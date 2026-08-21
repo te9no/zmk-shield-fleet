@@ -12,7 +12,7 @@ Madula向け共通変更に参加します。
 | MDK | n/a | pending | pending | pending |
 | MKB2 | n/a | pending | pending (旧revあり) | pending (一部旧stack) |
 | MRM | n/a | pending | pending | pending |
-| SparAkashaAnanta | pending (fork/ZMK 0.3) | pending (moving main) | pending (moving main) | pending (ZMK 0.3) |
+| SparAkashaAnanta | applied ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) |
 | Cornix | applied | n/a | pending | applied |
 | Torabo | n/a | n/a | pending (v0.2) | pending (ZMK 0.3) |
 | CaGiMe | pending (fork/ZMK 0.3) | pending (moving main) | pending (comment only) | pending (ZMK 0.3) |
@@ -27,7 +27,7 @@ Madula向け共通変更に参加します。
 - Analog voltage: module `59fc126`をPolaris `6a7b21f`でpinして検証。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
-- Revision pinning: moving ref／短縮SHAはPolarisとMKB2が0件。その他10 repositoriesに87件。
+- Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAAが0件。その他9 repositoriesに71件。
 
 ## Inventory findings
 

@@ -66,6 +66,7 @@ id = "saa"
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
 default_branch = "master"
+maintenance_branch = "feat/add-iqs-module-and-led-support"
 architecture = "module-shields"
 modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
