@@ -24,7 +24,7 @@
     "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
     "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "旧revision 3570fa7を使用中" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
-    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "moving mainとZMK 0.3を使用中" },
+    "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "固定revisionをsplit central側へ適用し、全21 firmware matrix成功" },
     "cornix": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio V2対応済みだがCDC boot triggerは未導入" },
     "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "旧v0.2とZMK 0.3を使用中" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "module定義はコメントアウト。ローカル専用" },
