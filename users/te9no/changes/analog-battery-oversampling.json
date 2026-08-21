@@ -27,7 +27,7 @@
     "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4", "commit": "e8079559d8aa6f091f8f5a39362835f18762cb71", "notes": "専用検証branchで59fc126へ固定し、左右JOYおよびJOY+IQSを含む全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "moving mainを使用中。59fc126へのpinと実機確認が必要。ローカル専用" },
     "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "module利用あり。59fc126へのpinと実機確認が必要" },
-    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "analog input利用あり。module導入と実機確認が必要" },
+    "solstice": { "status": "pr-open", "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/1", "commit": "1b64a3248dcfde13492c937e4ec6c211e882327b", "notes": "専用ZMK 0.4検証branchの左analog構成へmoduleを固定。全5 firmware target成功、実機確認待ち" },
     "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "交換式analog stick対応。module導入と実機確認が必要" }
   },
   "steps": []

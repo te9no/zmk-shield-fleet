@@ -146,6 +146,7 @@ rollout_order = 2
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
 default_branch = "main"
+maintenance_branch = "codex/zmk-0.4-baseline"
 architecture = "integrated-shield"
 modules = ["joystick", "trackball"]
 tags = ["dya-studio", "split", "xiao"]
