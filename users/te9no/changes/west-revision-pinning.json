@@ -19,7 +19,7 @@
     "mdk": { "status": "pending", "pr": null, "commit": null, "findings": 6, "notes": "6 findings" },
     "mkb2": { "status": "applied", "pr": null, "commit": null, "findings": 0, "notes": "moving ref/短縮SHAなし" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "findings": 5, "notes": "5 findings" },
-    "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "findings": 0, "notes": "全west projectを40文字commit SHAへ固定。PR #5でmasterへ昇格" },
+    "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "findings": 0, "notes": "専用検証branchの全west projectを40文字commit SHAへ固定。master昇格はPR #6でrevert済み。実機確認待ち" },
     "cornix": { "status": "applied", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "findings": 0, "notes": "残っていたmoving revision 2件を40文字commit SHAへ固定し、全12 firmware matrix成功" },
     "torabo": { "status": "pending", "pr": null, "commit": null, "findings": 7, "notes": "7 findings" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "findings": 16, "notes": "16 findings。ローカル専用" },
