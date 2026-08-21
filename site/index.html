@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Cross-repository propagation dashboard for shared ZMK changes.">
+    <meta property="og:title" content="ZMK Shield Fleet">
+    <meta property="og:description" content="Track shared ZMK changes from reference implementation to every keyboard repository.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://te9no.github.io/zmk-shield-fleet/">
+    <meta property="og:image" content="https://te9no.github.io/zmk-shield-fleet/og.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ZMK Shield Fleet">
+    <meta name="twitter:description" content="Track shared ZMK changes from reference implementation to every keyboard repository.">
+    <meta name="twitter:image" content="https://te9no.github.io/zmk-shield-fleet/og.png">
+    <title>ZMK Shield Fleet</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="ZMK Shield Fleet home">
+        <span class="brand-mark">ZF</span>
+        <span>ZMK Shield Fleet</span>
+      </a>
+      <div class="topbar-actions">
+        <label class="profile-control">
+          <span>Profile</span>
+          <select id="profile-select" aria-label="Fleet profile"></select>
+        </label>
+        <a class="github-link" href="https://github.com/te9no/zmk-shield-fleet">GitHub ↗</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <p class="eyebrow">PROPAGATION CONTROL</p>
+        <h1>One proven fix.<br><span>Every keyboard accounted for.</span></h1>
+        <p class="hero-copy">Follow shared drivers and ZMK features from a reference implementation through review, merge, and verified application.</p>
+        <div class="stats" id="stats" aria-live="polite"></div>
+      </section>
+
+      <section class="section" aria-labelledby="changes-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CHANGE LEDGER</p>
+            <h2 id="changes-heading">Propagation status</h2>
+          </div>
+          <div class="filters" role="group" aria-label="Change filters">
+            <button class="filter active" data-filter="all">All changes</button>
+            <button class="filter" data-filter="pending">Needs action</button>
+            <button class="filter" data-filter="complete">Complete</button>
+          </div>
+        </div>
+        <div class="change-grid" id="change-grid"></div>
+      </section>
+
+      <section class="section matrix-section" aria-labelledby="matrix-heading">
+        <div class="section-heading matrix-title">
+          <div>
+            <p class="eyebrow">FLEET MATRIX</p>
+            <h2 id="matrix-heading">Repository coverage</h2>
+          </div>
+          <label class="search-control">
+            <span>Filter repositories</span>
+            <input id="repo-search" type="search" placeholder="Search name, module, tag…">
+          </label>
+        </div>
+        <div class="matrix-wrap">
+          <table id="matrix-table">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section revision-section" aria-labelledby="revision-heading">
+        <div>
+          <p class="eyebrow">REPRODUCIBLE BUILDS</p>
+          <h2 id="revision-heading">Revision pinning</h2>
+          <p>Moving branches and abbreviated SHAs remain visible until each repository is pinned to a verified commit.</p>
+        </div>
+        <div id="revision-list" class="revision-list"></div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Generated from version-controlled fleet profiles.</span>
+      <span id="footer-profile"></span>
+    </footer>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

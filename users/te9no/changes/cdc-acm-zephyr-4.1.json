@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "cdc-acm-zephyr-4.1",
+  "enabled": true,
+  "title": "CDC ACM debug/boot triggerをZephyr 4.1対応版へ揃える",
+  "description": "edge-triggered CDC polling修整を含むrevisionを、各キーボードで採用または適用不要判定する。",
+  "scope": { "all": true },
+  "source": {
+    "repository": "te9no/zmk-feature-cdc-acm-bootloader-trigger",
+    "from_revision": null,
+    "to_revision": "1850754d269aab9ba73e4639371bfe59a4130e65",
+    "change_url": "https://github.com/te9no/zmk-feature-cdc-acm-bootloader-trigger/commit/1850754d269aab9ba73e4639371bfe59a4130e65",
+    "notes": "Zephyr 4.1でCDC pollingをedge-triggeredにする修整。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "10885439f82c58cd65c1cdccc935e97954bbe0c9",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/10885439f82c58cd65c1cdccc935e97954bbe0c9",
+    "notes": "PolarisのZMK 0.4 DYA Studio buildで固定revisionを検証。"
+  },
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "tracking": {
+    "polaris": { "status": "applied", "pr": null, "commit": "10885439f82c58cd65c1cdccc935e97954bbe0c9", "notes": "基準実装" },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
+    "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "旧revision 3570fa7を使用中" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "moving mainとZMK 0.3を使用中" },
+    "cornix": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio V2対応済みだがCDC boot triggerは未導入" },
+    "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "旧v0.2とZMK 0.3を使用中" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "module定義はコメントアウト。ローカル専用" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" },
+    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" },
+    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" }
+  },
+  "steps": []
+}

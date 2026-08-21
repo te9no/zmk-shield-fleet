@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "analog-battery-oversampling",
+  "enabled": true,
+  "title": "アナログスティック利用時の電圧監視をoversampling版へ揃える",
+  "description": "Polarisで検証した電圧分圧oversampling修整を、joystick搭載キーボードへ漏れなく反映する。",
+  "scope": { "module": "joystick" },
+  "source": {
+    "repository": "te9no/zmk-module-battery-nrf-vddh-oversampling",
+    "from_revision": null,
+    "to_revision": "59fc126f859d4e7700186c9906e4645379763c34",
+    "change_url": "https://github.com/te9no/zmk-module-battery-nrf-vddh-oversampling/commit/59fc126f859d4e7700186c9906e4645379763c34",
+    "notes": "電圧分圧測定へ設定可能なoversamplingを追加したrevision。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "6a7b21fa878e718472102b787f6dd21e0ee113db",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/6a7b21fa878e718472102b787f6dd21e0ee113db",
+    "notes": "Polarisで59fc126をpinしてアナログ入力構成と併用。"
+  },
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cagime", "berkut51", "solstice", "sparagmos"],
+  "tracking": {
+    "polaris": { "status": "applied", "pr": null, "commit": "6a7b21fa878e718472102b787f6dd21e0ee113db", "notes": "基準実装" },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "module未導入" },
+    "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "module未導入" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "module未導入" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "moving mainを使用中。59fc126へのpinと実機確認が必要" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "moving mainを使用中。59fc126へのpinと実機確認が必要。ローカル専用" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "module利用あり。59fc126へのpinと実機確認が必要" },
+    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "analog input利用あり。module導入と実機確認が必要" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "交換式analog stick対応。module導入と実機確認が必要" }
+  },
+  "steps": []
+}

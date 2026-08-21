@@ -1,10 +1,14 @@
-name: Roll out campaign
+name: Roll out driver change
 
 on:
   workflow_dispatch:
     inputs:
-      campaign:
-        description: Campaign id from campaigns/<id>.json
+      manifest:
+        description: Profile manifest, for example users/alice/fleet.toml
+        required: true
+        type: string
+      change:
+        description: Change id from the profile's changes/<id>.json
         required: true
         type: string
 
@@ -12,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: fleet-rollout-${{ inputs.campaign }}
+  group: fleet-rollout-${{ inputs.manifest }}-${{ inputs.change }}
   cancel-in-progress: false
 
 jobs:
@@ -32,18 +36,25 @@ jobs:
       - name: Install fleet CLI
         run: python -m pip install -e .
 
-      - name: Validate campaign and compose matrix
+      - name: Validate ledger entry and compose matrix
         id: targets
         shell: bash
         env:
-          CAMPAIGN: ${{ inputs.campaign }}
+          CHANGE: ${{ inputs.change }}
+          MANIFEST: ${{ inputs.manifest }}
         run: |
           set -euo pipefail
-          if [[ ! "$CAMPAIGN" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
-            echo "Invalid campaign id: $CAMPAIGN" >&2
+          if [[ ! "$MANIFEST" =~ ^users/[A-Za-z0-9._-]+/fleet\.toml$ ]]; then
+            echo "Invalid profile manifest: $MANIFEST" >&2
             exit 1
           fi
-          targets="$(shield-fleet campaign targets "$CAMPAIGN" --ci-only --github-matrix)"
+          if [[ ! "$CHANGE" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
+            echo "Invalid change id: $CHANGE" >&2
+            exit 1
+          fi
+          shield-fleet ledger check "$CHANGE" --manifest "$MANIFEST"
+          targets="$(shield-fleet change targets "$CHANGE" \
+            --manifest "$MANIFEST" --ci-only --github-matrix)"
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
 
   rollout:
@@ -84,13 +95,14 @@ jobs:
       - name: Install fleet CLI
         run: python -m pip install -e fleet
 
-      - name: Preflight and apply campaign
+      - name: Preflight and apply change
         env:
-          CAMPAIGN: ${{ inputs.campaign }}
+          CHANGE: ${{ inputs.change }}
+          MANIFEST: ${{ inputs.manifest }}
           REPOSITORY_ID: ${{ matrix.id }}
         run: |
-          shield-fleet campaign apply "$CAMPAIGN" \
-            --manifest fleet/fleet.toml \
+          shield-fleet change apply "$CHANGE" \
+            --manifest "fleet/$MANIFEST" \
             --workspace workspace \
             --repo "$REPOSITORY_ID" \
             --diff
@@ -102,13 +114,13 @@ jobs:
           path: workspace/${{ matrix.checkout }}
           token: ${{ secrets.FLEET_TOKEN }}
           base: ${{ matrix.maintenance_branch }}
-          branch: fleet/${{ inputs.campaign }}
+          branch: fleet/${{ inputs.change }}
           delete-branch: true
           draft: true
-          commit-message: 'fleet: apply ${{ inputs.campaign }}'
-          title: 'fleet: apply ${{ inputs.campaign }}'
+          commit-message: 'fleet: apply ${{ inputs.change }}'
+          title: 'fleet: apply ${{ inputs.change }}'
           body: |
-            Applied cross-repository campaign `${{ inputs.campaign }}` from
+            Applied driver change `${{ inputs.change }}` from the ledger in
             `${{ github.repository }}`.
 
             Source run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}

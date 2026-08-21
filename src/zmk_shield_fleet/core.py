@@ -107,11 +107,64 @@ class Campaign:
     steps: tuple[CampaignStep, ...]
 
 
+LEDGER_STATUSES = frozenset(
+    {"pending", "pr-open", "merged", "applied", "closed", "blocked", "not-applicable"}
+)
+
+
+@dataclass(frozen=True)
+class ChangeSource:
+    repository: str
+    from_revision: str | None
+    to_revision: str
+    change_url: str | None
+    notes: str
+
+
+@dataclass(frozen=True)
+class ChangeTrigger:
+    repository: str
+    revision: str
+    change_url: str
+    notes: str
+
+
+@dataclass(frozen=True)
+class TargetTracking:
+    status: str
+    pr: str | None
+    commit: str | None
+    notes: str
+
+
+@dataclass(frozen=True)
+class LedgerEntry:
+    campaign: Campaign
+    source: ChangeSource
+    trigger: ChangeTrigger | None
+    scope_module: str | None
+    scope_all: bool
+    tracking: Mapping[str, TargetTracking]
+
+    @property
+    def path(self) -> Path:
+        return self.campaign.path
+
+
 @dataclass(frozen=True)
 class AuditIssue:
     level: str
     subject: str
     message: str
+
+
+@dataclass(frozen=True)
+class RevisionFinding:
+    repository: str
+    path: str
+    line: int
+    revision: str
+    kind: str
 
 
 @dataclass(frozen=True)
@@ -152,6 +205,12 @@ def _require_string(value: Any, context: str, *, allow_empty: bool = False) -> s
     if not isinstance(value, str) or (not allow_empty and not value):
         raise FleetError(f"{context} must be a non-empty string")
     return value
+
+
+def _optional_string(value: Any, context: str) -> str | None:
+    if value is None:
+        return None
+    return _require_string(value, context)
 
 
 def _string_tuple(value: Any, context: str, *, nonempty: bool = False) -> tuple[str, ...]:
@@ -406,6 +465,53 @@ def inventory_rows(
     return rows
 
 
+def revision_findings(
+    workspace: Path,
+    repositories: Sequence[RepositorySpec],
+    *,
+    strict_sha: bool = False,
+) -> tuple[RevisionFinding, ...]:
+    findings: list[RevisionFinding] = []
+    moving_names = {"main", "master", "develop", "development", "dev", "latest", "head"}
+    for repo in repositories:
+        root = repository_path(workspace, repo)
+        manifest_path = next(
+            (candidate for candidate in (root / "config" / "west.yml", root / "west.yml") if candidate.is_file()),
+            None,
+        )
+        if manifest_path is None:
+            continue
+        for line_number, line in enumerate(manifest_path.read_text(encoding="utf-8").splitlines(), 1):
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            match = re.match(r"revision:\s*([^#\s]+)", stripped, re.IGNORECASE)
+            if not match:
+                continue
+            revision = match.group(1)
+            if re.fullmatch(r"[0-9a-fA-F]{40}", revision):
+                continue
+            lowered = revision.lower()
+            if re.fullmatch(r"[0-9a-fA-F]{4,39}", revision):
+                kind = "short-sha"
+            elif lowered in moving_names or "branch" in lowered or lowered.startswith("refs/heads/"):
+                kind = "moving-ref"
+            elif strict_sha:
+                kind = "tag-or-ref"
+            else:
+                continue
+            findings.append(
+                RevisionFinding(
+                    repository=repo.id,
+                    path=manifest_path.relative_to(root).as_posix(),
+                    line=line_number,
+                    revision=revision,
+                    kind=kind,
+                )
+            )
+    return tuple(findings)
+
+
 def _matches_required_glob(root: Path, pattern: str) -> bool:
     for candidate in root.glob(pattern):
         if candidate.is_file():
@@ -563,6 +669,9 @@ def resolve_campaign_path(manifest: Manifest, source: str | Path) -> Path:
     source_text = str(source)
     if not ID_PATTERN.fullmatch(source_text):
         raise FleetError(f"campaign must be a safe id or existing JSON path: {source_text!r}")
+    change_path = (manifest.path.parent / "changes" / f"{source_text}.json").resolve()
+    if change_path.exists():
+        return change_path
     return (manifest.path.parent / "campaigns" / f"{source_text}.json").resolve()
 
 
@@ -596,9 +705,9 @@ def load_campaign(
     if unknown:
         raise FleetError(f"campaign references unknown repositories: {', '.join(sorted(unknown))}")
 
-    raw_steps = table.get("steps")
-    if not isinstance(raw_steps, list) or not raw_steps:
-        raise FleetError("campaign.steps must be a non-empty array")
+    raw_steps = table.get("steps", [])
+    if not isinstance(raw_steps, list):
+        raise FleetError("campaign.steps must be an array")
     steps: list[CampaignStep] = []
     seen_step_ids: set[str] = set()
     for index, item in enumerate(raw_steps):
@@ -677,6 +786,208 @@ def load_campaign(
         repositories=repository_ids,
         steps=tuple(steps),
     )
+
+
+def load_ledger_entry(
+    manifest: Manifest, source: str | Path, *, allow_disabled: bool = True
+) -> LedgerEntry:
+    campaign = load_campaign(manifest, source, allow_disabled=allow_disabled)
+    try:
+        raw = json.loads(campaign.path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:  # load_campaign normally catches these
+        raise FleetError(f"cannot read ledger entry {campaign.path}: {exc}") from exc
+    table = _require_mapping(raw, "change")
+    source_table = _require_mapping(table.get("source"), "change.source")
+    source_info = ChangeSource(
+        repository=_require_string(source_table.get("repository"), "change.source.repository"),
+        from_revision=_optional_string(
+            source_table.get("from_revision"), "change.source.from_revision"
+        ),
+        to_revision=_require_string(source_table.get("to_revision"), "change.source.to_revision"),
+        change_url=_optional_string(source_table.get("change_url"), "change.source.change_url"),
+        notes=_require_string(
+            source_table.get("notes", ""), "change.source.notes", allow_empty=True
+        ),
+    )
+    trigger_info = None
+    if table.get("trigger") is not None:
+        trigger_table = _require_mapping(table.get("trigger"), "change.trigger")
+        trigger_info = ChangeTrigger(
+            repository=_require_string(
+                trigger_table.get("repository"), "change.trigger.repository"
+            ),
+            revision=_require_string(trigger_table.get("revision"), "change.trigger.revision"),
+            change_url=_require_string(
+                trigger_table.get("change_url"), "change.trigger.change_url"
+            ),
+            notes=_require_string(
+                trigger_table.get("notes", ""), "change.trigger.notes", allow_empty=True
+            ),
+        )
+    scope_module = None
+    scope_all = False
+    if table.get("scope") is not None:
+        scope_table = _require_mapping(table.get("scope"), "change.scope")
+        if set(scope_table) == {"module"}:
+            scope_module = _validate_id(
+                _require_string(scope_table.get("module"), "change.scope.module"),
+                "change.scope.module",
+            )
+            expected_repositories = {
+                repo.id for repo in manifest.repositories.values() if scope_module in repo.modules
+            }
+            scope_description = repr(scope_module) + " consumer"
+        elif set(scope_table) == {"all"} and scope_table.get("all") is True:
+            scope_all = True
+            expected_repositories = set(manifest.repositories)
+            scope_description = "managed repository"
+        else:
+            raise FleetError("change.scope must be either {module: <id>} or {all: true}")
+        if set(campaign.repositories) != expected_repositories:
+            missing = sorted(expected_repositories.difference(campaign.repositories))
+            extra = sorted(set(campaign.repositories).difference(expected_repositories))
+            details = []
+            if missing:
+                details.append("missing " + ", ".join(missing))
+            if extra:
+                details.append("extra " + ", ".join(extra))
+            raise FleetError(
+                f"change.repositories must match every {scope_description}: "
+                + "; ".join(details)
+            )
+    tracking_table = _require_mapping(table.get("tracking"), "change.tracking")
+    if set(tracking_table) != set(campaign.repositories):
+        raise FleetError("change.tracking keys must exactly match change.repositories")
+    tracking: dict[str, TargetTracking] = {}
+    for repo_id in campaign.repositories:
+        target = _require_mapping(tracking_table[repo_id], f"change.tracking.{repo_id}")
+        status = _require_string(target.get("status"), f"change.tracking.{repo_id}.status")
+        if status not in LEDGER_STATUSES:
+            raise FleetError(
+                f"change.tracking.{repo_id}.status must be one of: "
+                + ", ".join(sorted(LEDGER_STATUSES))
+            )
+        tracking[repo_id] = TargetTracking(
+            status=status,
+            pr=_optional_string(target.get("pr"), f"change.tracking.{repo_id}.pr"),
+            commit=_optional_string(target.get("commit"), f"change.tracking.{repo_id}.commit"),
+            notes=_require_string(
+                target.get("notes", ""), f"change.tracking.{repo_id}.notes", allow_empty=True
+            ),
+        )
+    return LedgerEntry(
+        campaign=campaign,
+        source=source_info,
+        trigger=trigger_info,
+        scope_module=scope_module,
+        scope_all=scope_all,
+        tracking=tracking,
+    )
+
+
+def list_ledger_entries(manifest: Manifest) -> tuple[LedgerEntry, ...]:
+    directory = manifest.path.parent / "changes"
+    if not directory.exists():
+        return ()
+    return tuple(load_ledger_entry(manifest, path) for path in sorted(directory.glob("*.json")))
+
+
+def mark_ledger_target(
+    entry: LedgerEntry,
+    repository: str,
+    status: str,
+    *,
+    pr: str | None = None,
+    commit: str | None = None,
+    notes: str | None = None,
+) -> None:
+    if repository not in entry.tracking:
+        raise FleetError(f"repository {repository!r} is not tracked by change {entry.campaign.id!r}")
+    if status not in LEDGER_STATUSES:
+        raise FleetError(f"invalid ledger status: {status!r}")
+    raw = json.loads(entry.path.read_text(encoding="utf-8"))
+    target = raw["tracking"][repository]
+    target["status"] = status
+    if pr is not None:
+        target["pr"] = pr or None
+    if commit is not None:
+        target["commit"] = commit or None
+    if notes is not None:
+        target["notes"] = notes
+    _write_json_atomic(entry.path, raw)
+
+
+def _write_json_atomic(path: Path, value: Any) -> None:
+    rendered = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
+    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
+    try:
+        with os.fdopen(descriptor, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(rendered)
+        os.replace(temporary, path)
+    except BaseException:
+        try:
+            os.unlink(temporary)
+        except FileNotFoundError:
+            pass
+        raise
+
+
+def github_pull_requests(repository: str, branch: str) -> list[dict[str, Any]]:
+    command = [
+        "gh", "pr", "list", "--repo", repository, "--head", branch, "--state", "all",
+        "--limit", "20", "--json",
+        "number,url,state,isDraft,mergedAt,mergeCommit,createdAt,updatedAt",
+    ]
+    try:
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError as exc:
+        raise FleetError("gh is required for ledger sync") from exc
+    if result.returncode != 0:
+        raise FleetError(f"cannot query {repository}: {result.stderr.strip()}")
+    return json.loads(result.stdout)
+
+
+def sync_ledger_entry(
+    manifest: Manifest,
+    entry: LedgerEntry,
+    *,
+    write: bool = False,
+    fetcher=github_pull_requests,
+) -> Mapping[str, TargetTracking]:
+    updated = dict(entry.tracking)
+    raw = json.loads(entry.path.read_text(encoding="utf-8")) if write else None
+    branch = f"fleet/{entry.campaign.id}"
+    for repo_id, current in entry.tracking.items():
+        if current.status == "not-applicable":
+            continue
+        spec = manifest.repositories[repo_id]
+        if spec.github is None:
+            continue
+        pulls = fetcher(spec.github, branch)
+        if not pulls:
+            continue
+        pull = max(pulls, key=lambda item: item.get("updatedAt") or item.get("createdAt") or "")
+        if pull.get("mergedAt"):
+            status = "merged"
+        elif pull.get("state") == "OPEN":
+            status = "pr-open"
+        else:
+            status = "closed"
+        merge_commit = pull.get("mergeCommit") or {}
+        tracked = TargetTracking(
+            status=status,
+            pr=pull.get("url") or current.pr,
+            commit=merge_commit.get("oid") or current.commit,
+            notes=current.notes,
+        )
+        updated[repo_id] = tracked
+        if raw is not None:
+            raw["tracking"][repo_id].update(
+                {"status": tracked.status, "pr": tracked.pr, "commit": tracked.commit}
+            )
+    if raw is not None:
+        _write_json_atomic(entry.path, raw)
+    return updated
 
 
 def _campaign_files(root: Path, patterns: Sequence[str]) -> tuple[Path, ...]:

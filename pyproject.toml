@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "zmk-shield-fleet"
 version = "0.1.0"
-description = "Guarded cross-repository maintenance for modular ZMK keyboard shields"
+description = "Track and propagate shared ZMK changes across keyboard repositories"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }
