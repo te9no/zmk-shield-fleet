@@ -10,7 +10,7 @@ Madula向け共通変更に参加します。
 | --- | --- | --- | --- | --- |
 | Polaris | applied | applied | applied | applied |
 | MDK | n/a | pending | pending | pending |
-| MKB2 | n/a | pending | pending (旧revあり) | pending (一部旧stack) |
+| MKB2 | n/a | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) |
 | MRM | n/a | pending | pending | pending |
 | SparAkashaAnanta | validation branch・実機待ち ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#4](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) |
 | Cornix | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) | n/a | applied（repository内同等実装、[#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)） | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) |
@@ -28,6 +28,7 @@ Madula向け共通変更に参加します。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
 - Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornixが0件。その他8 repositoriesに69件。
+- MKB2 ZMK 0.4: PR #7の全18 firmware targetが成功。MLX90393の0.4 API対応はdriver PR #1へ分離し、いずれも実機確認までdraftを維持。
 
 ## Inventory findings
 

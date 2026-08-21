@@ -22,7 +22,7 @@
   "tracking": {
     "polaris": { "status": "applied", "pr": null, "commit": "e11afa19e772b19e09ae9ff66829d5145aaced65", "notes": "基準実装" },
     "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio V2固定module群なし" },
-    "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "一部runtime moduleはあるがPolaris基準より旧revisionで、combo/macro/診断群なし" },
+    "mkb2": { "status": "pr-open", "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7", "commit": "67880352bd1835e72bf66b9011231bd4387250ef", "notes": "専用検証branchをZMK 0.4と固定DYA Studio module群へ移行し、全18 firmware target成功。実機確認待ち" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio V2固定module群なし" },
     "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "専用検証branchをZMK 0.4と固定DYA Studio module群へ移行し、全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち" },
     "cornix": { "status": "applied", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "notes": "Polarisと同じ固定revision群を採用し、Madula対応とともにmainへ昇格。全12 firmware matrix成功" },
