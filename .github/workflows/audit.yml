@@ -35,10 +35,31 @@ jobs:
         run: python -m unittest discover -s tests -v
 
       - name: Validate driver-change ledger
-        run: shield-fleet ledger check
+        shell: bash
+        run: |
+          set -euo pipefail
+          for manifest in users/*/fleet.toml; do
+            shield-fleet ledger check --manifest "$manifest"
+          done
 
       - name: Clone CI-managed repositories
-        run: shield-fleet clone --workspace .fleet-workspace --ci-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          for manifest in users/*/fleet.toml; do
+            profile="$(basename "$(dirname "$manifest")")"
+            shield-fleet clone --manifest "$manifest" \
+              --workspace ".fleet-workspace/$profile" --ci-only
+          done
 
       - name: Audit repository contracts and drift
-        run: shield-fleet audit --workspace .fleet-workspace --ci-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          for manifest in users/*/fleet.toml; do
+            profile="$(basename "$(dirname "$manifest")")"
+            shield-fleet audit --manifest "$manifest" \
+              --workspace ".fleet-workspace/$profile" --ci-only
+            shield-fleet revisions --manifest "$manifest" \
+              --workspace ".fleet-workspace/$profile" --ci-only
+          done

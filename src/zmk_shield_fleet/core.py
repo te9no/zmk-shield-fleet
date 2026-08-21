@@ -159,6 +159,15 @@ class AuditIssue:
 
 
 @dataclass(frozen=True)
+class RevisionFinding:
+    repository: str
+    path: str
+    line: int
+    revision: str
+    kind: str
+
+
+@dataclass(frozen=True)
 class StepResult:
     step: str
     repository: str
@@ -454,6 +463,53 @@ def inventory_rows(
             }
         )
     return rows
+
+
+def revision_findings(
+    workspace: Path,
+    repositories: Sequence[RepositorySpec],
+    *,
+    strict_sha: bool = False,
+) -> tuple[RevisionFinding, ...]:
+    findings: list[RevisionFinding] = []
+    moving_names = {"main", "master", "develop", "development", "dev", "latest", "head"}
+    for repo in repositories:
+        root = repository_path(workspace, repo)
+        manifest_path = next(
+            (candidate for candidate in (root / "config" / "west.yml", root / "west.yml") if candidate.is_file()),
+            None,
+        )
+        if manifest_path is None:
+            continue
+        for line_number, line in enumerate(manifest_path.read_text(encoding="utf-8").splitlines(), 1):
+            stripped = line.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            match = re.match(r"revision:\s*([^#\s]+)", stripped, re.IGNORECASE)
+            if not match:
+                continue
+            revision = match.group(1)
+            if re.fullmatch(r"[0-9a-fA-F]{40}", revision):
+                continue
+            lowered = revision.lower()
+            if re.fullmatch(r"[0-9a-fA-F]{4,39}", revision):
+                kind = "short-sha"
+            elif lowered in moving_names or "branch" in lowered or lowered.startswith("refs/heads/"):
+                kind = "moving-ref"
+            elif strict_sha:
+                kind = "tag-or-ref"
+            else:
+                continue
+            findings.append(
+                RevisionFinding(
+                    repository=repo.id,
+                    path=manifest_path.relative_to(root).as_posix(),
+                    line=line_number,
+                    revision=revision,
+                    kind=kind,
+                )
+            )
+    return tuple(findings)
 
 
 def _matches_required_glob(root: Path, pattern: str) -> bool:

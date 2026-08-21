@@ -3,7 +3,7 @@ schema = 1
 [fleet]
 owner = "te9no"
 # This repository normally lives beside the managed checkouts under config/.
-workspace = ".."
+workspace = "../../.."
 
 [[repositories]]
 id = "polaris"
@@ -82,9 +82,9 @@ checkout = "zmk-keyboard-cornix"
 default_branch = "main"
 # MeKaBu module snippets are currently maintained on this branch.
 maintenance_branch = "feature/madula-tp-status"
-architecture = "module-snippets"
+architecture = "madula-module-snippets"
 modules = ["iqs9151", "lpps", "trackball"]
-tags = ["mekabu", "modular-input", "split", "xiao"]
+tags = ["madula", "mekabu", "modular-input", "split", "xiao"]
 required_globs = [
   "build.yaml",
   "snippets/madula-*/snippet.yml",

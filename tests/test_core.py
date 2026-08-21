@@ -18,6 +18,7 @@ from zmk_shield_fleet.core import (
     mark_ledger_target,
     plan_campaign,
     resolve_workspace,
+    revision_findings,
     select_repositories,
     sync_ledger_entry,
 )
@@ -327,6 +328,24 @@ class LedgerTests(unittest.TestCase):
 
 
 class AuditTests(unittest.TestCase):
+    def test_revision_audit_finds_moving_refs_and_short_shas(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            fixture.init_repositories()
+            (fixture.workspace / "one" / "config" / "west.yml").write_text(
+                "revision: main\nrevision: abc1234\nrevision: v1.2.3\n", encoding="utf-8"
+            )
+            manifest = load_manifest(fixture.manifest_path)
+            findings = revision_findings(
+                fixture.workspace, select_repositories(manifest, ["one"])
+            )
+            self.assertEqual(["moving-ref", "short-sha"], [item.kind for item in findings])
+            strict = revision_findings(
+                fixture.workspace, select_repositories(manifest, ["one"]), strict_sha=True
+            )
+            self.assertEqual(3, len(strict))
+
     def test_mirror_drift_is_reported(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))

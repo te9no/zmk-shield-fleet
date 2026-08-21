@@ -22,6 +22,7 @@ from .core import (
     load_manifest,
     mark_ledger_target,
     plan_campaign,
+    revision_findings,
     resolve_workspace,
     select_repositories,
     sync_ledger_entry,
@@ -80,6 +81,15 @@ def build_parser() -> argparse.ArgumentParser:
     )
     audit.add_argument("--strict", action="store_true", help="treat warnings as failures")
     audit.add_argument("--json", action="store_true", help="emit JSON")
+
+    revisions = subparsers.add_parser(
+        "revisions", parents=[common], help="find moving or non-SHA west revisions"
+    )
+    revisions.add_argument(
+        "--strict-sha", action="store_true", help="report tags and every non-40-character SHA"
+    )
+    revisions.add_argument("--check", action="store_true", help="fail when findings exist")
+    revisions.add_argument("--json", action="store_true", help="emit JSON")
 
     clone = subparsers.add_parser(
         "clone", parents=[common], help="clone missing managed repositories"
@@ -311,6 +321,24 @@ def dispatch(args: argparse.Namespace) -> int:
         has_errors = any(issue.level == "error" for issue in issues)
         has_warnings = any(issue.level == "warning" for issue in issues)
         return 1 if has_errors or (args.strict and has_warnings) else 0
+
+    if args.command == "revisions":
+        manifest, workspace = _load_context(args)
+        findings = revision_findings(
+            workspace, _selected(args, manifest), strict_sha=args.strict_sha
+        )
+        if args.json:
+            print(json.dumps([finding.__dict__ for finding in findings], ensure_ascii=False, indent=2))
+        elif not findings:
+            print("OK: no matching revision findings")
+        else:
+            for finding in findings:
+                print(
+                    f"{finding.kind:10} {finding.repository}:"
+                    f"{finding.path}:{finding.line} {finding.revision}"
+                )
+            print(f"\nRevision audit: {len(findings)} finding(s)")
+        return 1 if args.check and findings else 0
 
     if args.command == "clone":
         manifest, workspace = _load_context(args)

@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "west-revision-pinning",
+  "enabled": true,
+  "title": "west dependency revisionsを検証済みcommitへ固定する",
+  "description": "moving branchと短縮SHAをなくし、全キーボードのbuildを再現可能にする。",
+  "scope": { "all": true },
+  "source": {
+    "repository": "te9no/zmk-shield-fleet",
+    "from_revision": null,
+    "to_revision": "40-character-commit-sha-policy",
+    "change_url": "https://github.com/te9no/zmk-shield-fleet/pull/1",
+    "notes": "shield-fleet revisionsでmain/master/branch refと短縮SHAを継続検査する。"
+  },
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "tracking": {
+    "polaris": { "status": "applied", "pr": null, "commit": null, "notes": "moving ref/短縮SHAなし" },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "6 findings" },
+    "mkb2": { "status": "applied", "pr": null, "commit": null, "notes": "moving ref/短縮SHAなし" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "5 findings" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "16 findings" },
+    "cornix": { "status": "pending", "pr": null, "commit": null, "notes": "2 findings" },
+    "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "7 findings" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "16 findings。ローカル専用" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "7 findings" },
+    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "12 findings" },
+    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "7 findings" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "9 findings" }
+  },
+  "steps": []
+}

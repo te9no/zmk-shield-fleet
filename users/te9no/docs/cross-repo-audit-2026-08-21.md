@@ -3,6 +3,9 @@
 Polarisの実証済み構成を基準に、ローカルの開発branchと各リポジトリの
 `config/west.yml`、関連snippet／shieldを横並び確認した初回棚卸しです。
 
+CornixはMadula module snippet方式として管理し、IQS9151、LPPS、trackballの
+Madula向け共通変更に参加します。
+
 | Repository | IQS本家/ZMK 0.4 | Analog電圧oversampling | CDC Zephyr 4.1 | DYA Studio V2 |
 | --- | --- | --- | --- | --- |
 | Polaris | applied | applied | applied | applied |
@@ -24,6 +27,7 @@ Polarisの実証済み構成を基準に、ローカルの開発branchと各リ�
 - Analog voltage: module `59fc126`をPolaris `6a7b21f`でpinして検証。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
+- Revision pinning: moving ref／短縮SHAはPolarisとMKB2が0件。その他10 repositoriesに87件。
 
 ## Inventory findings
 

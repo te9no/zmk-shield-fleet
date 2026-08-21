@@ -3,8 +3,12 @@ name: Roll out driver change
 on:
   workflow_dispatch:
     inputs:
+      manifest:
+        description: Profile manifest, for example users/alice/fleet.toml
+        required: true
+        type: string
       change:
-        description: Change id from changes/<id>.json
+        description: Change id from the profile's changes/<id>.json
         required: true
         type: string
 
@@ -12,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: fleet-rollout-${{ inputs.change }}
+  group: fleet-rollout-${{ inputs.manifest }}-${{ inputs.change }}
   cancel-in-progress: false
 
 jobs:
@@ -37,14 +41,20 @@ jobs:
         shell: bash
         env:
           CHANGE: ${{ inputs.change }}
+          MANIFEST: ${{ inputs.manifest }}
         run: |
           set -euo pipefail
+          if [[ ! "$MANIFEST" =~ ^users/[A-Za-z0-9._-]+/fleet\.toml$ ]]; then
+            echo "Invalid profile manifest: $MANIFEST" >&2
+            exit 1
+          fi
           if [[ ! "$CHANGE" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
             echo "Invalid change id: $CHANGE" >&2
             exit 1
           fi
-          shield-fleet ledger check "$CHANGE"
-          targets="$(shield-fleet change targets "$CHANGE" --ci-only --github-matrix)"
+          shield-fleet ledger check "$CHANGE" --manifest "$MANIFEST"
+          targets="$(shield-fleet change targets "$CHANGE" \
+            --manifest "$MANIFEST" --ci-only --github-matrix)"
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
 
   rollout:
@@ -88,10 +98,11 @@ jobs:
       - name: Preflight and apply change
         env:
           CHANGE: ${{ inputs.change }}
+          MANIFEST: ${{ inputs.manifest }}
           REPOSITORY_ID: ${{ matrix.id }}
         run: |
           shield-fleet change apply "$CHANGE" \
-            --manifest fleet/fleet.toml \
+            --manifest "fleet/$MANIFEST" \
             --workspace workspace \
             --repo "$REPOSITORY_ID" \
             --diff

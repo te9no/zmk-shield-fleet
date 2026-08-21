@@ -1,0 +1,25 @@
+schema = 1
+
+[fleet]
+owner = "example"
+workspace = "../../../my-zmk-workspace"
+
+[[repositories]]
+id = "keyboard-a"
+checkout = "zmk-config-keyboard-a"
+default_branch = "main"
+architecture = "module-snippets"
+modules = ["trackball", "encoder"]
+tags = ["modular-input", "split"]
+ci = false
+required_globs = ["config/west.yml", "build.yaml"]
+
+[[repositories]]
+id = "keyboard-b"
+checkout = "zmk-config-keyboard-b"
+default_branch = "main"
+architecture = "module-shields"
+modules = ["trackball", "encoder"]
+tags = ["modular-input", "split"]
+ci = false
+required_globs = ["config/west.yml", "build.yaml"]
