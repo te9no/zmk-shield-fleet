@@ -29,7 +29,7 @@
     "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "ZMK v0.3-branch+dyaと旧Studio stack" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "ZMK v0.3-branch+dyaとmoving mainの旧Studio stack。ローカル専用" },
     "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "旧DYA runtime stackを使用中" },
-    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "旧DYA runtime stackを使用中" },
+    "solstice": { "status": "pr-open", "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/1", "commit": "1b64a3248dcfde13492c937e4ec6c211e882327b", "notes": "専用検証branchをZMK 0.4と固定DYA Studio module群へ移行。全5 firmware target成功、実機確認待ち" },
     "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "旧DYA runtime stackを使用中" },
     "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "旧DYA runtime stackを使用中" }
   },

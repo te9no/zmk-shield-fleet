@@ -17,7 +17,7 @@ Madula向け共通変更に参加します。
 | Torabo | n/a | n/a | pending (v0.2) | pending (ZMK 0.3) |
 | CaGiMe | pending (fork/ZMK 0.3) | pending (moving main) | pending (comment only) | pending (ZMK 0.3) |
 | Berkut51 | n/a | pending | pending | pending (旧stack) |
-| GeaconSolstice | n/a | pending | pending | pending (旧stack) |
+| GeaconSolstice | n/a | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) |
 | koZakura | n/a | n/a | pending | pending (旧stack) |
 | GeaconSparagmos | n/a | pending | pending | pending (旧stack) |
 
@@ -27,8 +27,9 @@ Madula向け共通変更に参加します。
 - Analog voltage: module `59fc126`をPolaris `6a7b21f`でpinして検証。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
-- Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornixが0件。その他8 repositoriesに69件。
+- Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornix、GeaconSolsticeが0件。その他7 repositoriesに57件。
 - MKB2 ZMK 0.4: PR #7の全18 firmware targetが成功。MLX90393の0.4 API対応はdriver PR #1へ分離し、いずれも実機確認までdraftを維持。
+- GeaconSolstice ZMK 0.4: PR #1の全5 firmware targetが成功。dongle display PR #3とtemp-layer upstream PR #2を含め、実機確認までdraftを維持。
 
 ## Inventory findings
 
