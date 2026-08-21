@@ -19,7 +19,7 @@
     "mdk": { "status": "pending", "pr": null, "commit": null, "findings": 6, "notes": "6 findings" },
     "mkb2": { "status": "applied", "pr": null, "commit": null, "findings": 0, "notes": "moving ref/短縮SHAなし" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "findings": 5, "notes": "5 findings" },
-    "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "findings": 0, "notes": "全west projectを40文字commit SHAへ固定" },
+    "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "findings": 0, "notes": "全west projectを40文字commit SHAへ固定。PR #5でmasterへ昇格" },
     "cornix": { "status": "pending", "pr": null, "commit": null, "findings": 2, "notes": "2 findings" },
     "torabo": { "status": "pending", "pr": null, "commit": null, "findings": 7, "notes": "7 findings" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "findings": 16, "notes": "16 findings。ローカル専用" },
