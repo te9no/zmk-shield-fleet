@@ -260,6 +260,59 @@ class CampaignTests(unittest.TestCase):
 
 
 class LedgerTests(unittest.TestCase):
+    def test_applied_requires_declared_validation_checks_to_pass(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"].update(
+                {"status": "applied", "validation": {"ci": "passed", "hardware": "pending"}}
+            )
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "cannot be applied.*hardware"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
+    def test_mark_updates_validation_and_guards_applied_status(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["validation"] = {"ci": "passed", "hardware": "pending"}
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            entry = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
+            with self.assertRaisesRegex(FleetError, "validation is incomplete.*hardware"):
+                mark_ledger_target(entry, "one", "applied")
+            mark_ledger_target(
+                entry,
+                "one",
+                "applied",
+                validation={"hardware": "passed"},
+                validation_urls={"hardware": "https://example.com/checklist"},
+            )
+            reloaded = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            self.assertEqual("applied", reloaded.tracking["one"].status)
+            self.assertEqual("passed", reloaded.tracking["one"].validation["hardware"])
+            self.assertEqual(
+                "https://example.com/checklist",
+                reloaded.tracking["one"].validation_urls["hardware"],
+            )
+
+    def test_validation_url_requires_a_matching_check(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["validation_urls"] = {
+                "hardware": "https://example.com/checklist"
+            }
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "no matching validation check"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
     def test_record_only_entry_with_empty_steps_is_valid(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))

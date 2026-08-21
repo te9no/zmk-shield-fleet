@@ -15,6 +15,7 @@ When one keyboard proves a shared fix, the fleet ledger records:
 - the reference keyboard commit that verified it;
 - every repository that consumes the affected module;
 - whether each target is pending, in a PR, merged, applied, blocked, or not applicable;
+- optional CI and hardware validation gates that must pass before `applied`;
 - optional deterministic edits for `west.yml`, overlays, `.conf` files, and other UTF-8 text files.
 
 Module-scoped entries are checked against the inventory. Adding another consumer

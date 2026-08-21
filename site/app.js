@@ -1,13 +1,20 @@
 const state = { data: null, profile: null, filter: "all", search: "" };
 const terminalStatuses = new Set(["applied", "merged", "not-applicable"]);
+const acceptedValidationStatuses = new Set(["passed", "waived"]);
 
 const escapeHtml = (value) => String(value ?? "")
   .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
   .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
+function targetComplete(target) {
+  if (target.status === "not-applicable") return true;
+  const checks = Object.values(target.validation ?? {});
+  return terminalStatuses.has(target.status) && checks.every((status) => acceptedValidationStatuses.has(status));
+}
+
 function counts(change) {
   const values = Object.values(change.tracking);
-  const complete = values.filter((target) => terminalStatuses.has(target.status)).length;
+  const complete = values.filter(targetComplete).length;
   return { complete, total: values.length, pending: values.length - complete };
 }
 
@@ -63,8 +70,18 @@ function statusCell(change, repositoryId) {
   if (!target) return '<span class="status na">not in scope</span>';
   const label = target.status === "not-applicable" ? "not applicable" : target.status;
   const css = target.status === "not-applicable" ? "na" : target.status;
-  const detail = target.pr ? ` title="${escapeHtml(target.pr)}"` : "";
-  return `<span class="status ${css}"${detail}>${escapeHtml(label)}</span>`;
+  const status = target.pr
+    ? `<a class="status ${escapeHtml(css)}" href="${escapeHtml(target.pr)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`
+    : `<span class="status ${escapeHtml(css)}">${escapeHtml(label)}</span>`;
+  const validation = Object.entries(target.validation ?? {}).map(([name, status]) => {
+    const symbol = status === "passed" ? "✓" : status === "waived" ? "—" : status === "failed" ? "×" : "…";
+    const url = target.validation_urls?.[name];
+    const content = `${escapeHtml(name)} ${symbol}${url ? " ↗" : ""}`;
+    return url
+      ? `<a class="validation ${escapeHtml(status)}" href="${escapeHtml(url)}" target="_blank" rel="noopener">${content}</a>`
+      : `<span class="validation ${escapeHtml(status)}">${content}</span>`;
+  }).join("");
+  return `${status}${validation ? `<span class="validation-list">${validation}</span>` : ""}`;
 }
 
 function renderMatrix(profile) {
