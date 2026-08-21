@@ -20,6 +20,7 @@ def build_profile(manifest_path: Path) -> dict:
                 "id": row["id"],
                 "github": row.get("github"),
                 "architecture": row["architecture"],
+                "rollout_order": row.get("rollout_order"),
                 "modules": row.get("modules", []),
                 "tags": row.get("tags", []),
                 "ci": row.get("ci", True),

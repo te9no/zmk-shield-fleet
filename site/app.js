@@ -70,11 +70,13 @@ function statusCell(change, repositoryId) {
 function renderMatrix(profile) {
   const query = state.search.toLowerCase();
   const repositories = profile.repositories.filter((repo) =>
-    [repo.id, repo.architecture, ...repo.modules, ...repo.tags].join(" ").toLowerCase().includes(query));
+    [repo.id, repo.architecture, ...repo.modules, ...repo.tags].join(" ").toLowerCase().includes(query))
+    .sort((a, b) => (a.rollout_order ?? Number.MAX_SAFE_INTEGER) - (b.rollout_order ?? Number.MAX_SAFE_INTEGER));
   const table = document.querySelector("#matrix-table");
-  table.querySelector("thead").innerHTML = `<tr><th>Repository</th>${profile.changes.map((change) => `<th>${escapeHtml(change.id)}</th>`).join("")}</tr>`;
+  table.querySelector("thead").innerHTML = `<tr><th>Repository</th><th>Rollout</th>${profile.changes.map((change) => `<th>${escapeHtml(change.id)}</th>`).join("")}</tr>`;
   table.querySelector("tbody").innerHTML = repositories.map((repo) => `<tr>
     <td><span class="repo-name">${escapeHtml(repo.id)}</span><span class="repo-sub">${escapeHtml(repo.architecture)} · ${escapeHtml(repo.modules.join(", "))}</span></td>
+    <td>${repo.rollout_order ? `<span class="status ${repo.rollout_order >= 99 ? "na" : "pr-open"}">${repo.rollout_order >= 99 ? "lowest" : `#${repo.rollout_order}`}</span>` : '<span class="status na">—</span>'}</td>
     ${profile.changes.map((change) => `<td>${statusCell(change, repo.id)}</td>`).join("")}
   </tr>`).join("") || '<tr><td class="empty" colspan="99">No repositories match.</td></tr>';
 }

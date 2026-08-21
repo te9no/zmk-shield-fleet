@@ -21,6 +21,7 @@ required_globs = [
 
 [[repositories]]
 id = "mdk"
+rollout_order = 99
 github = "te9no/zmk-config-MDK"
 checkout = "zmk-config-MDK"
 default_branch = "main"
@@ -35,9 +36,11 @@ required_globs = [
 
 [[repositories]]
 id = "mkb2"
+rollout_order = 1
 github = "te9no/zmk-config-MKB2"
 checkout = "zmk-config-MKB2"
 default_branch = "main"
+maintenance_branch = "codex/zmk-0.4-baseline"
 architecture = "module-shields"
 modules = ["encoder", "joystick", "keys", "lpps", "mlx90393", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
@@ -49,6 +52,7 @@ required_globs = [
 
 [[repositories]]
 id = "mrm"
+rollout_order = 99
 github = "te9no/zmk-config-MRM"
 checkout = "zmk-config-MRM"
 default_branch = "main"
@@ -92,6 +96,7 @@ required_globs = [
 
 [[repositories]]
 id = "torabo"
+rollout_order = 99
 github = "te9no/zmk-keyboard-torabo-tsuki-lp"
 checkout = "zmk-keyboard-torabo-tsuki-lp"
 default_branch = "v0.3+dya-studio"
@@ -122,6 +127,7 @@ required_globs = [
 
 [[repositories]]
 id = "berkut51"
+rollout_order = 99
 github = "te9no/zmk-config-berkut51"
 checkout = "zmk-config-berkut51"
 default_branch = "main"
@@ -136,6 +142,7 @@ required_globs = [
 
 [[repositories]]
 id = "solstice"
+rollout_order = 2
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
 default_branch = "main"
@@ -150,6 +157,7 @@ required_globs = [
 
 [[repositories]]
 id = "kozakura"
+rollout_order = 99
 github = "te9no/zmk-config-koZakura"
 checkout = "zmk-config-koZakura"
 default_branch = "main"
@@ -164,6 +172,7 @@ required_globs = [
 
 [[repositories]]
 id = "sparagmos"
+rollout_order = 99
 github = "te9no/zmk-config-GeaconSparagmos"
 checkout = "zmk-config-GeaconSparagmos"
 default_branch = "master"
