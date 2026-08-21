@@ -1,13 +1,20 @@
 const state = { data: null, profile: null, filter: "all", search: "" };
 const terminalStatuses = new Set(["applied", "merged", "not-applicable"]);
+const acceptedValidationStatuses = new Set(["passed", "waived"]);
 
 const escapeHtml = (value) => String(value ?? "")
   .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
   .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
+function targetComplete(target) {
+  if (target.status === "not-applicable") return true;
+  const checks = Object.values(target.validation ?? {});
+  return terminalStatuses.has(target.status) && checks.every((status) => acceptedValidationStatuses.has(status));
+}
+
 function counts(change) {
   const values = Object.values(change.tracking);
-  const complete = values.filter((target) => terminalStatuses.has(target.status)).length;
+  const complete = values.filter(targetComplete).length;
   return { complete, total: values.length, pending: values.length - complete };
 }
 
@@ -64,7 +71,11 @@ function statusCell(change, repositoryId) {
   const label = target.status === "not-applicable" ? "not applicable" : target.status;
   const css = target.status === "not-applicable" ? "na" : target.status;
   const detail = target.pr ? ` title="${escapeHtml(target.pr)}"` : "";
-  return `<span class="status ${css}"${detail}>${escapeHtml(label)}</span>`;
+  const validation = Object.entries(target.validation ?? {}).map(([name, status]) => {
+    const symbol = status === "passed" ? "✓" : status === "waived" ? "—" : status === "failed" ? "×" : "…";
+    return `<span class="validation ${escapeHtml(status)}">${escapeHtml(name)} ${symbol}</span>`;
+  }).join("");
+  return `<span class="status ${css}"${detail}>${escapeHtml(label)}</span>${validation ? `<span class="validation-list">${validation}</span>` : ""}`;
 }
 
 function renderMatrix(profile) {

@@ -19,7 +19,13 @@
   },
   "repositories": ["mdk", "mrm"],
   "tracking": {
-    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "" },
+    "mdk": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "",
+      "validation": { "ci": "pending", "hardware": "pending" }
+    },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "" }
   },
   "steps": [

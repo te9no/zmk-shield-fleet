@@ -10,9 +10,21 @@ other UTF-8 text files.
 matching repositories from `fleet.toml` and fails if even one target is omitted.
 `steps` may be empty for a record/checklist-only change.
 
+Targets may declare named validation gates such as
+`"validation": {"ci": "passed", "hardware": "pending"}`. Allowed values are
+`pending`, `passed`, `failed`, and `waived`. Once gates are declared, every gate
+must be `passed` or explicitly `waived` before the target can be marked
+`applied`. A merged PR with pending validation remains visibly incomplete on the
+dashboard.
+
 Start from `../examples/change.json.disabled`, then record the upstream change,
 list every target, describe deterministic replacements, and review
 `shield-fleet change plan <id> --diff` before enabling it.
 
 Use `shield-fleet ledger mark` for manual updates and `shield-fleet ledger sync
 <id> --write` to discover PRs created from branch `fleet/<id>`.
+
+```sh
+shield-fleet ledger mark driver-fix --repo keyboard-a --status pr-open \
+  --validation-check ci=passed --validation-check hardware=pending
+```

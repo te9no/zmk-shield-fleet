@@ -103,6 +103,12 @@ td { font-size: 13px; }
 .status.closed::before { background: #df7467; }
 .status.na { color: #6d7974; }
 .status.na::before { background: #53605b; }
+.validation-list { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.validation { border: 1px solid #53605b; border-radius: 999px; padding: 2px 6px; color: #bdc8c3; font-size: 10px; white-space: nowrap; }
+.validation.passed { border-color: #4e8061; color: #8fd1a8; }
+.validation.pending { border-color: #8b6b3f; color: #f0b96e; }
+.validation.failed { border-color: #874d48; color: #f18a7f; }
+.validation.waived { color: #89958f; }
 
 .revision-section { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: start; }
 .revision-section > div > p:last-child { color: var(--muted); line-height: 1.6; }
