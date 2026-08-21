@@ -1,0 +1,125 @@
+name: Roll out campaign
+
+on:
+  workflow_dispatch:
+    inputs:
+      campaign:
+        description: Campaign id from campaigns/<id>.json
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: fleet-rollout-${{ inputs.campaign }}
+  cancel-in-progress: false
+
+jobs:
+  matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.targets.outputs.targets }}
+    steps:
+      - name: Checkout fleet repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install fleet CLI
+        run: python -m pip install -e .
+
+      - name: Validate campaign and compose matrix
+        id: targets
+        shell: bash
+        env:
+          CAMPAIGN: ${{ inputs.campaign }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$CAMPAIGN" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
+            echo "Invalid campaign id: $CAMPAIGN" >&2
+            exit 1
+          fi
+          targets="$(shield-fleet campaign targets "$CAMPAIGN" --ci-only --github-matrix)"
+          echo "targets=$targets" >> "$GITHUB_OUTPUT"
+
+  rollout:
+    needs: matrix
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.matrix.outputs.targets) }}
+    steps:
+      - name: Require cross-repository token
+        shell: bash
+        env:
+          FLEET_TOKEN: ${{ secrets.FLEET_TOKEN }}
+        run: |
+          if [[ -z "$FLEET_TOKEN" ]]; then
+            echo "Repository secret FLEET_TOKEN is required." >&2
+            exit 1
+          fi
+
+      - name: Checkout fleet repository
+        uses: actions/checkout@v7
+        with:
+          path: fleet
+
+      - name: Checkout target repository
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ matrix.github }}
+          ref: ${{ matrix.maintenance_branch }}
+          token: ${{ secrets.FLEET_TOKEN }}
+          path: workspace/${{ matrix.checkout }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install fleet CLI
+        run: python -m pip install -e fleet
+
+      - name: Preflight and apply campaign
+        env:
+          CAMPAIGN: ${{ inputs.campaign }}
+          REPOSITORY_ID: ${{ matrix.id }}
+        run: |
+          shield-fleet campaign apply "$CAMPAIGN" \
+            --manifest fleet/fleet.toml \
+            --workspace workspace \
+            --repo "$REPOSITORY_ID" \
+            --diff
+
+      - name: Create draft pull request
+        id: pull-request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          path: workspace/${{ matrix.checkout }}
+          token: ${{ secrets.FLEET_TOKEN }}
+          base: ${{ matrix.maintenance_branch }}
+          branch: fleet/${{ inputs.campaign }}
+          delete-branch: true
+          draft: true
+          commit-message: 'fleet: apply ${{ inputs.campaign }}'
+          title: 'fleet: apply ${{ inputs.campaign }}'
+          body: |
+            Applied cross-repository campaign `${{ inputs.campaign }}` from
+            `${{ github.repository }}`.
+
+            Source run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            This pull request is intentionally a draft. Verify this keyboard's
+            firmware build before merging.
+
+      - name: Summarize result
+        shell: bash
+        run: |
+          if [[ -n "${{ steps.pull-request.outputs.pull-request-url }}" ]]; then
+            echo "Draft PR: ${{ steps.pull-request.outputs.pull-request-url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No file changes for ${{ matrix.id }}." >> "$GITHUB_STEP_SUMMARY"

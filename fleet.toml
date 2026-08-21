@@ -1,0 +1,131 @@
+schema = 1
+
+[fleet]
+owner = "te9no"
+# This repository normally lives beside the managed checkouts under config/.
+workspace = ".."
+
+[[repositories]]
+id = "polaris"
+github = "te9no/zmk-config-GeaconPolaris"
+checkout = "zmk-config-GeaconPolaris"
+default_branch = "main"
+architecture = "module-snippets"
+modules = ["encoder", "iqs9151", "joystick", "lpps", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "split", "xiao"]
+required_globs = [
+  "build.yaml",
+  "boards/shields/GeaconPolaris/Polaris_modules.dtsi",
+  "snippets/*/snippet.yml",
+]
+
+[[repositories]]
+id = "mdk"
+github = "te9no/zmk-config-MDK"
+checkout = "zmk-config-MDK"
+default_branch = "main"
+architecture = "slot-snippets"
+modules = ["encoder", "joystick", "keys", "mlx90393", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "three-slot", "xiao"]
+required_globs = [
+  "build.yaml",
+  "snippets/Slot*/snippet.yml",
+  "snippets/Slot*/*.overlay",
+]
+
+[[repositories]]
+id = "mkb2"
+github = "te9no/zmk-config-MKB2"
+checkout = "zmk-config-MKB2"
+default_branch = "main"
+architecture = "module-shields"
+modules = ["encoder", "joystick", "keys", "lpps", "mlx90393", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "split", "xiao"]
+required_globs = [
+  "build.yaml",
+  "boards/shields/MKB/MKB_*_*.overlay",
+  "boards/shields/MKB/MKB_*_*.conf",
+]
+
+[[repositories]]
+id = "mrm"
+github = "te9no/zmk-config-MRM"
+checkout = "zmk-config-MRM"
+default_branch = "main"
+architecture = "slot-snippets"
+modules = ["encoder", "joystick", "keys", "mlx90393", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "three-slot", "xiao"]
+required_globs = [
+  "build.yaml",
+  "snippets/Slot*/snippet.yml",
+  "snippets/Slot*/*.overlay",
+]
+
+[[repositories]]
+id = "saa"
+github = "te9no/zmk-config-SparAkashaAnanta"
+checkout = "zmk-config-SparAkashaAnanta"
+default_branch = "master"
+architecture = "module-shields"
+modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "split", "xiao"]
+required_globs = [
+  "build.yaml",
+  "boards/shields/SparAkashaAnanta/SAA_*_*.overlay",
+  "boards/shields/SparAkashaAnanta/SAA_*_*.conf",
+]
+
+[[repositories]]
+id = "cornix"
+github = "te9no/zmk-keyboard-cornix"
+checkout = "zmk-keyboard-cornix"
+default_branch = "main"
+# MeKaBu module snippets are currently maintained on this branch.
+maintenance_branch = "feature/madula-tp-status"
+architecture = "module-snippets"
+modules = ["iqs9151", "lpps", "trackball"]
+tags = ["mekabu", "modular-input", "split", "xiao"]
+required_globs = [
+  "build.yaml",
+  "snippets/madula-*/snippet.yml",
+  "snippets/madula-*/*.overlay",
+]
+
+[[repositories]]
+id = "torabo"
+github = "te9no/zmk-keyboard-torabo-tsuki-lp"
+checkout = "zmk-keyboard-torabo-tsuki-lp"
+default_branch = "v0.3+dya-studio"
+architecture = "module-snippets"
+modules = ["trackball", "touchpad"]
+tags = ["modular-input", "split", "xiao"]
+required_globs = [
+  "build.yaml",
+  "snippets/input-*/snippet.yml",
+  "snippets/input-*/*.overlay",
+]
+
+# CaGiMe is already present locally but has no GitHub remote or initial commit.
+# It participates in local audits and campaigns, but not in CI cloning/rollout.
+[[repositories]]
+id = "cagime"
+checkout = "zmk-config-CaGiMe"
+default_branch = "master"
+architecture = "module-shields"
+modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
+tags = ["mekabu", "modular-input", "split", "xiao", "local-only"]
+ci = false
+required_globs = [
+  "build.yaml",
+  "boards/shields/CaGiMe/CGM_*_*.overlay",
+  "boards/shields/CaGiMe/CGM_*_*.conf",
+]
+
+[[mirrors]]
+id = "mdk-mrm-slot-snippets"
+description = "MDK and MRM began with the same three-slot module snippet set."
+enforce = false
+members = [
+  { repository = "mdk", path = "snippets", include = ["Slot*/**"], exclude = [] },
+  { repository = "mrm", path = "snippets", include = ["Slot*/**"], exclude = [] },
+]
