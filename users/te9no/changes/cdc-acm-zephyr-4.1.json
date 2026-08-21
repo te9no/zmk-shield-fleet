@@ -24,7 +24,7 @@
     "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
     "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "旧revision 3570fa7を使用中" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
-    "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "固定revisionをsplit central側へ適用。PR #5でmasterへ昇格し、全21 firmware matrix成功" },
+    "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "専用検証branchのsplit central側へ固定revisionを適用し、全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち" },
     "cornix": { "status": "applied", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "notes": "Zephyr 4.1のDTE rate callbackを使う同等実装をrepository内に保持し、全production buildで検証" },
     "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "旧v0.2とZMK 0.3を使用中" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "module定義はコメントアウト。ローカル専用" },
