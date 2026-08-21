@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "id": "example-driver-update",
+  "enabled": false,
+  "title": "Propagate an example driver update",
+  "description": "Example only: replace repositories, revisions, paths, and expected counts.",
+  "source": {
+    "repository": "te9no/example-zmk-driver",
+    "from_revision": "old-revision",
+    "to_revision": "new-revision",
+    "change_url": "https://github.com/te9no/example-zmk-driver/compare/old-revision...new-revision",
+    "notes": "Why this driver change needs propagation"
+  },
+  "repositories": ["mdk", "mrm"],
+  "tracking": {
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "" }
+  },
+  "steps": [
+    {
+      "id": "update-west-revision",
+      "paths": ["config/west.yml"],
+      "operation": "literal_replace",
+      "find": "revision: old-revision",
+      "replace": "revision: new-revision",
+      "expect": { "mdk": 1, "mrm": 1 }
+    },
+    {
+      "id": "update-overlay-binding",
+      "paths": ["**/*.overlay"],
+      "operation": "literal_replace",
+      "find": "example,old-binding",
+      "replace": "example,new-binding",
+      "expect": { "mdk": { "min": 0, "max": 4 }, "mrm": { "min": 0, "max": 4 } }
+    },
+    {
+      "id": "update-kconfig",
+      "paths": ["**/*.conf"],
+      "operation": "literal_replace",
+      "find": "CONFIG_EXAMPLE_OLD=y",
+      "replace": "CONFIG_EXAMPLE_NEW=y",
+      "expect": { "mdk": { "min": 0, "max": 4 }, "mrm": { "min": 0, "max": 4 } }
+    }
+  ]
+}

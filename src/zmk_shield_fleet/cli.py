@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Sequence
 
 from .core import (
+    LEDGER_STATUSES,
     FleetError,
     apply_campaign,
     audit_fleet,
@@ -15,11 +16,15 @@ from .core import (
     clone_repositories,
     inventory_rows,
     json_compact,
+    list_ledger_entries,
     load_campaign,
+    load_ledger_entry,
     load_manifest,
+    mark_ledger_target,
     plan_campaign,
     resolve_workspace,
     select_repositories,
+    sync_ledger_entry,
 )
 
 
@@ -60,7 +65,7 @@ def _common_parser(*, selectors: bool = True) -> argparse.ArgumentParser:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="shield-fleet",
-        description="Guarded cross-repository maintenance for modular ZMK shields.",
+        description="Track and propagate shared ZMK driver changes across keyboard repositories.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
     common = _common_parser()
@@ -86,36 +91,56 @@ def build_parser() -> argparse.ArgumentParser:
         help="shallow clone depth; use 0 for full history (default: 1)",
     )
 
-    campaign = subparsers.add_parser("campaign", help="plan or apply a guarded migration")
-    campaign_subparsers = campaign.add_subparsers(dest="campaign_command", required=True)
-    campaign_common = _common_parser()
+    for command, help_text in (
+        ("change", "plan or apply the file changes recorded in a ledger entry"),
+        ("campaign", "backward-compatible alias for change"),
+    ):
+        change = subparsers.add_parser(command, help=help_text)
+        change_subparsers = change.add_subparsers(dest="change_command", required=True)
+        change_common = _common_parser()
 
-    targets = campaign_subparsers.add_parser(
-        "targets", parents=[campaign_common], help="emit a campaign target list"
-    )
-    targets.add_argument("campaign", help="campaign id or JSON path")
-    targets.add_argument(
-        "--github-matrix",
-        action="store_true",
-        help="emit a compact GitHub Actions matrix",
-    )
+        targets = change_subparsers.add_parser(
+            "targets", parents=[change_common], help="emit a change target list"
+        )
+        targets.add_argument("change", help="change id or JSON path")
+        targets.add_argument(
+            "--github-matrix", action="store_true", help="emit a compact GitHub Actions matrix"
+        )
 
-    plan = campaign_subparsers.add_parser(
-        "plan", parents=[campaign_common], help="preflight a campaign without writing"
-    )
-    plan.add_argument("campaign", help="campaign id or JSON path")
-    plan.add_argument("--diff", action="store_true", help="show the unified diff")
+        plan = change_subparsers.add_parser(
+            "plan", parents=[change_common], help="preflight a change without writing"
+        )
+        plan.add_argument("change", help="change id or JSON path")
+        plan.add_argument("--diff", action="store_true", help="show the unified diff")
 
-    apply = campaign_subparsers.add_parser(
-        "apply", parents=[campaign_common], help="preflight and apply a campaign"
-    )
-    apply.add_argument("campaign", help="campaign id or JSON path")
-    apply.add_argument("--diff", action="store_true", help="show the unified diff before writing")
-    apply.add_argument(
-        "--allow-dirty",
-        action="store_true",
-        help="allow writes to repositories with existing changes",
-    )
+        apply = change_subparsers.add_parser(
+            "apply", parents=[change_common], help="preflight and apply a change"
+        )
+        apply.add_argument("change", help="change id or JSON path")
+        apply.add_argument("--diff", action="store_true", help="show the unified diff before writing")
+        apply.add_argument(
+            "--allow-dirty", action="store_true",
+            help="allow writes to repositories with existing changes",
+        )
+
+    ledger = subparsers.add_parser("ledger", help="inspect and update the driver-change ledger")
+    ledger_subparsers = ledger.add_subparsers(dest="ledger_command", required=True)
+    ledger_common = _common_parser(selectors=False)
+    ledger_subparsers.add_parser("list", parents=[ledger_common], help="list all changes")
+    show = ledger_subparsers.add_parser("show", parents=[ledger_common], help="show one change")
+    show.add_argument("change", help="change id or JSON path")
+    check = ledger_subparsers.add_parser("check", parents=[ledger_common], help="validate entries")
+    check.add_argument("change", nargs="?", help="optional change id or JSON path")
+    sync = ledger_subparsers.add_parser("sync", parents=[ledger_common], help="sync PR states")
+    sync.add_argument("change", nargs="?", help="optional change id or JSON path")
+    sync.add_argument("--write", action="store_true", help="write discovered states to JSON")
+    mark = ledger_subparsers.add_parser("mark", parents=[ledger_common], help="update one target")
+    mark.add_argument("change", help="change id or JSON path")
+    mark.add_argument("--repo", required=True, help="repository id")
+    mark.add_argument("--status", required=True, choices=sorted(LEDGER_STATUSES))
+    mark.add_argument("--pr", help="pull request URL; pass an empty value to clear")
+    mark.add_argument("--commit", help="applied/merge commit; pass an empty value to clear")
+    mark.add_argument("--notes", help="free-form note")
     return parser
 
 
@@ -174,7 +199,7 @@ def _campaign_repository_filter(
 
 
 def _print_campaign_plan(plan) -> None:
-    print(f"Campaign: {plan.campaign.id} — {plan.campaign.title}")
+    print(f"Change: {plan.campaign.id} — {plan.campaign.title}")
     for result in plan.results:
         state = "up-to-date" if result.pending == 0 else f"{result.pending} pending"
         if result.already:
@@ -206,6 +231,52 @@ def _resolve_campaign_selection(args: argparse.Namespace, manifest, campaign):
 
 
 def dispatch(args: argparse.Namespace) -> int:
+    if args.command == "ledger":
+        manifest = load_manifest(args.manifest)
+        if args.ledger_command in {"list", "check", "sync"} and not getattr(args, "change", None):
+            entries = list_ledger_entries(manifest)
+        else:
+            entries = (load_ledger_entry(manifest, args.change),)
+
+        if args.ledger_command == "list":
+            if not entries:
+                print("No ledger entries.")
+            for entry in entries:
+                counts: dict[str, int] = {}
+                for target in entry.tracking.values():
+                    counts[target.status] = counts.get(target.status, 0) + 1
+                summary = ", ".join(f"{key}={counts[key]}" for key in sorted(counts))
+                print(f"{entry.campaign.id}\t{entry.source.to_revision}\t{summary}")
+            return 0
+
+        if args.ledger_command == "check":
+            print(f"OK: validated {len(entries)} ledger entry/entries")
+            return 0
+
+        if args.ledger_command == "show":
+            entry = entries[0]
+            print(f"{entry.campaign.id}: {entry.campaign.title}")
+            print(f"Source: {entry.source.repository} -> {entry.source.to_revision}")
+            for repo_id, target in entry.tracking.items():
+                details = target.pr or target.commit or "-"
+                print(f"  {repo_id}: {target.status} ({details})")
+            return 0
+
+        if args.ledger_command == "mark":
+            mark_ledger_target(
+                entries[0], args.repo, args.status, pr=args.pr,
+                commit=args.commit, notes=args.notes,
+            )
+            print(f"Updated {entries[0].campaign.id}/{args.repo}: {args.status}")
+            return 0
+
+        if args.ledger_command == "sync":
+            for entry in entries:
+                tracking = sync_ledger_entry(manifest, entry, write=args.write)
+                for repo_id, target in tracking.items():
+                    print(f"{entry.campaign.id}\t{repo_id}\t{target.status}\t{target.pr or '-'}")
+            return 0
+
     if args.command == "inventory":
         manifest, workspace = _load_context(args)
         rows = inventory_rows(manifest, workspace, _selected(args, manifest))
@@ -247,12 +318,12 @@ def dispatch(args: argparse.Namespace) -> int:
             print(message)
         return 0
 
-    if args.command == "campaign":
+    if args.command in {"change", "campaign"}:
         manifest, workspace = _load_context(args)
-        loaded = load_campaign(manifest, args.campaign)
+        loaded = load_campaign(manifest, args.change)
         selected_ids = _resolve_campaign_selection(args, manifest, loaded)
 
-        if args.campaign_command == "targets":
+        if args.change_command == "targets":
             matrix = campaign_matrix(
                 manifest,
                 loaded,
@@ -274,7 +345,7 @@ def dispatch(args: argparse.Namespace) -> int:
         if args.diff and planned.changes:
             print()
             print(campaign_diff(planned), end="")
-        if args.campaign_command == "apply":
+        if args.change_command == "apply":
             apply_campaign(
                 manifest,
                 workspace,

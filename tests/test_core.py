@@ -13,10 +13,13 @@ from zmk_shield_fleet.core import (
     audit_fleet,
     campaign_matrix,
     load_campaign,
+    load_ledger_entry,
     load_manifest,
+    mark_ledger_target,
     plan_campaign,
     resolve_workspace,
     select_repositories,
+    sync_ledger_entry,
 )
 
 
@@ -114,6 +117,23 @@ class FleetFixture:
         path.write_text(json.dumps(campaign), encoding="utf-8")
         return path
 
+    def write_ledger(self, *, tracking: dict | None = None) -> Path:
+        raw = json.loads(self.write_campaign().read_text(encoding="utf-8"))
+        raw["source"] = {
+            "repository": "example/driver",
+            "from_revision": "old",
+            "to_revision": "new",
+            "change_url": "https://github.com/example/driver/compare/old...new",
+            "notes": "test update",
+        }
+        raw["tracking"] = tracking or {
+            "one": {"status": "pending", "pr": None, "commit": None, "notes": ""},
+            "two": {"status": "pending", "pr": None, "commit": None, "notes": ""},
+        }
+        path = self.root / "align-value.json"
+        path.write_text(json.dumps(raw), encoding="utf-8")
+        return path
+
 
 class ManifestTests(unittest.TestCase):
     def test_manifest_and_tag_selection(self) -> None:
@@ -137,6 +157,30 @@ class ManifestTests(unittest.TestCase):
 
 
 class CampaignTests(unittest.TestCase):
+    def test_one_change_can_update_west_overlay_and_conf(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            fixture.init_repositories()
+            for name in ("one", "two"):
+                root = fixture.workspace / name
+                (root / "config" / "west.yml").write_text("revision: old\n", encoding="utf-8")
+                (root / "config" / "shield.overlay").write_text("old-binding\n", encoding="utf-8")
+            raw = json.loads(fixture.write_campaign().read_text(encoding="utf-8"))
+            raw["steps"] = [
+                {"id": "west", "paths": ["config/west.yml"], "operation": "literal_replace",
+                 "find": "revision: old", "replace": "revision: new", "expect": {"one": 1, "two": 1}},
+                {"id": "overlay", "paths": ["**/*.overlay"], "operation": "literal_replace",
+                 "find": "old-binding", "replace": "new-binding", "expect": {"one": 1, "two": 1}},
+                {"id": "conf", "paths": ["**/*.conf"], "operation": "literal_replace",
+                 "find": "VALUE=old", "replace": "VALUE=new", "expect": {"one": 1, "two": 1}},
+            ]
+            path = fixture.root / "align-value.json"
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            plan = plan_campaign(manifest, fixture.workspace, load_campaign(manifest, path))
+            self.assertEqual(6, len(plan.changes))
+
     def test_campaign_is_preflighted_applied_and_idempotent(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
@@ -212,6 +256,47 @@ class CampaignTests(unittest.TestCase):
             campaign = load_campaign(manifest, fixture.write_campaign())
             matrix = campaign_matrix(manifest, campaign, ["two"], ci_only=True)
             self.assertEqual("two", matrix["include"][0]["id"])
+
+
+class LedgerTests(unittest.TestCase):
+    def test_tracking_must_cover_every_repository(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger(
+                tracking={"one": {"status": "pending", "pr": None, "commit": None, "notes": ""}}
+            )
+            with self.assertRaisesRegex(FleetError, "keys must exactly match"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
+    def test_pr_states_are_synced_and_manual_state_can_be_marked(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8")
+            text = text.replace('checkout = "one"', 'github = "example/one"\ncheckout = "one"')
+            text = text.replace('checkout = "two"', 'github = "example/two"\ncheckout = "two"')
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            path = fixture.write_ledger()
+            entry = load_ledger_entry(manifest, path)
+
+            def fake_fetch(repository: str, branch: str):
+                self.assertEqual("fleet/align-value", branch)
+                if repository.endswith("/one"):
+                    return [{"state": "OPEN", "url": "https://example/pr/1", "updatedAt": "2"}]
+                return [{"state": "MERGED", "mergedAt": "now", "url": "https://example/pr/2",
+                         "mergeCommit": {"oid": "abc123"}, "updatedAt": "3"}]
+
+            synced = sync_ledger_entry(manifest, entry, write=True, fetcher=fake_fetch)
+            self.assertEqual("pr-open", synced["one"].status)
+            self.assertEqual("merged", synced["two"].status)
+            self.assertEqual("abc123", synced["two"].commit)
+
+            reloaded = load_ledger_entry(manifest, path)
+            self.assertEqual("https://example/pr/1", reloaded.tracking["one"].pr)
+            mark_ledger_target(reloaded, "one", "applied", commit="def456")
+            self.assertEqual("applied", load_ledger_entry(manifest, path).tracking["one"].status)
 
 
 class AuditTests(unittest.TestCase):
