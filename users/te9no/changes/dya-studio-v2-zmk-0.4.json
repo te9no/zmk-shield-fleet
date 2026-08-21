@@ -25,7 +25,7 @@
     "mkb2": { "status": "pending", "pr": null, "commit": null, "notes": "一部runtime moduleはあるがPolaris基準より旧revisionで、combo/macro/診断群なし" },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio V2固定module群なし" },
     "saa": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "ZMK 0.4と固定DYA Studio module群へ移行。PR #5でmasterへ昇格し、全21 firmware matrix成功" },
-    "cornix": { "status": "applied", "pr": null, "commit": "e8dc0e1e990007d0ccb12f8a214c820da452a5ec", "notes": "Polarisと同じ固定revision群を採用済み" },
+    "cornix": { "status": "applied", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "notes": "Polarisと同じ固定revision群を採用し、Madula対応とともにmainへ昇格。全12 firmware matrix成功" },
     "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "ZMK v0.3-branch+dyaと旧Studio stack" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "ZMK v0.3-branch+dyaとmoving mainの旧Studio stack。ローカル専用" },
     "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "旧DYA runtime stackを使用中" },

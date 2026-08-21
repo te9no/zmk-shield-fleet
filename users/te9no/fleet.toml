@@ -80,8 +80,6 @@ id = "cornix"
 github = "te9no/zmk-keyboard-cornix"
 checkout = "zmk-keyboard-cornix"
 default_branch = "main"
-# MeKaBu module snippets are currently maintained on this branch.
-maintenance_branch = "feature/madula-tp-status"
 architecture = "madula-module-snippets"
 modules = ["iqs9151", "lpps", "trackball"]
 tags = ["madula", "mekabu", "modular-input", "split", "xiao"]

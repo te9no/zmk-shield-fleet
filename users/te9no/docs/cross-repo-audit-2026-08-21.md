@@ -13,7 +13,7 @@ Madula向け共通変更に参加します。
 | MKB2 | n/a | pending | pending (旧revあり) | pending (一部旧stack) |
 | MRM | n/a | pending | pending | pending |
 | SparAkashaAnanta | applied ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#4](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) |
-| Cornix | applied | n/a | pending | applied |
+| Cornix | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) | n/a | applied（repository内同等実装、[#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)） | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) |
 | Torabo | n/a | n/a | pending (v0.2) | pending (ZMK 0.3) |
 | CaGiMe | pending (fork/ZMK 0.3) | pending (moving main) | pending (comment only) | pending (ZMK 0.3) |
 | Berkut51 | n/a | pending | pending | pending (旧stack) |
@@ -27,7 +27,7 @@ Madula向け共通変更に参加します。
 - Analog voltage: module `59fc126`をPolaris `6a7b21f`でpinして検証。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
-- Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAAが0件。その他9 repositoriesに71件。
+- Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornixが0件。その他8 repositoriesに69件。
 
 ## Inventory findings
 
