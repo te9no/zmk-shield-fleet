@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "id": "iqs9151-upstream-zmk-0.4",
+  "enabled": true,
+  "title": "IQS9151をShiniNet本家ドライバでZMK 0.4対応する",
+  "description": "Polarisで実機検証した本家IQS9151構成を、IQS搭載キーボードへ漏れなく反映する。",
+  "scope": { "module": "iqs9151" },
+  "source": {
+    "repository": "ShiniNet/zmk-driver-iqs9151",
+    "from_revision": null,
+    "to_revision": "08a6fd19c5aa5ae7f11daf371b5a391cd8596783",
+    "change_url": "https://github.com/ShiniNet/zmk-driver-iqs9151/commit/08a6fd19c5aa5ae7f11daf371b5a391cd8596783",
+    "notes": "旧te9no/zmk-driver-iqs9151-rpcから本家へ切り替える。fork固有KconfigとStudio RPCは移植しない。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "839f0c090afcb3c5f6172ca12ea169ae36575466",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/839f0c090afcb3c5f6172ca12ea169ae36575466",
+    "notes": "Polarisで本家ドライバを検証。f3e2337でpointer調整、b95a554でsplit centralの向きを修整。"
+  },
+  "repositories": ["polaris", "saa", "cornix", "cagime"],
+  "tracking": {
+    "polaris": { "status": "applied", "pr": null, "commit": "b95a554c545b9a24fe3ca0fcb24981e261e4a20a", "notes": "基準実装" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "IQS forkとZMK v0.3-branch+dyaを使用中" },
+    "cornix": { "status": "applied", "pr": null, "commit": "ee0827fa94567a18e491f9fd3945ce5048b02dee", "notes": "Polarisと同じdriver revisionおよび設定値を反映済み" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "IQS forkとZMK v0.3-branch+dyaを使用中。ローカル専用" }
+  },
+  "steps": []
+}

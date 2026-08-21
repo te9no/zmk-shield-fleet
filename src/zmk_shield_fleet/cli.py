@@ -257,6 +257,12 @@ def dispatch(args: argparse.Namespace) -> int:
             entry = entries[0]
             print(f"{entry.campaign.id}: {entry.campaign.title}")
             print(f"Source: {entry.source.repository} -> {entry.source.to_revision}")
+            if entry.trigger:
+                print(f"Trigger: {entry.trigger.repository}@{entry.trigger.revision}")
+            if entry.scope_module:
+                print(f"Scope: every repository with module={entry.scope_module}")
+            elif entry.scope_all:
+                print("Scope: every managed repository")
             for repo_id, target in entry.tracking.items():
                 details = target.pr or target.commit or "-"
                 print(f"  {repo_id}: {target.status} ({details})")
@@ -324,6 +330,10 @@ def dispatch(args: argparse.Namespace) -> int:
         selected_ids = _resolve_campaign_selection(args, manifest, loaded)
 
         if args.change_command == "targets":
+            if not loaded.steps:
+                raise FleetError(
+                    f"change {loaded.id!r} is ledger-only and has no automated steps"
+                )
             matrix = campaign_matrix(
                 manifest,
                 loaded,

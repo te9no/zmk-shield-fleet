@@ -16,6 +16,11 @@
 5. planで差分を確認し、ローカル適用またはGitHub ActionsからドラフトPRを作る。
 6. PR状態を同期し、手動反映分は台帳へ記録する。
 
+`trigger` には、変更を最初に実機検証したキーボードのcommitを記録します。
+`scope` を `{ "module": "iqs9151" }` または `{ "all": true }` とすると、
+`fleet.toml` から対象集合を再計算し、一台でも台帳から漏れると `ledger check` が失敗します。
+自動置換が安全に書けない変更は `steps: []` のチェックリスト専用台帳にできます。
+
 ```sh
 shield-fleet ledger list
 shield-fleet ledger show example-driver-update
@@ -63,8 +68,8 @@ shield-fleet audit --workspace .fleet-workspace --ci-only
 ```
 
 `fleet.toml` には Polaris、MDK、MKB2、MRM、SparAkashaAnanta、Cornix、Torabo、
-ローカル専用CaGiMeを登録しています。CaGiMeは監査と台帳には参加できますが、GitHub
-remoteがないためPR rolloutからは除外されます。
+Berkut51、GeaconSolstice、koZakura、GeaconSparagmos、ローカル専用CaGiMeを登録しています。
+CaGiMeは監査と台帳には参加できますが、GitHub remoteがないためPR rolloutからは除外されます。
 
 ## ドラフトPR rollout
 
@@ -86,3 +91,6 @@ python -m zmk_shield_fleet ledger check
 ```
 
 旧 `campaign` コマンドは互換aliasとして残しています。
+
+初回の横断検査結果は [`docs/cross-repo-audit-2026-08-21.md`](docs/cross-repo-audit-2026-08-21.md)
+に記録しています。

@@ -11,6 +11,12 @@
     "change_url": "https://github.com/te9no/example-zmk-driver/compare/old-revision...new-revision",
     "notes": "Why this driver change needs propagation"
   },
+  "trigger": {
+    "repository": "te9no/example-keyboard",
+    "revision": "verified-implementation-commit",
+    "change_url": "https://github.com/te9no/example-keyboard/commit/verified-implementation-commit",
+    "notes": "The keyboard and build where this change was proven"
+  },
   "repositories": ["mdk", "mrm"],
   "tracking": {
     "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "" },

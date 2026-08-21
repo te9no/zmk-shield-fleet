@@ -122,6 +122,14 @@ class ChangeSource:
 
 
 @dataclass(frozen=True)
+class ChangeTrigger:
+    repository: str
+    revision: str
+    change_url: str
+    notes: str
+
+
+@dataclass(frozen=True)
 class TargetTracking:
     status: str
     pr: str | None
@@ -133,6 +141,9 @@ class TargetTracking:
 class LedgerEntry:
     campaign: Campaign
     source: ChangeSource
+    trigger: ChangeTrigger | None
+    scope_module: str | None
+    scope_all: bool
     tracking: Mapping[str, TargetTracking]
 
     @property
@@ -638,9 +649,9 @@ def load_campaign(
     if unknown:
         raise FleetError(f"campaign references unknown repositories: {', '.join(sorted(unknown))}")
 
-    raw_steps = table.get("steps")
-    if not isinstance(raw_steps, list) or not raw_steps:
-        raise FleetError("campaign.steps must be a non-empty array")
+    raw_steps = table.get("steps", [])
+    if not isinstance(raw_steps, list):
+        raise FleetError("campaign.steps must be an array")
     steps: list[CampaignStep] = []
     seen_step_ids: set[str] = set()
     for index, item in enumerate(raw_steps):
@@ -742,6 +753,52 @@ def load_ledger_entry(
             source_table.get("notes", ""), "change.source.notes", allow_empty=True
         ),
     )
+    trigger_info = None
+    if table.get("trigger") is not None:
+        trigger_table = _require_mapping(table.get("trigger"), "change.trigger")
+        trigger_info = ChangeTrigger(
+            repository=_require_string(
+                trigger_table.get("repository"), "change.trigger.repository"
+            ),
+            revision=_require_string(trigger_table.get("revision"), "change.trigger.revision"),
+            change_url=_require_string(
+                trigger_table.get("change_url"), "change.trigger.change_url"
+            ),
+            notes=_require_string(
+                trigger_table.get("notes", ""), "change.trigger.notes", allow_empty=True
+            ),
+        )
+    scope_module = None
+    scope_all = False
+    if table.get("scope") is not None:
+        scope_table = _require_mapping(table.get("scope"), "change.scope")
+        if set(scope_table) == {"module"}:
+            scope_module = _validate_id(
+                _require_string(scope_table.get("module"), "change.scope.module"),
+                "change.scope.module",
+            )
+            expected_repositories = {
+                repo.id for repo in manifest.repositories.values() if scope_module in repo.modules
+            }
+            scope_description = repr(scope_module) + " consumer"
+        elif set(scope_table) == {"all"} and scope_table.get("all") is True:
+            scope_all = True
+            expected_repositories = set(manifest.repositories)
+            scope_description = "managed repository"
+        else:
+            raise FleetError("change.scope must be either {module: <id>} or {all: true}")
+        if set(campaign.repositories) != expected_repositories:
+            missing = sorted(expected_repositories.difference(campaign.repositories))
+            extra = sorted(set(campaign.repositories).difference(expected_repositories))
+            details = []
+            if missing:
+                details.append("missing " + ", ".join(missing))
+            if extra:
+                details.append("extra " + ", ".join(extra))
+            raise FleetError(
+                f"change.repositories must match every {scope_description}: "
+                + "; ".join(details)
+            )
     tracking_table = _require_mapping(table.get("tracking"), "change.tracking")
     if set(tracking_table) != set(campaign.repositories):
         raise FleetError("change.tracking keys must exactly match change.repositories")
@@ -762,7 +819,14 @@ def load_ledger_entry(
                 target.get("notes", ""), f"change.tracking.{repo_id}.notes", allow_empty=True
             ),
         )
-    return LedgerEntry(campaign=campaign, source=source_info, tracking=tracking)
+    return LedgerEntry(
+        campaign=campaign,
+        source=source_info,
+        trigger=trigger_info,
+        scope_module=scope_module,
+        scope_all=scope_all,
+        tracking=tracking,
+    )
 
 
 def list_ledger_entries(manifest: Manifest) -> tuple[LedgerEntry, ...]:

@@ -259,6 +259,33 @@ class CampaignTests(unittest.TestCase):
 
 
 class LedgerTests(unittest.TestCase):
+    def test_record_only_entry_with_empty_steps_is_valid(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["scope"] = {"all": True}
+            raw["steps"] = []
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            entry = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            self.assertTrue(entry.scope_all)
+            self.assertEqual((), entry.campaign.steps)
+
+    def test_module_scope_detects_an_omitted_consumer(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["scope"] = {"module": "trackball"}
+            raw["repositories"] = ["one"]
+            raw["tracking"] = {"one": raw["tracking"]["one"]}
+            raw["steps"] = []
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "missing two"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
     def test_tracking_must_cover_every_repository(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
