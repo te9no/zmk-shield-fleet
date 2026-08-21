@@ -12,7 +12,7 @@ Madula向け共通変更に参加します。
 | MDK | n/a | pending | pending | pending |
 | MKB2 | n/a | pending | pending (旧revあり) | pending (一部旧stack) |
 | MRM | n/a | pending | pending | pending |
-| SparAkashaAnanta | applied ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3)) |
+| SparAkashaAnanta | applied ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#4](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) | applied ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [master #5](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/5)) |
 | Cornix | applied | n/a | pending | applied |
 | Torabo | n/a | n/a | pending (v0.2) | pending (ZMK 0.3) |
 | CaGiMe | pending (fork/ZMK 0.3) | pending (moving main) | pending (comment only) | pending (ZMK 0.3) |
