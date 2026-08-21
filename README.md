@@ -110,3 +110,11 @@ shield-fleet ledger check --manifest users/te9no/fleet.toml
 ```
 
 The legacy `campaign` command remains as a compatibility alias for `change`.
+
+## Dashboard
+
+The repository includes a reusable static dashboard in `site/`. GitHub Pages
+builds its data from every committed `users/*/fleet.toml` profile and change
+ledger, so status updates appear without hand-editing HTML. The dashboard shows
+fleet totals, propagation progress, the repository/change matrix, and revision
+pinning findings.
