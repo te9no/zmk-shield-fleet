@@ -21,7 +21,7 @@
   "repositories": ["polaris", "saa", "cornix", "cagime"],
   "tracking": {
     "polaris": { "status": "applied", "pr": null, "commit": "b95a554c545b9a24fe3ca0fcb24981e261e4a20a", "notes": "基準実装" },
-    "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2", "commit": "4671a29fd1f15c199abf128de41ef18080c2b11c", "notes": "専用検証branchでZMK 0.4基盤と本家driverへ移行し、全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち", "validation": { "ci": "passed", "hardware": "pending" } },
+    "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2", "commit": "4671a29fd1f15c199abf128de41ef18080c2b11c", "notes": "専用検証branchでZMK 0.4基盤と本家driverへ移行し、全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち", "validation": { "ci": "passed", "hardware": "pending" }, "validation_urls": { "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32466324146" } },
     "cornix": { "status": "applied", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "notes": "Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映し、mainへ昇格" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "IQS forkとZMK v0.3-branch+dyaを使用中。ローカル専用" }
   },

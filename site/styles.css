@@ -96,6 +96,8 @@ td { font-size: 13px; }
 .repo-name { font-weight: 750; }
 .repo-sub { display: block; margin-top: 4px; color: #99a49f; font-size: 11px; }
 .status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; }
+a.status, a.validation { color: inherit; text-decoration: none; }
+a.status:hover, a.validation:hover { text-decoration: underline; text-underline-offset: 3px; }
 .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #75817c; }
 .status.applied::before, .status.merged::before { background: #76c594; }
 .status.pending::before, .status.blocked::before { background: #e5a459; }

@@ -286,11 +286,32 @@ class LedgerTests(unittest.TestCase):
             with self.assertRaisesRegex(FleetError, "validation is incomplete.*hardware"):
                 mark_ledger_target(entry, "one", "applied")
             mark_ledger_target(
-                entry, "one", "applied", validation={"hardware": "passed"}
+                entry,
+                "one",
+                "applied",
+                validation={"hardware": "passed"},
+                validation_urls={"hardware": "https://example.com/checklist"},
             )
             reloaded = load_ledger_entry(load_manifest(fixture.manifest_path), path)
             self.assertEqual("applied", reloaded.tracking["one"].status)
             self.assertEqual("passed", reloaded.tracking["one"].validation["hardware"])
+            self.assertEqual(
+                "https://example.com/checklist",
+                reloaded.tracking["one"].validation_urls["hardware"],
+            )
+
+    def test_validation_url_requires_a_matching_check(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["validation_urls"] = {
+                "hardware": "https://example.com/checklist"
+            }
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "no matching validation check"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
 
     def test_record_only_entry_with_empty_steps_is_valid(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

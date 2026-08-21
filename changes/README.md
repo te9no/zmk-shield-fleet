@@ -17,6 +17,9 @@ must be `passed` or explicitly `waived` before the target can be marked
 `applied`. A merged PR with pending validation remains visibly incomplete on the
 dashboard.
 
+`validation_urls` may attach an HTTPS evidence link to any declared check. The
+dashboard makes both these links and the target PR directly clickable.
+
 Start from `../examples/change.json.disabled`, then record the upstream change,
 list every target, describe deterministic replacements, and review
 `shield-fleet change plan <id> --diff` before enabling it.
@@ -26,5 +29,7 @@ Use `shield-fleet ledger mark` for manual updates and `shield-fleet ledger sync
 
 ```sh
 shield-fleet ledger mark driver-fix --repo keyboard-a --status pr-open \
-  --validation-check ci=passed --validation-check hardware=pending
+  --validation-check ci=passed --validation-check hardware=pending \
+  --validation-url ci=https://github.com/example/keyboard/actions/runs/123 \
+  --validation-url hardware=https://github.com/example/keyboard/blob/fleet/driver-fix/docs/validation.md
 ```

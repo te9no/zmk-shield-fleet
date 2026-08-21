@@ -43,6 +43,16 @@ def _validation_check(value: str) -> tuple[str, str]:
     return name, status
 
 
+def _validation_url(value: str) -> tuple[str, str]:
+    try:
+        name, url = value.split("=", 1)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("expected NAME=HTTPS_URL") from exc
+    if not name or not url.startswith("https://"):
+        raise argparse.ArgumentTypeError("expected NAME=HTTPS_URL")
+    return name, url
+
+
 def _common_parser(*, selectors: bool = True) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument(
@@ -172,6 +182,14 @@ def build_parser() -> argparse.ArgumentParser:
         default=[],
         metavar="NAME=STATUS",
         help="set a validation check (pending, passed, failed, or waived); repeatable",
+    )
+    mark.add_argument(
+        "--validation-url",
+        action="append",
+        type=_validation_url,
+        default=[],
+        metavar="NAME=HTTPS_URL",
+        help="link a validation check to its CI run, checklist, or evidence; repeatable",
     )
     return parser
 
@@ -303,6 +321,12 @@ def dispatch(args: argparse.Namespace) -> int:
                         f"{name}={status}" for name, status in sorted(target.validation.items())
                     )
                     print(f"    validation: {checks}")
+                    if target.validation_urls:
+                        links = ", ".join(
+                            f"{name}={url}"
+                            for name, url in sorted(target.validation_urls.items())
+                        )
+                        print(f"    evidence: {links}")
             return 0
 
         if args.ledger_command == "mark":
@@ -310,6 +334,7 @@ def dispatch(args: argparse.Namespace) -> int:
                 entries[0], args.repo, args.status, pr=args.pr,
                 commit=args.commit, notes=args.notes,
                 validation=dict(args.validation_check) if args.validation_check else None,
+                validation_urls=dict(args.validation_url) if args.validation_url else None,
             )
             print(f"Updated {entries[0].campaign.id}/{args.repo}: {args.status}")
             return 0

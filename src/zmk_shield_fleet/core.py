@@ -138,6 +138,7 @@ class TargetTracking:
     commit: str | None
     notes: str
     validation: Mapping[str, str]
+    validation_urls: Mapping[str, str]
 
 
 @dataclass(frozen=True)
@@ -908,6 +909,29 @@ def load_ledger_entry(
                 f"change.tracking.{repo_id} cannot be applied while validation is incomplete: "
                 + ", ".join(incomplete)
             )
+        validation_urls_table = _require_mapping(
+            target.get("validation_urls", {}),
+            f"change.tracking.{repo_id}.validation_urls",
+        )
+        validation_urls: dict[str, str] = {}
+        for check_name, url_value in validation_urls_table.items():
+            check_id = _validate_id(
+                _require_string(check_name, f"change.tracking.{repo_id}.validation_urls key"),
+                f"change.tracking.{repo_id}.validation_urls",
+            )
+            if check_id not in validation:
+                raise FleetError(
+                    f"change.tracking.{repo_id}.validation_urls.{check_id} has no matching "
+                    "validation check"
+                )
+            url = _require_string(
+                url_value, f"change.tracking.{repo_id}.validation_urls.{check_id}"
+            )
+            if not re.fullmatch(r"https://[^\s]+", url):
+                raise FleetError(
+                    f"change.tracking.{repo_id}.validation_urls.{check_id} must be an HTTPS URL"
+                )
+            validation_urls[check_id] = url
         tracking[repo_id] = TargetTracking(
             status=status,
             pr=_optional_string(target.get("pr"), f"change.tracking.{repo_id}.pr"),
@@ -916,6 +940,7 @@ def load_ledger_entry(
                 target.get("notes", ""), f"change.tracking.{repo_id}.notes", allow_empty=True
             ),
             validation=validation,
+            validation_urls=validation_urls,
         )
     return LedgerEntry(
         campaign=campaign,
@@ -943,6 +968,7 @@ def mark_ledger_target(
     commit: str | None = None,
     notes: str | None = None,
     validation: Mapping[str, str] | None = None,
+    validation_urls: Mapping[str, str] | None = None,
 ) -> None:
     if repository not in entry.tracking:
         raise FleetError(f"repository {repository!r} is not tracked by change {entry.campaign.id!r}")
@@ -967,6 +993,15 @@ def mark_ledger_target(
             f"cannot mark {repository!r} applied while validation is incomplete: "
             + ", ".join(incomplete)
         )
+    updated_validation_urls = dict(target.get("validation_urls", {}))
+    if validation_urls is not None:
+        for check_id, url in validation_urls.items():
+            _validate_id(check_id, "validation URL")
+            if check_id not in updated_validation:
+                raise FleetError(f"validation URL {check_id!r} has no matching validation check")
+            if not re.fullmatch(r"https://[^\s]+", url):
+                raise FleetError(f"validation URL {check_id!r} must use HTTPS")
+            updated_validation_urls[check_id] = url
     target["status"] = status
     if pr is not None:
         target["pr"] = pr or None
@@ -976,6 +1011,8 @@ def mark_ledger_target(
         target["notes"] = notes
     if validation is not None:
         target["validation"] = updated_validation
+    if validation_urls is not None:
+        target["validation_urls"] = updated_validation_urls
     _write_json_atomic(entry.path, raw)
 
 
@@ -1042,6 +1079,7 @@ def sync_ledger_entry(
             commit=merge_commit.get("oid") or current.commit,
             notes=current.notes,
             validation=current.validation,
+            validation_urls=current.validation_urls,
         )
         updated[repo_id] = tracked
         if raw is not None:

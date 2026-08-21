@@ -24,7 +24,11 @@
       "pr": null,
       "commit": null,
       "notes": "",
-      "validation": { "ci": "pending", "hardware": "pending" }
+      "validation": { "ci": "pending", "hardware": "pending" },
+      "validation_urls": {
+        "ci": "https://github.com/example/keyboard/actions/runs/123",
+        "hardware": "https://github.com/example/keyboard/blob/fleet/example/docs/validation.md"
+      }
     },
     "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "" }
   },
