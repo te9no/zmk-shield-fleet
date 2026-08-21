@@ -34,6 +34,7 @@ class RepositorySpec:
     modules: tuple[str, ...]
     tags: tuple[str, ...]
     required_globs: tuple[str, ...]
+    rollout_order: int | None = None
     github: str | None = None
     ci: bool = True
 
@@ -278,6 +279,13 @@ def load_manifest(path: str | Path) -> Manifest:
             raise FleetError(f"repositories[{index}].ci must be a boolean")
         if ci and github is None:
             raise FleetError(f"repository {repo_id!r} is enabled for CI but has no github value")
+        rollout_order = table.get("rollout_order")
+        if rollout_order is not None and (
+            not isinstance(rollout_order, int)
+            or isinstance(rollout_order, bool)
+            or rollout_order < 1
+        ):
+            raise FleetError(f"repositories[{index}].rollout_order must be a positive integer")
 
         repositories[repo_id] = RepositorySpec(
             id=repo_id,
@@ -297,6 +305,7 @@ def load_manifest(path: str | Path) -> Manifest:
             required_globs=_string_tuple(
                 table.get("required_globs", []), f"repositories[{index}].required_globs", nonempty=True
             ),
+            rollout_order=rollout_order,
             github=github,
             ci=ci,
         )
@@ -454,6 +463,7 @@ def inventory_rows(
             {
                 "id": repo.id,
                 "architecture": repo.architecture,
+                "rollout_order": repo.rollout_order,
                 "modules": list(repo.modules),
                 "branch": branch,
                 "state": git_state,
