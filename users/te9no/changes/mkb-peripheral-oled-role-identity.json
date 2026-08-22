@@ -7,9 +7,9 @@
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "537666b5aca8c04276f3d2e9d614eb31c6d5be7e",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/537666b5aca8c04276f3d2e9d614eb31c6d5be7e",
-    "notes": "現行のZMK 0.4 portrait battery screenはCentralとPeripheralで同じネコの描画を共有する。"
+    "to_revision": "ee4333911aa32a401db8bdf5cdb4740640a6da78",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/ee4333911aa32a401db8bdf5cdb4740640a6da78",
+    "notes": "共用moduleへ既定OFFのPeripheral role screenを追加。Centralの猫表示は維持し、PeripheralではPERI、大きなP、SIDE、ローカル電池残量を表示できる。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -22,9 +22,9 @@
     "mkb2": {
       "status": "pending",
       "pr": null,
-      "commit": null,
-      "notes": "Centralの表示と混同しないPeripheral専用の絵柄または明確な役割表示を設計し、左右実機で向き・識別性・接続状態・電池表示を確認する。",
-      "validation": { "ci": "pending", "hardware": "pending" }
+      "commit": "ba69d80",
+      "notes": "MKB/zmk-0.4_validation_peripheral-oledで右Peripheralだけrole screenを有効化し、zmk-nice-oledをee43339へ固定。検証済みPMW3610 Studio RPCを保持し、右PeripheralのCDC Debugと1200 baud bootも統合。MKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。CDCは右TBv4実機でログ取得・1200 baud boot・復帰まで確認済みでMKB/zmk-0.4へ分離集約した。OLEDの向き・識別性・電池表示の目視確認のみ待ち。",
+      "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
   "steps": []

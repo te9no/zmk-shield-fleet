@@ -2,30 +2,39 @@
   "schema": 1,
   "id": "mkb-joystick-pointer-speed",
   "enabled": true,
-  "title": "MKB JOYのポインタ速度を実用範囲へ調整する",
-  "description": "左JOYは入力できるがポインタ移動が著しく遅いため、実機で扱いやすい速度と加速特性を決める。",
+  "title": "アナログジョイスティックの速度と滑らかさを横並びで点検する",
+  "description": "MKBで判明した過大なscale-divisorとreport intervalによる低速・間欠報告を、joystick搭載キーボードごとに点検し、ハードウェア特性に合わせて調整する。",
+  "scope": { "module": "joystick" },
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
-    "to_revision": "5568bf498ac1e07216199ecd548f6da086c87b48",
-    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
-    "notes": "ZMK 0.4検証branchのMKB_L_MODULE_JOY実装。"
+    "to_revision": "ea0830ae3c40b168c7d37febc849cd74d27aadbd",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/commit/ea0830ae3c40b168c7d37febc849cd74d27aadbd",
+    "notes": "MKB/zmk-0.4へ集約済み。941d3f7でscale-divisorを800から70へ調整し、d3d127cとea0830aで100 Hz入力を間欠化せず毎sample報告する設定へ修整。数値のコピーではなく各機のADC範囲・sampling周期・既存scaleを監査する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
-    "revision": "0361c7503e840d7d1279e98a1de37096e0b4d814",
-    "change_url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326",
-    "notes": "2026-08-22の左JOY実機試験で入力自体は動作するが、ポインタ速度が著しく遅いことを確認。"
+    "revision": "941d3f7835c2a596ecfcebc4d156039e5efa71cf",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/commit/941d3f7835c2a596ecfcebc4d156039e5efa71cf",
+    "notes": "2026-08-22のMKB左JOY実機試験で低速と約1秒周期の間欠移動を確認し、速度・report interval修整後に滑らかな連続移動を確認。"
   },
-  "repositories": ["mkb2"],
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cagime", "berkut51", "solstice", "sparagmos"],
   "tracking": {
     "mkb2": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "感度、スケーリング、加速設定を調査し、通常操作できる移動量を実機で決定する。",
-      "validation": { "ci": "pending", "hardware": "failed" }
-    }
+      "status": "applied",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+      "commit": "ea0830ae3c40b168c7d37febc849cd74d27aadbd",
+      "notes": "MKB/zmk-0.4に速度・100 Hz連続report修整を集約。2026-08-22に左JOYで滑らかな移動を実機確認し、同日just.shで再buildしたMKB_L_MODULE_JOYを再書き込み。",
+      "validation": { "ci": "passed", "hardware": "passed" }
+    },
+    "polaris": { "status": "pending", "pr": null, "commit": null, "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。" },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "JOY slotあり。最低優先度で監査する。" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "JOY slotあり。最低優先度で監査する。" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "JOYおよびJOY+IQS構成のscaleとreport cadenceを専用検証branchで確認する。mainへは実機確認前に昇格しない。" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "joystick対象。ローカル専用として監査する。" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "joystick対象。最低優先度で監査する。" },
+    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "analog入力構成をMKBの次の優先群として監査する。" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "交換式analog stick構成。最低優先度で監査する。" }
   },
   "steps": []
 }

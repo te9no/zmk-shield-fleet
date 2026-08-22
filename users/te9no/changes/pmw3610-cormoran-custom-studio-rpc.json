@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "pmw3610-cormoran-custom-studio-rpc",
+  "enabled": true,
+  "title": "PMW3610をcormoran版custom Studio RPC対応driverへ揃える",
+  "description": "DYA Studio V2のPMW3610状態・表面診断を利用できるように、PMW3610搭載機のdriver系統、Studio RPC、split relay、固定revisionを横断管理する。",
+  "scope": { "module": "trackball" },
+  "source": {
+    "repository": "cormoran/zmk-driver-pmw3610-with-custom-studio-rpc",
+    "from_revision": null,
+    "to_revision": "5c34ea0eec246a1c986111417cd779b53144629a",
+    "change_url": "https://github.com/cormoran/zmk-driver-pmw3610-with-custom-studio-rpc/commit/5c34ea0eec246a1c986111417cd779b53144629a",
+    "notes": "DYA Studio V2が要求するcormoran__pmw3610 custom subsystemを提供するrevision。module importがzmk-feature-custom-settingsのmoving mainを含むため、導入時は依存revisionも40文字SHAへ固定する。既存pixart,pmw3610やpmw3610-altからはcompatible/Kconfig差分を個別確認する。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-MKB2",
+"revision": "1f540398d5af4b49b04bbab045263ee67c5a63ce",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+    "notes": "MKBでDYA Studio V2接続成功後、PMW3610カードがcustom Studio RPC module未導入を検出。画像ではcormoran/zmk-driver-pmw3610-with-custom-studio-rpcの有効化を要求。"
+  },
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "tracking": {
+    "polaris": { "status": "pending", "pr": null, "commit": "59d4f17", "notes": "第1群。既存のPolaris/codex/polaris-dya-studio-v2@6e0ca94にはcormoran PMW driver@5c34ea0、左右TB compatible移行、DYA対応がある。Polaris/zmk-0.4_validation_pmw3610-cormoran-rpcでMKB横並びにsplit relay payloadを256から240へ、low-priority stackを2048から4096へ調整し、custom settings split RPC relayとPMW custom settingsを右TBだけに限定。初回全体buildは右IQS 2件へPMW settingsが誤適用されlink失敗し8/10だったためTB_R限定へ修正。IQS 2/2とTB_R個別成功後、./just.sh build-fast . --pristine=alwaysで全10 targetが成功。検証branchは59d4f17（fix: align PMW3610 split RPC validation）としてpush済み。実機未検証、PR未作成、Polaris/mainおよび既存Polaris/codex/polaris-dya-studio-v2未反映。センサーがPeripheral配置の場合、横展開前にDYA Studio UIがsource 1/ALL列挙とdeferred PeripheralResponseを扱えることを確認する", "validation": { "ci": "passed", "hardware": "pending" } },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。単純置換せず別途適合性を判断" },
+    "mkb2": { "status": "applied", "pr": "https://github.com/cormoran/dya-studio/pull/168", "commit": "a0e8090", "notes": "第1群・先行検証機。MKB/zmk-0.4_validation_pmw3610-cormoran-rpcでcormoran版custom Studio RPC driver、CONFIG_ZMK_PMW3610_STUDIO_RPC、物理studio_unlock、右peripheralのsplit relayを検証。just.shによる15 target全件build成功（失敗0）、PMW関連targetのMKB_L_MODULE_TB、MKB_R_MODULE_TBv4、MKB_R_MODULE_TBv3も成功。split relay payloadはuint8_tの256→0警告を避けて240、low-priority stackは4096。左MKB_L_MODULE_JOYと右MKB_R_MODULE_TBv4の実機書込み後、CDC Debug 20秒で右Peripheral由来のnonzero mouse movement 203件、error/fail/fatal/overflow/disconnect 0を確認し、PMW入力とsplit input relayは実機成功。DYA StudioのPMW3610カードがPeripheralを列挙しないupstream UI gapに対し、cormoran/dya-studio PR #168を作成。te9no/dya-studioのcodex/pmw3610-split-peripheral（a0e8090）はALL source列挙、DeferredResponse/PeripheralResponse相関、各device sourceの診断/frame capture/chunk/streamへの伝搬、fast notification bufferingを実装。Jest 83 suites（688 passed、1 skipped）、lint、production buildはローカル成功。2026-08-22にPeripheral対応版DYA StudioとMKB右TBv4で実機確認し、PMW3610 Product ID 0x3e、Revision 0x01、初期化エラー0、CPI 800、強制起動、22x22全484 pixel frame capture、streaming約34.7 FPSを確認。「センサーが報告されていません」を解消", "validation": { "ci": "passed", "hardware-input": "passed", "upstream-local-ci": "passed", "studio-peripheral-preview-hardware": "passed" } },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。MDKと同時に適合性を判断" },
+    "saa": { "status": "pending", "pr": null, "commit": "4486e6e", "notes": "SAA/feat/add-iqs-module-and-led-support@5d1d4e3（ZMK 0.4、IQS upstream、oversampling、CDC固定済み）からSAA/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。cormoran PMW driver@5c34ea0とcustom settings@c6a7fefを固定し、左右pixart,pmw3610をcormoran,pmw3610へ移行。settings-idはsaa-ltb/saa-rtb、右CentralでStudio/custom settings/PMW relay、左Peripheralでcustom settings/PMW relayを有効化。split payloadは240、low-priority stackは4096。./just.sh build-fast . --pristine=alwaysで全21 targetが成功。検証branchは4486e6e（feat: validate cormoran PMW3610 across SAA）としてpush済み。実機未検証、PR未作成、SAA/masterおよびSAA/feat/add-iqs-module-and-led-support未反映。未検証のSAA/master昇格をrevertする既存方針を維持。左Peripheral PMWはDYA Studio PR #168 previewでsource 1を確認する", "validation": { "ci": "passed", "studio-peripheral-preview-hardware": "pending", "hardware": "pending" } },
+    "cornix": { "status": "pending", "pr": null, "commit": "564cf6e", "notes": "第1群。Cornix/main@11d70e4からCornix/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。./just.sh build-fast . --pristine=alwaysで全12 targetが成功。検証branchは564cf6e（feat: validate cormoran PMW3610 on Madula）としてpush済み。実機未検証、PR未作成、Cornix/main未反映・未マージ。センサーがPeripheral配置の場合、横展開前にDYA Studio UIがsource 1/ALL列挙とdeferred PeripheralResponseを扱えることを確認する", "validation": { "targeted-build": "passed", "ci": "passed", "hardware": "pending" } },
+    "torabo": { "status": "not-applicable", "pr": null, "commit": null, "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "後続・ローカル専用。checkout不在のためPMW3610実装系統を再取得後に監査" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行cormoran/zmk-pmw3610-driver moving mainで、custom Studio RPC版とは別repository。固定revision化と移行が必要" },
+    "solstice": { "status": "pending", "pr": null, "commit": "8599bd0", "notes": "既存Solstice/codex/zmk-0.4-baseline@1b64a32（PR #1）からSolstice/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。右Peripheralのpixart,pmw3610をcormoran,pmw3610へ移行し、cormoran/zmk-driver-pmw3610-with-custom-studio-rpc@5c34ea0eec246a1c986111417cd779b53144629aとcustom settings@c6a7fef3a3be3d3ace5de9a4b0628c6418cd1f3fを固定。左CentralでStudio/custom settings/PMW split RPC、右PeripheralでPMW custom settings relayを有効化。split payloadは240、low-priority stackは4096。./just.sh build-fast . --pristine=alwaysで全5 targetが成功。検証branchは8599bd0（feat: validate cormoran PMW3610 split RPC）としてpush済み。実機未検証、PR未作成、Solstice/mainおよび既存PR #1 branch未反映。右Peripheral配置のため、DYA Studio PR #168 previewでsource 1を確認する", "validation": { "ci": "passed", "studio-peripheral-preview-hardware": "pending", "hardware": "pending" } },
+    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving main、左右PMW3610構成。複数sensor識別とsplit relayの確認が必要" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving mainとpixart,pmw3610。左右variantの適用範囲を確認" }
+  },
+  "steps": []
+}
