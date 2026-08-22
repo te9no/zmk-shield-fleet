@@ -2,14 +2,14 @@
   "schema": 1,
   "id": "mkb-trackball-axis-rotation",
   "enabled": true,
-  "title": "MKB右TBの軸を実装方向へ90度補正する",
-  "description": "Polaris基準の軸変換に対してMKBではセンサーが物理的に90度異なるため、MKB固有の実装方向へ軸を補正する。",
+  "title": "MKB右TBの軸方向をZMK 0.4で実機確認する",
+  "description": "PolarisとMKBではセンサー実装角が90度異なるため、Polarisの変換を流用せずMKB固有設定の実機方向を確認する。",
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
-    "to_revision": "5568bf498ac1e07216199ecd548f6da086c87b48",
-    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
-    "notes": "ZMK 0.4検証branchのMKB_R_MODULE_TBv4実装。Polarisを基準にした設定を参照しているが、MKBのセンサー実装角はPolaris比で90度異なる。"
+    "to_revision": "caf40676c796958c92a4556684edc43b8e5cb63d",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+    "notes": "実機確認済み更新を蓄積するzmk-0.4 branch。Polarisの軸変換を追加せず、現行MKB設定を維持する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -20,11 +20,12 @@
   "repositories": ["mkb2"],
   "tracking": {
     "mkb2": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "Polaris側や共通driverの基準は変えず、MKB_R_MODULE_TBv4側だけへ90度補正を適用する。回転方向を特定してX/Y swapと符号反転の組み合わせを決め、上下左右を実機確認する。",
-      "validation": { "ci": "pending", "hardware": "failed" }
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+      "commit": "caf40676c796958c92a4556684edc43b8e5cb63d",
+      "notes": "2026-08-22にzmk-0.4相当の左JOY centralをCDCで再書き込み後、右TBv4の方向が正常であることを実機確認。zmk-0.4_validation_tb-orientationはzmk-0.4との差分0件で、追加の90度補正は不要。main未反映。",
+      "validation": { "ci": "passed", "hardware": "passed" },
+      "validation_urls": { "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326", "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/10" }
     }
   },
   "steps": []
