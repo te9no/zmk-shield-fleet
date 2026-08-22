@@ -29,7 +29,7 @@
     "torabo": { "status": "not-applicable", "pr": null, "commit": null, "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外" },
     "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "後続・ローカル専用。checkout不在のためPMW3610実装系統を再取得後に監査" },
     "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行cormoran/zmk-pmw3610-driver moving mainで、custom Studio RPC版とは別repository。固定revision化と移行が必要" },
-    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "第1群完了後の次候補。現行efogdev moving mainとpixart,pmw3610。右peripheralにセンサーがあるためsplit RPC relayを含めて検証" },
+    "solstice": { "status": "pending", "pr": null, "commit": "8599bd0", "notes": "既存Solstice/codex/zmk-0.4-baseline@1b64a32（PR #1）からSolstice/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。右Peripheralのpixart,pmw3610をcormoran,pmw3610へ移行し、cormoran/zmk-driver-pmw3610-with-custom-studio-rpc@5c34ea0eec246a1c986111417cd779b53144629aとcustom settings@c6a7fef3a3be3d3ace5de9a4b0628c6418cd1f3fを固定。左CentralでStudio/custom settings/PMW split RPC、右PeripheralでPMW custom settings relayを有効化。split payloadは240、low-priority stackは4096。./just.sh build-fast . --pristine=alwaysで全5 targetが成功。検証branchは8599bd0（feat: validate cormoran PMW3610 split RPC）としてpush済み。実機未検証、PR未作成、Solstice/mainおよび既存PR #1 branch未反映。右Peripheral配置のため、DYA Studio PR #168 previewでsource 1を確認する", "validation": { "ci": "passed", "studio-peripheral-preview-hardware": "pending", "hardware": "pending" } },
     "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving main、左右PMW3610構成。複数sensor識別とsplit relayの確認が必要" },
     "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving mainとpixart,pmw3610。左右variantの適用範囲を確認" }
   },
