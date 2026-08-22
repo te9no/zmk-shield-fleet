@@ -1,0 +1,52 @@
+{
+  "schema": 1,
+  "id": "build-health-badge-no-commits",
+  "enabled": true,
+  "title": "build-healthバッジの自動commitを廃止する",
+  "description": "日時入りの生成SVG/JSONを毎日commitする方式をやめ、GitHub Actions標準バッジとworkflow artifactへ移行する。",
+  "source": {
+    "repository": "te9no/zmk-workspace",
+    "from_revision": "committed-build-health-badges",
+    "to_revision": "6c6a10826290a7c4d619595ba3909594b3db5c2a",
+    "change_url": "https://github.com/te9no/zmk-workspace/pull/2",
+    "notes": "共通workflowからbadge用git-auto-commitを除去し、既存callerとの入力互換性を維持する。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-workspace",
+    "revision": "6c6a10826290a7c4d619595ba3909594b3db5c2a",
+    "change_url": "https://github.com/te9no/zmk-workspace/pull/2",
+    "notes": "scheduled buildは継続するが、成功時にbadge-only commitを作らない。"
+  },
+  "repositories": ["polaris", "mkb2", "saa", "cornix"],
+  "tracking": {
+    "polaris": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/5",
+      "commit": "07f2d0ed919f49ada9afef6b834b79ae42317f8b",
+      "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
+      "validation": { "ci": "pending", "hardware": "waived" }
+    },
+    "mkb2": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/8",
+      "commit": "e565810975a613a635a6719958d0570fd8c589d7",
+      "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
+      "validation": { "ci": "pending", "hardware": "waived" }
+    },
+    "saa": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/7",
+      "commit": "d201e947661965de5039dfbbd067c62a93a0286a",
+      "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
+      "validation": { "ci": "pending", "hardware": "waived" }
+    },
+    "cornix": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/2",
+      "commit": "1637c596483920582f28a29049fc8fb55f90d42c",
+      "notes": "生成badgeを削除し、badge生成要求をcaller workflowから除去。",
+      "validation": { "ci": "pending", "hardware": "waived" }
+    }
+  },
+  "steps": []
+}
