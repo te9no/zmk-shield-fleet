@@ -2,14 +2,14 @@
   "schema": 1,
   "id": "mkb-peripheral-oled-role-identity",
   "enabled": true,
-  "title": "MKBのPeripheral OLEDを別ポーズの寝るネコにする",
-  "description": "左右のOLEDに同じネコを表示する現状を見直し、Peripheral側は通常時に別ポーズ、無操作時に寝姿を表示する。",
+  "title": "MKBのPeripheral OLEDを本家Bongo Catにする",
+  "description": "左右のOLEDに同じネコを表示する現状を見直し、Peripheral側は本家moduleのBongo Catアセットを表示する。",
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "eb8adc8da4ae08b52a3b53ab12bd78537f400eec",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/eb8adc8da4ae08b52a3b53ab12bd78537f400eec",
-    "notes": "共用moduleへ既定OFFのPeripheral companion catを追加。Centralのネコは維持し、Peripheralは左側の巻きしっぽと手振りの別ポーズを表示。ZMKのIdle/Sleep時は丸まった寝姿へ切り替え、アニメーションタイマーも停止する。ローカル電池表示は維持。"
+    "to_revision": "c37327de7936892b20abaa7fe4ba799757ef510b",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/c37327de7936892b20abaa7fe4ba799757ef510b",
+    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面へ統合。Active時はtap1_03/tap2_03の左右タップを交互表示し、Idle/Sleep時はtap1_01で手を止め、小さなZを表示してタイマーも停止。CentralのネコとPeripheralのローカル電池表示は維持。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -22,8 +22,8 @@
     "mkb2": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/11",
-      "commit": "935fd88",
-      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で、右PeripheralのPERI/P/SIDE表示を別ポーズのネコとIdle/Sleep時の寝姿へ変更し、zmk-nice-oledをeb8adc8へ固定。PMW3610 Studio RPCと右Peripheral CDCを含むMKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。右TBv4へCDCで書き込み、COM12復帰と起動ログを確認済み。OLEDの通常ポーズ・向き・電池表示・寝姿の目視確認待ち。",
+      "commit": "9ec759e",
+      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で、右Peripheralを本家Bongo Catアセットへ変更し、zmk-nice-oledをc37327dへ固定。PMW3610 Studio RPCと右Peripheral CDCを含むMKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。右TBv4へCDCで書き込み、COM12復帰を確認済み。OLEDの向き・左右タップ・電池表示・Idle/Sleep表示の目視確認待ち。",
       "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
