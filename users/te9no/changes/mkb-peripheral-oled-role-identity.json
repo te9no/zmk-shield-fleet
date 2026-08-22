@@ -7,9 +7,9 @@
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399",
-    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。旧アセットは横向き描画用に事前回転されているため、表示時に反時計回りへ戻し、中央32 pxを無拡大で切り出す。Active時はtap1_03/tap2_03を交互表示し、Idle/Sleep時はtap1_01で手を止め、小さなZを表示してタイマーも停止。Centralはレイヤー・Bluetooth・左右電池、Peripheralはローカル電池を表示する。"
+    "to_revision": "1e46dfcf226fe8954c1d916d7d7ab2b834f60b43",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/1e46dfcf226fe8954c1d916d7d7ab2b834f60b43",
+    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。旧アセットは横向き描画用に事前回転されているため、表示時に反時計回りへ戻し、中央32 pxを無拡大で切り出す。無入力時は静止し、Centralはkeycode入力、Peripheralはローカルposition入力の押下ごとに左右の手を切り替え、500 ms後に静止へ戻る。小さなZはIdle/Sleep時だけ表示してタイマーも停止。Centralはレイヤー・Bluetooth・左右電池、Peripheralはローカル電池を表示する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -20,11 +20,11 @@
   "repositories": ["mkb2"],
   "tracking": {
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/11",
-      "commit": "77978408e17b8485907e2e43d14d884ab3b700f6",
-      "notes": "MKB/zmk-0.4をbaseとするPR #11で左右OLEDを本家Bongo Catへ変更し、zmk-nice-oledを2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399へ固定。90度傾く旧アセットを反時計回りに戻して中央32 pxを無拡大で切り出す補正を追加し、PMW3610 Studio RPCと両側CDCを含む通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証成功。向き補正版を左JOYへCentral CDC COM11経由、右TBv4へPeripheral CDC COM12経由で書き込み、両ポートの復帰を確認。2026-08-23に正立表示を実機確認し、位置は微調整候補だが現状を採用。PR #11をMKB/zmk-0.4へmerge済み。stable firmware branchには未反映。",
-      "validation": { "ci": "passed", "hardware": "passed" }
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/12",
+      "commit": "1517f75",
+      "notes": "MKB/zmk-0.4をbaseとするDraft PR #12でzmk-nice-oledを1e46dfcf226fe8954c1d916d7d7ab2b834f60b43へ固定。常時600 ms周期で左右の手を切り替えていた動作を、本家responsive版に合わせて入力押下時だけ切り替え、500 ms無入力で静止する方式へ変更。通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで検証成功し、左JOYへCentral CDC COM11経由、右TBv4へPeripheral CDC COM12経由で書き込み、両ポートの復帰を確認。無入力時の静止と入力連動の実機目視確認待ち。stable firmware branchには未反映。",
+      "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
   "steps": []
