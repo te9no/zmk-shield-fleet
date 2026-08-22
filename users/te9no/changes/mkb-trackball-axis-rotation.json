@@ -20,10 +20,10 @@
   "repositories": ["mkb2"],
   "tracking": {
     "mkb2": {
-      "status": "pr-open",
+      "status": "applied",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
       "commit": "caf40676c796958c92a4556684edc43b8e5cb63d",
-      "notes": "2026-08-22にzmk-0.4相当の左JOY centralをCDCで再書き込み後、右TBv4の方向が正常であることを実機確認。zmk-0.4_validation_tb-orientationはzmk-0.4との差分0件で、追加の90度補正は不要。main未反映。",
+      "notes": "2026-08-22にMKB/zmk-0.4相当の左JOY centralと右TBv4を再書き込み後、方向が正常であることを実機確認。zmk-0.4_validation_tb-orientationはMKB/zmk-0.4との差分0件で、追加の90度補正は不要。stable firmware branchには未反映。",
       "validation": { "ci": "passed", "hardware": "passed" },
       "validation_urls": { "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326", "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/10" }
     }
