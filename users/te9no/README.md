@@ -9,6 +9,11 @@ first, GeaconSolstice is second, and order 99 is the lowest-priority backlog.
 CI success only advances a validation branch; default-branch promotion requires
 hardware validation.
 
+Fleet work is ledger-first. By default, an audit or hardware observation is
+recorded as a pending ledger item only. Managed keyboard repositories and shared
+modules are not modified unless te9no explicitly requests implementation of that
+specific item.
+
 ```sh
 shield-fleet ledger list --manifest users/te9no/fleet.toml
 shield-fleet audit --manifest users/te9no/fleet.toml
