@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "mkb-trackball-axis-rotation",
+  "enabled": true,
+  "title": "MKB右TBの軸を実装方向へ90度補正する",
+  "description": "右TBのポインタ方向が物理操作に対して90度ずれているため、基板実装方向に合う軸変換を決める。",
+  "source": {
+    "repository": "te9no/zmk-config-MKB2",
+    "from_revision": null,
+    "to_revision": "5568bf498ac1e07216199ecd548f6da086c87b48",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
+    "notes": "ZMK 0.4検証branchのMKB_R_MODULE_TBv4実装。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-MKB2",
+    "revision": "0361c7503e840d7d1279e98a1de37096e0b4d814",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326",
+    "notes": "2026-08-22の右TBv4実機試験でポインタ方向が90度ずれていることを確認。"
+  },
+  "repositories": ["mkb2"],
+  "tracking": {
+    "mkb2": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "回転方向を特定してX/Y swapと符号反転の組み合わせを決め、上下左右を実機確認する。",
+      "validation": { "ci": "pending", "hardware": "failed" }
+    }
+  },
+  "steps": []
+}
