@@ -3,13 +3,13 @@
   "id": "mkb-trackball-axis-rotation",
   "enabled": true,
   "title": "MKB右TBの軸方向をZMK 0.4で実機確認する",
-  "description": "PolarisとMKBではセンサー実装角が90度異なるため、Polarisの変換を流用せずMKB固有設定の実機方向を確認する。",
+  "description": "PolarisとMKBではセンサー実装角が異なり、PMW3610 driverやmodule世代でも生の軸方向が変わり得るため、共通変換を流用せずMKBのTB世代ごとに実機方向を確認する。",
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
-    "to_revision": "caf40676c796958c92a4556684edc43b8e5cb63d",
-    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/10",
-    "notes": "実機確認済み更新を蓄積するzmk-0.4 branch。Polarisの軸変換を追加せず、現行MKB設定を維持する。"
+    "to_revision": "707866267d3e0f099644f25cc102370a219a08cd",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/13",
+    "notes": "cormoran版TBv4の実機で上下と左右がともに逆になることを確認。TBv3などを巻き込まないようTBv4のsplit送信側だけX/Yを反転し、共通Central変換との二重反転で正方向へ戻す検証変更。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -20,12 +20,11 @@
   "repositories": ["mkb2"],
   "tracking": {
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
-      "commit": "caf40676c796958c92a4556684edc43b8e5cb63d",
-      "notes": "2026-08-22にMKB/zmk-0.4相当の左JOY centralと右TBv4を再書き込み後、方向が正常であることを実機確認。zmk-0.4_validation_tb-orientationはMKB/zmk-0.4との差分0件で、追加の90度補正は不要。stable firmware branchには未反映。",
-      "validation": { "ci": "passed", "hardware": "passed" },
-      "validation_urls": { "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326", "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/10" }
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/13",
+      "commit": "707866267d3e0f099644f25cc102370a219a08cd",
+      "notes": "2026-08-23にcormoran版右TBv4で、上が下、下が上、左が右、右が左へ動く二軸反転を実機確認。Bongo入力連動検証branchへ積み上げたPR #13で、MKB_R_TBのtrackball_splitだけX/Y反転processorを追加。MKB_R_MODULE_TBv4をjust.sh build-fast --pristine=alwaysで検証成功し、Peripheral CDC COM12経由で書き込み、COM12復帰を確認。正方向の実機再確認待ち。TBv3およびstable firmware branchには未反映。",
+      "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
   "steps": []
