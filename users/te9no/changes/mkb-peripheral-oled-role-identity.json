@@ -2,14 +2,14 @@
   "schema": 1,
   "id": "mkb-peripheral-oled-role-identity",
   "enabled": true,
-  "title": "MKBのPeripheral OLEDをCentralと識別できる表示にする",
-  "description": "左右のOLEDに同じネコを表示する現状を見直し、Peripheral側を一目で識別できる役割別表示へ変更する。",
+  "title": "MKBのPeripheral OLEDを別ポーズの寝るネコにする",
+  "description": "左右のOLEDに同じネコを表示する現状を見直し、Peripheral側は通常時に別ポーズ、無操作時に寝姿を表示する。",
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "ee4333911aa32a401db8bdf5cdb4740640a6da78",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/ee4333911aa32a401db8bdf5cdb4740640a6da78",
-    "notes": "共用moduleへ既定OFFのPeripheral role screenを追加。Centralの猫表示は維持し、PeripheralではPERI、大きなP、SIDE、ローカル電池残量を表示できる。"
+    "to_revision": "eb8adc8da4ae08b52a3b53ab12bd78537f400eec",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/eb8adc8da4ae08b52a3b53ab12bd78537f400eec",
+    "notes": "共用moduleへ既定OFFのPeripheral companion catを追加。Centralのネコは維持し、Peripheralは左側の巻きしっぽと手振りの別ポーズを表示。ZMKのIdle/Sleep時は丸まった寝姿へ切り替え、アニメーションタイマーも停止する。ローカル電池表示は維持。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -22,8 +22,8 @@
     "mkb2": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/11",
-      "commit": "af658d8",
-      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で、右Peripheralだけrole screenを有効化し、zmk-nice-oledをee43339へ固定。検証済みPMW3610 Studio RPCと右Peripheral CDCを含むMKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。CDCは右TBv4実機でログ取得・1200 baud boot・復帰まで確認済み。OLEDの向き・識別性・電池表示の目視確認のみ待ち。",
+      "commit": "935fd88",
+      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で、右PeripheralのPERI/P/SIDE表示を別ポーズのネコとIdle/Sleep時の寝姿へ変更し、zmk-nice-oledをeb8adc8へ固定。PMW3610 Studio RPCと右Peripheral CDCを含むMKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。右TBv4へCDCで書き込み、COM12復帰と起動ログを確認済み。OLEDの通常ポーズ・向き・電池表示・寝姿の目視確認待ち。",
       "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
