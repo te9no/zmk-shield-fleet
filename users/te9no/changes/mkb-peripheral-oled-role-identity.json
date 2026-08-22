@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "mkb-peripheral-oled-role-identity",
+  "enabled": true,
+  "title": "MKBのPeripheral OLEDをCentralと識別できる表示にする",
+  "description": "左右のOLEDに同じネコを表示する現状を見直し、Peripheral側を一目で識別できる役割別表示へ変更する。",
+  "source": {
+    "repository": "te9no/zmk-nice-oled",
+    "from_revision": null,
+    "to_revision": "537666b5aca8c04276f3d2e9d614eb31c6d5be7e",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/537666b5aca8c04276f3d2e9d614eb31c6d5be7e",
+    "notes": "現行のZMK 0.4 portrait battery screenはCentralとPeripheralで同じネコの描画を共有する。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-MKB2",
+    "revision": "5568bf498ac1e07216199ecd548f6da086c87b48",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
+    "notes": "2026-08-22のMKB実機確認で、Peripheral側もCentral側と同じネコ表示になることを改善候補として記録。"
+  },
+  "repositories": ["mkb2"],
+  "tracking": {
+    "mkb2": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "Centralの表示と混同しないPeripheral専用の絵柄または明確な役割表示を設計し、左右実機で向き・識別性・接続状態・電池表示を確認する。",
+      "validation": { "ci": "pending", "hardware": "pending" }
+    }
+  },
+  "steps": []
+}
