@@ -23,7 +23,7 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/11",
       "commit": "2adc276739c249b59e19d44f7c2ed3c6fd9be884",
-      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で左右OLEDを本家Bongo Catへ変更し、zmk-nice-oledを2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399へ固定。90度傾く旧アセットを反時計回りに戻して中央32 pxを無拡大で切り出す補正を追加し、PMW3610 Studio RPCと両側CDCを含む通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証成功。向き補正版を左JOYへCentral CDC COM11経由で書き込み、COM11復帰を確認。右TBv4はDYA StudioによるCOM12占有の解放後に再書き込み予定。両OLEDの正立・左右タップ・役割別情報・Idle/Sleep表示の目視確認待ち。",
+      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で左右OLEDを本家Bongo Catへ変更し、zmk-nice-oledを2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399へ固定。90度傾く旧アセットを反時計回りに戻して中央32 pxを無拡大で切り出す補正を追加し、PMW3610 Studio RPCと両側CDCを含む通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証成功。向き補正版を左JOYへCentral CDC COM11経由、右TBv4へPeripheral CDC COM12経由で書き込み、両ポートの復帰を確認。両OLEDの正立・左右タップ・役割別情報・Idle/Sleep表示の目視確認待ち。",
       "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
