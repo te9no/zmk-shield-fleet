@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "id": "pmw3610-cormoran-custom-studio-rpc",
+  "enabled": true,
+  "title": "PMW3610をcormoran版custom Studio RPC対応driverへ揃える",
+  "description": "DYA Studio V2のPMW3610状態・表面診断を利用できるように、PMW3610搭載機のdriver系統、Studio RPC、split relay、固定revisionを横断管理する。",
+  "scope": { "module": "trackball" },
+  "source": {
+    "repository": "cormoran/zmk-driver-pmw3610-with-custom-studio-rpc",
+    "from_revision": null,
+    "to_revision": "5c34ea0eec246a1c986111417cd779b53144629a",
+    "change_url": "https://github.com/cormoran/zmk-driver-pmw3610-with-custom-studio-rpc/commit/5c34ea0eec246a1c986111417cd779b53144629a",
+    "notes": "DYA Studio V2が要求するcormoran__pmw3610 custom subsystemを提供するrevision。module importがzmk-feature-custom-settingsのmoving mainを含むため、導入時は依存revisionも40文字SHAへ固定する。既存pixart,pmw3610やpmw3610-altからはcompatible/Kconfig差分を個別確認する。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-MKB2",
+"revision": "1f540398d5af4b49b04bbab045263ee67c5a63ce",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+    "notes": "MKBでDYA Studio V2接続成功後、PMW3610カードがcustom Studio RPC module未導入を検出。画像ではcormoran/zmk-driver-pmw3610-with-custom-studio-rpcの有効化を要求。"
+  },
+  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "tracking": {
+    "polaris": { "status": "pending", "pr": null, "commit": null, "notes": "第1群。MKB/Cornixと同じcormoran版・固定revisionへ揃える。現行はefogdev/zmk-pmw3610-driver@42e0a8557a3adc43231fef4234f23e530034e427、compatibleはpixart,pmw3610" },
+    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。単純置換せず別途適合性を判断" },
+    "mkb2": { "status": "pending", "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10", "commit": "1f540398d5af4b49b04bbab045263ee67c5a63ce", "notes": "第1群・先行検証機。DYA Studio接続は成功済みだがPMW3610 custom subsystemは未導入。現行badjeff driver@42e0a8557a3adc43231fef4234f23e530034e427、compatibleはpixart,pmw3610。専用検証branchでdriver/compatible、CONFIG_ZMK_PMW3610_STUDIO_RPC、物理studio_unlock、右peripheralのsplit relayを検証する" },
+    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。MDKと同時に適合性を判断" },
+    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "後続。現行efogdev moving mainとpixart,pmw3610。ZMK 0.4/DYA Studio検証branch上で実機確認し、未テストのSAA既定branchへ直接昇格しない" },
+    "cornix": { "status": "pending", "pr": null, "commit": null, "notes": "第1群。MKB/Polarisと同じcormoran版・固定revisionへ揃える。現行ZMK 0.4内蔵INPUT_PMW3610とpixart,pmw3610からの移行が必要" },
+    "torabo": { "status": "not-applicable", "pr": null, "commit": null, "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外" },
+    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "後続・ローカル専用。checkout不在のためPMW3610実装系統を再取得後に監査" },
+    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行cormoran/zmk-pmw3610-driver moving mainで、custom Studio RPC版とは別repository。固定revision化と移行が必要" },
+    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "第1群完了後の次候補。現行efogdev moving mainとpixart,pmw3610。右peripheralにセンサーがあるためsplit RPC relayを含めて検証" },
+    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving main、左右PMW3610構成。複数sensor識別とsplit relayの確認が必要" },
+    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先群。現行efogdev moving mainとpixart,pmw3610。左右variantの適用範囲を確認" }
+  },
+  "steps": []
+}
