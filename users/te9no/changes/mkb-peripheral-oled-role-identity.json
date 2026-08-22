@@ -7,9 +7,9 @@
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "6e5d5c8ebfbe10dea828ec76008f6a0b03eec56b",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/6e5d5c8ebfbe10dea828ec76008f6a0b03eec56b",
-    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。Active時はtap1_03/tap2_03の左右タップを交互表示し、Idle/Sleep時はtap1_01で手を止め、小さなZを表示してタイマーも停止。Centralはレイヤー・Bluetooth・左右電池、Peripheralはローカル電池を表示する。"
+    "to_revision": "2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399",
+    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。旧アセットは横向き描画用に事前回転されているため、表示時に反時計回りへ戻し、中央32 pxを無拡大で切り出す。Active時はtap1_03/tap2_03を交互表示し、Idle/Sleep時はtap1_01で手を止め、小さなZを表示してタイマーも停止。Centralはレイヤー・Bluetooth・左右電池、Peripheralはローカル電池を表示する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
@@ -22,8 +22,8 @@
     "mkb2": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/11",
-      "commit": "4cd28d2",
-      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で左右OLEDを本家Bongo Catへ変更し、zmk-nice-oledを6e5d5c8へ固定。PMW3610 Studio RPCと両側CDCを含む通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで検証成功。左JOYへCentral CDC COM11経由で書き込み、COM11復帰と起動ログを確認。右TBv4はBongo Cat版とPeripheral CDC COM12を維持。両OLEDの向き・左右タップ・役割別情報・Idle/Sleep表示の目視確認待ち。",
+      "commit": "2adc276739c249b59e19d44f7c2ed3c6fd9be884",
+      "notes": "MKB/zmk-0.4をbaseとするDraft PR #11で左右OLEDを本家Bongo Catへ変更し、zmk-nice-oledを2b8233c2cf9854b5ec859e8b9a2dd6b54f0f9399へ固定。90度傾く旧アセットを反時計回りに戻して中央32 pxを無拡大で切り出す補正を追加し、PMW3610 Studio RPCと両側CDCを含む通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証成功。向き補正版を左JOYへCentral CDC COM11経由で書き込み、COM11復帰を確認。右TBv4はDYA StudioによるCOM12占有の解放後に再書き込み予定。両OLEDの正立・左右タップ・役割別情報・Idle/Sleep表示の目視確認待ち。",
       "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
