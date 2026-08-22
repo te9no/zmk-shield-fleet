@@ -22,8 +22,8 @@
     "mkb2": {
       "status": "pending",
       "pr": null,
-      "commit": "09edf97",
-      "notes": "MKB/zmk-0.4_validation_peripheral-oledで右Peripheralだけrole screenを有効化し、zmk-nice-oledをee43339へ固定。MKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fastで検証成功。実機で向き・識別性・電池表示を確認後にMKB/zmk-0.4へ集約する。",
+      "commit": "ba69d80",
+      "notes": "MKB/zmk-0.4_validation_peripheral-oledで右Peripheralだけrole screenを有効化し、zmk-nice-oledをee43339へ固定。検証済みPMW3610 Studio RPCを保持し、右PeripheralのCDC Debugと1200 baud bootも統合。MKB_R_MODULE_ENC、JOY、KEY、LPPS、RZT、TBv4、TBv3、TPDの全8 targetをjust.sh build-fast --pristine=alwaysで検証成功。実機でOLEDの向き・識別性・電池表示とCDCを確認後にMKB/zmk-0.4へ集約する。",
       "validation": { "ci": "passed", "hardware": "pending" }
     }
   },
