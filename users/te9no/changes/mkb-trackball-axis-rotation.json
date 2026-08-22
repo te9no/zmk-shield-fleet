@@ -7,7 +7,7 @@
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
-    "to_revision": "707866267d3e0f099644f25cc102370a219a08cd",
+    "to_revision": "83238374162ab65f6f9a35b6b0ff2069294a050c",
     "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/13",
     "notes": "cormoran版TBv4の実機で上下と左右がともに逆になることを確認。TBv3などを巻き込まないようTBv4のsplit送信側だけX/Yを反転し、共通Central変換との二重反転で正方向へ戻す検証変更。"
   },
@@ -20,11 +20,11 @@
   "repositories": ["mkb2"],
   "tracking": {
     "mkb2": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/13",
-      "commit": "707866267d3e0f099644f25cc102370a219a08cd",
-      "notes": "2026-08-23にcormoran版右TBv4で、上が下、下が上、左が右、右が左へ動く二軸反転を実機確認。Bongo入力連動検証branchへ積み上げたPR #13で、MKB_R_TBのtrackball_splitだけX/Y反転processorを追加。MKB_R_MODULE_TBv4をjust.sh build-fast --pristine=alwaysで検証成功し、Peripheral CDC COM12経由で書き込み、COM12復帰を確認。正方向の実機再確認待ち。TBv3およびstable firmware branchには未反映。",
-      "validation": { "ci": "passed", "hardware": "pending" }
+      "commit": "83238374162ab65f6f9a35b6b0ff2069294a050c",
+      "notes": "2026-08-23にcormoran版右TBv4で、上が下、下が上、左が右、右が左へ動く二軸反転を実機確認。Bongo入力連動検証branchへ積み上げたPR #13で、MKB_R_TBのtrackball_splitだけX/Y反転processorを追加。MKB_R_MODULE_TBv4をjust.sh build-fast --pristine=alwaysで検証成功し、Peripheral CDC COM12経由で書き込み、COM12復帰を確認。書き込み後に上→上、左→左を含む正方向を実機確認し、PR #13をzmk-0.4_validation_bongo-input-responsiveへmerge済み。TBv3、MKB/zmk-0.4およびstable firmware branchにはまだ未反映。",
+      "validation": { "ci": "passed", "hardware": "passed" }
     }
   },
   "steps": []
