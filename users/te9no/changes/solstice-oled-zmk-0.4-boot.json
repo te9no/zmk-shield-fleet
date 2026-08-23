@@ -20,11 +20,11 @@
   "repositories": ["solstice"],
   "tracking": {
     "solstice": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "676e7a9",
-      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。2026-08-23にcompact表示と背景極性を実機合格と確認。DYA StudioはCOM443を選択できたがRPC handshakeがtimeout。直接GetDeviceInfoも無応答だった。MKBとの差分からSolsticeだけboard CDC、CDC Debug、Studio RPCの3 CDC構成であることを特定し、未使用board CDCを無効化。2 CDC構成ではDebug/CDC Boot=COM73、Studio RPC=COM74となり、COM74へのGetDeviceInfoが30-byte応答でSolstice名とserialを返した。just.sh build-fast Solstice_ --pristine=alwaysでUS/JIS左右4/4成功。DYA Studio UIでの最終確認とPeripheral電池表示の確認待ち。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-flash": "passed", "compact-32px-hardware": "passed", "dya-studio-direct-rpc": "passed", "dya-studio-ui": "pending", "oled-polarity": "passed", "peripheral-battery": "pending", "right-key-offset": "passed" }
+      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
+      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。2026-08-23にcompact表示と背景極性を実機合格と確認。DYA Studioは3 CDC構成でtimeoutしたが、未使用board CDCを無効化してDebug/CDC Boot=COM73、Studio RPC=COM74へ整理。直接GetDeviceInfoとDYA Studio UI接続を実機合格と確認した。just.sh build-fast Solstice_ --pristine=alwaysでUS/JIS左右4/4成功。Peripheral電池表示の確認待ち。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-flash": "passed", "compact-32px-hardware": "passed", "dya-studio-direct-rpc": "passed", "dya-studio-ui": "passed", "oled-polarity": "passed", "peripheral-battery": "pending", "right-key-offset": "passed" }
     }
   },
   "steps": []
