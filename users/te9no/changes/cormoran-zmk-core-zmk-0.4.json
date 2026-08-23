@@ -134,7 +134,7 @@
         "build": "passed",
         "driver-selection": "passed",
         "left-flash": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "both-halves-flash": "pending",
         "analog-runtime": "pending"
       },
@@ -142,7 +142,7 @@
         "build": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "driver-selection": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "left-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
-        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
         "both-halves-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "analog-runtime": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
       }
