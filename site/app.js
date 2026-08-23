@@ -84,6 +84,11 @@ function statusCell(change, repositoryId) {
   return `${status}${validation ? `<span class="validation-list">${validation}</span>` : ""}`;
 }
 
+function statusCellClass(change, repositoryId) {
+  const status = change.tracking[repositoryId]?.status ?? "not-applicable";
+  return `status-cell status-cell-${status === "not-applicable" ? "na" : status}`;
+}
+
 function renderMatrix(profile) {
   const query = state.search.toLowerCase();
   const repositories = profile.repositories.filter((repo) =>
@@ -94,7 +99,7 @@ function renderMatrix(profile) {
   table.querySelector("tbody").innerHTML = repositories.map((repo) => `<tr>
     <td><span class="repo-name">${escapeHtml(repo.id)}</span><span class="repo-sub">${escapeHtml(repo.architecture)} · ${escapeHtml(repo.modules.join(", "))}</span></td>
     <td>${repo.rollout_order ? `<span class="status ${repo.rollout_order >= 99 ? "na" : "pr-open"}">${repo.rollout_order >= 99 ? "lowest" : `#${repo.rollout_order}`}</span>` : '<span class="status na">—</span>'}</td>
-    ${profile.changes.map((change) => `<td>${statusCell(change, repo.id)}</td>`).join("")}
+    ${profile.changes.map((change) => `<td class="${statusCellClass(change, repo.id)}">${statusCell(change, repo.id)}</td>`).join("")}
   </tr>`).join("") || '<tr><td class="empty" colspan="99">No repositories match.</td></tr>';
 }
 
