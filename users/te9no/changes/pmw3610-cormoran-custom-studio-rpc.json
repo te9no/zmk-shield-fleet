@@ -81,10 +81,10 @@
       }
     },
     "cornix": {
-      "status": "pending",
-      "pr": null,
-      "commit": "564cf6e",
-      "notes": "第1群。Cornix/main@11d70e4からCornix/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。./just.sh build-fast . --pristine=alwaysで全12 targetが成功。検証branchは564cf6e（feat: validate cormoran PMW3610 on Madula）としてpush済み。実機未検証、PR未作成、Cornix/main未反映・未マージ。センサーがPeripheral配置の場合、横展開前にDYA Studio UIがsource 1/ALL列挙とdeferred PeripheralResponseを扱えることを確認する",
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+      "commit": "3b194eb98fd2a154247555001b5d206f1683c438",
+      "notes": "第1群。Cornix/zmk-0.4へ向けたDraft PR #3で、cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。Madula専用west workspaceを同期後、just.sh build-fast madula --pristine=alwaysでTrackball/TrackPoint/IQSの3/3 targetが成功。実機未検証のためDraftのまま保持し、mainには未反映。MadulaのセンサーはCentral配置なので、DYA Studioでlocal sourceの診断とframe captureを確認する。",
       "validation": {
         "targeted-build": "passed",
         "ci": "passed",

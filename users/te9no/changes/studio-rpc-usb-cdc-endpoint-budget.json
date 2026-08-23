@@ -71,10 +71,14 @@
       "notes": "未テストのため専用検証branchで監査する。"
     },
     "cornix": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "MKB/Polarisと同じcormoran版構成でCDC node数を監査する。第1優先群。"
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+      "commit": "3b194eb98fd2a154247555001b5d206f1683c438",
+      "notes": "Madula Trackballの生成devicetreeでboard CDC・Studio RPC・USB loggingの3 CDC構成を検出。Draft PR #3で未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ修正。just.sh pristineでMadula 3/3 target成功。DYA Studio実機接続はpending。",
+      "validation": {
+        "build": "passed",
+        "hardware": "pending"
+      }
     },
     "torabo": {
       "status": "pending",
