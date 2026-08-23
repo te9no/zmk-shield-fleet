@@ -107,13 +107,13 @@
       "validation": {
         "build": "passed",
         "dya-studio": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "trackball-hardware": "pending"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
         "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
       }
     },
