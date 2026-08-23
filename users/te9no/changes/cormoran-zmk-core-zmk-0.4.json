@@ -86,8 +86,18 @@
     "saa": {
       "status": "pending",
       "pr": null,
-      "commit": null,
-      "notes": "専用ZMK 0.4検証branchで実施し、未検証のstable masterへは入れない。ハードウェア検証待ちを維持する。"
+      "commit": "fc64d9f",
+      "notes": "専用zmk-0.4_validation_cormoran-zmkへcormoran/zmk@e5c9b69を直接固定。./just.sh build-fast SAA_ --pristine=alwaysで左右通常/IQS複合20/20、settings_reset 1/1の計21構成が成功。JOY生成設定でoversampling=0とDYA analog inputを確認。branchへpush済みだがPRは作らず、stable masterは未変更。実機検証待ち。",
+      "validation": {
+        "build": "passed",
+        "driver-selection": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "driver-selection": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/fc64d9f",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+      }
     },
     "cornix": {
       "status": "pr-open",
