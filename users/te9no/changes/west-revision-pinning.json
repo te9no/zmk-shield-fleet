@@ -48,17 +48,17 @@
     },
     "mkb2": {
       "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7",
-      "commit": "7d131c42989e670f638e6c668978c628d1013962",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+      "commit": "1c350f554c6139b23a802fcdebdd5730e8ac39d9",
       "findings": 0,
-      "notes": "MKB/zmk-0.4の全west projectを40文字commit SHAへ固定。15 firmware variantとsettings_resetが成功。2026-08-22に固定revisionからjust.shで左JOY・右TBv4を再buildして実機へ書き込み、JOY、TB方向、split入力、DYA Studio、Peripheral PMW3610表面診断を確認。strict-sha再監査もfindings 0",
+      "notes": "MKB/zmk-0.4の全west projectを40文字commit SHAへ固定。統合PR #14ではcormoran/zmk@e5c9b69と実機確認済みzmk-nice-oled@c511d7fを直接固定し、クリーン履歴から左JOY・右TBv4をjust.sh pristine buildして実機へ書き込んだ。JOY、TB方向、split入力、DYA Studio、Peripheral PMW3610表面診断、左右OLEDを確認。strict-sha findings 0を維持。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32490225196",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/codex/zmk-0.4-baseline/docs/zmk-0.4-validation.md"
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "mrm": {

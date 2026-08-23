@@ -7,28 +7,28 @@
   "source": {
     "repository": "te9no/zmk-nice-oled",
     "from_revision": null,
-    "to_revision": "1e46dfcf226fe8954c1d916d7d7ab2b834f60b43",
-    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/1e46dfcf226fe8954c1d916d7d7ab2b834f60b43",
-    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。旧アセットは横向き描画用に事前回転されているため、表示時に反時計回りへ戻し、中央32 pxを無拡大で切り出す。無入力時は静止し、Centralはkeycode入力、Peripheralはローカルposition入力の押下ごとに左右の手を切り替え、500 ms後に静止へ戻る。小さなZはIdle/Sleep時だけ表示してタイマーも停止。Centralはレイヤー・Bluetooth・左右電池、Peripheralはローカル電池を表示する。"
+    "to_revision": "c511d7f64ba0f186051943d027333d247ad8e206",
+    "change_url": "https://github.com/te9no/zmk-nice-oled/commit/c511d7f64ba0f186051943d027333d247ad8e206",
+    "notes": "共用moduleの本家Bongo Cat 26x50アセットをZMK 0.4縦向き画面のCentralとPeripheralの両方へ統合。無入力時は静止し、Centralはkeycode入力、Peripheralはローカルposition入力の押下ごとに左右の手を切り替え、500 ms後に静止へ戻る。Centralの猫は文字との間隔を確保するため5 px下げた。Peripheralは重複するPERI見出しを除き、Bongo Cat、SPLIT、肉球、Centralへの実接続状態を示すLINK（接続時チェック・切断時×）、ローカル電池を縦配置する。小さなZはIdle/Sleep時だけ表示してタイマーも停止する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-MKB2",
-    "revision": "5568bf498ac1e07216199ecd548f6da086c87b48",
-    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
-    "notes": "2026-08-22のMKB実機確認で、Peripheral側もCentral側と同じネコ表示になることを改善候補として記録。"
+    "revision": "1c350f554c6139b23a802fcdebdd5730e8ac39d9",
+    "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+    "notes": "2026-08-23のMKB左右実機確認で、Bongo Catの位置、Peripheralの情報密度、Central接続状態の表示を調整して確定した。"
   },
   "repositories": [
     "mkb2"
   ],
   "tracking": {
     "mkb2": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/12",
-      "commit": "1517f75",
-      "notes": "MKB/zmk-0.4をbaseとするDraft PR #12でzmk-nice-oledを1e46dfcf226fe8954c1d916d7d7ab2b834f60b43へ固定。常時600 ms周期で左右の手を切り替えていた動作を、本家responsive版に合わせて入力押下時だけ切り替え、500 ms無入力で静止する方式へ変更。通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで検証成功し、左JOYへCentral CDC COM11経由、右TBv4へPeripheral CDC COM12経由で書き込み、両ポートの復帰を確認。無入力時の静止と入力連動の実機目視確認待ち。stable firmware branchには未反映。",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+      "commit": "1c350f554c6139b23a802fcdebdd5730e8ac39d9",
+      "notes": "zmk-nice-oledをc511d7f64ba0f186051943d027333d247ad8e206へ固定。左JOYと右TBv4をjust.shでpristine buildし、Central COM11とPeripheral COM12のCDC Bootで実機へ書き込んだ。左右Bongo Catの入力連動・静止、Central側の位置、Peripheral側のSPLIT/肉球/LINK/電池レイアウトを目視確認し、LINKはsplit接続イベントへ追従する。旧Draft PR #12は統合PR #14へ吸収してクローズ。zmk-0.4へ統合し、stable firmware mainには未反映。",
       "validation": {
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "passed"
       }
     }
   },
