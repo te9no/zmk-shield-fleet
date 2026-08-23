@@ -1,6 +1,19 @@
-const state = { data: null, profile: null, filter: "all", search: "" };
+const state = { data: null, profile: null, filter: "all", matrixFilter: "all", search: "" };
 const terminalStatuses = new Set(["applied", "merged", "not-applicable"]);
-const acceptedValidationStatuses = new Set(["passed", "waived"]);
+const changeLabels = {
+  "analog-battery-oversampling": "Analog battery",
+  "build-health-badge-no-commits": "Build badges",
+  "cdc-acm-zephyr-4.1": "CDC Debug",
+  "dya-studio-v2-zmk-0.4": "Studio V2",
+  "iqs9151-upstream-zmk-0.4": "IQS9151",
+  "mkb-joystick-pointer-speed": "Joystick motion",
+  "mkb-peripheral-oled-role-identity": "MKB OLED",
+  "mkb-trackball-axis-rotation": "MKB TB axis",
+  "pmw3610-cormoran-custom-studio-rpc": "PMW3610 RPC",
+  "solstice-oled-zmk-0.4-boot": "Solstice OLED",
+  "studio-rpc-usb-cdc-endpoint-budget": "USB CDC budget",
+  "west-revision-pinning": "Revision pins",
+};
 
 const escapeHtml = (value) => String(value ?? "")
   .replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
@@ -9,7 +22,15 @@ const escapeHtml = (value) => String(value ?? "")
 function targetComplete(target) {
   if (target.status === "not-applicable") return true;
   const checks = Object.values(target.validation ?? {});
-  return terminalStatuses.has(target.status) && checks.every((status) => acceptedValidationStatuses.has(status));
+  return terminalStatuses.has(target.status) && !checks.includes("pending");
+}
+
+function targetNeedsAction(target) {
+  return target && target.status !== "not-applicable" && !targetComplete(target);
+}
+
+function shortChangeLabel(change) {
+  return changeLabels[change.id] ?? change.title;
 }
 
 function counts(change) {
@@ -35,6 +56,49 @@ function renderStats(profile) {
   ];
   document.querySelector("#stats").innerHTML = stats.map(([value, label]) =>
     `<div class="stat"><strong>${value}</strong><span>${label}</span></div>`).join("");
+}
+
+function renderActions(profile) {
+  const queue = profile.repositories.map((repo) => {
+    const items = profile.changes.flatMap((change) => {
+      const target = change.tracking[repo.id];
+      return targetNeedsAction(target) ? [{ change, target }] : [];
+    });
+    return {
+      repo,
+      items,
+      openPrs: items.filter(({ target }) => target.status === "pr-open").length,
+      validations: items.filter(({ target }) => Object.values(target.validation ?? {}).includes("pending")).length,
+    };
+  }).filter(({ repo, items }) => items.length && (repo.rollout_order ?? 50) < 99)
+    .sort((a, b) => (a.repo.rollout_order ?? 50) - (b.repo.rollout_order ?? 50) || b.openPrs - a.openPrs || a.repo.id.localeCompare(b.repo.id));
+
+  const grid = document.querySelector("#action-grid");
+  const visible = queue.slice(0, 6);
+  const lowPriority = profile.repositories.filter((repo) => (repo.rollout_order ?? 0) >= 99).length;
+  document.querySelector("#action-summary").textContent = `${queue.length} active repositories · ${lowPriority} lowest-priority deferred`;
+
+  if (!visible.length) {
+    grid.innerHTML = '<div class="empty">No active rollout work. The fleet is accounted for.</div>';
+    return;
+  }
+
+  grid.innerHTML = visible.map(({ repo, items, openPrs, validations }) => {
+    const rank = repo.rollout_order ? `#${repo.rollout_order}` : "queued";
+    const itemLinks = items.slice(0, 3).map(({ change, target }) => {
+      const reason = target.status === "pr-open" ? "review" : Object.values(target.validation ?? {}).includes("pending") ? "validate" : "apply";
+      const text = `<span>${escapeHtml(shortChangeLabel(change))}</span><small>${reason}</small>`;
+      return target.pr
+        ? `<a href="${escapeHtml(target.pr)}" target="_blank" rel="noopener">${text}</a>`
+        : `<span>${text}</span>`;
+    }).join("");
+    return `<article class="action-card">
+      <div class="action-card-head"><span class="priority-badge">${escapeHtml(rank)}</span><span>${items.length} item${items.length === 1 ? "" : "s"}</span></div>
+      <h3><a href="#repo-${escapeHtml(repo.id)}">${escapeHtml(repo.id)}</a></h3>
+      <p>${openPrs ? `${openPrs} open PR${openPrs === 1 ? "" : "s"}` : "No open PR"}${validations ? ` · ${validations} validation pending` : ""}</p>
+      <div class="action-list">${itemLinks}</div>
+    </article>`;
+  }).join("");
 }
 
 function renderChanges(profile) {
@@ -73,33 +137,51 @@ function statusCell(change, repositoryId) {
   const status = target.pr
     ? `<a class="status ${escapeHtml(css)}" href="${escapeHtml(target.pr)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`
     : `<span class="status ${escapeHtml(css)}">${escapeHtml(label)}</span>`;
-  const validation = Object.entries(target.validation ?? {}).map(([name, status]) => {
-    const symbol = status === "passed" ? "✓" : status === "waived" ? "—" : status === "failed" ? "×" : "…";
-    const url = target.validation_urls?.[name];
-    const content = `${escapeHtml(name)} ${symbol}${url ? " ↗" : ""}`;
-    return url
-      ? `<a class="validation ${escapeHtml(status)}" href="${escapeHtml(url)}" target="_blank" rel="noopener">${content}</a>`
-      : `<span class="validation ${escapeHtml(status)}">${content}</span>`;
+  const validationEntries = Object.entries(target.validation ?? {});
+  const validation = ["passed", "pending", "failed", "waived"].flatMap((validationStatus) => {
+    const matches = validationEntries.filter(([, status]) => status === validationStatus);
+    if (!matches.length) return [];
+    const symbol = validationStatus === "passed" ? "✓" : validationStatus === "waived" ? "—" : validationStatus === "failed" ? "×" : "…";
+    const names = matches.map(([name]) => name).join(", ");
+    const url = matches.map(([name]) => target.validation_urls?.[name]).find(Boolean);
+    const content = `${symbol} ${matches.length}`;
+    const title = `${validationStatus}: ${names}`;
+    return [url
+      ? `<a class="validation ${validationStatus}" href="${escapeHtml(url)}" target="_blank" rel="noopener" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}">${content} ↗</a>`
+      : `<span class="validation ${validationStatus}" title="${escapeHtml(title)}" aria-label="${escapeHtml(title)}">${content}</span>`];
   }).join("");
   return `${status}${validation ? `<span class="validation-list">${validation}</span>` : ""}`;
 }
 
 function statusCellClass(change, repositoryId) {
-  const status = change.tracking[repositoryId]?.status ?? "not-applicable";
-  return `status-cell status-cell-${status === "not-applicable" ? "na" : status}`;
+  const target = change.tracking[repositoryId];
+  if (!target || target.status === "not-applicable") return "status-cell status-cell-na";
+  if (target.status === "pr-open") return "status-cell status-cell-pr-open";
+  if (target.status === "blocked" || target.status === "closed") return "status-cell status-cell-failed";
+  if (!targetComplete(target)) return "status-cell status-cell-pending";
+  return "status-cell status-cell-complete";
 }
 
 function renderMatrix(profile) {
   const query = state.search.toLowerCase();
-  const repositories = profile.repositories.filter((repo) =>
-    [repo.id, repo.architecture, ...repo.modules, ...repo.tags].join(" ").toLowerCase().includes(query))
+  const repositories = profile.repositories.filter((repo) => {
+    const searchMatch = [repo.id, repo.architecture, ...repo.modules, ...repo.tags].join(" ").toLowerCase().includes(query);
+    const targets = profile.changes.map((change) => change.tracking[repo.id]).filter(Boolean);
+    const viewMatch = state.matrixFilter === "pending" ? (repo.rollout_order ?? 50) < 99 && targets.some(targetNeedsAction)
+      : state.matrixFilter === "pr-open" ? targets.some((target) => target.status === "pr-open")
+      : true;
+    return searchMatch && viewMatch;
+  })
     .sort((a, b) => (a.rollout_order ?? Number.MAX_SAFE_INTEGER) - (b.rollout_order ?? Number.MAX_SAFE_INTEGER));
   const table = document.querySelector("#matrix-table");
-  table.querySelector("thead").innerHTML = `<tr><th>Repository</th><th>Rollout</th>${profile.changes.map((change) => `<th>${escapeHtml(change.id)}</th>`).join("")}</tr>`;
-  table.querySelector("tbody").innerHTML = repositories.map((repo) => `<tr>
+  table.querySelector("thead").innerHTML = `<tr><th>Repository</th><th>Rollout</th>${profile.changes.map((change) => `<th><abbr title="${escapeHtml(change.title)}">${escapeHtml(shortChangeLabel(change))}</abbr></th>`).join("")}</tr>`;
+  table.querySelector("tbody").innerHTML = repositories.map((repo) => `<tr id="repo-${escapeHtml(repo.id)}">
     <td><span class="repo-name">${escapeHtml(repo.id)}</span><span class="repo-sub">${escapeHtml(repo.architecture)} · ${escapeHtml(repo.modules.join(", "))}</span></td>
     <td>${repo.rollout_order ? `<span class="status ${repo.rollout_order >= 99 ? "na" : "pr-open"}">${repo.rollout_order >= 99 ? "lowest" : `#${repo.rollout_order}`}</span>` : '<span class="status na">—</span>'}</td>
-    ${profile.changes.map((change) => `<td class="${statusCellClass(change, repo.id)}">${statusCell(change, repo.id)}</td>`).join("")}
+    ${profile.changes.map((change) => {
+      const notes = change.tracking[repo.id]?.notes ?? "Not in scope";
+      return `<td class="${statusCellClass(change, repo.id)}" title="${escapeHtml(notes)}">${statusCell(change, repo.id)}</td>`;
+    }).join("")}
   </tr>`).join("") || '<tr><td class="empty" colspan="99">No repositories match.</td></tr>';
 }
 
@@ -119,7 +201,7 @@ function renderRevisions(profile) {
 
 function render() {
   const profile = currentProfile();
-  renderStats(profile); renderChanges(profile); renderMatrix(profile); renderRevisions(profile);
+  renderStats(profile); renderActions(profile); renderChanges(profile); renderMatrix(profile); renderRevisions(profile);
   document.querySelector("#footer-profile").textContent = `Profile: ${profile.id} · Owner: ${profile.owner}`;
 }
 
@@ -132,11 +214,23 @@ async function init() {
     state.profile = state.data.profiles[0].id;
     const select = document.querySelector("#profile-select");
     select.innerHTML = state.data.profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.id)}</option>`).join("");
-    select.addEventListener("change", (event) => { state.profile = event.target.value; state.search = ""; document.querySelector("#repo-search").value = ""; render(); });
+    select.addEventListener("change", (event) => {
+      state.profile = event.target.value;
+      state.search = "";
+      state.matrixFilter = "all";
+      document.querySelector("#repo-search").value = "";
+      document.querySelectorAll(".matrix-filter").forEach((item) => item.classList.toggle("active", item.dataset.matrixFilter === "all"));
+      render();
+    });
     document.querySelectorAll(".filter").forEach((button) => button.addEventListener("click", () => {
       state.filter = button.dataset.filter;
       document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item === button));
       renderChanges(currentProfile());
+    }));
+    document.querySelectorAll(".matrix-filter").forEach((button) => button.addEventListener("click", () => {
+      state.matrixFilter = button.dataset.matrixFilter;
+      document.querySelectorAll(".matrix-filter").forEach((item) => item.classList.toggle("active", item === button));
+      renderMatrix(currentProfile());
     }));
     document.querySelector("#repo-search").addEventListener("input", (event) => { state.search = event.target.value; renderMatrix(currentProfile()); });
     render();
