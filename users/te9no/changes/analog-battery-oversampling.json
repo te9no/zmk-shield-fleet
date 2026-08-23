@@ -93,10 +93,10 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
       "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "notes": "専用ZMK 0.4検証branchの左analog構成へoversampling moduleを固定。統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。analog入力の個別長時間実機確認は引き続きpending。",
+      "notes": "専用ZMK 0.4検証branchの左analog構成へoversampling moduleを固定。統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。2026-08-23にanalog stickの実動作に問題がないことを確認し、60秒後の入力freeze対策を実機合格とした。",
       "validation": {
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
