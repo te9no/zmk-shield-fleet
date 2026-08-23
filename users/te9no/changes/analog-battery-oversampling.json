@@ -90,17 +90,25 @@
       "notes": "module利用あり。59fc126へのpinと実機確認が必要"
     },
     "solstice": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "notes": "専用ZMK 0.4検証branchの左analog構成へoversampling moduleを固定。統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。2026-08-23にanalog stickの実動作に問題がないことを確認し、60秒後の入力freeze対策を実機合格とした。",
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+      "commit": "4e83373",
+      "notes": "PR #4ではte9no/zmk@afe241d（cormoran/main+dya@e5c9b69の直系子commit）とoversampling module 59fc126の組み合わせで、analog stickと60秒後の入力継続を実機合格としていた。参照元をcormoranへ明示するため、PR #5でZMK本体をcormoran/main+dya@e5c9b6915b56801193e359dd9bad4a167ce0d1b8へ直接固定。just.sh pristineでUS/JIS左右4/4成功。生成設定でte9no,battery-voltage-divider-oversampling、oversampling=0、analog input有効を確認し、左USへ書き込み後COM73/COM74とCDC runtime logを確認。右US書き込みと切替後のanalog stick 60秒継続確認を待つ。stable mainとzmk-0.4は未変更。",
       "validation": {
-        "ci": "passed",
-        "hardware": "passed"
+        "ci": "pending",
+        "cormoran-build": "passed",
+        "driver-selection": "passed",
+        "left-flash": "passed",
+        "both-halves-flash": "pending",
+        "analog-runtime": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4"
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
+        "cormoran-build": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "driver-selection": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "left-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "both-halves-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "analog-runtime": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
       }
     },
     "sparagmos": {
