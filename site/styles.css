@@ -93,6 +93,15 @@ th:last-child, td:last-child { border-right: 0; }
 tr:last-child td { border-bottom: 0; }
 th { color: #aeb7b2; background: #1b2823; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
 td { font-size: 13px; }
+.status-cell { transition: background-color 140ms ease, box-shadow 140ms ease; }
+.status-cell-applied,
+.status-cell-merged { background: rgba(70, 143, 96, 0.18); box-shadow: inset 3px 0 #62b47e; }
+.status-cell-pr-open { background: rgba(67, 142, 181, 0.18); box-shadow: inset 3px 0 #5ba8cf; }
+.status-cell-pending,
+.status-cell-blocked { background: rgba(190, 123, 47, 0.19); box-shadow: inset 3px 0 #d4934a; }
+.status-cell-closed { background: rgba(172, 75, 65, 0.2); box-shadow: inset 3px 0 #cf685c; }
+.status-cell-na { background: rgba(91, 105, 99, 0.1); }
+tbody tr:hover .status-cell { filter: brightness(1.09); }
 .repo-name { font-weight: 750; }
 .repo-sub { display: block; margin-top: 4px; color: #99a49f; font-size: 11px; }
 .status { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-size: 12px; }
