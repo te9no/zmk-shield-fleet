@@ -28,8 +28,8 @@ Madula向け共通変更に参加します。
 - CDC: Zephyr 4.1 edge-trigger修整 `1850754`をPolaris `1088543`でpinして検証。MKB2 PR #7では全左centralでCDC Debug（ZMK log level 4）を明示的に有効化し、16/16 build成功。2026-08-22にMKB_L_MODULE_KEY実機でdebug出力と1200 baud UF2遷移を確認。
 - DYA Studio V2: Polaris `e11afa1`を基準とし、Cornix `e8dc0e1`でも同じ固定revision群を採用。
 - Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornix、GeaconSolsticeが0件。その他7 repositoriesに57件。
-- MKB2 ZMK 0.4 + DYA Studio V2: PR #7で15 firmware variantとsettings_reset（16/16）が成功。非LPPS左centralへフルstack、右側へwatchdog/kscan診断relayを導入し、左LPPSはRAM制約からフルStudio対象外。MLX90393の0.4 API対応はdriver PR #1へ分離し、いずれも実機確認までdraftを維持。
-- GeaconSolstice ZMK 0.4: PR #1の全5 firmware targetが成功。dongle display PR #3とtemp-layer upstream PR #2を含め、実機確認までdraftを維持。
+- MKB2 ZMK 0.4 + DYA Studio V2: PR #7で15 firmware variantとsettings_reset（16/16）が成功。非LPPS左centralへフルstack、右側へwatchdog/kscan診断relayを導入し、左LPPSはRAM制約からフルStudio対象外。MLX90393のZMK 0.4 singular endpoint APIは[driver PR #1](https://github.com/te9no/zmk-driver-MLX90393/pull/1)へ分離済み。MKB2 buildは成功したが、MLX90393実機未検証なのでclean Draftを維持する。
+- GeaconSolstice ZMK 0.4: PR #1の全5 firmware targetが成功。te9no forkの[LVGL 9 PR #3](https://github.com/te9no/zmk-dongle-display/pull/3)はDraftのままで、現在`west update` CI failureを調査待ち。積み上げ[PR #4](https://github.com/te9no/zmk-dongle-display/pull/4)の明示色/mono themeはSolstice OLED実機で不合格だったためsupersededとしてcloseし、Solsticeは実機合格済みの上流`englmaxi/zmk-dongle-display@2bb333f`を維持する。
 
 ## Inventory findings
 
