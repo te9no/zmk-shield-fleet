@@ -104,11 +104,11 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
       "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "notes": "左右US/JISへzmk-usb-loggingとcdc-bootを追加し、未使用board CDCを無効化。just.sh pristineで4/4成功。左右USへ書き込み、左COM73と右COM50のCDC Debugを確認し、左COM73の1200 baud bootを実機合格。統合PR #4をzmk-0.4へmerge済み。右COM50の1200 baud boot再確認はpending。stable mainは未変更。",
+      "notes": "左右US/JISへzmk-usb-loggingとcdc-bootを追加し、未使用board CDCを無効化。just.sh pristineで4/4成功。左右USへ書き込み、左COM73と右COM50のCDC Debugを確認。2026-08-23に右COM50へ1200 baud touchを送信し、COM50の消失とXIAO-SENSEブートローダーのHドライブ出現を実機確認した。Solstice_R_US.uf2を書き戻した後はCOM50へ復帰し、CDC DebugでPMW3610ログを再取得。左右の1200 baud boot triggerを実機合格とした。統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。",
       "validation": {
         "ci": "passed",
         "left-hardware": "passed",
-        "right-hardware": "pending"
+        "right-hardware": "passed"
       }
     },
     "kozakura": {
