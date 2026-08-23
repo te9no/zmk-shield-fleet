@@ -33,17 +33,32 @@
 
     <main id="top">
       <section class="hero">
-        <p class="eyebrow">PROPAGATION CONTROL</p>
-        <h1>One proven fix.<br><span>Every keyboard accounted for.</span></h1>
-        <p class="hero-copy">Follow shared drivers and ZMK features from a reference implementation through review, merge, and verified application.</p>
+        <div class="hero-heading">
+          <div>
+            <p class="eyebrow">FLEET OVERVIEW</p>
+            <h1>Know what<br><span>ships next.</span></h1>
+          </div>
+          <p class="hero-copy">Turn shared ZMK changes into a clear queue of reviews, validation, and rollout work.</p>
+        </div>
         <div class="stats" id="stats" aria-live="polite"></div>
+      </section>
+
+      <section class="section action-section" aria-labelledby="actions-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">WORK QUEUE</p>
+            <h2 id="actions-heading">Next actions</h2>
+          </div>
+          <p class="section-copy" id="action-summary"></p>
+        </div>
+        <div class="action-grid" id="action-grid"></div>
       </section>
 
       <section class="section" aria-labelledby="changes-heading">
         <div class="section-heading">
           <div>
             <p class="eyebrow">CHANGE LEDGER</p>
-            <h2 id="changes-heading">Propagation status</h2>
+            <h2 id="changes-heading">Rollout campaigns</h2>
           </div>
           <div class="filters" role="group" aria-label="Change filters">
             <button class="filter active" data-filter="all">All changes</button>
@@ -60,10 +75,24 @@
             <p class="eyebrow">FLEET MATRIX</p>
             <h2 id="matrix-heading">Repository coverage</h2>
           </div>
-          <label class="search-control">
-            <span>Filter repositories</span>
-            <input id="repo-search" type="search" placeholder="Search name, module, tag…">
-          </label>
+          <div class="matrix-controls">
+            <div class="matrix-filters" role="group" aria-label="Repository view">
+              <button class="matrix-filter active" data-matrix-filter="all">All</button>
+              <button class="matrix-filter" data-matrix-filter="pending">Active queue</button>
+              <button class="matrix-filter" data-matrix-filter="pr-open">Open PRs</button>
+            </div>
+            <label class="search-control">
+              <span>Filter repositories</span>
+              <input id="repo-search" type="search" placeholder="Search name, module, tag…">
+            </label>
+          </div>
+        </div>
+        <div class="matrix-legend" aria-label="Status legend">
+          <span class="legend-item complete">Complete</span>
+          <span class="legend-item pr-open">Open PR</span>
+          <span class="legend-item pending">Needs action</span>
+          <span class="legend-item failed">Blocked / closed</span>
+          <span class="legend-item na">Not in scope</span>
         </div>
         <div class="matrix-wrap">
           <table id="matrix-table">
