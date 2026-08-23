@@ -7,29 +7,29 @@
   "source": {
     "repository": "te9no/zmk-config-GeaconSolstice",
     "from_revision": "f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52",
-    "to_revision": null,
-    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/3",
-    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。SSD1306のdevicetree定義は維持し、dongle_display shieldだけを外してCONFIG_ZMK_DISPLAYによる標準画面へ戻す。"
+    "to_revision": "3260ee7",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。標準ZMK OLED画面への切り戻しではOLED・HID・CDC・Studioの起動を確認したが、必須のPeripheral電池残量が表示されない。次段としてdongle_displayを戻し、表示専用thread stackを6144 bytesへ拡張して検証する。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "a5fae75",
-    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/3",
-    "notes": "2026-08-23のSolstice左実機検証で起動停止を確認したため。"
+    "revision": "3260ee7",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+    "notes": "2026-08-23のSolstice左実機検証で、標準画面なら起動する一方、Peripheral電池残量が表示されず運用要件を満たさないことを確認したため。"
   },
   "repositories": ["solstice"],
   "tracking": {
     "solstice": {
       "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/3",
-      "commit": "a5fae75",
-      "notes": "zmk-0.4_validation_peripheral-cdc-debugをbaseにzmk-0.4_validation_oled-defaultを作成。左US/JISからdongle_display addonを外し、ZMK標準OLED画面へ切り戻した。just.sh build-fast Solstice_L_US --pristine=alwaysは成功。実機起動確認までDraftを維持し、上位ZMK 0.4検証branchへは未反映。",
-      "validation": { "ci": "passed", "hardware": "pending" }
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+      "commit": "3260ee7",
+      "notes": "PR #3の標準OLED版は左CentralのOLED・HID・CDC COM73・追加RPC用COM74/COM443の起動を実機確認したが、Peripheral電池残量がないため暫定切り分け扱い。PR #4でdongle_displayとPeripheral電池表示を戻し、CONFIG_ZMK_DISPLAY_DEDICATED_THREAD_STACK_SIZEを6144へ拡張。just.sh build-fast Solstice_L_US --pristine=alwaysは成功。実機起動確認待ちで、上位ZMK 0.4検証branchへは未反映。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-hardware": "pending" }
     }
   },
   "steps": [
-    "左US版を実機へ書き込み、OLEDとUSB CDC/HIDの起動を確認する",
-    "起動すればdongle_displayのZMK 0.4移植を原因候補として調査する",
-    "起動しなければOLEDを完全無効化した次段の切り分け版を試す"
+    "PR #4の左US版を実機へ書き込み、OLEDとUSB CDC/HIDの起動を確認する",
+    "Peripheral電池残量が更新されることを確認する",
+    "起動しなければdongle_displayを電池ウィジェットだけに縮小して再検証する"
   ]
 }
