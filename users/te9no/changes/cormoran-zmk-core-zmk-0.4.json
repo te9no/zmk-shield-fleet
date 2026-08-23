@@ -106,7 +106,7 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
       "commit": "729909b",
-      "notes": "第1群。既存Draft PR #3でcormoran/zmk@e5c9b69へ直接固定。存在しないboard_cdc_acm_uart参照という既存build blockerも除去し、Madula 3構成とCornix/TPS43を含む./just.sh build-fast all --pristine=alwaysが12/12成功。トラックボール実機未接続のためDraftを維持。",
+      "notes": "Fleet最優先。既存Draft PR #3でcormoran/zmk@e5c9b69へ直接固定。存在しないboard_cdc_acm_uart参照という既存build blockerも除去し、Madula 3構成とCornix/TPS43を含む./just.sh build-fast all --pristine=alwaysが12/12成功。次は物理Madula trackball moduleを装着して、PMW3610入力・local source診断・frame captureを実機確認する。未接続のためDraftを維持し、mainには反映しない。",
       "validation": {
         "build": "passed",
         "dya-studio": "passed",
@@ -139,17 +139,18 @@
       "notes": "最低優先度。ZMK 0.4開発branchで直接cormoran固定と実機確認を行う。"
     },
     "solstice": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
-      "commit": "4e83373",
-      "notes": "第2群。cormoran/zmk@e5c9b69へ直接固定し、just.sh pristine 4/4、生成設定、左US書き込み、CDC runtime logまで確認。右US書き込みと両手切替後のanalog stick 60秒継続確認待ち。zmk-0.4とstable mainは未変更。",
+      "commit": "6638e6c",
+      "notes": "cormoran/zmk@e5c9b69への直接固定だけを含むPR #5を、US左右書き込み、右入力、OLED、DYA Studio最終接続/UI、analog stick実機合格の確認後に2026-08-23にzmk-0.4へ6638e6cとしてマージ。GitHub ActionsのUS/JIS左右4/4とsettings_resetも成功。stable mainは未変更。",
       "validation": {
         "build": "passed",
         "driver-selection": "passed",
         "left-flash": "passed",
         "ci": "passed",
-        "both-halves-flash": "pending",
-        "analog-runtime": "pending"
+        "both-halves-flash": "passed",
+        "analog-runtime": "passed",
+        "hardware": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",

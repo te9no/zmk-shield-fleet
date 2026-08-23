@@ -90,17 +90,18 @@
       "notes": "module利用あり。59fc126へのpinと実機確認が必要"
     },
     "solstice": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
-      "commit": "4e83373",
-      "notes": "PR #4ではte9no/zmk@afe241d（cormoran/main+dya@e5c9b69の直系子commit）とoversampling module 59fc126の組み合わせで、analog stickと60秒後の入力継続を実機合格としていた。参照元をcormoranへ明示するため、PR #5でZMK本体をcormoran/main+dya@e5c9b6915b56801193e359dd9bad4a167ce0d1b8へ直接固定。just.sh pristineでUS/JIS左右4/4成功。生成設定でte9no,battery-voltage-divider-oversampling、oversampling=0、analog input有効を確認し、左USへ書き込み後COM73/COM74とCDC runtime logを確認。右US書き込みと切替後のanalog stick 60秒継続確認を待つ。stable mainとzmk-0.4は未変更。",
+      "commit": "6638e6c",
+      "notes": "PR #4ではte9no/zmk@afe241d（cormoran/main+dya@e5c9b69の直系子commit）とoversampling module 59fc126の組み合わせで、analog stickと60秒後の入力継続を実機合格としていた。参照元をcormoranへ明示するPR #5はZMK本体の直接固定だけを含む。US/JIS左右4/4とsettings_reset、US左右書き込み、右入力、OLED、DYA Studio最終接続/UI、analog stickの実機合格を確認し、2026-08-23にzmk-0.4へ6638e6cとしてマージ。stable mainは未変更。",
       "validation": {
         "ci": "passed",
         "cormoran-build": "passed",
         "driver-selection": "passed",
         "left-flash": "passed",
-        "both-halves-flash": "pending",
-        "analog-runtime": "pending"
+        "both-halves-flash": "passed",
+        "analog-runtime": "passed",
+        "hardware": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",

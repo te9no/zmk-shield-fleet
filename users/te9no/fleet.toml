@@ -36,7 +36,7 @@ required_globs = [
 
 [[repositories]]
 id = "mkb2"
-rollout_order = 1
+rollout_order = 2
 github = "te9no/zmk-config-MKB2"
 checkout = "zmk-config-MKB2"
 default_branch = "main"
@@ -82,6 +82,7 @@ required_globs = [
 
 [[repositories]]
 id = "cornix"
+rollout_order = 1
 github = "te9no/zmk-keyboard-cornix"
 checkout = "zmk-keyboard-cornix"
 default_branch = "main"
@@ -142,7 +143,7 @@ required_globs = [
 
 [[repositories]]
 id = "solstice"
-rollout_order = 2
+rollout_order = 3
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
 default_branch = "main"
