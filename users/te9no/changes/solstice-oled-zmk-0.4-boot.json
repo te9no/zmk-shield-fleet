@@ -7,13 +7,13 @@
   "source": {
     "repository": "te9no/zmk-config-GeaconSolstice",
     "from_revision": "f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52",
-    "to_revision": "f706f291cf440c6e95f9a7c59cf65ae59b9fd8be",
+    "to_revision": "1055be9d98ae79197a8263539ff9e72f9682a3e5",
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。標準ZMK OLED画面への切り戻しでは起動したため、dongle_displayを戻して表示専用thread stackを6144 bytesへ拡張したところ起動成功。白背景はSSD1306反転指定では直らず、LVGL 9画面styleの色未指定が原因と判断し、共有moduleで黒背景・白文字・透明widget containerを明示した。右手位置は専用Solstice_R_Offset snippetで修正し、実機合格。"
+    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。標準ZMK OLED画面への切り戻しでは起動したため、dongle_displayを戻して表示専用thread stackを6144 bytesへ拡張したところ起動成功。白背景に対し、共有moduleで黒背景・白文字・透明widget containerを明示したf706f29版は変化なし。続いてmono themeとZMK_DISPLAY_INVERTを有効化した1055be9版も白背景のまま。現在はmono dark themeを維持したままSSD1306 inversion-onも有効にした組み合わせを実機へ書き込み、結果待ち。右手位置は専用Solstice_R_Offset snippetで修正し、実機合格。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "d8be0a1",
+    "revision": "b373ba2",
     "change_url": "https://github.com/te9no/zmk-dongle-display/pull/4",
     "notes": "2026-08-23のSolstice左実機検証で、標準画面なら起動する一方、Peripheral電池残量が表示されず運用要件を満たさないことを確認したため。"
   },
@@ -22,9 +22,9 @@
     "solstice": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "d8be0a1",
-      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でdongle_display、Peripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。白背景対策としてzmk-dongle-display@f706f291cf440c6e95f9a7c59cf65ae59b9fd8be（module PR #4）を固定し、just.sh build-fast Solstice_L_US --pristine=always成功後、CDC boot経由で左H:へ書き込み、COM73/74/443復帰を確認。黒背景とPeripheral電池表示の目視確認待ち。上位ZMK 0.4検証branchへは未反映。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "oled-monochrome-style-flash": "passed", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
+      "commit": "b373ba2",
+      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でdongle_display、Peripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。白背景対策1（module f706f29の明示色style）と対策2（module 1055be9のmono dark theme）は実機で変化なし。対策3としてLV_USE_THEME_MONO=y、ZMK_DISPLAY_INVERT=y、SSD1306 inversion-onの3条件を最終config/DTSで確認し、just.sh pristine build成功後にCDC boot経由で左H:へ書き込み、COM73/74/443復帰を確認。背景極性とPeripheral電池表示の目視確認待ち。上位ZMK 0.4検証branchへは未反映。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-flash": "passed", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
     }
   },
   "steps": [
