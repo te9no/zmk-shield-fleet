@@ -9,25 +9,27 @@
     "from_revision": "f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52",
     "to_revision": "2bb333f87136d33e94a49d86236ed9ec254a8060",
     "change_url": "https://github.com/englmaxi/zmk-dongle-display/commit/2bb333f87136d33e94a49d86236ed9ec254a8060",
-    "notes": "左Centralの起動停止は表示thread stack拡張で解消。白背景に対するte9no forkの明示色style版、mono dark theme版、mono themeとSSD1306反転の併用版はいずれも改善せず。本家englmaxiのZMK 0.4対応版が論理白背景・黒文字を明示し、SSD1306 inversion-onとの組み合わせを前提としていることを確認したため、独自forkを中止して本家2bb333fへ固定した。本家には表示event throttlingとZMK API修正も含まれる。右手位置は専用Solstice_R_Offset snippetで修正し、実機合格。"
+    "notes": "左Centralの起動停止は表示thread stack拡張で解消。白背景に対するte9no forkの明示色style版、mono dark theme版、mono themeとSSD1306反転の併用版はいずれも改善せず。本家englmaxiのZMK 0.4対応版が論理白背景・黒文字を明示し、SSD1306 inversion-onとの組み合わせを前提としていることを確認したため、独自forkを中止して本家2bb333fへ固定した。本家には表示event throttlingとZMK API修正も含まれる。右手位置は専用Solstice_R_Offset snippetで修正し、実機合格。128x32 OLEDでは本家のBongo Cat右下配置が文字と重なるため、上流ベースのcompact 32pxレイアウトを提案し、猫を中央配置してレイヤーwidgetを無効化する検証版を作成した。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "e5911bd",
+    "revision": "8738367",
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-    "notes": "2026-08-23のSolstice左実機検証で、te9no forkによる白背景対策が3回とも無効だったため、本家ZMK 0.4対応版へ切り替えた。"
+    "notes": "2026-08-23のSolstice左実機検証で、te9no forkによる白背景対策が3回とも無効だったため、本家ZMK 0.4対応版へ切り替えた。本家版でBongo Catが右端の文字と重なったため、compact 32pxレイアウトの検証を開始した。"
   },
   "repositories": ["solstice"],
   "tracking": {
     "solstice": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "e5911bd",
-      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。just.sh pristine Solstice_L_US build成功後、CDC boot経由で左H:へ書き込み、COM73/74/443復帰を確認。本家版の背景極性とPeripheral電池表示の目視確認待ち。上位ZMK 0.4検証branchへは未反映。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
+      "commit": "8738367",
+      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。just.sh pristine Solstice_L_US build成功。DYA StudioがCOM74を占有しているため、compact版のCDC書き込みと目視確認は保留。上位ZMK 0.4検証branchへは未反映。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-hardware": "pending", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
     }
   },
   "steps": [
+    "DYA Studioを切断してCDC bootを解放し、compact 32px版を左Centralへ書き込む",
+    "Bongo Catが中央に表示され、文字と重ならないことを確認する",
     "OLED背景極性が正常であることを確認する",
     "Peripheral電池残量が更新されることを確認する",
     "本家固定revisionを実機確認後にZMK 0.4検証branchへマージする"
