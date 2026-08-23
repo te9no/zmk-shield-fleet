@@ -36,14 +36,14 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
-      "commit": "31a25dd",
-      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。just.sh pristineでJOY、IQS、IQS debug、PMW3610を含む9/9成功。左LPPSと右IQSは実機で動作を確認済み。左LPPSはBongo Cat有効化（zmk-nice-oled@c511d7f、31a25dd）を再書き込みし、COM326の1200 baud UF2遷移、XIAO-BOOTへのzmk.uf2コピー、COM326復帰を確認。2026-08-23にユーザーが左OLEDのBongo Cat表示を実機目視で合格と確認。zmk-0.4へは未マージ。",
+      "commit": "53cbeec",
+      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。just.sh pristineとGitHub ActionsでJOY、IQS、IQS debug、PMW3610を含む10 firmware targetおよびsettings_resetが成功。左LPPSと右IQSは実機で動作を確認済み。左LPPSはBongo Cat有効化（zmk-nice-oled@c511d7f、31a25dd）を再書き込みし、COM326の1200 baud UF2遷移、XIAO-BOOTへのzmk.uf2コピー、COM326復帰を確認。2026-08-23にユーザーが左OLEDのBongo Cat表示を実機目視で合格と確認。PR #6はCI成功・生成firmware publish後、2026-08-23にzmk-0.4へ53cbeecとしてマージ。stable firmware mainは未変更。",
       "validation": {
         "build": "passed",
         "driver-selection": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "lpps-hardware": "passed",
         "iqs-hardware": "passed",
         "oled-bongo-visual": "passed",
