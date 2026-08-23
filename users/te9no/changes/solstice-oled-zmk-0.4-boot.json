@@ -23,12 +23,12 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
       "commit": "8738367",
-      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。just.sh pristine Solstice_L_US build成功。DYA StudioがCOM74を占有しているため、compact版のCDC書き込みと目視確認は保留。上位ZMK 0.4検証branchへは未反映。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-hardware": "pending", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
+      "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。just.sh pristine Solstice_L_US build成功。DYA Studio終了後にCOM73/74/443の解放を確認し、COM74 CDC boot経由で左Centralへ書き込み。再起動後に3ポート復帰と通常debugログを確認した。compact表示とDYA Studio再接続の目視確認待ち。上位ZMK 0.4検証branchへは未反映。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-flash": "passed", "compact-32px-hardware": "pending", "dya-studio-reconnect": "pending", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "passed" }
     }
   },
   "steps": [
-    "DYA Studioを切断してCDC bootを解放し、compact 32px版を左Centralへ書き込む",
+    "DYA Studioを再起動し、SolsticeへUSB接続できることを確認する",
     "Bongo Catが中央に表示され、文字と重ならないことを確認する",
     "OLED背景極性が正常であることを確認する",
     "Peripheral電池残量が更新されることを確認する",
