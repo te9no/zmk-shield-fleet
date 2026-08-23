@@ -4,7 +4,9 @@
   "enabled": true,
   "title": "アナログジョイスティックの速度と滑らかさを横並びで点検する",
   "description": "MKBで判明した過大なscale-divisorとreport intervalによる低速・間欠報告を、joystick搭載キーボードごとに点検し、ハードウェア特性に合わせて調整する。",
-  "scope": { "module": "joystick" },
+  "scope": {
+    "module": "joystick"
+  },
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
@@ -18,23 +20,76 @@
     "change_url": "https://github.com/te9no/zmk-config-MKB2/commit/941d3f7835c2a596ecfcebc4d156039e5efa71cf",
     "notes": "2026-08-22のMKB左JOY実機試験で低速と約1秒周期の間欠移動を確認し、速度・report interval修整後に滑らかな連続移動を確認。"
   },
-  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cagime", "berkut51", "solstice", "sparagmos"],
+  "repositories": [
+    "polaris",
+    "mdk",
+    "mkb2",
+    "mrm",
+    "saa",
+    "cagime",
+    "berkut51",
+    "solstice",
+    "sparagmos"
+  ],
   "tracking": {
     "mkb2": {
       "status": "applied",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
       "commit": "ea0830ae3c40b168c7d37febc849cd74d27aadbd",
       "notes": "MKB/zmk-0.4に速度・100 Hz連続report修整を集約。2026-08-22に左JOYで滑らかな移動を実機確認し、同日just.shで再buildしたMKB_L_MODULE_JOYを再書き込み。",
-      "validation": { "ci": "passed", "hardware": "passed" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "passed"
+      }
     },
-    "polaris": { "status": "pending", "pr": null, "commit": null, "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。" },
-    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "JOY slotあり。最低優先度で監査する。" },
-    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "JOY slotあり。最低優先度で監査する。" },
-    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "JOYおよびJOY+IQS構成のscaleとreport cadenceを専用検証branchで確認する。mainへは実機確認前に昇格しない。" },
-    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "joystick対象。ローカル専用として監査する。" },
-    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "joystick対象。最低優先度で監査する。" },
-    "solstice": { "status": "pending", "pr": null, "commit": null, "notes": "analog入力構成をMKBの次の優先群として監査する。" },
-    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "交換式analog stick構成。最低優先度で監査する。" }
+    "polaris": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。"
+    },
+    "mdk": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "JOY slotあり。最低優先度で監査する。"
+    },
+    "mrm": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "JOY slotあり。最低優先度で監査する。"
+    },
+    "saa": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "JOYおよびJOY+IQS構成のscaleとreport cadenceを専用検証branchで確認する。mainへは実機確認前に昇格しない。"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "joystick対象。ローカル専用として監査する。"
+    },
+    "berkut51": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "joystick対象。最低優先度で監査する。"
+    },
+    "solstice": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "analog入力構成をMKBの次の優先群として監査する。"
+    },
+    "sparagmos": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "交換式analog stick構成。最低優先度で監査する。"
+    }
   },
   "steps": []
 }

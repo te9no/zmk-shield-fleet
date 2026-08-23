@@ -17,14 +17,19 @@
     "change_url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326",
     "notes": "2026-08-22の右TBv4実機試験でポインタ方向が90度ずれていることを確認。PolarisとMKBのセンサー実装角差と一致する。"
   },
-  "repositories": ["mkb2"],
+  "repositories": [
+    "mkb2"
+  ],
   "tracking": {
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/13",
       "commit": "83238374162ab65f6f9a35b6b0ff2069294a050c",
       "notes": "2026-08-23にcormoran版右TBv4で、上が下、下が上、左が右、右が左へ動く二軸反転を実機確認。Bongo入力連動検証branchへ積み上げたPR #13で、MKB_R_TBのtrackball_splitだけX/Y反転processorを追加。MKB_R_MODULE_TBv4をjust.sh build-fast --pristine=alwaysで検証成功し、Peripheral CDC COM12経由で書き込み、COM12復帰を確認。書き込み後に上→上、左→左を含む正方向を実機確認し、PR #13をzmk-0.4_validation_bongo-input-responsiveへmerge済み。TBv3、MKB/zmk-0.4およびstable firmware branchにはまだ未反映。",
-      "validation": { "ci": "passed", "hardware": "passed" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "passed"
+      }
     }
   },
   "steps": []

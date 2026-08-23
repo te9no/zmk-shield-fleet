@@ -4,7 +4,9 @@
   "enabled": true,
   "title": "Studio RPCとCDC Debug併用時はUSB CDCを2本以内にする",
   "description": "nRF52840でDYA/ZMK Studio RPCとCDC Debugを併用する場合、未使用のboard CDCを無効化する。3 CDC構成は全インターフェースが列挙されても最後のStudio RPC OUTが受信できず、接続timeoutになる場合がある。",
-  "scope": { "all": true },
+  "scope": {
+    "all": true
+  },
   "source": {
     "repository": "te9no/zmk-config-MKB2",
     "from_revision": null,
@@ -18,20 +20,104 @@
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/676e7a9",
     "notes": "Solsticeで3 CDC構成のStudio COM443が列挙・open可能でもRPC無応答になることを再現。board CDC無効化後、Studio COM74へのGetDeviceInfoが30-byte応答を返した。"
   },
-  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "repositories": [
+    "polaris",
+    "mdk",
+    "mkb2",
+    "mrm",
+    "saa",
+    "cornix",
+    "torabo",
+    "cagime",
+    "berkut51",
+    "solstice",
+    "kozakura",
+    "sparagmos"
+  ],
   "tracking": {
-    "polaris": { "status": "pending", "pr": null, "commit": null, "notes": "CDC DebugとStudio RPC有効時のCDC node数を監査する。第1優先群。" },
-    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。ZMK 0.4移行時に監査する。" },
-    "mkb2": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10", "commit": "1f540398d5af4b49b04bbab045263ee67c5a63ce", "notes": "board CDCを無効化し、CDC Debug/CDC BootとStudio RPCを維持。DYA Studio UI実機接続済み。", "validation": { "build": "passed", "direct-rpc": "passed", "ui": "passed" } },
-    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。ZMK 0.4移行時に監査する。" },
-    "saa": { "status": "pending", "pr": null, "commit": null, "notes": "未テストのため専用検証branchで監査する。" },
-    "cornix": { "status": "pending", "pr": null, "commit": null, "notes": "MKB/Polarisと同じcormoran版構成でCDC node数を監査する。第1優先群。" },
-    "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。" },
-    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "ローカル専用。" },
-    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。" },
-    "solstice": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4", "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9", "notes": "board CDCを無効化。just.sh pristineでUS/JIS左右4/4成功。Debug/CDC Boot=COM73、Studio RPC=COM74として列挙し、直接GetDeviceInfo RPC応答とDYA Studio UI接続を実機合格と確認。統合PR #4をzmk-0.4へmerge済み。", "validation": { "build": "passed", "flash": "passed", "direct-rpc": "passed", "ui": "passed" } },
-    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。" },
-    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "最低優先度。" }
+    "polaris": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CDC DebugとStudio RPC有効時のCDC node数を監査する。第1優先群。"
+    },
+    "mdk": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4移行時に監査する。"
+    },
+    "mkb2": {
+      "status": "applied",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+      "commit": "1f540398d5af4b49b04bbab045263ee67c5a63ce",
+      "notes": "board CDCを無効化し、CDC Debug/CDC BootとStudio RPCを維持。DYA Studio UI実機接続済み。",
+      "validation": {
+        "build": "passed",
+        "direct-rpc": "passed",
+        "ui": "passed"
+      }
+    },
+    "mrm": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4移行時に監査する。"
+    },
+    "saa": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "未テストのため専用検証branchで監査する。"
+    },
+    "cornix": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "MKB/Polarisと同じcormoran版構成でCDC node数を監査する。第1優先群。"
+    },
+    "torabo": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "ローカル専用。"
+    },
+    "berkut51": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。"
+    },
+    "solstice": {
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
+      "notes": "board CDCを無効化。just.sh pristineでUS/JIS左右4/4成功。Debug/CDC Boot=COM73、Studio RPC=COM74として列挙し、直接GetDeviceInfo RPC応答とDYA Studio UI接続を実機合格と確認。統合PR #4をzmk-0.4へmerge済み。",
+      "validation": {
+        "build": "passed",
+        "flash": "passed",
+        "direct-rpc": "passed",
+        "ui": "passed"
+      }
+    },
+    "kozakura": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。"
+    },
+    "sparagmos": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。"
+    }
   },
   "steps": []
 }

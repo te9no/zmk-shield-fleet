@@ -4,7 +4,9 @@
   "enabled": true,
   "title": "CDC ACM debug/boot triggerをZephyr 4.1対応版へ揃える",
   "description": "edge-triggered CDC polling修整を含むrevisionを各キーボードで採用し、USB接続可能なsplitではCentral/Peripheralの両側へCDC Debugと1200 baud boot triggerを揃える。USB endpoint数・RAM・Studio RPCとの競合を個別に確認し、適用不能なら理由を記録する。",
-  "scope": { "all": true },
+  "scope": {
+    "all": true
+  },
   "source": {
     "repository": "te9no/zmk-feature-cdc-acm-bootloader-trigger",
     "from_revision": null,
@@ -18,20 +20,109 @@
     "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/10885439f82c58cd65c1cdccc935e97954bbe0c9",
     "notes": "PolarisのZMK 0.4 DYA Studio buildで固定revisionを検証。"
   },
-  "repositories": ["polaris", "mdk", "mkb2", "mrm", "saa", "cornix", "torabo", "cagime", "berkut51", "solstice", "kozakura", "sparagmos"],
+  "repositories": [
+    "polaris",
+    "mdk",
+    "mkb2",
+    "mrm",
+    "saa",
+    "cornix",
+    "torabo",
+    "cagime",
+    "berkut51",
+    "solstice",
+    "kozakura",
+    "sparagmos"
+  ],
   "tracking": {
-    "polaris": { "status": "pending", "pr": null, "commit": "10885439f82c58cd65c1cdccc935e97954bbe0c9", "notes": "Zephyr 4.1対応revisionの基準実装は適用済み。MKB/Solsticeと同様に全Peripheral targetへCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。" },
-    "mdk": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
-    "mkb2": { "status": "applied", "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7", "commit": "d4e7156", "notes": "左Centralは全targetへCDC triggerとZMK debug-level出力を導入済み。右Peripheralも全8 targetへCDC Debugと1200 baud bootを追加。MKB/zmk-0.4の通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証し15/15成功。2026-08-22に右MKB_R_MODULE_TBv4でCOM12からZephyr起動ログとCDC trigger初期化を取得し、1200 baudでI: XIAO-SENSEへ遷移、再書き込み後のCOM12復帰まで確認。MKB/zmk-0.4へ集約済み。", "validation": { "ci": "passed", "hardware": "passed" } },
-    "mrm": { "status": "pending", "pr": null, "commit": null, "notes": "現行west.ymlにmoduleなし" },
-    "saa": { "status": "merged", "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3", "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d", "notes": "専用検証branchのsplit Central側へ固定revisionを適用し、全21 firmware matrix成功。Peripheral CDC parityは未監査。master昇格はPR #6でrevert済み。実機確認待ち", "validation": { "ci": "passed", "hardware": "pending" }, "validation_urls": { "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32464854176" } },
-    "cornix": { "status": "pending", "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1", "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028", "notes": "Zephyr 4.1のDTE rate callbackを使う同等実装をrepository内に保持し、全production buildで検証済み。Madulaを含むPeripheral側にもCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。" },
-    "torabo": { "status": "pending", "pr": null, "commit": null, "notes": "旧v0.2とZMK 0.3を使用中" },
-    "cagime": { "status": "pending", "pr": null, "commit": null, "notes": "module定義はコメントアウト。ローカル専用" },
-    "berkut51": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" },
-    "solstice": { "status": "pr-open", "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/2", "commit": "866b1f15c7d1198ab491934bdf095fc0e0d15f27", "notes": "cormoran PMW3610検証branchへ積み上げたzmk-0.4_validation_peripheral-cdc-debugで、右PeripheralのUS/JIS両targetへzmk-usb-loggingとcdc-bootを追加。just.sh build-fast Solstice_R_ --pristine=alwaysで2/2成功。右US実機への書き込みとCOM/1200 baud boot確認待ち。左Central USはCOM50起動ログ確認済み。stable mainおよび既存PR #1には未反映。", "validation": { "ci": "passed", "hardware": "pending" } },
-    "kozakura": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" },
-    "sparagmos": { "status": "pending", "pr": null, "commit": null, "notes": "DYA Studio利用あり、CDC trigger未導入" }
+    "polaris": {
+      "status": "pending",
+      "pr": null,
+      "commit": "10885439f82c58cd65c1cdccc935e97954bbe0c9",
+      "notes": "Zephyr 4.1対応revisionの基準実装は適用済み。MKB/Solsticeと同様に全Peripheral targetへCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。"
+    },
+    "mdk": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "現行west.ymlにmoduleなし"
+    },
+    "mkb2": {
+      "status": "applied",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7",
+      "commit": "d4e7156",
+      "notes": "左Centralは全targetへCDC triggerとZMK debug-level出力を導入済み。右Peripheralも全8 targetへCDC Debugと1200 baud bootを追加。MKB/zmk-0.4の通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証し15/15成功。2026-08-22に右MKB_R_MODULE_TBv4でCOM12からZephyr起動ログとCDC trigger初期化を取得し、1200 baudでI: XIAO-SENSEへ遷移、再書き込み後のCOM12復帰まで確認。MKB/zmk-0.4へ集約済み。",
+      "validation": {
+        "ci": "passed",
+        "hardware": "passed"
+      }
+    },
+    "mrm": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "現行west.ymlにmoduleなし"
+    },
+    "saa": {
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3",
+      "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d",
+      "notes": "専用検証branchのsplit Central側へ固定revisionを適用し、全21 firmware matrix成功。Peripheral CDC parityは未監査。master昇格はPR #6でrevert済み。実機確認待ち",
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32464854176"
+      }
+    },
+    "cornix": {
+      "status": "pending",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
+      "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
+      "notes": "Zephyr 4.1のDTE rate callbackを使う同等実装をrepository内に保持し、全production buildで検証済み。Madulaを含むPeripheral側にもCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。"
+    },
+    "torabo": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "旧v0.2とZMK 0.3を使用中"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "module定義はコメントアウト。ローカル専用"
+    },
+    "berkut51": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "DYA Studio利用あり、CDC trigger未導入"
+    },
+    "solstice": {
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
+      "notes": "左右US/JISへzmk-usb-loggingとcdc-bootを追加し、未使用board CDCを無効化。just.sh pristineで4/4成功。左右USへ書き込み、左COM73と右COM50のCDC Debugを確認し、左COM73の1200 baud bootを実機合格。統合PR #4をzmk-0.4へmerge済み。右COM50の1200 baud boot再確認はpending。stable mainは未変更。",
+      "validation": {
+        "ci": "passed",
+        "left-hardware": "passed",
+        "right-hardware": "pending"
+      }
+    },
+    "kozakura": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "DYA Studio利用あり、CDC trigger未導入"
+    },
+    "sparagmos": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "DYA Studio利用あり、CDC trigger未導入"
+    }
   },
   "steps": []
 }
