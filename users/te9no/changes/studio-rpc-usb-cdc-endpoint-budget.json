@@ -74,12 +74,13 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
       "commit": "3b194eb98fd2a154247555001b5d206f1683c438",
-      "notes": "Madula Trackballの生成devicetreeでboard CDC・Studio RPC・USB loggingの3 CDC構成を検出。Draft PR #3で未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ修正。just.sh pristineでMadula 3/3 target成功。2026-08-23に実機へ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙を確認。Studio RPC応答とDYA Studio接続はpending。",
+      "notes": "Madula Trackballの生成devicetreeでboard CDC・Studio RPC・USB loggingの3 CDC構成を検出。Draft PR #3で未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ修正。just.sh pristineでMadula 3/3 target成功。2026-08-23に実機へ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙およびDYA Studio接続を確認。USB endpoint対策は実機合格。",
       "validation": {
         "build": "passed",
         "flash": "passed",
         "cdc-enumeration": "passed",
-        "hardware": "pending"
+        "ui": "passed",
+        "hardware": "passed"
       }
     },
     "torabo": {
