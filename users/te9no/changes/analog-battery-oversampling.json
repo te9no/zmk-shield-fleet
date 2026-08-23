@@ -95,7 +95,7 @@
       "commit": "4e83373",
       "notes": "PR #4ではte9no/zmk@afe241d（cormoran/main+dya@e5c9b69の直系子commit）とoversampling module 59fc126の組み合わせで、analog stickと60秒後の入力継続を実機合格としていた。参照元をcormoranへ明示するため、PR #5でZMK本体をcormoran/main+dya@e5c9b6915b56801193e359dd9bad4a167ce0d1b8へ直接固定。just.sh pristineでUS/JIS左右4/4成功。生成設定でte9no,battery-voltage-divider-oversampling、oversampling=0、analog input有効を確認し、左USへ書き込み後COM73/COM74とCDC runtime logを確認。右US書き込みと切替後のanalog stick 60秒継続確認を待つ。stable mainとzmk-0.4は未変更。",
       "validation": {
-        "ci": "pending",
+        "ci": "passed",
         "cormoran-build": "passed",
         "driver-selection": "passed",
         "left-flash": "passed",
