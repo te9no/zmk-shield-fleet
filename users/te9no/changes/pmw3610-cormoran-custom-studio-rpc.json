@@ -84,10 +84,12 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
       "commit": "3b194eb98fd2a154247555001b5d206f1683c438",
-      "notes": "第1群。Cornix/zmk-0.4へ向けたDraft PR #3で、cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。Madula専用west workspaceを同期後、just.sh build-fast madula --pristine=alwaysでTrackball/TrackPoint/IQSの3/3 targetが成功。実機未検証のためDraftのまま保持し、mainには未反映。MadulaのセンサーはCentral配置なので、DYA Studioでlocal sourceの診断とframe captureを確認する。",
+      "notes": "第1群。Cornix/zmk-0.4へ向けたDraft PR #3で、cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。Madula専用west workspaceを同期後、just.sh build-fast madula --pristine=alwaysでTrackball/TrackPoint/IQSの3/3 targetが成功。2026-08-23にMadula TrackballをXIAO-SENSEへ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙を確認。mainには未反映。トラックボール入力とDYA Studio local source診断/frame captureはpendingのためDraftを維持。",
       "validation": {
         "targeted-build": "passed",
         "ci": "passed",
+        "flash": "passed",
+        "cdc-enumeration": "passed",
         "hardware": "pending"
       }
     },
