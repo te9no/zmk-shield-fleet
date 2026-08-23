@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "id": "cormoran-zmk-core-zmk-0.4",
+  "enabled": true,
+  "title": "ZMK 0.4本体をcormoranフォークへ直接固定する",
+  "description": "te9no経由のZMK参照をcormoran/main+dyaの検証済みcommitへ揃え、DYA Studioとアナログ入力対策の由来を明確にする。",
+  "scope": {
+    "all": true
+  },
+  "source": {
+    "repository": "cormoran/zmk",
+    "from_revision": "te9no/zmk@afe241df80b05c3f4e0cc95ada7584d24422a893",
+    "to_revision": "e5c9b6915b56801193e359dd9bad4a167ce0d1b8",
+    "change_url": "https://github.com/cormoran/zmk/commit/e5c9b6915b56801193e359dd9bad4a167ce0d1b8",
+    "notes": "cormoran/main+dyaの固定revision。外部oversampling moduleはte9no/zmk-module-battery-nrf-vddh-oversampling@59fc126のまま併用する。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconSolstice",
+    "revision": "4e83373",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+    "notes": "Solsticeでte9no経由からcormoran直接参照へ変更し、左実機と全4 firmware buildを確認したことを横展開トリガーとする。"
+  },
+  "repositories": [
+    "polaris",
+    "mdk",
+    "mkb2",
+    "mrm",
+    "saa",
+    "cornix",
+    "torabo",
+    "cagime",
+    "berkut51",
+    "solstice",
+    "kozakura",
+    "sparagmos"
+  ],
+  "tracking": {
+    "polaris": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+      "commit": "bcb86ab",
+      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。just.sh pristineでJOY、IQS、IQS debug、PMW3610を含む9/9成功。JOY生成設定でoversampling=0、DYA analog inputとStudio RPCを確認。実機再検証前のためzmk-0.4へ未マージ。",
+      "validation": {
+        "build": "passed",
+        "driver-selection": "passed",
+        "ci": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+        "driver-selection": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6"
+      }
+    },
+    "mdk": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4開発branchを用意してから直接cormoran固定を検証する。"
+    },
+    "mkb2": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+      "commit": "003e817",
+      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。./just.sh build-fast MKB_ --pristine=alwaysで全15構成成功。左JOY生成設定でoversampling=0、DYA analog inputを確認。既存MKB実機検証済み機能の再確認前なのでzmk-0.4へ未マージ。",
+      "validation": {
+        "build": "passed",
+        "driver-selection": "passed",
+        "ci": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+        "driver-selection": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/14"
+      }
+    },
+    "mrm": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4開発branchを用意してから直接cormoran固定を検証する。"
+    },
+    "saa": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "専用ZMK 0.4検証branchで実施し、未検証のstable masterへは入れない。ハードウェア検証待ちを維持する。"
+    },
+    "cornix": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+      "commit": "729909b",
+      "notes": "第1群。既存Draft PR #3でcormoran/zmk@e5c9b69へ直接固定。存在しないboard_cdc_acm_uart参照という既存build blockerも除去し、Madula 3構成とCornix/TPS43を含む./just.sh build-fast all --pristine=alwaysが12/12成功。トラックボール実機未接続のためDraftを維持。",
+      "validation": {
+        "build": "passed",
+        "dya-studio": "passed",
+        "ci": "pending",
+        "trackball-hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+      }
+    },
+    "torabo": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。現在はcormoran/v0.3-branch+dyaを直接利用済み。ZMK 0.4移行時にe5c9b69系へ固定する。"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "ローカル専用。ZMK 0.4開発branchを作成後に直接cormoran固定を検証する。"
+    },
+    "berkut51": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4開発branchで直接cormoran固定と実機確認を行う。"
+    },
+    "solstice": {
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+      "commit": "4e83373",
+      "notes": "第2群。cormoran/zmk@e5c9b69へ直接固定し、just.sh pristine 4/4、生成設定、左US書き込み、CDC runtime logまで確認。右US書き込みと両手切替後のanalog stick 60秒継続確認待ち。zmk-0.4とstable mainは未変更。",
+      "validation": {
+        "build": "passed",
+        "driver-selection": "passed",
+        "left-flash": "passed",
+        "ci": "pending",
+        "both-halves-flash": "pending",
+        "analog-runtime": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "driver-selection": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "left-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "both-halves-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+        "analog-runtime": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
+      }
+    },
+    "kozakura": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4開発branchで直接cormoran固定を検証する。"
+    },
+    "sparagmos": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "最低優先度。ZMK 0.4開発branchで直接cormoran固定と交換式analog stickを検証する。"
+    }
+  },
+  "steps": []
+}

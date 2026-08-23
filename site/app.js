@@ -4,6 +4,7 @@ const changeLabels = {
   "analog-battery-oversampling": "Analog battery",
   "build-health-badge-no-commits": "Build badges",
   "cdc-acm-zephyr-4.1": "CDC Debug",
+  "cormoran-zmk-core-zmk-0.4": "cormoran ZMK core",
   "dya-studio-v2-zmk-0.4": "Studio V2",
   "iqs9151-upstream-zmk-0.4": "IQS9151",
   "mkb-joystick-pointer-speed": "Joystick motion",
