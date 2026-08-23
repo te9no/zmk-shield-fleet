@@ -7,13 +7,13 @@
   "source": {
     "repository": "te9no/zmk-config-GeaconSolstice",
     "from_revision": "f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52",
-    "to_revision": "3260ee7",
+    "to_revision": "87dbabb",
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。標準ZMK OLED画面への切り戻しではOLED・HID・CDC・Studioの起動を確認したが、必須のPeripheral電池残量が表示されない。次段としてdongle_displayを戻し、表示専用thread stackを6144 bytesへ拡張して検証する。"
+    "notes": "左Central実機でカスタムdongle_displayを含むZMK 0.4 US版を書き込んだ後、OLED・USBとも起動を確認できなかった。標準ZMK OLED画面への切り戻しでは起動したため、dongle_displayを戻して表示専用thread stackを6144 bytesへ拡張したところ起動成功。カスタム画面の背景反転はSSD1306のinversion-onを外して修正した。右手が左手位置として入力される問題には、ZMK 0.4で効かないshield条件分岐を専用Solstice_R_Offset snippetへ置換した。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "3260ee7",
+    "revision": "87dbabb",
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
     "notes": "2026-08-23のSolstice左実機検証で、標準画面なら起動する一方、Peripheral電池残量が表示されず運用要件を満たさないことを確認したため。"
   },
@@ -22,14 +22,14 @@
     "solstice": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "3260ee7",
-      "notes": "PR #3の標準OLED版は左CentralのOLED・HID・CDC COM73・追加RPC用COM74/COM443の起動を実機確認したが、Peripheral電池残量がないため暫定切り分け扱い。PR #4でdongle_displayとPeripheral電池表示を戻し、CONFIG_ZMK_DISPLAY_DEDICATED_THREAD_STACK_SIZEを6144へ拡張。just.sh build-fast Solstice_L_US --pristine=alwaysは成功。実機起動確認待ちで、上位ZMK 0.4検証branchへは未反映。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-hardware": "pending" }
+      "commit": "87dbabb",
+      "notes": "PR #3の標準OLED版で左CentralのOLED・HID・CDC・Studio起動を確認後、PR #4でdongle_displayとPeripheral電池表示を戻し、表示thread stackを6144へ拡張して起動成功。SSD1306 inversion-on削除と右専用col-offset 8 snippetも追加し、just.sh build-fast Solstice_ --pristine=alwaysはUS/JIS 4/4成功。2026-08-23に左USをH:、右USをI:へ書き込み、左COM73/74/443と右COM50/49の復帰を確認。OLED極性、Peripheral電池表示、右キー位置の最終目視確認待ち。上位ZMK 0.4検証branchへは未反映。",
+      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "oled-polarity": "pending", "peripheral-battery": "pending", "right-key-offset": "pending" }
     }
   },
   "steps": [
-    "PR #4の左US版を実機へ書き込み、OLEDとUSB CDC/HIDの起動を確認する",
+    "OLED背景極性が正常であることを確認する",
     "Peripheral電池残量が更新されることを確認する",
-    "起動しなければdongle_displayを電池ウィジェットだけに縮小して再検証する"
+    "右手キーが右側の位置として入力されることを確認する"
   ]
 }
