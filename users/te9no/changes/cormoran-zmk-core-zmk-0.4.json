@@ -60,15 +60,15 @@
       "notes": "最低優先度。ZMK 0.4開発branchを用意してから直接cormoran固定を検証する。"
     },
     "mkb2": {
-      "status": "pr-open",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
-      "commit": "003e817",
-      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。./just.sh build-fast MKB_ --pristine=alwaysで全15構成成功。左JOY生成設定でoversampling=0、DYA analog inputを確認。既存MKB実機検証済み機能の再確認前なのでzmk-0.4へ未マージ。",
+      "commit": "1defa7d",
+      "notes": "第1群。cormoran/zmk@e5c9b69へ直接固定し、統合PR #14を衝突のないzmk-0.4ベースへ積み直した。全15構成の既存CIに加え、クリーン履歴から左JOYと右TBv4をjust.sh pristine build。左JOYはanalog input 100 Hz、oversampling電圧監視、DYA Studio、CDCを確認し、右TBv4はPMW3610初期化、split接続、CDC、正しい二軸方向、OLED LINK表示を実機確認。zmk-0.4へ統合し、stable mainは未変更。",
       "validation": {
         "build": "passed",
         "driver-selection": "passed",
-        "ci": "pending",
-        "hardware": "pending"
+        "ci": "passed",
+        "hardware": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-MKB2/pull/14",
