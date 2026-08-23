@@ -17,14 +17,33 @@
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
     "notes": "2026-08-23のSolstice左実機検証で、te9no forkによる白背景対策が3回とも無効だったため、本家ZMK 0.4対応版へ切り替えた。本家版でBongo Catが右端の文字と重なったため、compact 32pxレイアウトの検証を開始した。"
   },
-  "repositories": ["solstice"],
+  "repositories": [
+    "solstice"
+  ],
   "tracking": {
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
       "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
       "notes": "PR #3の標準OLED版で左Centralの起動を確認後、PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。右入力位置は実機合格。te9no forkでの白背景対策3案は実機で改善せず、englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替。本家版は起動したが、128x32 OLEDで50x26pxのBongo Catが右端の文字と重なることを確認。englmaxi/zmk-dongle-display PR #37（te9no/b724f0a）でcompact 32px中央配置を追加し、Solstice側でレイヤーwidgetを無効化。2026-08-23にcompact表示と背景極性を実機合格と確認。DYA Studioは3 CDC構成でtimeoutしたが、未使用board CDCを無効化してDebug/CDC Boot=COM73、Studio RPC=COM74へ整理。直接GetDeviceInfoとDYA Studio UI接続を実機合格と確認した。just.sh build-fast Solstice_ --pristine=alwaysでUS/JIS左右4/4成功。Peripheral電池表示の確認待ち。",
-      "validation": { "ci": "passed", "standard-oled-hardware": "passed", "custom-oled-boot-hardware": "passed", "both-halves-flash": "passed", "explicit-lvgl-colors-hardware": "failed", "mono-dark-theme-hardware": "failed", "mono-dark-plus-ssd1306-invert-hardware": "failed", "upstream-module-flash": "passed", "compact-32px-build": "passed", "compact-32px-flash": "passed", "compact-32px-hardware": "passed", "dya-studio-direct-rpc": "passed", "dya-studio-ui": "passed", "oled-polarity": "passed", "peripheral-battery": "pending", "right-key-offset": "passed" }
+      "validation": {
+        "ci": "passed",
+        "standard-oled-hardware": "passed",
+        "custom-oled-boot-hardware": "passed",
+        "both-halves-flash": "passed",
+        "explicit-lvgl-colors-hardware": "failed",
+        "mono-dark-theme-hardware": "failed",
+        "mono-dark-plus-ssd1306-invert-hardware": "failed",
+        "upstream-module-flash": "passed",
+        "compact-32px-build": "passed",
+        "compact-32px-flash": "passed",
+        "compact-32px-hardware": "passed",
+        "dya-studio-direct-rpc": "passed",
+        "dya-studio-ui": "passed",
+        "oled-polarity": "passed",
+        "peripheral-battery": "pending",
+        "right-key-offset": "passed"
+      }
     }
   },
   "steps": []

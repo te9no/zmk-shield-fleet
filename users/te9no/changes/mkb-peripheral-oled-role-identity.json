@@ -17,14 +17,19 @@
     "change_url": "https://github.com/te9no/zmk-config-MKB2/pull/7",
     "notes": "2026-08-22のMKB実機確認で、Peripheral側もCentral側と同じネコ表示になることを改善候補として記録。"
   },
-  "repositories": ["mkb2"],
+  "repositories": [
+    "mkb2"
+  ],
   "tracking": {
     "mkb2": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/12",
       "commit": "1517f75",
       "notes": "MKB/zmk-0.4をbaseとするDraft PR #12でzmk-nice-oledを1e46dfcf226fe8954c1d916d7d7ab2b834f60b43へ固定。常時600 ms周期で左右の手を切り替えていた動作を、本家responsive版に合わせて入力押下時だけ切り替え、500 ms無入力で静止する方式へ変更。通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで検証成功し、左JOYへCentral CDC COM11経由、右TBv4へPeripheral CDC COM12経由で書き込み、両ポートの復帰を確認。無入力時の静止と入力連動の実機目視確認待ち。stable firmware branchには未反映。",
-      "validation": { "ci": "passed", "hardware": "pending" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      }
     }
   },
   "steps": []

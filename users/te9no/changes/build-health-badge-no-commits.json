@@ -17,39 +17,64 @@
     "change_url": "https://github.com/te9no/zmk-workspace/pull/2",
     "notes": "scheduled buildは継続するが、成功時にbadge-only commitを作らない。"
   },
-  "repositories": ["polaris", "mkb2", "saa", "cornix"],
+  "repositories": [
+    "polaris",
+    "mkb2",
+    "saa",
+    "cornix"
+  ],
   "tracking": {
     "polaris": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/5",
       "commit": "07f2d0ed919f49ada9afef6b834b79ae42317f8b",
       "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
-      "validation": { "ci": "passed", "hardware": "waived" },
-      "validation_urls": { "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32563346036" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "waived"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32563346036"
+      }
     },
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/8",
       "commit": "e565810975a613a635a6719958d0570fd8c589d7",
       "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
-      "validation": { "ci": "passed", "hardware": "waived" },
-      "validation_urls": { "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32563345789" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "waived"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32563345789"
+      }
     },
     "saa": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/7",
       "commit": "d201e947661965de5039dfbbd067c62a93a0286a",
       "notes": "生成badgeを削除し、READMEをGitHub Actions標準バッジへ変更。",
-      "validation": { "ci": "passed", "hardware": "waived" },
-      "validation_urls": { "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32563345932" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "waived"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32563345932"
+      }
     },
     "cornix": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/2",
       "commit": "1637c596483920582f28a29049fc8fb55f90d42c",
       "notes": "生成badgeを削除し、badge生成要求をcaller workflowから除去。",
-      "validation": { "ci": "passed", "hardware": "waived" },
-      "validation_urls": { "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32563345948" }
+      "validation": {
+        "ci": "passed",
+        "hardware": "waived"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32563345948"
+      }
     }
   },
   "steps": []
