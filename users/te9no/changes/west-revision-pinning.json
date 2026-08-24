@@ -19,13 +19,8 @@
     "measured_at": "2026-08-25",
     "measurement_mode": "strict-sha",
     "measurement_command": "shield-fleet revisions --manifest users/te9no/fleet.toml --strict-sha",
-    "measurement_scope": "Fresh clones of CI-managed repositories at maintenance_branch when configured, otherwise default_branch; counts include every non-40-character revision including tags and named refs; local-only cagime excluded",
-    "evidence_status": "local-fresh-clone-observation-pending-public-ci-run",
-    "local_only_baseline": {
-      "repository": "cagime",
-      "findings": 16,
-      "status": "stale-pending-remeasure"
-    }
+    "measurement_scope": "Fresh clones of managed repositories at maintenance_branch when configured, otherwise default_branch; counts include every non-40-character revision including tags and named refs",
+    "evidence_status": "local-fresh-clone-observation-pending-public-ci-run"
   },
   "repositories": [
     "polaris",
@@ -35,7 +30,6 @@
     "saa",
     "cornix",
     "torabo",
-    "cagime",
     "berkut51",
     "solstice",
     "kozakura",
@@ -153,21 +147,6 @@
       },
       "validation_urls": {
         "revision-audit": "https://github.com/te9no/zmk-keyboard-torabo-tsuki-lp/tree/v0.3%2Bdya-studio"
-      }
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 16,
-      "notes": "旧ローカル監査で16 findings。CI対象外のため2026-08-25 baselineには含めず、再計測待ち。",
-      "validation": {
-        "local-repository-bootstrap": "pending",
-        "local-revision-audit": "pending"
-      },
-      "validation_urls": {
-        "local-repository-bootstrap": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json",
-        "local-revision-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json"
       }
     },
     "berkut51": {

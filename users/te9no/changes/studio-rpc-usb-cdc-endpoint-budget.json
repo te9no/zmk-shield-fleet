@@ -28,7 +28,6 @@
     "saa",
     "cornix",
     "torabo",
-    "cagime",
     "berkut51",
     "solstice",
     "kozakura",
@@ -192,12 +191,6 @@
       "pr": null,
       "commit": null,
       "notes": "最低優先度。"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "ローカル専用。"
     },
     "berkut51": {
       "status": "pending",

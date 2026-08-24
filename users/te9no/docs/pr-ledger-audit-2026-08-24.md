@@ -16,7 +16,6 @@ changed. No external repository was changed.
 - [dongle-display PR #3](https://github.com/te9no/zmk-dongle-display/pull/3) remains Draft and actionable for CI repair, but not eligible for module `main` merge before OLED hardware validation. Stacked PR #4 was closed as superseded after its color experiments failed.
 - External [cormoran/dya-studio PR #168](https://github.com/cormoran/dya-studio/pull/168) remains open and is tracked only as a pending upstream validation/user decision. Fleet does not alter it.
 - External englmaxi/zmk-dongle-display [PR #37](https://github.com/englmaxi/zmk-dongle-display/pull/37) was withdrawn/closed without merge; it is historical evidence, not a current dependency.
-- MLX90393 remains explicitly out of scope. Its Draft PR is untouched.
 
 ## Prioritized next actions
 
@@ -26,4 +25,4 @@ changed. No external repository was changed.
 4. **dongle-display / PR #3 — active:** repair the ZMK 0.4/LVGL9 CI in a safe scope. Hardware remains a separate merge gate.
 5. **External PR #168 — waiting:** leave the external PR untouched and record the upstream/user decision when it arrives.
 6. **Polaris JOY and PMW3610, then SAA PMW3610 — hardware backlog:** CI/build evidence exists, but pointer behavior, split relay, and Studio source diagnostics remain unverified on the relevant modules.
-7. **CaGiMe and the lowest-priority group — later:** classify local-only/legacy configurations after the active and hardware-blocked work. Stable firmware `main`/`master` promotion is not a next action.
+7. **Lowest-priority group — later:** classify legacy configurations after the active and hardware-blocked work. Stable firmware `main`/`master` promotion is not a next action.

@@ -144,36 +144,6 @@ evidence = [
 ]
 
 [[next_actions]]
-id = "cagime-local-only"
-state = "later"
-priority = "low"
-order = 97
-repository = "cagime"
-action = "ローカル専用checkoutの旧ZMK構成を監査し、検証branch化またはnot-applicableを判断する。"
-completion = "対象moduleと検証方針が記録され、必要ならローカル専用branchでbuild evidenceが得られる。"
-blocker = "GitHub remoteと初期commitがなく、CI/PR運用の対象外。"
-change_id = "west-revision-pinning"
-validation_keys = ["local-repository-bootstrap", "local-revision-audit"]
-evidence = [
-  { label = "Revision ledger", status = "info", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
-]
-
-[[next_actions]]
-id = "mlx90393-out-of-scope"
-state = "later"
-priority = "low"
-order = 98
-repository = "zmk-driver-MLX90393"
-repository_url = "https://github.com/te9no/zmk-driver-MLX90393"
-action = "今回は作業せず、Draft PRも現状のまま維持する。"
-completion = "ユーザーがMLX90393を再度scopeに入れ、必要な実機検証を指定する。"
-blocker = "ユーザー指示により対象外。PR #1には触らない。"
-pr = "https://github.com/te9no/zmk-driver-MLX90393/pull/1"
-evidence = [
-  { label = "Draft PR #1 (out of scope)", status = "waived", url = "https://github.com/te9no/zmk-driver-MLX90393/pull/1" },
-]
-
-[[next_actions]]
 id = "lowest-priority-fleet"
 state = "later"
 priority = "low"
@@ -214,7 +184,7 @@ github = "te9no/zmk-config-MDK"
 checkout = "zmk-config-MDK"
 default_branch = "main"
 architecture = "slot-snippets"
-modules = ["encoder", "joystick", "keys", "mlx90393", "trackball", "touchpad"]
+modules = ["encoder", "joystick", "keys", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "three-slot", "xiao"]
 required_globs = [
   "build.yaml",
@@ -232,7 +202,7 @@ checkout = "zmk-config-MKB2"
 default_branch = "main"
 maintenance_branch = "zmk-0.4"
 architecture = "module-shields"
-modules = ["encoder", "joystick", "keys", "lpps", "mlx90393", "trackball", "touchpad"]
+modules = ["encoder", "joystick", "keys", "lpps", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
 required_globs = [
   "build.yaml",
@@ -249,7 +219,7 @@ github = "te9no/zmk-config-MRM"
 checkout = "zmk-config-MRM"
 default_branch = "main"
 architecture = "slot-snippets"
-modules = ["encoder", "joystick", "keys", "mlx90393", "trackball", "touchpad"]
+modules = ["encoder", "joystick", "keys", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "three-slot", "xiao"]
 required_globs = [
   "build.yaml",
@@ -308,24 +278,6 @@ required_globs = [
   "build.yaml",
   "snippets/input-*/snippet.yml",
   "snippets/input-*/*.overlay",
-]
-
-# CaGiMe is already present locally but has no GitHub remote or initial commit.
-# It participates in local audits and campaigns, but not in CI cloning/rollout.
-[[repositories]]
-id = "cagime"
-rollout_enabled = false
-allow_external = false
-checkout = "zmk-config-CaGiMe"
-default_branch = "master"
-architecture = "module-shields"
-modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
-tags = ["mekabu", "modular-input", "split", "xiao", "local-only"]
-ci = false
-required_globs = [
-  "build.yaml",
-  "boards/shields/CaGiMe/CGM_*_*.overlay",
-  "boards/shields/CaGiMe/CGM_*_*.conf",
 ]
 
 [[repositories]]
