@@ -79,5 +79,6 @@ jobs:
               baseline_args=(--baseline-change west-revision-pinning)
             fi
             shield-fleet revisions --manifest "$manifest" \
-              --workspace ".fleet-workspace/$profile" --ci-only "${baseline_args[@]}"
+              --workspace ".fleet-workspace/$profile" --ci-only --strict-sha \
+              "${baseline_args[@]}"
           done
