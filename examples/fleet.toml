@@ -35,22 +35,28 @@ validation_keys = ["hardware"]
 
 [[repositories]]
 id = "keyboard-a"
+github = "example/zmk-config-keyboard-a"
 checkout = "zmk-config-keyboard-a"
 default_branch = "main"
+maintenance_branch = "zmk-0.4"
 architecture = "module-snippets"
 modules = ["trackball", "encoder"]
 tags = ["modular-input", "split"]
 ci = false
 rollout_enabled = true
+allow_external = false
 required_globs = ["config/west.yml", "build.yaml"]
 
 [[repositories]]
 id = "keyboard-b"
+github = "example/zmk-config-keyboard-b"
 checkout = "zmk-config-keyboard-b"
 default_branch = "main"
+maintenance_branch = "zmk-0.4"
 architecture = "module-shields"
 modules = ["trackball", "encoder"]
 tags = ["modular-input", "split"]
 ci = false
 rollout_enabled = false
+allow_external = false
 required_globs = ["config/west.yml", "build.yaml"]

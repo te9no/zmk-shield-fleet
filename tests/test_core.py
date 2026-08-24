@@ -221,6 +221,23 @@ class ManifestTests(unittest.TestCase):
             with self.assertRaisesRegex(FleetError, "must differ"):
                 load_manifest(fixture.manifest_path)
 
+    def test_public_example_manifest_is_parseable_and_rollout_safe(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        manifest = load_manifest(root / "examples" / "fleet.toml")
+
+        keyboard_a = manifest.repositories["keyboard-a"]
+        self.assertEqual("example/zmk-config-keyboard-a", keyboard_a.github)
+        self.assertEqual("main", keyboard_a.default_branch)
+        self.assertEqual("zmk-0.4", keyboard_a.maintenance_branch)
+        self.assertTrue(keyboard_a.rollout_enabled)
+        self.assertFalse(keyboard_a.allow_external)
+
+        keyboard_b = manifest.repositories["keyboard-b"]
+        self.assertEqual("example/zmk-config-keyboard-b", keyboard_b.github)
+        self.assertEqual("zmk-0.4", keyboard_b.maintenance_branch)
+        self.assertFalse(keyboard_b.rollout_enabled)
+        self.assertFalse(keyboard_b.allow_external)
+
     def test_next_actions_are_validated_and_sorted(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
