@@ -45,7 +45,9 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717"
-      }
+      },
+      "branch": "zmk-0.4",
+      "base_branch": "main"
     },
     "mdk": {
       "status": "pending",
@@ -65,7 +67,10 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
@@ -85,13 +90,26 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cornix": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "PR #1がmainへmerge済み。Polarisと同じ固定revision群を採用し、Madula対応を含む全12 firmware matrix成功。"
+      "notes": "PR #1がmainへmerge済み。Polarisと同じ固定revision群を採用し、Madula対応を含む全12 firmware matrix成功。後続Draft PR #3の実機でDYA Studio接続も確認済み。",
+      "branch": "codex/promote-madula-zmk-0.4-to-main",
+      "base_branch": "main",
+      "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
+      "validation": {
+        "ci": "passed",
+        "dya-studio": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+      }
     },
     "torabo": {
       "status": "pending",
@@ -128,7 +146,10 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
         "left-hardware-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4"
-      }
+      },
+      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "base_branch": "zmk-0.4",
+      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
     "kozakura": {
       "status": "pending",

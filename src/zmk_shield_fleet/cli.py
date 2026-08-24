@@ -3,8 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from pathlib import Path
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from .core import (
     LEDGER_STATUSES,
@@ -15,6 +15,7 @@ from .core import (
     campaign_diff,
     campaign_matrix,
     clone_repositories,
+    evidence_audit,
     inventory_rows,
     json_compact,
     list_ledger_entries,
@@ -23,10 +24,12 @@ from .core import (
     load_manifest,
     mark_ledger_target,
     plan_campaign,
-    revision_findings,
     resolve_workspace,
+    revision_baseline_issues,
+    revision_findings,
     select_repositories,
     sync_ledger_entry,
+    validate_next_action_references,
 )
 
 
@@ -113,6 +116,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--strict-sha", action="store_true", help="report tags and every non-40-character SHA"
     )
     revisions.add_argument("--check", action="store_true", help="fail when findings exist")
+    revisions.add_argument(
+        "--baseline-change",
+        help="fail only when per-repository findings exceed this ledger change baseline",
+    )
     revisions.add_argument("--json", action="store_true", help="emit JSON")
 
     clone = subparsers.add_parser(
@@ -156,6 +163,17 @@ def build_parser() -> argparse.ArgumentParser:
             "--allow-dirty", action="store_true",
             help="allow writes to repositories with existing changes",
         )
+        for safety_parser in (plan, apply):
+            safety_parser.add_argument(
+                "--allow-checkout-mismatch",
+                action="store_true",
+                help="explicitly allow origin/maintenance-branch mismatch",
+            )
+            safety_parser.add_argument(
+                "--allow-default-branch",
+                action="store_true",
+                help="explicitly allow planning/writing the stable default branch",
+            )
 
     ledger = subparsers.add_parser("ledger", help="inspect and update the driver-change ledger")
     ledger_subparsers = ledger.add_subparsers(dest="ledger_command", required=True)
@@ -168,6 +186,12 @@ def build_parser() -> argparse.ArgumentParser:
     sync = ledger_subparsers.add_parser("sync", parents=[ledger_common], help="sync PR states")
     sync.add_argument("change", nargs="?", help="optional change id or JSON path")
     sync.add_argument("--write", action="store_true", help="write discovered states to JSON")
+    evidence = ledger_subparsers.add_parser(
+        "evidence", parents=[ledger_common], help="read and compare remote PR/CI evidence"
+    )
+    evidence.add_argument("change", nargs="?", help="optional change id or JSON path")
+    evidence.add_argument("--strict", action="store_true", help="treat warnings as failures")
+    evidence.add_argument("--json", action="store_true", help="emit JSON")
     mark = ledger_subparsers.add_parser("mark", parents=[ledger_common], help="update one target")
     mark.add_argument("change", help="change id or JSON path")
     mark.add_argument("--repo", required=True, help="repository id")
@@ -283,7 +307,7 @@ def _resolve_campaign_selection(args: argparse.Namespace, manifest, campaign):
 def dispatch(args: argparse.Namespace) -> int:
     if args.command == "ledger":
         manifest = load_manifest(args.manifest)
-        if args.ledger_command in {"list", "check", "sync"} and not getattr(args, "change", None):
+        if args.ledger_command in {"list", "check", "sync", "evidence"} and not getattr(args, "change", None):
             entries = list_ledger_entries(manifest)
         else:
             entries = (load_ledger_entry(manifest, args.change),)
@@ -300,8 +324,22 @@ def dispatch(args: argparse.Namespace) -> int:
             return 0
 
         if args.ledger_command == "check":
+            validate_next_action_references(manifest, list_ledger_entries(manifest))
             print(f"OK: validated {len(entries)} ledger entry/entries")
             return 0
+
+        if args.ledger_command == "evidence":
+            issues = evidence_audit(manifest, entries)
+            if args.json:
+                print(json.dumps([issue.__dict__ for issue in issues], ensure_ascii=False, indent=2))
+            elif not issues:
+                print(f"OK: verified remote evidence for {len(entries)} ledger entry/entries")
+            else:
+                for issue in issues:
+                    print(f"{issue.level.upper():7} {issue.subject}: {issue.message}")
+            has_errors = any(issue.level == "error" for issue in issues)
+            has_warnings = any(issue.level == "warning" for issue in issues)
+            return 1 if has_errors or (args.strict and has_warnings) else 0
 
         if args.ledger_command == "show":
             entry = entries[0]
@@ -377,11 +415,22 @@ def dispatch(args: argparse.Namespace) -> int:
 
     if args.command == "revisions":
         manifest, workspace = _load_context(args)
+        repositories = _selected(args, manifest)
         findings = revision_findings(
-            workspace, _selected(args, manifest), strict_sha=args.strict_sha
+            workspace, repositories, strict_sha=args.strict_sha
         )
+        baseline_issues = ()
+        if args.baseline_change:
+            baseline = load_ledger_entry(manifest, args.baseline_change)
+            baseline_issues = revision_baseline_issues(baseline, findings, repositories)
         if args.json:
-            print(json.dumps([finding.__dict__ for finding in findings], ensure_ascii=False, indent=2))
+            payload: Any = [finding.__dict__ for finding in findings]
+            if args.baseline_change:
+                payload = {
+                    "findings": payload,
+                    "baseline_issues": [issue.__dict__ for issue in baseline_issues],
+                }
+            print(json.dumps(payload, ensure_ascii=False, indent=2))
         elif not findings:
             print("OK: no matching revision findings")
         else:
@@ -391,7 +440,10 @@ def dispatch(args: argparse.Namespace) -> int:
                     f"{finding.path}:{finding.line} {finding.revision}"
                 )
             print(f"\nRevision audit: {len(findings)} finding(s)")
-        return 1 if args.check and findings else 0
+        if baseline_issues and not args.json:
+            for issue in baseline_issues:
+                print(f"{issue.level.upper():7} {issue.subject}: {issue.message}")
+        return 1 if (args.check and findings) or baseline_issues else 0
 
     if args.command == "clone":
         manifest, workspace = _load_context(args)
@@ -431,7 +483,14 @@ def dispatch(args: argparse.Namespace) -> int:
                     )
             return 0
 
-        planned = plan_campaign(manifest, workspace, loaded, selected_ids)
+        planned = plan_campaign(
+            manifest,
+            workspace,
+            loaded,
+            selected_ids,
+            allow_checkout_mismatch=args.allow_checkout_mismatch,
+            allow_default_branch=args.allow_default_branch,
+        )
         _print_campaign_plan(planned)
         if args.diff and planned.changes:
             print()
@@ -442,6 +501,8 @@ def dispatch(args: argparse.Namespace) -> int:
                 workspace,
                 planned,
                 allow_dirty=args.allow_dirty,
+                allow_checkout_mismatch=args.allow_checkout_mismatch,
+                allow_default_branch=args.allow_default_branch,
             )
             if planned.changes:
                 print(f"Applied {len(planned.changes)} file change(s).")

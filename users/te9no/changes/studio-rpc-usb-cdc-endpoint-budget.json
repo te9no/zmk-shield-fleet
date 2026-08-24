@@ -39,19 +39,81 @@
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
       "commit": "07bd951a1e73319cc6fa93004306945c6cdab958",
+      "branch": "codex/zmk-0.4-cdc-debug-right",
+      "base_branch": "zmk-0.4",
+      "pr_head": "db78208e1d007aff6bbe8cce2a3572dd49439be3",
       "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機でCOM327のCDC Debug、1200 baudによるI:XIAO-BOOT遷移、書き戻し後のCOM327復帰とZMK/Peripheral接続を確認し、右側1 CDC構成を実機合格とした。PR #7はDraftのまま。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
-        "ci": "passed",
-        "hardware": "passed"
+        "ci": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
-      }
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
+      },
+      "variants": [
+        {
+          "id": "right-iqs",
+          "status": "passed",
+          "validation": {
+            "endpoint-budget": "passed",
+            "cdc-enumeration": "passed",
+            "1200-baud": "passed",
+            "module-input": "passed",
+            "split-connectivity": "passed"
+          },
+          "evidence": [
+            {
+              "label": "Draft PR #7",
+              "status": "info",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+            },
+            {
+              "label": "9/9 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
+            }
+          ]
+        },
+        {
+          "id": "right-tb",
+          "status": "pending",
+          "validation": {
+            "endpoint-budget": "passed",
+            "cdc-enumeration": "pending",
+            "1200-baud": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Draft PR #7 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+            }
+          ]
+        },
+        {
+          "id": "right-tpd",
+          "status": "pending",
+          "validation": {
+            "endpoint-budget": "passed",
+            "cdc-enumeration": "pending",
+            "1200-baud": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Draft PR #7 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+            }
+          ]
+        }
+      ]
     },
     "mdk": {
       "status": "pending",
@@ -75,7 +137,10 @@
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "direct-rpc": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
         "ui": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
@@ -95,7 +160,9 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cornix": {
       "status": "pr-open",
@@ -115,7 +182,10 @@
         "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "ui": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
-      }
+      },
+      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "base_branch": "zmk-0.4",
+      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
     },
     "torabo": {
       "status": "pending",
@@ -145,7 +215,10 @@
         "flash": "passed",
         "direct-rpc": "passed",
         "ui": "passed"
-      }
+      },
+      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "base_branch": "zmk-0.4",
+      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
     "kozakura": {
       "status": "pending",

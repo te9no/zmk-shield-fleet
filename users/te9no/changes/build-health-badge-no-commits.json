@@ -35,7 +35,10 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32563346036"
-      }
+      },
+      "branch": "codex/stop-build-health-commits",
+      "base_branch": "main",
+      "pr_head": "d46f332ddb73afb8a9433358fb4a6b6b5dd4b1a5"
     },
     "mkb2": {
       "status": "merged",
@@ -48,7 +51,10 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32563345789"
-      }
+      },
+      "branch": "codex/stop-build-health-commits",
+      "base_branch": "main",
+      "pr_head": "e606cff24d9594fa6c17ccf9e663f50faec188dd"
     },
     "saa": {
       "status": "merged",
@@ -61,7 +67,10 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32563345932"
-      }
+      },
+      "branch": "codex/stop-build-health-commits",
+      "base_branch": "master",
+      "pr_head": "eebcc5282e514f00035e2355752e047b32a7e8b2"
     },
     "cornix": {
       "status": "merged",
@@ -74,7 +83,10 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32563345948"
-      }
+      },
+      "branch": "codex/stop-build-health-commits",
+      "base_branch": "main",
+      "pr_head": "1637c596483920582f28a29049fc8fb55f90d42c"
     }
   },
   "steps": []

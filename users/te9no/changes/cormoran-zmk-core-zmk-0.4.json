@@ -54,7 +54,10 @@
         "driver-selection": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "da95be27ed47a2661742e0a0c4e61d7da1fee075"
     },
     "mdk": {
       "status": "pending",
@@ -78,7 +81,10 @@
         "driver-selection": "https://github.com/te9no/zmk-config-MKB2/pull/14",
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
@@ -96,14 +102,24 @@
         "ci": "passed",
         "local-pristine-build": "passed",
         "driver-selection": "passed",
-        "hardware": "pending"
+        "hardware": "pending",
+        "1200-baud": "pending",
+        "dya-studio": "pending",
+        "split-connectivity": "pending",
+        "module-input": "pending"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "driver-selection": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/fc64d9ff70483e0ca9e48cc3355552804fd9b02a",
-        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "1200-baud": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "dya-studio": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "split-connectivity": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "module-input": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cornix": {
       "status": "pr-open",
@@ -121,7 +137,10 @@
         "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
         "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
-      }
+      },
+      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "base_branch": "zmk-0.4",
+      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
     },
     "torabo": {
       "status": "pending",
@@ -162,7 +181,10 @@
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
         "both-halves-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "analog-runtime": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "4e833733539999423974a83d6a9695e1590490b5"
     },
     "kozakura": {
       "status": "pending",

@@ -34,7 +34,7 @@ python -m pip install -e .
 
 ## Create a profile
 
-Copy the templates into a user profile:
+Fork this repository, then copy the templates into a user profile:
 
 ```text
 users/alice/
@@ -46,6 +46,24 @@ users/alice/
 Personal inventories belong in `users/<name>/`; the CLI and schema remain
 generic. See [`users/README.md`](users/README.md) and
 [`examples/change.json.disabled`](examples/change.json.disabled).
+
+The shortest end-to-end setup is:
+
+```sh
+mkdir -p users/alice/changes
+cp examples/fleet.toml users/alice/fleet.toml
+cp examples/change.json.disabled users/alice/changes/driver-fix.json
+
+shield-fleet ledger check --manifest users/alice/fleet.toml
+shield-fleet audit --manifest users/alice/fleet.toml
+python3 scripts/build_dashboard.py
+python3 -m http.server 8000 --directory site
+```
+
+Edit the copied owner, workspace, repository, scope, and evidence values before
+committing. Open <http://127.0.0.1:8000/#next-actions> to review the result, then
+enable GitHub Pages with **GitHub Actions** as its source. The included Pages
+workflow validates every enabled ledger before publishing it.
 
 Profiles may also declare a curated, ordered work queue. This metadata is
 optional and stays in the profile rather than dashboard JavaScript:
@@ -61,12 +79,24 @@ action = "Flash the validation firmware and test pointer input."
 completion = "Pointer input and bootloader recovery pass on hardware."
 blocker = ""
 pr = "https://github.com/example/zmk-config-keyboard-a/pull/12"
+change_id = "driver-fix"
+validation_keys = ["ci", "hardware"]
+variant_ids = ["keyboard-a-left", "keyboard-a-right"]
+evidence = [
+  { label = "Hardware checklist", status = "passed", url = "https://github.com/example/zmk-config-keyboard-a/blob/zmk-0.4/docs/validation.md" },
+]
 ```
 
 `repository` may name an inventory ID or an adjacent module repository. For an
 adjacent repository, set `repository_url` so its card has a useful link. An
 explicit `repository_url` also overrides the inventory anchor, which is useful
 for a dedicated validation branch.
+
+`change_id` links a card to a schema-validated ledger entry. Optional
+`validation_keys` selects checks to show on the card, `variant_ids` names the
+firmware variants covered by the action, and `evidence` adds adjacent evidence
+that does not belong to a ledger check. Every evidence item has a short label,
+`passed`, `pending`, `failed`, or `waived` status, and an HTTPS URL.
 
 ## Typical workflow
 
@@ -142,7 +172,32 @@ by Pages and status updates appear without hand-editing HTML. The dashboard show
 fleet totals, profile-defined next actions, propagation progress, the
 repository/change matrix, and revision pinning findings. Next-action cards can
 be filtered by actionable work, hardware/external waits, and deferred or
-out-of-scope work.
+out-of-scope work. The first currently actionable entry is also shown once as
+**Start here**; this does not change the profile's explicit priority or order.
+Validation checks are rendered individually, so each named evidence URL remains
+reachable on desktop and mobile.
+
+All committed `users/*/fleet.toml` profiles and their enabled change ledgers are
+included in the public dashboard payload. Never commit credentials, private
+clone URLs, private evidence URLs, local absolute paths, or firmware binaries.
+
+Forks can configure public project metadata without editing dashboard JavaScript:
+
+- `FLEET_PROJECT_NAME`: dashboard/project label;
+- `FLEET_PROJECT_URL`: public source repository URL;
+- `FLEET_SITE_URL`: deployed site root used by Open Graph metadata;
+- `FLEET_LOCALE`: fallback BCP 47 locale;
+- `FLEET_SOURCE_COMMIT`: source revision when Git metadata is unavailable.
+
+GitHub Actions supplies the repository and commit automatically. A profile's
+locale is inferred from its curated action text unless the typed manifest model
+provides one explicitly.
+
+`site/data.json` is a generated Pages/local-preview artifact. It is intentionally
+untracked and listed in `.gitignore`, so its `generated_at` timestamp never
+creates a source-tree diff or an automated commit. The Pages workflow generates
+it after checkout and uploads the complete `site/` directory as its deployment
+artifact.
 
 Preview it locally after regenerating the data:
 
@@ -152,3 +207,12 @@ python3 -m http.server 8000 --directory site
 ```
 
 Then open <http://127.0.0.1:8000/#next-actions>.
+Regenerating the payload updates the ignored `site/data.json` file only; remove
+it when finished if you do not want to retain the local preview artifact.
+
+Dashboard model helpers also have dependency-free Node tests:
+
+```sh
+node --test site/model.test.mjs
+node --check site/app.js
+```

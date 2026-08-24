@@ -47,7 +47,34 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
-      }
+      },
+      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "base_branch": "zmk-0.4",
+      "variants": [
+        {
+          "id": "right-tb",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Dedicated PMW3610 branch",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+            },
+            {
+              "label": "10/10 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625"
+            }
+          ]
+        }
+      ]
     },
     "mdk": {
       "status": "pending",
@@ -73,7 +100,10 @@
         "upstream-local-ci": "https://github.com/cormoran/dya-studio/pull/168",
         "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
         "upstream-pr": "https://github.com/cormoran/dya-studio/pull/168"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
@@ -95,7 +125,57 @@
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195",
         "studio-peripheral-preview-hardware": "https://github.com/cormoran/dya-studio/pull/168",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
-      }
+      },
+      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "base_branch": "master",
+      "variants": [
+        {
+          "id": "left-tb",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "studio-peripheral-preview-hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Dedicated PMW3610 branch",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+            },
+            {
+              "label": "21/21 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195"
+            }
+          ]
+        },
+        {
+          "id": "right-tb",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "studio-peripheral-preview-hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Dedicated PMW3610 branch",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+            },
+            {
+              "label": "21/21 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195"
+            }
+          ]
+        }
+      ]
     },
     "cornix": {
       "status": "pr-open",
@@ -117,7 +197,36 @@
         "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "dya-studio-connection": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
         "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
-      }
+      },
+      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "base_branch": "zmk-0.4",
+      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d",
+      "variants": [
+        {
+          "id": "madula-trackball",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending",
+            "1200-baud": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Draft PR #3 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+            },
+            {
+              "label": "12/12 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654"
+            }
+          ]
+        }
+      ]
     },
     "torabo": {
       "status": "not-applicable",
@@ -149,7 +258,10 @@
         "split-direct-rpc": "passed",
         "studio-peripheral-preview-hardware": "passed",
         "hardware": "passed"
-      }
+      },
+      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "base_branch": "zmk-0.4",
+      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
     "kozakura": {
       "status": "pending",
