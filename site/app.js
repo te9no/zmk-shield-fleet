@@ -11,9 +11,9 @@ const escapeHtml = (value) => String(value ?? "")
   .replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 
 function targetComplete(target) {
-  if (target.status === "not-applicable") return true;
   const checks = Object.values(target.validation ?? {});
-  return terminalStatuses.has(target.status) && !checks.includes("pending");
+  return terminalStatuses.has(target.status)
+    && checks.every((status) => status === "passed" || status === "waived");
 }
 
 function targetNeedsAction(target) {
@@ -67,9 +67,11 @@ function renderActions(profile) {
 
   grid.innerHTML = visible.map((action) => {
     const knownRepository = profile.repositories.some((repo) => repo.id === action.repository);
-    const repositoryHref = knownRepository ? `#repo-${encodeURIComponent(action.repository)}` : action.repository_url;
+    const repositoryHref = action.repository_url
+      || (knownRepository ? `#repo-${encodeURIComponent(action.repository)}` : null);
+    const externalRepositoryLink = Boolean(action.repository_url) || !knownRepository;
     const repository = repositoryHref
-      ? `<a href="${escapeHtml(repositoryHref)}"${knownRepository ? "" : ' target="_blank" rel="noopener"'}>${escapeHtml(action.repository)}</a>`
+      ? `<a href="${escapeHtml(repositoryHref)}"${externalRepositoryLink ? ' target="_blank" rel="noopener"' : ""}>${escapeHtml(action.repository)}</a>`
       : escapeHtml(action.repository);
     const stateMeta = actionStates[action.state];
     const blocker = action.blocker || "No blocker — ready to proceed.";

@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "site" / "data.json"
 sys.path.insert(0, str(ROOT / "src"))
 
-from zmk_shield_fleet.core import load_manifest  # noqa: E402
+from zmk_shield_fleet.core import load_ledger_entry, load_manifest  # noqa: E402
 
 
 def build_profile(manifest_path: Path) -> dict:
@@ -47,6 +47,9 @@ def build_profile(manifest_path: Path) -> dict:
 
     changes = []
     for path in sorted((manifest_path.parent / "changes").glob("*.json")):
+        # Fail the build before publishing if any committed ledger violates the
+        # same schema and cross-profile constraints enforced by the CLI.
+        load_ledger_entry(manifest, path)
         raw = json.loads(path.read_text(encoding="utf-8"))
         if not raw.get("enabled", False):
             continue

@@ -974,16 +974,6 @@ def load_ledger_entry(
                     + ", ".join(sorted(VALIDATION_STATUSES))
                 )
             validation[check_id] = check_status
-        incomplete = sorted(
-            check_id
-            for check_id, check_status in validation.items()
-            if check_status not in {"passed", "waived"}
-        )
-        if status == "applied" and incomplete:
-            raise FleetError(
-                f"change.tracking.{repo_id} cannot be applied while validation is incomplete: "
-                + ", ".join(incomplete)
-            )
         validation_urls_table = _require_mapping(
             target.get("validation_urls", {}),
             f"change.tracking.{repo_id}.validation_urls",
@@ -1058,16 +1048,6 @@ def mark_ledger_target(
             if check_status not in VALIDATION_STATUSES:
                 raise FleetError(f"invalid validation status: {check_status!r}")
             updated_validation[check_id] = check_status
-    incomplete = sorted(
-        check_id
-        for check_id, check_status in updated_validation.items()
-        if check_status not in {"passed", "waived"}
-    )
-    if status == "applied" and incomplete:
-        raise FleetError(
-            f"cannot mark {repository!r} applied while validation is incomplete: "
-            + ", ".join(incomplete)
-        )
     updated_validation_urls = dict(target.get("validation_urls", {}))
     if validation_urls is not None:
         for check_id, url in validation_urls.items():

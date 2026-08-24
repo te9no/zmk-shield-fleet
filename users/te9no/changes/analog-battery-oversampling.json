@@ -45,17 +45,17 @@
       "notes": "module未導入"
     },
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
       "commit": "7d131c42989e670f638e6c668978c628d1013962",
-      "notes": "専用ZMK 0.4検証branchでmoduleを固定し、左右JOYを含む15 firmware variantとsettings_resetが成功。2026-08-22に左JOYへ書き込み、COM3ログでAIN7 setup=0とanalog input 100 Hzを確認。60秒経過後もJOY入力が継続し、電圧監視とのSAADC競合によるfreeze対策を実機確認済み。MKB/zmk-0.4へ集約済み、stable firmware branchには未反映",
+      "notes": "統合PR #14でMKB/zmk-0.4へ反映済み。左右JOYを含む15 firmware variantとsettings_resetが成功し、2026-08-22に左JOYのAIN7 setup=0、analog input 100 Hz、60秒後の継続入力を実機確認。旧PR #7/#9/#10は統合前のclosed-unmerged履歴であり、現行証跡はPR #14。stable firmware mainは未変更。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32553399326",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/9"
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "mrm": {
@@ -65,16 +65,17 @@
       "notes": "module未導入"
     },
     "saa": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4",
-      "commit": "e8079559d8aa6f091f8f5a39362835f18762cb71",
-      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmkで59fc126へ固定し、左右JOYおよびJOY+IQSを含む全21 targetがActions 32628652475で成功。次は左右JOY実機で入力cadenceと60秒継続を確認する。master昇格はPR #6でrevert済みで、再昇格しない。",
+      "status": "applied",
+      "pr": null,
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "現行の専用zmk-0.4_validation_cormoran-zmkで59fc126へ固定し、左右JOYおよびJOY+IQSを含む全21 targetがActions 32628652475で成功。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevertされたため、現行branch上の適用を正としmergedとは扱わない。次は左右JOY実機で入力cadenceと60秒継続を確認する。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32469565220"
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
     },
     "cagime": {
@@ -92,7 +93,7 @@
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
-      "commit": "6638e6c",
+      "commit": "6638e6c2f3331b4577b7863b99a84206722768e6",
       "notes": "PR #4ではte9no/zmk@afe241d（cormoran/main+dya@e5c9b69の直系子commit）とoversampling module 59fc126の組み合わせで、analog stickと60秒後の入力継続を実機合格としていた。参照元をcormoranへ明示するPR #5はZMK本体の直接固定だけを含む。US/JIS左右4/4とsettings_reset、US左右書き込み、右入力、OLED、DYA Studio最終接続/UI、analog stickの実機合格を確認し、2026-08-23にzmk-0.4へ6638e6cとしてマージ。stable mainは未変更。",
       "validation": {
         "ci": "passed",

@@ -15,7 +15,7 @@ When one keyboard proves a shared fix, the fleet ledger records:
 - the reference keyboard commit that verified it;
 - every repository that consumes the affected module;
 - whether each target is pending, in a PR, merged, applied, blocked, or not applicable;
-- optional CI and hardware validation gates that must pass before `applied`;
+- optional CI and hardware validation gates, tracked independently from whether code is already `applied`;
 - optional deterministic edits for `west.yml`, overlays, `.conf` files, and other UTF-8 text files.
 
 Module-scoped entries are checked against the inventory. Adding another consumer
@@ -64,7 +64,9 @@ pr = "https://github.com/example/zmk-config-keyboard-a/pull/12"
 ```
 
 `repository` may name an inventory ID or an adjacent module repository. For an
-adjacent repository, set `repository_url` so its card has a useful link.
+adjacent repository, set `repository_url` so its card has a useful link. An
+explicit `repository_url` also overrides the inventory anchor, which is useful
+for a dedicated validation branch.
 
 ## Typical workflow
 
@@ -135,7 +137,8 @@ The legacy `campaign` command remains as a compatibility alias for `change`.
 
 The repository includes a reusable static dashboard in `site/`. GitHub Pages
 builds its data from every committed `users/*/fleet.toml` profile and change
-ledger, so status updates appear without hand-editing HTML. The dashboard shows
+ledger after schema-validating every ledger, so invalid data cannot be published
+by Pages and status updates appear without hand-editing HTML. The dashboard shows
 fleet totals, profile-defined next actions, propagation progress, the
 repository/change matrix, and revision pinning findings. Next-action cards can
 be filtered by actionable work, hardware/external waits, and deferred or

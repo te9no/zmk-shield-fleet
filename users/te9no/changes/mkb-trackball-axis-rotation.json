@@ -24,11 +24,15 @@
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
-      "commit": "9f187ed",
+      "commit": "9f187ed93187cdcf9861e4f2caef5568115cb847",
       "notes": "2026-08-23にcormoran版右TBv4で、上が下、下が上、左が右、右が左へ動く二軸反転を実機確認。MKB_R_TBのtrackball_splitだけX/Y反転processorを追加し、MKB_R_MODULE_TBv4をjust.sh build-fast --pristine=alwaysで検証成功。Peripheral CDC COM12経由で書き込み、上→上、左→左を含む正方向、PMW3610初期化、split再接続を確認した。元のPR #13を統合PR #14へ吸収し、zmk-0.4へ反映。TBv3とstable firmware mainは未変更。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     }
   },

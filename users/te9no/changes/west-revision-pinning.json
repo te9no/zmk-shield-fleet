@@ -37,7 +37,13 @@
       "pr": null,
       "commit": null,
       "findings": 0,
-      "notes": "moving ref/短縮SHAなし"
+      "notes": "moving ref/短縮SHAなし。zmk-nice-oled@c511d7f64ba0f186051943d027333d247ad8e206はmodule mainではなくcodex/portrait-split-layout由来の固定pin。",
+      "validation": {
+        "ci": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717"
+      }
     },
     "mdk": {
       "status": "pending",
@@ -47,17 +53,17 @@
       "notes": "6 findings"
     },
     "mkb2": {
-      "status": "applied",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
       "commit": "1c350f554c6139b23a802fcdebdd5730e8ac39d9",
       "findings": 0,
-      "notes": "MKB/zmk-0.4の全west projectを40文字commit SHAへ固定。統合PR #14ではcormoran/zmk@e5c9b69と実機確認済みzmk-nice-oled@c511d7fを直接固定し、クリーン履歴から左JOY・右TBv4をjust.sh pristine buildして実機へ書き込んだ。JOY、TB方向、split入力、DYA Studio、Peripheral PMW3610表面診断、左右OLEDを確認。strict-sha findings 0を維持。",
+      "notes": "統合PR #14でMKB/zmk-0.4の全west projectを40文字SHAへ固定。左JOY・右TBv4のbuild/実機確認に合格し、strict-sha findings 0。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32490225196",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
@@ -69,25 +75,26 @@
       "notes": "5 findings"
     },
     "saa": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3",
-      "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d",
+      "status": "applied",
+      "pr": null,
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
       "findings": 0,
-      "notes": "専用検証branchの全west projectを40文字commit SHAへ固定。master昇格はPR #6でrevert済み。実機確認待ち",
+      "notes": "現行zmk-0.4_validation_cormoran-zmkの全west projectを40文字SHAへ固定。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevert済み。現行branch上のappliedを正とし、実機確認待ち。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32464854176"
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
     },
     "cornix": {
-      "status": "applied",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
       "findings": 0,
-      "notes": "残っていたmoving revision 2件を40文字commit SHAへ固定し、全12 firmware matrix成功"
+      "notes": "PR #1がmainへmerge済み。残っていたmoving revision 2件を40文字commit SHAへ固定し、全12 firmware matrix成功。"
     },
     "torabo": {
       "status": "pending",

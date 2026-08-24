@@ -16,8 +16,8 @@
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "676e7a9",
-    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/676e7a9",
+    "revision": "676e7a97cdc555f6c6f145fa4f8e1f0996df4d89",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/676e7a97cdc555f6c6f145fa4f8e1f0996df4d89",
     "notes": "Solsticeで3 CDC構成のStudio COM443が列挙・open可能でもRPC無応答になることを再現。board CDC無効化後、Studio COM74へのGetDeviceInfoが30-byte応答を返した。"
   },
   "repositories": [
@@ -43,11 +43,13 @@
       "validation": {
         "build": "passed",
         "config-dts": "passed",
+        "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32685858214",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
       }
     },
@@ -58,14 +60,21 @@
       "notes": "最低優先度。ZMK 0.4移行時に監査する。"
     },
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
       "commit": "1f540398d5af4b49b04bbab045263ee67c5a63ce",
-      "notes": "board CDCを無効化し、CDC Debug/CDC BootとStudio RPCを維持。DYA Studio UI実機接続済み。",
+      "notes": "統合PR #14でboard CDC無効化、CDC Debug/CDC Boot、Studio RPCをzmk-0.4へ反映。DYA Studio UI実機接続済み。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。",
       "validation": {
         "build": "passed",
+        "ci": "passed",
         "direct-rpc": "passed",
         "ui": "passed"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "direct-rpc": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
+        "ui": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "mrm": {
@@ -75,15 +84,23 @@
       "notes": "最低優先度。ZMK 0.4移行時に監査する。"
     },
     "saa": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": null,
-      "notes": "未テストのため専用検証branchで監査する。"
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "専用zmk-0.4_validation_cormoran-zmkで右CentralのUSB logging/Studio RPC構成を生成設定まで確認し、21/21 CI成功。USB列挙とDYA Studio UIは実機待ち。",
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+      }
     },
     "cornix": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "3b194eb98fd2a154247555001b5d206f1683c438",
+      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
       "notes": "Madula Trackballの生成devicetreeでboard CDC・Studio RPC・USB loggingの3 CDC構成を検出。Draft PR #3で未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ修正。just.sh pristineでMadula 3/3 target成功。2026-08-23に実機へ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙およびDYA Studio接続を確認。USB endpoint対策は実機合格。",
       "validation": {
         "build": "passed",
@@ -91,6 +108,13 @@
         "cdc-enumeration": "passed",
         "ui": "passed",
         "hardware": "passed"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "ui": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
       }
     },
     "torabo": {

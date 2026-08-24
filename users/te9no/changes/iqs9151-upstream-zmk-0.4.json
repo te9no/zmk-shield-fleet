@@ -34,23 +34,24 @@
       "notes": "基準実装"
     },
     "saa": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2",
-      "commit": "4671a29fd1f15c199abf128de41ef18080c2b11c",
-      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmkでZMK 0.4と本家driver@08a6fd1を固定し、IQS Local/Splitを含む全21 targetがActions 32628652475で成功。次は左右JOYとの複合構成を含め、IQS実機のlocal/split入力と両手接続を確認する。master昇格はPR #6でrevert済みで、再昇格しない。",
+      "status": "applied",
+      "pr": null,
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "現行の専用zmk-0.4_validation_cormoran-zmkでZMK 0.4と本家driver@08a6fd1を固定し、IQS Local/Splitを含む全21 targetがActions 32628652475で成功。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevertされた。次はJOY複合を含むIQS local/split入力と両手接続を実機確認する。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32466324146"
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
     },
     "cornix": {
-      "status": "applied",
+      "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映し、mainへ昇格"
+      "notes": "PR #1がmainへmerge済み。Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映。"
     },
     "cagime": {
       "status": "pending",

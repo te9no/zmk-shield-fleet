@@ -16,7 +16,7 @@
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",
-    "revision": "4e83373",
+    "revision": "4e833733539999423974a83d6a9695e1590490b5",
     "change_url": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
     "notes": "Solsticeでte9no経由からcormoran直接参照へ変更し、左実機と全4 firmware buildを確認したことを横展開トリガーとする。"
   },
@@ -38,8 +38,8 @@
     "polaris": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
-      "commit": "53cbeec",
-      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。just.sh pristineとGitHub ActionsでJOY、IQS、IQS debug、PMW3610を含む10 firmware targetおよびsettings_resetが成功。左LPPSと右IQSは実機で動作を確認済み。左LPPSはBongo Cat有効化（zmk-nice-oled@c511d7f、31a25dd）を再書き込みし、COM326の1200 baud UF2遷移、XIAO-BOOTへのzmk.uf2コピー、COM326復帰を確認。2026-08-23にユーザーが左OLEDのBongo Cat表示を実機目視で合格と確認。PR #6はCI成功・生成firmware publish後、2026-08-23にzmk-0.4へ53cbeecとしてマージ。stable firmware mainは未変更。",
+      "commit": "53cbeec1040ce2043d4489e8e5d4e52db99b1ba9",
+      "notes": "第1群。zmk-0.4_validation_cormoran-zmkでcormoran/zmk@e5c9b69へ直接固定。just.sh pristineとGitHub Actionsで10 firmware targetとsettings_resetが成功し、左LPPS・右IQSを実機確認済み。左LPPSのBongo Catはzmk-nice-oled@c511d7f64ba0f186051943d027333d247ad8e206をmodule mainではなくcodex/portrait-split-layout由来のpinとして採用し、1200 baud書き込みと表示目視に合格。PR #6を2026-08-23にzmk-0.4へmerge。stable firmware mainは未変更。",
       "validation": {
         "build": "passed",
         "driver-selection": "passed",
@@ -65,8 +65,8 @@
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
-      "commit": "1defa7d",
-      "notes": "第1群。cormoran/zmk@e5c9b69へ直接固定し、統合PR #14を衝突のないzmk-0.4ベースへ積み直した。全15構成の既存CIに加え、クリーン履歴から左JOYと右TBv4をjust.sh pristine build。左JOYはanalog input 100 Hz、oversampling電圧監視、DYA Studio、CDCを確認し、右TBv4はPMW3610初期化、split接続、CDC、正しい二軸方向、OLED LINK表示を実機確認。zmk-0.4へ統合し、stable mainは未変更。",
+      "commit": "1defa7d9370c74b468897541fae1f87fe33a0a12",
+      "notes": "cormoran/zmk@e5c9b69へ直接固定し、統合PR #14をzmk-0.4へmerge。15/15 CIと左JOY・右TBv4の実機確認に合格。旧PR #7/#9/#10はclosed-unmergedの統合前履歴で、現行証跡はPR #14。stable mainは未変更。",
       "validation": {
         "build": "passed",
         "driver-selection": "passed",
@@ -76,8 +76,8 @@
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-MKB2/pull/14",
         "driver-selection": "https://github.com/te9no/zmk-config-MKB2/pull/14",
-        "ci": "https://github.com/te9no/zmk-config-MKB2/pull/14",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/pull/14"
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "mrm": {
@@ -87,26 +87,28 @@
       "notes": "最低優先度。ZMK 0.4開発branchを用意してから直接cormoran固定を検証する。"
     },
     "saa": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "4e54e1c",
-      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmk。コードcommit fc64d9fでcormoran/zmk@e5c9b69を直接固定し、remote head 4e54e1cはCI生成の21 UF2追加だけ。GitHub Actions 32628652475に加え、2026-08-24にfresh専用west/build workspaceからjust.sh build-fast all --pristine=alwaysを再実行し、左右通常/IQS複合20/20、settings_reset 1/1の計21/21が成功。生成設定でJOYのoversampling=0とDYA analog input、IQS upstream、右CentralのCDC trigger/Studio RPCを確認。次は左右JOYとIQS実機で入力方向/cadence、60秒継続、local/split、両手接続、CDC 1200 baud、DYA Studio UIを確認する。PRは作らずstable masterは変更しない。",
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "現行の専用zmk-0.4_validation_cormoran-zmk。コードcommit fc64d9ff70483e0ca9e48cc3355552804fd9b02aでcormoran/zmk@e5c9b69を直接固定し、remote head 4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8はCI生成の21 UF2追加まで含む。Actions 32628652475とfresh local pristine buildで21/21成功。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevertされたため現行branch上のappliedを正とする。次は左右JOY/IQS、CDC 1200 baud、DYA Studio UIを実機確認する。PRは作らずstable masterは変更しない。",
       "validation": {
         "build": "passed",
+        "ci": "passed",
         "local-pristine-build": "passed",
         "driver-selection": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
-        "driver-selection": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/fc64d9f",
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "driver-selection": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/fc64d9ff70483e0ca9e48cc3355552804fd9b02a",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
     },
     "cornix": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b",
+      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
       "notes": "Fleet最優先。既存Draft PR #3でcormoran/zmk@e5c9b69へ直接固定。存在しないboard_cdc_acm_uart参照という既存build blockerも除去し、Madula 3構成とCornix/TPS43を含む./just.sh build-fast all --pristine=alwaysが12/12成功。次は物理Madula trackball moduleを装着して、PMW3610入力・local source診断・frame captureを実機確認する。未接続のためDraftを維持し、mainには反映しない。",
       "validation": {
         "build": "passed",
@@ -142,7 +144,7 @@
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
-      "commit": "6638e6c",
+      "commit": "6638e6c2f3331b4577b7863b99a84206722768e6",
       "notes": "cormoran/zmk@e5c9b69への直接固定だけを含むPR #5を、US左右書き込み、右入力、OLED、DYA Studio最終接続/UI、analog stick実機合格の確認後に2026-08-23にzmk-0.4へ6638e6cとしてマージ。GitHub ActionsのUS/JIS左右4/4とsettings_resetも成功。stable mainは未変更。",
       "validation": {
         "build": "passed",

@@ -1,5 +1,10 @@
 # Cross-repository audit — 2026-08-21
 
+> **Historical snapshot:** This document preserves the 2026-08-21 initial
+> inventory and must not be read as current status. See
+> `pr-ledger-audit-2026-08-24.md`, `fleet.toml`, and `changes/*.json` for the
+> authoritative maintenance branches, validation evidence, and next actions.
+
 Polarisの実証済み構成を基準に、ローカルの開発branchと各リポジトリの
 `config/west.yml`、関連snippet／shieldを横並び確認した初回棚卸しです。
 
@@ -30,6 +35,7 @@ Madula向け共通変更に参加します。
 - Revision pinning: moving ref／短縮SHAはPolaris、MKB2、SAA、Cornix、GeaconSolsticeが0件。その他7 repositoriesに57件。
 - MKB2 ZMK 0.4 + DYA Studio V2: PR #7で15 firmware variantとsettings_reset（16/16）が成功。非LPPS左centralへフルstack、右側へwatchdog/kscan診断relayを導入し、左LPPSはRAM制約からフルStudio対象外。MLX90393のZMK 0.4 singular endpoint APIは[driver PR #1](https://github.com/te9no/zmk-driver-MLX90393/pull/1)へ分離済み。MKB2 buildは成功したが、MLX90393実機未検証なのでclean Draftを維持する。
 - GeaconSolstice ZMK 0.4: PR #1の全5 firmware targetが成功。te9no forkの[LVGL 9 PR #3](https://github.com/te9no/zmk-dongle-display/pull/3)はDraftのままで、現在`west update` CI failureを調査待ち。積み上げ[PR #4](https://github.com/te9no/zmk-dongle-display/pull/4)の明示色/mono themeはSolstice OLED実機で不合格だったためsupersededとしてcloseし、Solsticeは実機合格済みの上流`englmaxi/zmk-dongle-display@2bb333f`を維持する。
+- Historical follow-up: englmaxi/zmk-dongle-display [PR #37](https://github.com/englmaxi/zmk-dongle-display/pull/37) was withdrawn and closed without merge. It is not a current dependency.
 
 ## Inventory findings
 

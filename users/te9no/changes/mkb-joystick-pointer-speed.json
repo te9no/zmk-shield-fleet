@@ -33,13 +33,17 @@
   ],
   "tracking": {
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/10",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
       "commit": "ea0830ae3c40b168c7d37febc849cd74d27aadbd",
-      "notes": "MKB/zmk-0.4に速度・100 Hz連続report修整を集約。2026-08-22に左JOYで滑らかな移動を実機確認し、同日just.shで再buildしたMKB_L_MODULE_JOYを再書き込み。",
+      "notes": "統合PR #14でMKB/zmk-0.4へ速度・100 Hz連続report修整を反映。2026-08-22に左JOYで滑らかな移動を実機確認。旧PR #10はclosed-unmergedの統合前履歴。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "polaris": {
@@ -61,10 +65,18 @@
       "notes": "JOY slotあり。最低優先度で監査する。"
     },
     "saa": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": null,
-      "notes": "JOYおよびJOY+IQS構成のscaleとreport cadenceを専用検証branchで確認する。mainへは実機確認前に昇格しない。"
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "専用zmk-0.4_validation_cormoran-zmkのJOY/JOY+IQSを含む21/21 CIは成功。scale、report cadence、60秒継続は実機待ちで、stable masterへは昇格しない。",
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+      }
     },
     "cagime": {
       "status": "pending",
@@ -79,10 +91,18 @@
       "notes": "joystick対象。最低優先度で監査する。"
     },
     "solstice": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "analog入力構成をMKBの次の優先群として監査する。"
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
+      "commit": "6638e6c2f3331b4577b7863b99a84206722768e6",
+      "notes": "PR #5をzmk-0.4へmerge済み。US左右を書き込み、ユーザーが2026-08-23にanalog stickの方向・速度・継続入力を実機合格と確認。stable mainは未変更。",
+      "validation": {
+        "ci": "passed",
+        "hardware": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
+      }
     },
     "sparagmos": {
       "status": "pending",

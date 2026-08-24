@@ -11,8 +11,8 @@ state = "waiting"
 priority = "high"
 order = 1
 repository = "cornix"
-action = "Madula Trackball実機でtrackball入力とsplit動作を最終確認する。"
-completion = "Madula TBのpointer入力、左右接続、CDC Debug、DYA Studioがすべて実機合格する。"
+action = "Madula Trackball実機でtrackball入力・split動作・1200 baud bootを最終確認する。"
+completion = "Madula TBのpointer入力、左右接続、CDC Debug、1200 baud boot、DYA Studioがすべて実機合格する。"
 blocker = "Madula Trackball実機の接続・操作確認待ち。実機合格までmerge不可。"
 pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
 
@@ -25,7 +25,7 @@ repository = "saa"
 action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象moduleを書き込み、左右実機を検証する。"
 completion = "1200 baud boot、DYA Studio UI、両手接続、対象module入力が合格し、専用branchの検証証跡が揃う。"
 blocker = "実機moduleと書き込み時間が必要。stable masterは対象外。"
-pr = "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
 
 [[next_actions]]
 id = "polaris-right-cdc-hardware"
@@ -49,6 +49,58 @@ action = "Draft PR #3のLVGL9/ZMK 0.4 CI失敗を調査し、安全な範囲でb
 completion = "PR #3のCIが成功し、実機OLED検証手順とmerge gateが明記される。"
 blocker = "CI修正は今実行可能だが、実機OLED合格までmodule repoへmerge不可。"
 pr = "https://github.com/te9no/zmk-dongle-display/pull/3"
+
+[[next_actions]]
+id = "dya-studio-upstream-pr-168"
+state = "waiting"
+priority = "medium"
+order = 5
+repository = "cormoran/dya-studio"
+repository_url = "https://github.com/cormoran/dya-studio"
+action = "外部PR #168のPeripheral PMW3610対応を確認し、採否はユーザー判断に委ねる。"
+completion = "upstream側の判断が確定し、Fleetのupstream-pr validationへ結果が記録される。"
+blocker = "外部所有repositoryのopen PR。Fleetから変更・close・mergeせず、ユーザー判断を待つ。"
+pr = "https://github.com/cormoran/dya-studio/pull/168"
+
+[[next_actions]]
+id = "polaris-joy-speed-hardware"
+state = "waiting"
+priority = "medium"
+order = 6
+repository = "polaris"
+action = "左右JOY firmwareでpointer scale、100 Hz report cadence、60秒継続入力を実機確認する。"
+completion = "方向・速度・滑らかさ・60秒後の継続入力が左右JOYで合格する。"
+blocker = "Polaris JOY moduleの書き込みと操作確認待ち。"
+
+[[next_actions]]
+id = "polaris-pmw3610-hardware"
+state = "waiting"
+priority = "medium"
+order = 7
+repository = "polaris"
+action = "専用PMW3610検証branchの右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
+completion = "PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
+blocker = "Polaris trackball実機未検証。CI 10/10成功だけではmerge不可。"
+
+[[next_actions]]
+id = "saa-pmw3610-hardware"
+state = "later"
+priority = "medium"
+order = 8
+repository = "saa"
+action = "SAAの通常21-target実機確認後、別PMW3610検証branchの左右TBを検証する。"
+completion = "左右PMW3610入力、split relay、DYA Studio source列挙が実機合格する。"
+blocker = "専用branchの21/21 buildは成功済みだが実機未検証。SAA基本検証を先に完了する。"
+
+[[next_actions]]
+id = "cagime-local-only"
+state = "later"
+priority = "low"
+order = 97
+repository = "cagime"
+action = "ローカル専用checkoutの旧ZMK構成を監査し、検証branch化またはnot-applicableを判断する。"
+completion = "対象moduleと検証方針が記録され、必要ならローカル専用branchでbuild evidenceが得られる。"
+blocker = "GitHub remoteと初期commitがなく、CI/PR運用の対象外。"
 
 [[next_actions]]
 id = "mlx90393-out-of-scope"
@@ -77,6 +129,7 @@ id = "polaris"
 github = "te9no/zmk-config-GeaconPolaris"
 checkout = "zmk-config-GeaconPolaris"
 default_branch = "main"
+maintenance_branch = "zmk-0.4"
 architecture = "module-snippets"
 modules = ["encoder", "iqs9151", "joystick", "lpps", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
@@ -138,7 +191,7 @@ rollout_order = 2
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
 default_branch = "master"
-maintenance_branch = "feat/add-iqs-module-and-led-support"
+maintenance_branch = "zmk-0.4_validation_cormoran-zmk"
 architecture = "module-shields"
 modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
@@ -154,6 +207,7 @@ rollout_order = 1
 github = "te9no/zmk-keyboard-cornix"
 checkout = "zmk-keyboard-cornix"
 default_branch = "main"
+maintenance_branch = "zmk-0.4"
 architecture = "madula-module-snippets"
 modules = ["iqs9151", "lpps", "trackball"]
 tags = ["madula", "mekabu", "modular-input", "split", "xiao"]
@@ -215,7 +269,7 @@ rollout_order = 4
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
 default_branch = "main"
-maintenance_branch = "codex/zmk-0.4-baseline"
+maintenance_branch = "zmk-0.4"
 architecture = "integrated-shield"
 modules = ["joystick", "trackball"]
 tags = ["dya-studio", "split", "xiao"]

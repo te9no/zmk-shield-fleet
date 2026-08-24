@@ -60,13 +60,17 @@
       "notes": "現行west.ymlにmoduleなし"
     },
     "mkb2": {
-      "status": "applied",
-      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/7",
-      "commit": "d4e7156",
-      "notes": "左Centralは全targetへCDC triggerとZMK debug-level出力を導入済み。右Peripheralも全8 targetへCDC Debugと1200 baud bootを追加。MKB/zmk-0.4の通常firmware全15 targetをjust.sh build-fast --pristine=alwaysで再検証し15/15成功。2026-08-22に右MKB_R_MODULE_TBv4でCOM12からZephyr起動ログとCDC trigger初期化を取得し、1200 baudでI: XIAO-SENSEへ遷移、再書き込み後のCOM12復帰まで確認。MKB/zmk-0.4へ集約済み。",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
+      "commit": "d4e7156823e16f344f23d83bc89723f8f8032c60",
+      "notes": "統合PR #14でMKB/zmk-0.4へ反映済み。左Central全targetと右Peripheral全8 targetへCDC Debug/1200 baud bootを導入し、15/15 build成功。右TBv4のCOM12ログ、1200 baud bootloader遷移、COM12復帰を実機確認。旧PR #7/#9/#10はclosed-unmerged履歴で、現行証跡はPR #14。",
       "validation": {
         "ci": "passed",
         "hardware": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
       }
     },
     "mrm": {
@@ -76,23 +80,38 @@
       "notes": "現行west.ymlにmoduleなし"
     },
     "saa": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3",
-      "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d",
-      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmkでCDC trigger@1850754と右CentralのUSB logging/Studio RPCを固定し、全21 targetがActions 32628652475で成功。次は実機で1200 baud boot、DYA Studio UI、両手接続を確認する。Peripheral CDC parityは今回の必要性を実機構成で判断し、stable masterへは昇格しない。",
+      "status": "applied",
+      "pr": null,
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "現行の専用zmk-0.4_validation_cormoran-zmkでCDC trigger@1850754と右CentralのUSB logging/Studio RPCを固定し、全21 targetがActions 32628652475で成功。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevertされた。次は1200 baud boot、DYA Studio UI、両手接続を実機確認し、stable masterへは昇格しない。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32464854176"
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
     },
     "cornix": {
-      "status": "pending",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
-      "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "Zephyr 4.1のDTE rate callbackを使う同等実装をrepository内に保持し、全production buildで検証済み。Madulaを含むPeripheral側にもCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。"
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
+      "notes": "Draft PR #3でMadulaを含む対象構成へCDC Debugと1200 baud bootを統合。12/12 CI、書き込み、2 CDC列挙、DYA Studio接続は実機合格。1200 baudによるbootloader遷移のみ未確認のためDraftを維持する。",
+      "validation": {
+        "build": "passed",
+        "flash": "passed",
+        "cdc-enumeration": "passed",
+        "dya-studio": "passed",
+        "1200-baud": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
+        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+      }
     },
     "torabo": {
       "status": "pending",

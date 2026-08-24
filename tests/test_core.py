@@ -326,7 +326,7 @@ class CampaignTests(unittest.TestCase):
 
 
 class LedgerTests(unittest.TestCase):
-    def test_applied_requires_declared_validation_checks_to_pass(self) -> None:
+    def test_applied_can_retain_pending_hardware_validation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
             fixture.write_manifest()
@@ -336,10 +336,11 @@ class LedgerTests(unittest.TestCase):
                 {"status": "applied", "validation": {"ci": "passed", "hardware": "pending"}}
             )
             path.write_text(json.dumps(raw), encoding="utf-8")
-            with self.assertRaisesRegex(FleetError, "cannot be applied.*hardware"):
-                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            entry = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            self.assertEqual("applied", entry.tracking["one"].status)
+            self.assertEqual("pending", entry.tracking["one"].validation["hardware"])
 
-    def test_mark_updates_validation_and_guards_applied_status(self) -> None:
+    def test_mark_updates_validation_independently_from_applied_status(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
             fixture.write_manifest()
@@ -347,10 +348,14 @@ class LedgerTests(unittest.TestCase):
             raw = json.loads(path.read_text(encoding="utf-8"))
             raw["tracking"]["one"]["validation"] = {"ci": "passed", "hardware": "pending"}
             path.write_text(json.dumps(raw), encoding="utf-8")
-            entry = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, path)
 
-            with self.assertRaisesRegex(FleetError, "validation is incomplete.*hardware"):
-                mark_ledger_target(entry, "one", "applied")
+            mark_ledger_target(entry, "one", "applied")
+            self.assertEqual(
+                "pending",
+                load_ledger_entry(manifest, path).tracking["one"].validation["hardware"],
+            )
             mark_ledger_target(
                 entry,
                 "one",
@@ -365,6 +370,30 @@ class LedgerTests(unittest.TestCase):
                 "https://example.com/checklist",
                 reloaded.tracking["one"].validation_urls["hardware"],
             )
+
+    def test_dashboard_build_rejects_an_invalid_ledger(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            raw = json.loads(fixture.write_ledger().read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["validation"] = {"ci": "unknown"}
+            changes = fixture.root / "changes"
+            changes.mkdir()
+            (changes / "align-value.json").write_text(json.dumps(raw), encoding="utf-8")
+
+            with self.assertRaisesRegex(FleetError, "validation.ci must be one of"):
+                build_profile(fixture.manifest_path)
+
+    def test_dashboard_completion_requires_passed_or_waived_validation(self) -> None:
+        app_js = (Path(__file__).resolve().parents[1] / "site" / "app.js").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn(
+            'checks.every((status) => status === "passed" || status === "waived")',
+            app_js,
+        )
+        self.assertNotIn('if (target.status === "not-applicable") return true;', app_js)
+        self.assertIn("action.repository_url", app_js)
 
     def test_validation_url_requires_a_matching_check(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
