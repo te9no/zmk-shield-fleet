@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import stat
 import subprocess
 import tempfile
@@ -198,9 +199,12 @@ class LocalRevisionBaseline:
 class RevisionMetrics:
     finding_total: int | None = None
     measured_at: str | None = None
+    measurement_mode: str | None = None
+    measurement_command: str | None = None
     fleet_commit: str | None = None
     audit_run: str | None = None
     measurement_scope: str | None = None
+    evidence_status: str | None = None
     local_only_baseline: LocalRevisionBaseline | None = None
 
 
@@ -1287,7 +1291,8 @@ def load_ledger_entry(
             metrics,
             {
                 "finding_total", "measured_at", "fleet_commit", "audit_run",
-                "measurement_scope", "local_only_baseline",
+                "measurement_mode", "measurement_command", "measurement_scope",
+                "evidence_status", "local_only_baseline",
             },
             "change.metrics",
         )
@@ -1301,6 +1306,34 @@ def load_ledger_entry(
         measured_at = _optional_string(metrics.get("measured_at"), "change.metrics.measured_at")
         if measured_at is not None and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", measured_at):
             raise FleetError("change.metrics.measured_at must use YYYY-MM-DD")
+        measurement_mode = _optional_string(
+            metrics.get("measurement_mode"), "change.metrics.measurement_mode"
+        )
+        if measurement_mode is not None and measurement_mode != "strict-sha":
+            raise FleetError("change.metrics.measurement_mode must be strict-sha")
+        measurement_command = _optional_string(
+            metrics.get("measurement_command"), "change.metrics.measurement_command"
+        )
+        if measurement_command is not None:
+            try:
+                command_parts = shlex.split(measurement_command)
+            except ValueError as exc:
+                raise FleetError(
+                    f"change.metrics.measurement_command is not a valid command: {exc}"
+                ) from exc
+            if (
+                command_parts[:2] != ["shield-fleet", "revisions"]
+                or "--strict-sha" not in command_parts
+            ):
+                raise FleetError(
+                    "change.metrics.measurement_command must record a "
+                    "shield-fleet revisions command with --strict-sha"
+                )
+        evidence_status = _optional_string(
+            metrics.get("evidence_status"), "change.metrics.evidence_status"
+        )
+        if evidence_status is not None:
+            _validate_id(evidence_status, "change.metrics.evidence_status")
         local_baseline_info = None
         if metrics.get("local_only_baseline") is not None:
             local_baseline = _require_mapping(
@@ -1334,6 +1367,8 @@ def load_ledger_entry(
         metrics_info = RevisionMetrics(
             finding_total=finding_total,
             measured_at=measured_at,
+            measurement_mode=measurement_mode,
+            measurement_command=measurement_command,
             fleet_commit=_optional_sha(
                 metrics.get("fleet_commit"), "change.metrics.fleet_commit"
             ),
@@ -1341,6 +1376,7 @@ def load_ledger_entry(
             measurement_scope=_optional_string(
                 metrics.get("measurement_scope"), "change.metrics.measurement_scope"
             ),
+            evidence_status=evidence_status,
             local_only_baseline=local_baseline_info,
         )
     if table.get("dashboard_label") is not None:

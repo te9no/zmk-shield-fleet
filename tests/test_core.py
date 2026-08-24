@@ -758,6 +758,63 @@ class LedgerTests(unittest.TestCase):
 
 
 class AuditTests(unittest.TestCase):
+    def test_strict_revision_metrics_are_typed(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["metrics"] = {
+                "finding_total": 3,
+                "measured_at": "2026-08-25",
+                "measurement_mode": "strict-sha",
+                "measurement_command": (
+                    "shield-fleet revisions --manifest users/example/fleet.toml --strict-sha"
+                ),
+                "measurement_scope": "Fresh CI-managed maintenance branches",
+                "evidence_status": "local-observation-pending-public-ci",
+            }
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            entry = load_ledger_entry(load_manifest(fixture.manifest_path), path)
+            self.assertIsNotNone(entry.metrics)
+            assert entry.metrics is not None
+            self.assertEqual("strict-sha", entry.metrics.measurement_mode)
+            self.assertIn("--strict-sha", entry.metrics.measurement_command or "")
+            self.assertEqual(
+                "local-observation-pending-public-ci", entry.metrics.evidence_status
+            )
+
+    def test_invalid_strict_revision_metrics_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            original = json.loads(path.read_text(encoding="utf-8"))
+            valid_metrics = {
+                "measurement_mode": "strict-sha",
+                "measurement_command": "shield-fleet revisions --strict-sha",
+                "evidence_status": "pending-public-ci",
+            }
+            cases = (
+                ("measurement_mode", "moving-ref", "must be strict-sha"),
+                (
+                    "measurement_command",
+                    "shield-fleet revisions --manifest fleet.toml",
+                    "with --strict-sha",
+                ),
+                ("measurement_command", ["shield-fleet"], "non-empty string"),
+                ("evidence_status", "pending public ci", "invalid id"),
+            )
+            manifest = load_manifest(fixture.manifest_path)
+            for field_name, bad_value, message in cases:
+                with self.subTest(field=field_name, value=bad_value):
+                    raw = json.loads(json.dumps(original))
+                    raw["metrics"] = dict(valid_metrics)
+                    raw["metrics"][field_name] = bad_value
+                    path.write_text(json.dumps(raw), encoding="utf-8")
+                    with self.assertRaisesRegex(FleetError, message):
+                        load_ledger_entry(manifest, path)
+
     def test_revision_baseline_detects_increase(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
