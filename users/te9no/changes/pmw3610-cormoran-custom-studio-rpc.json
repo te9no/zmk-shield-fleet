@@ -232,13 +232,7 @@
       "status": "not-applicable",
       "pr": null,
       "commit": null,
-      "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外",
-      "validation": {
-        "applicability": "waived"
-      },
-      "validation_urls": {
-        "applicability": "https://github.com/te9no/zmk-keyboard-torabo-tsuki-lp/tree/v0.3%2Bdya-studio"
-      }
+      "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外"
     },
     "cagime": {
       "status": "pending",
