@@ -36,10 +36,22 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pending",
-      "pr": null,
-      "commit": "10885439f82c58cd65c1cdccc935e97954bbe0c9",
-      "notes": "Zephyr 4.1対応revisionの基準実装は適用済み。MKB/Solsticeと同様に全Peripheral targetへCDC Debugと1200 baud bootを揃える追加監査が必要。第1優先群。"
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+      "commit": "c208d124a2447e7c692a2fc55863b8d4dd61c152",
+      "notes": "zmk-0.4起点の専用Draft PR #7で、廃止したIQS専用debug artifact/snippetに代えて右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。board CDCを無効化し、USB loggingの1 CDCに1200 baud boot triggerを接続した。左のStudio/boot/Bongo構成は変更なし。just.sh build-fast all --pristine=alwaysは9/9成功、Actions 32685858214も全9 target成功。Windowsで右実機はUSB列挙されておらず、書き込み・CDCログ・1200 baud bootは実機待ち。",
+      "validation": {
+        "build": "passed",
+        "config-dts": "passed",
+        "ci": "passed",
+        "right-hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32685858214",
+        "right-hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+      }
     },
     "mdk": {
       "status": "pending",

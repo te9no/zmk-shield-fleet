@@ -36,10 +36,20 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "CDC DebugとStudio RPC有効時のCDC node数を監査する。第1優先群。"
+      "status": "pr-open",
+      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+      "commit": "c208d124a2447e7c692a2fc55863b8d4dd61c152",
+      "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。右実機は未接続のためhardware pending。",
+      "validation": {
+        "build": "passed",
+        "config-dts": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+      }
     },
     "mdk": {
       "status": "pending",
