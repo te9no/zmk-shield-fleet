@@ -5,8 +5,10 @@ ledger, and audit notes. It is data consumed by the generic `shield-fleet` CLI;
 none of it is required by other users of the project.
 
 `rollout_order` is the personal deployment queue shown on GitHub Pages. Cornix
-is first while its physical Madula trackball validation is pending, MKB2 is
-second, GeaconSolstice is third, and order 99 is the lowest-priority backlog.
+remains the highest priority but is waiting for a physical Madula trackball.
+SAA is second and is the currently active dedicated-branch validation; MKB2 and
+GeaconSolstice follow as already validated references, and order 99 is the
+lowest-priority backlog.
 CI success only advances a validation branch; default-branch promotion requires
 hardware validation.
 

@@ -36,7 +36,7 @@ required_globs = [
 
 [[repositories]]
 id = "mkb2"
-rollout_order = 2
+rollout_order = 3
 github = "te9no/zmk-config-MKB2"
 checkout = "zmk-config-MKB2"
 default_branch = "main"
@@ -67,6 +67,7 @@ required_globs = [
 
 [[repositories]]
 id = "saa"
+rollout_order = 2
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
 default_branch = "master"
@@ -143,7 +144,7 @@ required_globs = [
 
 [[repositories]]
 id = "solstice"
-rollout_order = 3
+rollout_order = 4
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
 default_branch = "main"

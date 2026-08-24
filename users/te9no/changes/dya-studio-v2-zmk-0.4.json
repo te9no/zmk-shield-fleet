@@ -71,7 +71,7 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3",
       "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d",
-      "notes": "専用検証branchをZMK 0.4と固定DYA Studio module群へ移行し、全21 firmware matrix成功。master昇格はPR #6でrevert済み。実機確認待ち",
+      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmkでZMK 0.4と固定DYA Studio module群を維持し、全21 targetがActions 32628652475で成功。次は右CentralのStudio RPC/USB loggingと左右JOY/IQSを使い、DYA Studio UI、入力診断、両手接続を実機確認する。stable masterへは昇格しない。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"

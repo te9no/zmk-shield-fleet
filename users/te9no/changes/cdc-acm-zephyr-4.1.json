@@ -67,7 +67,7 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3",
       "commit": "2858dbf1df5cc221bc3c3d2ea21cae37e3e48e8d",
-      "notes": "専用検証branchのsplit Central側へ固定revisionを適用し、全21 firmware matrix成功。Peripheral CDC parityは未監査。master昇格はPR #6でrevert済み。実機確認待ち",
+      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmkでCDC trigger@1850754と右CentralのUSB logging/Studio RPCを固定し、全21 targetがActions 32628652475で成功。次は実機で1200 baud boot、DYA Studio UI、両手接続を確認する。Peripheral CDC parityは今回の必要性を実機構成で判断し、stable masterへは昇格しない。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"

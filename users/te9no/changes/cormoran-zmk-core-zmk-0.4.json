@@ -89,15 +89,16 @@
     "saa": {
       "status": "pending",
       "pr": null,
-      "commit": "fc64d9f",
-      "notes": "専用zmk-0.4_validation_cormoran-zmkへcormoran/zmk@e5c9b69を直接固定。./just.sh build-fast SAA_ --pristine=alwaysで左右通常/IQS複合20/20、settings_reset 1/1の計21構成が成功。JOY生成設定でoversampling=0とDYA analog inputを確認。branchへpush済みだがPRは作らず、stable masterは未変更。実機検証待ち。",
+      "commit": "4e54e1c",
+      "notes": "現在進行中の専用zmk-0.4_validation_cormoran-zmk。コードcommit fc64d9fでcormoran/zmk@e5c9b69を直接固定し、remote head 4e54e1cはCI生成の21 UF2追加だけ。GitHub Actions 32628652475に加え、2026-08-24にfresh専用west/build workspaceからjust.sh build-fast all --pristine=alwaysを再実行し、左右通常/IQS複合20/20、settings_reset 1/1の計21/21が成功。生成設定でJOYのoversampling=0とDYA analog input、IQS upstream、右CentralのCDC trigger/Studio RPCを確認。次は左右JOYとIQS実機で入力方向/cadence、60秒継続、local/split、両手接続、CDC 1200 baud、DYA Studio UIを確認する。PRは作らずstable masterは変更しない。",
       "validation": {
         "build": "passed",
+        "local-pristine-build": "passed",
         "driver-selection": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "driver-selection": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/fc64d9f",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       }
