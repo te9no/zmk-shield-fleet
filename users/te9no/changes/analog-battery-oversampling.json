@@ -36,7 +36,17 @@
       "status": "applied",
       "pr": null,
       "commit": "6a7b21fa878e718472102b787f6dd21e0ee113db",
-      "notes": "基準実装"
+      "notes": "基準実装",
+      "branch": "zmk-0.4",
+      "base_branch": "main",
+      "validation": {
+        "ci": "passed",
+        "hardware": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/6a7b21fa878e718472102b787f6dd21e0ee113db"
+      }
     },
     "mdk": {
       "status": "pending",
@@ -56,7 +66,10 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
@@ -76,7 +89,9 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cagime": {
       "status": "pending",
@@ -111,7 +126,10 @@
         "left-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "both-halves-flash": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5",
         "analog-runtime": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "4e833733539999423974a83d6a9695e1590490b5"
     },
     "sparagmos": {
       "status": "pending",

@@ -15,7 +15,16 @@
     "notes": "shield-fleet revisionsでmain/master/branch refと短縮SHAを継続検査する。"
   },
   "metrics": {
-    "finding_total": 57
+    "finding_total": 43,
+    "measured_at": "2026-08-25",
+    "fleet_commit": "ab3093b06b413c6b320979186a20e7dee11d61dd",
+    "audit_run": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676",
+    "measurement_scope": "CI-managed repositories at maintenance_branch when configured, otherwise default_branch; local-only cagime excluded",
+    "local_only_baseline": {
+      "repository": "cagime",
+      "findings": 16,
+      "status": "stale-pending-remeasure"
+    }
   },
   "repositories": [
     "polaris",
@@ -39,18 +48,28 @@
       "findings": 0,
       "notes": "moving ref/短縮SHAなし。zmk-nice-oled@c511d7f64ba0f186051943d027333d247ad8e206はmodule mainではなくcodex/portrait-split-layout由来の固定pin。",
       "validation": {
-        "ci": "passed"
+        "ci": "passed",
+        "revision-audit": "passed"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717"
-      }
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717",
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      },
+      "branch": "zmk-0.4",
+      "base_branch": "main"
     },
     "mdk": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 6,
-      "notes": "6 findings"
+      "findings": 7,
+      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "mkb2": {
       "status": "merged",
@@ -60,19 +79,30 @@
       "notes": "統合PR #14でMKB/zmk-0.4の全west projectを40文字SHAへ固定。左JOY・右TBv4のbuild/実機確認に合格し、strict-sha findings 0。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。",
       "validation": {
         "ci": "passed",
-        "hardware": "passed"
+        "hardware": "passed",
+        "revision-audit": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "mrm": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 5,
-      "notes": "5 findings"
+      "findings": 6,
+      "notes": "最新Fleet Auditで6 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "saa": {
       "status": "applied",
@@ -82,40 +112,75 @@
       "notes": "現行zmk-0.4_validation_cormoran-zmkの全west projectを40文字SHAへ固定。歴史上PR #2/#3/#4はfeat branchへmergeされたが、master昇格はPR #6でrevert済み。現行branch上のappliedを正とし、実機確認待ち。",
       "validation": {
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "pending",
+        "revision-audit": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
-        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cornix": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
       "findings": 0,
-      "notes": "PR #1がmainへmerge済み。残っていたmoving revision 2件を40文字commit SHAへ固定し、全12 firmware matrix成功。"
+      "notes": "PR #1がmainへmerge済み。残っていたmoving revision 2件を40文字commit SHAへ固定し、全12 firmware matrix成功。",
+      "branch": "codex/promote-madula-zmk-0.4-to-main",
+      "base_branch": "main",
+      "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
+      "validation": {
+        "ci": "passed",
+        "revision-audit": "passed"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "torabo": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "findings": 7,
-      "notes": "7 findings"
+      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "cagime": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "findings": 16,
-      "notes": "16 findings。ローカル専用"
+      "notes": "旧ローカル監査で16 findings。CI対象外のため2026-08-25 baselineには含めず、再計測待ち。",
+      "validation": {
+        "local-repository-bootstrap": "pending",
+        "local-revision-audit": "pending"
+      },
+      "validation_urls": {
+        "local-repository-bootstrap": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json",
+        "local-revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "berkut51": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "findings": 7,
-      "notes": "7 findings"
+      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "solstice": {
       "status": "merged",
@@ -125,26 +190,43 @@
       "notes": "zmk-0.4の全active west projectを40文字commit SHAへ固定。just.sh pristine buildと左右US実機検証後、統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。",
       "validation": {
         "ci": "passed",
-        "hardware": "passed"
+        "hardware": "passed",
+        "revision-audit": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4"
-      }
+        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      },
+      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "base_branch": "zmk-0.4",
+      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
     "kozakura": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "findings": 7,
-      "notes": "7 findings"
+      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     },
     "sparagmos": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "findings": 9,
-      "notes": "9 findings"
+      "notes": "最新Fleet Auditで9 moving-ref findings。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+      }
     }
   },
   "steps": []

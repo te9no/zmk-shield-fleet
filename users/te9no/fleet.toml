@@ -15,6 +15,13 @@ action = "Madula Trackball実機でtrackball入力・split動作・1200 baud boo
 completion = "Madula TBのpointer入力、左右接続、CDC Debug、1200 baud boot、DYA Studioがすべて実機合格する。"
 blocker = "Madula Trackball実機の接続・操作確認待ち。実機合格までmerge不可。"
 pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["hardware", "1200-baud"]
+variant_ids = ["madula-trackball"]
+evidence = [
+  { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/3" },
+  { label = "12/12 CI", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654" },
+]
 
 [[next_actions]]
 id = "saa-zmk-0-4-hardware-validation"
@@ -26,6 +33,12 @@ action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象module�
 completion = "1200 baud boot、DYA Studio UI、両手接続、対象module入力が合格し、専用branchの検証証跡が揃う。"
 blocker = "実機moduleと書き込み時間が必要。stable masterは対象外。"
 repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+change_id = "cormoran-zmk-core-zmk-0.4"
+validation_keys = ["hardware", "1200-baud", "dya-studio", "split-connectivity", "module-input"]
+evidence = [
+  { label = "Dedicated validation branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk" },
+  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475" },
+]
 
 [[next_actions]]
 id = "polaris-right-tb-tpd-cdc-hardware"
@@ -37,6 +50,13 @@ action = "右IQSで合格したCDC Debug/1200 baud構成を、右TB/TPDの各mod
 completion = "右TB/TPDのCDCログ、1200 baud boot、COM復帰、split/module入力がそれぞれ実機合格する。"
 blocker = "右IQSは2026-08-25に実機合格済み。残るTB/TPD moduleの接続・操作確認待ち。"
 pr = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+change_id = "cdc-acm-zephyr-4.1"
+validation_keys = ["flash", "cdc-enumeration", "1200-baud", "cdc-log", "module-input", "split-connectivity"]
+variant_ids = ["right-tb", "right-tpd"]
+evidence = [
+  { label = "Draft PR #7", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7" },
+  { label = "9/9 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186" },
+]
 
 [[next_actions]]
 id = "dongle-display-lvgl9-ci"
@@ -49,6 +69,12 @@ action = "Draft PR #3のLVGL9/ZMK 0.4 CI失敗を調査し、安全な範囲でb
 completion = "PR #3のCIが成功し、実機OLED検証手順とmerge gateが明記される。"
 blocker = "CI修正は今実行可能だが、実機OLED合格までmodule repoへmerge不可。"
 pr = "https://github.com/te9no/zmk-dongle-display/pull/3"
+change_id = "solstice-oled-zmk-0.4-boot"
+validation_keys = ["ci", "hardware"]
+evidence = [
+  { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-dongle-display/pull/3" },
+  { label = "Latest CI", status = "failed", url = "https://github.com/te9no/zmk-dongle-display/actions/runs/32478508598" },
+]
 
 [[next_actions]]
 id = "dya-studio-upstream-pr-168"
@@ -61,6 +87,11 @@ action = "外部PR #168のPeripheral PMW3610対応を確認し、採否はユー
 completion = "upstream側の判断が確定し、Fleetのupstream-pr validationへ結果が記録される。"
 blocker = "外部所有repositoryのopen PR。Fleetから変更・close・mergeせず、ユーザー判断を待つ。"
 pr = "https://github.com/cormoran/dya-studio/pull/168"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["studio-peripheral-preview-hardware"]
+evidence = [
+  { label = "External PR #168", status = "pending", url = "https://github.com/cormoran/dya-studio/pull/168" },
+]
 
 [[next_actions]]
 id = "polaris-joy-speed-hardware"
@@ -71,6 +102,12 @@ repository = "polaris"
 action = "左右JOY firmwareでpointer scale、100 Hz report cadence、60秒継続入力を実機確認する。"
 completion = "方向・速度・滑らかさ・60秒後の継続入力が左右JOYで合格する。"
 blocker = "Polaris JOY moduleの書き込みと操作確認待ち。"
+change_id = "mkb-joystick-pointer-speed"
+validation_keys = ["direction", "pointer-speed", "report-cadence", "60-second-continuity"]
+variant_ids = ["left-joy", "right-joy"]
+evidence = [
+  { label = "Polaris zmk-0.4 branch", status = "info", url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4" },
+]
 
 [[next_actions]]
 id = "polaris-pmw3610-hardware"
@@ -81,6 +118,13 @@ repository = "polaris"
 action = "専用PMW3610検証branchの右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
 completion = "PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
 blocker = "Polaris trackball実機未検証。CI 10/10成功だけではmerge不可。"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
+variant_ids = ["right-tb"]
+evidence = [
+  { label = "Dedicated PMW3610 branch", status = "info", url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc" },
+  { label = "10/10 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625" },
+]
 
 [[next_actions]]
 id = "saa-pmw3610-hardware"
@@ -91,6 +135,13 @@ repository = "saa"
 action = "SAAの通常21-target実機確認後、別PMW3610検証branchの左右TBを検証する。"
 completion = "左右PMW3610入力、split relay、DYA Studio source列挙が実機合格する。"
 blocker = "専用branchの21/21 buildは成功済みだが実機未検証。SAA基本検証を先に完了する。"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "studio-peripheral-preview-hardware"]
+variant_ids = ["left-tb", "right-tb"]
+evidence = [
+  { label = "Dedicated PMW3610 branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc" },
+  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195" },
+]
 
 [[next_actions]]
 id = "cagime-local-only"
@@ -101,6 +152,11 @@ repository = "cagime"
 action = "ローカル専用checkoutの旧ZMK構成を監査し、検証branch化またはnot-applicableを判断する。"
 completion = "対象moduleと検証方針が記録され、必要ならローカル専用branchでbuild evidenceが得られる。"
 blocker = "GitHub remoteと初期commitがなく、CI/PR運用の対象外。"
+change_id = "west-revision-pinning"
+validation_keys = ["local-repository-bootstrap", "local-revision-audit"]
+evidence = [
+  { label = "Revision ledger", status = "info", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
+]
 
 [[next_actions]]
 id = "mlx90393-out-of-scope"
@@ -113,6 +169,9 @@ action = "今回は作業せず、Draft PRも現状のまま維持する。"
 completion = "ユーザーがMLX90393を再度scopeに入れ、必要な実機検証を指定する。"
 blocker = "ユーザー指示により対象外。PR #1には触らない。"
 pr = "https://github.com/te9no/zmk-driver-MLX90393/pull/1"
+evidence = [
+  { label = "Draft PR #1 (out of scope)", status = "waived", url = "https://github.com/te9no/zmk-driver-MLX90393/pull/1" },
+]
 
 [[next_actions]]
 id = "lowest-priority-fleet"
@@ -123,9 +182,17 @@ repository = "mdk / mrm / torabo / berkut51 / kozakura / sparagmos"
 action = "高優先度の実機検証とactive PRを終えた後に、古いZMK基準とCDC/Studio差分を監査する。"
 completion = "各repositoryに対し、専用検証branchへ進むかnot-applicableとするかが記録される。"
 blocker = "最低優先度群。stable main/masterへの反映は次アクションに含めない。"
+change_id = "west-revision-pinning"
+validation_keys = ["revision-audit"]
+evidence = [
+  { label = "Fleet revision audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676" },
+  { label = "Revision ledger", status = "info", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
+]
 
 [[repositories]]
 id = "polaris"
+rollout_enabled = false
+allow_external = false
 github = "te9no/zmk-config-GeaconPolaris"
 checkout = "zmk-config-GeaconPolaris"
 default_branch = "main"
@@ -141,6 +208,8 @@ required_globs = [
 
 [[repositories]]
 id = "mdk"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-config-MDK"
 checkout = "zmk-config-MDK"
@@ -156,6 +225,8 @@ required_globs = [
 
 [[repositories]]
 id = "mkb2"
+rollout_enabled = false
+allow_external = false
 rollout_order = 3
 github = "te9no/zmk-config-MKB2"
 checkout = "zmk-config-MKB2"
@@ -172,6 +243,8 @@ required_globs = [
 
 [[repositories]]
 id = "mrm"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-config-MRM"
 checkout = "zmk-config-MRM"
@@ -187,6 +260,8 @@ required_globs = [
 
 [[repositories]]
 id = "saa"
+rollout_enabled = false
+allow_external = false
 rollout_order = 2
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
@@ -203,6 +278,8 @@ required_globs = [
 
 [[repositories]]
 id = "cornix"
+rollout_enabled = false
+allow_external = false
 rollout_order = 1
 github = "te9no/zmk-keyboard-cornix"
 checkout = "zmk-keyboard-cornix"
@@ -219,6 +296,8 @@ required_globs = [
 
 [[repositories]]
 id = "torabo"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-keyboard-torabo-tsuki-lp"
 checkout = "zmk-keyboard-torabo-tsuki-lp"
@@ -236,6 +315,8 @@ required_globs = [
 # It participates in local audits and campaigns, but not in CI cloning/rollout.
 [[repositories]]
 id = "cagime"
+rollout_enabled = false
+allow_external = false
 checkout = "zmk-config-CaGiMe"
 default_branch = "master"
 architecture = "module-shields"
@@ -250,6 +331,8 @@ required_globs = [
 
 [[repositories]]
 id = "berkut51"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-config-berkut51"
 checkout = "zmk-config-berkut51"
@@ -265,6 +348,8 @@ required_globs = [
 
 [[repositories]]
 id = "solstice"
+rollout_enabled = false
+allow_external = false
 rollout_order = 4
 github = "te9no/zmk-config-GeaconSolstice"
 checkout = "zmk-config-GeaconSolstice"
@@ -281,6 +366,8 @@ required_globs = [
 
 [[repositories]]
 id = "kozakura"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-config-koZakura"
 checkout = "zmk-config-koZakura"
@@ -296,6 +383,8 @@ required_globs = [
 
 [[repositories]]
 id = "sparagmos"
+rollout_enabled = false
+allow_external = false
 rollout_order = 99
 github = "te9no/zmk-config-GeaconSparagmos"
 checkout = "zmk-config-GeaconSparagmos"

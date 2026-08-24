@@ -44,13 +44,52 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
     "polaris": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。"
+      "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。",
+      "variants": [
+        {
+          "id": "left-joy",
+          "status": "pending",
+          "validation": {
+            "direction": "pending",
+            "pointer-speed": "pending",
+            "report-cadence": "pending",
+            "60-second-continuity": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Polaris zmk-0.4 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+            }
+          ]
+        },
+        {
+          "id": "right-joy",
+          "status": "pending",
+          "validation": {
+            "direction": "pending",
+            "pointer-speed": "pending",
+            "report-cadence": "pending",
+            "60-second-continuity": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Polaris zmk-0.4 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+            }
+          ]
+        }
+      ]
     },
     "mdk": {
       "status": "pending",
@@ -76,7 +115,9 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cagime": {
       "status": "pending",
@@ -102,7 +143,10 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
         "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/5"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "4e833733539999423974a83d6a9695e1590490b5"
     },
     "sparagmos": {
       "status": "pending",

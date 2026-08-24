@@ -29,7 +29,10 @@
       "validation": {
         "ci": "passed",
         "hardware": "passed"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "zmk-0.4",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     }
   },
   "steps": []

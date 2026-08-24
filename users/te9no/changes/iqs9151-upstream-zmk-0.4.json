@@ -43,7 +43,9 @@
         "init": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "split-connectivity": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
-      }
+      },
+      "branch": "zmk-0.4",
+      "base_branch": "main"
     },
     "saa": {
       "status": "applied",
@@ -57,13 +59,26 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-      }
+      },
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master"
     },
     "cornix": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "PR #1がmainへmerge済み。Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映。"
+      "notes": "PR #1がmainへmerge済み。Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映。buildは合格済みだが、Madula IQSのmodule固有入力は台帳上の実機証跡がないためpending。",
+      "branch": "codex/promote-madula-zmk-0.4-to-main",
+      "base_branch": "main",
+      "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+      }
     },
     "cagime": {
       "status": "pending",

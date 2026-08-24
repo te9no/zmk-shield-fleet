@@ -49,7 +49,10 @@
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
         "peripheral-battery": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
         "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4"
-      }
+      },
+      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "base_branch": "zmk-0.4",
+      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     }
   },
   "steps": []
