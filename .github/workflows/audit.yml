@@ -34,8 +34,8 @@ jobs:
       - name: Run unit tests
         run: python -m unittest discover -s tests -v
 
-      - name: Exercise dashboard completion logic in Node
-        run: node --test tests/test_dashboard_completion.mjs
+      - name: Exercise dashboard model and completion logic in Node
+        run: node --test site/model.test.mjs tests/test_dashboard_completion.mjs
 
       - name: Validate driver-change ledger
         shell: bash
