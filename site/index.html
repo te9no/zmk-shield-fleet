@@ -17,30 +17,33 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#next-actions">Skip to next actions / 次にやることへ</a>
     <header class="topbar">
       <a class="brand" href="#top" aria-label="ZMK Shield Fleet home">
-        <span class="brand-mark">ZF</span>
-        <span>ZMK Shield Fleet</span>
+        <span class="brand-mark" aria-hidden="true">ZF</span>
+        <span id="brand-name">ZMK Shield Fleet</span>
       </a>
-      <div class="topbar-actions">
-        <label class="profile-control">
+      <nav class="topbar-actions" aria-label="Dashboard links">
+        <label class="profile-control" id="profile-control">
           <span>Profile</span>
           <select id="profile-select" aria-label="Fleet profile"></select>
         </label>
-        <a class="github-link" href="https://github.com/te9no/zmk-shield-fleet">GitHub ↗</a>
-      </div>
+        <a class="docs-link" href="#create-your-fleet">Create yours</a>
+        <a class="github-link" id="project-link" href="https://github.com/te9no/zmk-shield-fleet">GitHub ↗</a>
+      </nav>
     </header>
 
     <main id="top">
-      <section class="hero">
+      <section class="hero" aria-labelledby="hero-title">
         <div class="hero-heading">
           <div>
             <p class="eyebrow">FLEET OVERVIEW</p>
-            <h1>Know what<br><span>ships next.</span></h1>
+            <h1 id="hero-title">Know what<br><span>ships next.</span></h1>
           </div>
           <p class="hero-copy">Turn shared ZMK changes into a clear queue of reviews, validation, and rollout work.</p>
         </div>
         <div class="stats" id="stats" aria-live="polite"></div>
+        <p class="stats-note">“Incomplete ledger cells” counts repository × change records that are not fully accepted. Use the curated queue below for concrete work.</p>
       </section>
 
       <section class="section action-section" id="next-actions" aria-labelledby="actions-heading">
@@ -54,17 +57,18 @@
             <div class="action-filters" role="group" aria-label="Next action status filter">
               <button class="action-filter active" data-action-filter="all" aria-pressed="true">All / すべて</button>
               <button class="action-filter" data-action-filter="active" aria-pressed="false">Now / 今進める</button>
-              <button class="action-filter" data-action-filter="waiting" aria-pressed="false">Waiting / 実機・外部待ち</button>
-              <button class="action-filter" data-action-filter="later" aria-pressed="false">Later / 後回し・対象外</button>
+              <button class="action-filter" data-action-filter="waiting" aria-pressed="false">Waiting / 待ち</button>
+              <button class="action-filter" data-action-filter="later" aria-pressed="false">Later / 後回し</button>
             </div>
           </div>
         </div>
+        <div class="start-here" id="start-here"></div>
         <div class="action-legend" aria-label="Next action status legend">
           <span class="action-state active">今進める</span>
           <span class="action-state waiting">実機/外部待ち</span>
           <span class="action-state later">後回し/対象外</span>
         </div>
-        <div class="action-grid" id="action-grid" aria-live="polite"></div>
+        <div class="action-grid" id="action-grid"></div>
       </section>
 
       <section class="section" aria-labelledby="changes-heading">
@@ -74,9 +78,9 @@
             <h2 id="changes-heading">Rollout campaigns</h2>
           </div>
           <div class="filters" role="group" aria-label="Change filters">
-            <button class="filter active" data-filter="all">All changes</button>
-            <button class="filter" data-filter="pending">Needs action</button>
-            <button class="filter" data-filter="complete">Complete</button>
+            <button class="filter active" data-filter="all" aria-pressed="true">All changes</button>
+            <button class="filter" data-filter="pending" aria-pressed="false">Needs action</button>
+            <button class="filter" data-filter="complete" aria-pressed="false">Complete</button>
           </div>
         </div>
         <div class="change-grid" id="change-grid"></div>
@@ -87,12 +91,13 @@
           <div>
             <p class="eyebrow">FLEET MATRIX</p>
             <h2 id="matrix-heading">Repository coverage</h2>
+            <p class="matrix-intro">Every validation name and evidence URL remains individually reachable. Open “Evidence &amp; notes” for branch and stable-rollout context.</p>
           </div>
           <div class="matrix-controls">
             <div class="matrix-filters" role="group" aria-label="Repository view">
-              <button class="matrix-filter active" data-matrix-filter="all">All</button>
-              <button class="matrix-filter" data-matrix-filter="pending">Active queue</button>
-              <button class="matrix-filter" data-matrix-filter="pr-open">Open PRs</button>
+              <button class="matrix-filter active" data-matrix-filter="all" aria-pressed="true">All</button>
+              <button class="matrix-filter" data-matrix-filter="pending" aria-pressed="false">Active queue</button>
+              <button class="matrix-filter" data-matrix-filter="pr-open" aria-pressed="false">Open PRs</button>
             </div>
             <label class="search-control">
               <span>Filter repositories</span>
@@ -113,6 +118,7 @@
             <tbody></tbody>
           </table>
         </div>
+        <div class="matrix-cards" id="matrix-cards"></div>
       </section>
 
       <section class="section revision-section" aria-labelledby="revision-heading">
@@ -123,13 +129,29 @@
         </div>
         <div id="revision-list" class="revision-list"></div>
       </section>
+
+      <section class="section create-section" id="create-your-fleet" aria-labelledby="create-heading">
+        <div>
+          <p class="eyebrow">PUBLIC &amp; REUSABLE</p>
+          <h2 id="create-heading">Create your fleet <span>/ 自分の台帳を作る</span></h2>
+          <p>Fork the project, copy the example profile, validate it, and let GitHub Pages publish the generated dashboard.</p>
+        </div>
+        <ol class="create-steps">
+          <li><strong>Copy a profile</strong><span>Start from <a id="profile-example-link" href="https://github.com/te9no/zmk-shield-fleet/blob/main/examples/fleet.toml">examples/fleet.toml ↗</a>.</span></li>
+          <li><strong>Add change ledgers</strong><span>Record scope, status, validation, evidence, and explicit next actions.</span></li>
+          <li><strong>Validate and publish</strong><span>Run ledger checks and dashboard generation before enabling Pages.</span></li>
+        </ol>
+        <p class="privacy-note"><strong>Public data notice:</strong> every committed <code>users/*/fleet.toml</code> profile and enabled change ledger is included in the public Pages payload. Never commit credentials, private URLs, or local paths.</p>
+        <a class="primary-link" id="setup-guide-link" href="https://github.com/te9no/zmk-shield-fleet#readme">Open the setup guide ↗</a>
+      </section>
     </main>
 
     <footer>
-      <span>Generated from version-controlled fleet profiles.</span>
+      <span>Generated from schema-validated, version-controlled fleet profiles.</span>
       <span id="footer-profile"></span>
+      <span id="footer-source"></span>
     </footer>
 
-    <script src="app.js" defer></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>

@@ -14,6 +14,12 @@ action = "Flash the validation firmware and exercise the shared trackball change
 completion = "Pointer input and the bootloader recovery path pass on hardware."
 blocker = ""
 pr = "https://github.com/example/zmk-config-keyboard-a/pull/12"
+change_id = "example-driver-update"
+validation_keys = ["ci", "hardware"]
+variant_ids = ["keyboard-a-left", "keyboard-a-right"]
+evidence = [
+  { label = "Hardware checklist", status = "passed", url = "https://github.com/example/zmk-config-keyboard-a/blob/validation/docs/hardware.md" },
+]
 
 [[next_actions]]
 id = "wait-for-keyboard-b"
@@ -24,6 +30,8 @@ repository = "keyboard-b"
 action = "Run the same validation when the second keyboard is available."
 completion = "The hardware result is recorded in the change ledger."
 blocker = "The keyboard is currently with an external tester."
+change_id = "example-driver-update"
+validation_keys = ["hardware"]
 
 [[repositories]]
 id = "keyboard-a"
@@ -33,6 +41,7 @@ architecture = "module-snippets"
 modules = ["trackball", "encoder"]
 tags = ["modular-input", "split"]
 ci = false
+rollout_enabled = true
 required_globs = ["config/west.yml", "build.yaml"]
 
 [[repositories]]
@@ -43,4 +52,5 @@ architecture = "module-shields"
 modules = ["trackball", "encoder"]
 tags = ["modular-input", "split"]
 ci = false
+rollout_enabled = false
 required_globs = ["config/west.yml", "build.yaml"]
