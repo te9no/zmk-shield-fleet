@@ -28,7 +28,6 @@
     "saa",
     "cornix",
     "torabo",
-    "cagime",
     "berkut51",
     "solstice",
     "kozakura",
@@ -233,12 +232,6 @@
       "pr": null,
       "commit": null,
       "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "後続・ローカル専用。checkout不在のためPMW3610実装系統を再取得後に監査"
     },
     "berkut51": {
       "status": "pending",

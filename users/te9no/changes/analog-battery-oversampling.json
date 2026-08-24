@@ -26,7 +26,6 @@
     "mkb2",
     "mrm",
     "saa",
-    "cagime",
     "berkut51",
     "solstice",
     "sparagmos"
@@ -92,12 +91,6 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "moving mainを使用中。59fc126へのpinと実機確認が必要。ローカル専用"
     },
     "berkut51": {
       "status": "pending",

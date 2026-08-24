@@ -28,7 +28,6 @@
     "saa",
     "cornix",
     "torabo",
-    "cagime",
     "berkut51",
     "solstice",
     "kozakura",
@@ -191,12 +190,6 @@
       "pr": null,
       "commit": null,
       "notes": "旧v0.2とZMK 0.3を使用中"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "module定義はコメントアウト。ローカル専用"
     },
     "berkut51": {
       "status": "pending",

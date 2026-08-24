@@ -28,7 +28,6 @@
     "saa",
     "cornix",
     "torabo",
-    "cagime",
     "berkut51",
     "solstice",
     "kozakura",
@@ -116,12 +115,6 @@
       "pr": null,
       "commit": null,
       "notes": "ZMK v0.3-branch+dyaと旧Studio stack"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "ZMK v0.3-branch+dyaとmoving mainの旧Studio stack。ローカル専用"
     },
     "berkut51": {
       "status": "pending",

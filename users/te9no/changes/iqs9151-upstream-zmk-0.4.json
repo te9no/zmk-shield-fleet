@@ -23,8 +23,7 @@
   "repositories": [
     "polaris",
     "saa",
-    "cornix",
-    "cagime"
+    "cornix"
   ],
   "tracking": {
     "polaris": {
@@ -79,12 +78,6 @@
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
         "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
       }
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "IQS forkとZMK v0.3-branch+dyaを使用中。ローカル専用"
     }
   },
   "steps": []

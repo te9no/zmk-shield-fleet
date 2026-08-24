@@ -26,7 +26,6 @@
     "mkb2",
     "mrm",
     "saa",
-    "cagime",
     "berkut51",
     "solstice",
     "sparagmos"
@@ -118,12 +117,6 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master"
-    },
-    "cagime": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "joystick対象。ローカル専用として監査する。"
     },
     "berkut51": {
       "status": "pending",
