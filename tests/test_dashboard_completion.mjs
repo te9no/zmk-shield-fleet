@@ -1,30 +1,34 @@
 import assert from "node:assert/strict";
-import fs from "node:fs";
 import test from "node:test";
-import vm from "node:vm";
 
-const source = fs.readFileSync(new URL("../site/app.js", import.meta.url), "utf8");
-const start = source.indexOf("const terminalStatuses");
-const end = source.indexOf("function shortChangeLabel");
-assert.notEqual(start, -1, "terminal status declaration must remain discoverable");
-assert.notEqual(end, -1, "completion logic boundary must remain discoverable");
+import { targetComplete, targetNeedsAction } from "../site/model.js";
 
-const context = {};
-vm.runInNewContext(
-  `${source.slice(start, end)}\nthis.targetComplete = targetComplete; this.targetNeedsAction = targetNeedsAction;`,
-  context,
-);
+const completionCases = [
+  ["applied with passed validation", { status: "applied", validation: { ci: "passed" } }, true],
+  ["merged with waived validation", { status: "merged", validation: { hardware: "waived" } }, true],
+  ["applied with pending validation", { status: "applied", validation: { hardware: "pending" } }, false],
+  ["merged with failed validation", { status: "merged", validation: { ci: "failed" } }, false],
+  ["non-terminal with passed validation", { status: "pending", validation: { ci: "passed" } }, false],
+  ["not-applicable without validation", { status: "not-applicable", validation: {} }, true],
+  ["missing target", null, false],
+];
 
-test("actual dashboard completion logic gates terminal targets on validation", () => {
-  assert.equal(context.targetComplete({ status: "applied", validation: { ci: "passed" } }), true);
-  assert.equal(context.targetComplete({ status: "applied", validation: { hardware: "pending" } }), false);
-  assert.equal(context.targetComplete({ status: "merged", validation: { ci: "failed" } }), false);
-  assert.equal(context.targetComplete({ status: "pending", validation: { ci: "passed" } }), false);
-});
+for (const [name, target, expected] of completionCases) {
+  test(`targetComplete: ${name}`, () => {
+    assert.equal(targetComplete(target), expected);
+  });
+}
 
-test("not-applicable targets never appear as actionable", () => {
-  const target = { status: "not-applicable", validation: {} };
-  assert.equal(context.targetComplete(target), true);
-  assert.equal(context.targetNeedsAction(target), false);
-});
+const actionCases = [
+  ["pending target", { status: "pending", validation: {} }, true],
+  ["terminal target with pending gate", { status: "applied", validation: { hardware: "pending" } }, true],
+  ["completed target", { status: "applied", validation: { hardware: "passed" } }, false],
+  ["not-applicable target", { status: "not-applicable", validation: {} }, false],
+  ["missing target", null, false],
+];
 
+for (const [name, target, expected] of actionCases) {
+  test(`targetNeedsAction: ${name}`, () => {
+    assert.equal(targetNeedsAction(target), expected);
+  });
+}
