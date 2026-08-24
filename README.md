@@ -193,6 +193,12 @@ GitHub Actions supplies the repository and commit automatically. A profile's
 locale is inferred from its curated action text unless the typed manifest model
 provides one explicitly.
 
+`site/data.json` is a generated Pages/local-preview artifact. It is intentionally
+untracked and listed in `.gitignore`, so its `generated_at` timestamp never
+creates a source-tree diff or an automated commit. The Pages workflow generates
+it after checkout and uploads the complete `site/` directory as its deployment
+artifact.
+
 Preview it locally after regenerating the data:
 
 ```sh
@@ -201,6 +207,8 @@ python3 -m http.server 8000 --directory site
 ```
 
 Then open <http://127.0.0.1:8000/#next-actions>.
+Regenerating the payload updates the ignored `site/data.json` file only; remove
+it when finished if you do not want to retain the local preview artifact.
 
 Dashboard model helpers also have dependency-free Node tests:
 
