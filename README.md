@@ -47,6 +47,25 @@ Personal inventories belong in `users/<name>/`; the CLI and schema remain
 generic. See [`users/README.md`](users/README.md) and
 [`examples/change.json.disabled`](examples/change.json.disabled).
 
+Profiles may also declare a curated, ordered work queue. This metadata is
+optional and stays in the profile rather than dashboard JavaScript:
+
+```toml
+[[next_actions]]
+id = "verify-keyboard-a"
+state = "active"       # active, waiting, or later
+priority = "high"      # high, medium, or low
+order = 1
+repository = "keyboard-a"
+action = "Flash the validation firmware and test pointer input."
+completion = "Pointer input and bootloader recovery pass on hardware."
+blocker = ""
+pr = "https://github.com/example/zmk-config-keyboard-a/pull/12"
+```
+
+`repository` may name an inventory ID or an adjacent module repository. For an
+adjacent repository, set `repository_url` so its card has a useful link.
+
 ## Typical workflow
 
 ```sh
@@ -117,5 +136,16 @@ The legacy `campaign` command remains as a compatibility alias for `change`.
 The repository includes a reusable static dashboard in `site/`. GitHub Pages
 builds its data from every committed `users/*/fleet.toml` profile and change
 ledger, so status updates appear without hand-editing HTML. The dashboard shows
-fleet totals, propagation progress, the repository/change matrix, and revision
-pinning findings.
+fleet totals, profile-defined next actions, propagation progress, the
+repository/change matrix, and revision pinning findings. Next-action cards can
+be filtered by actionable work, hardware/external waits, and deferred or
+out-of-scope work.
+
+Preview it locally after regenerating the data:
+
+```sh
+python3 scripts/build_dashboard.py
+python3 -m http.server 8000 --directory site
+```
+
+Then open <http://127.0.0.1:8000/#next-actions>.

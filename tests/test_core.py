@@ -7,6 +7,7 @@ import textwrap
 import unittest
 from pathlib import Path
 
+from scripts.build_dashboard import build_profile
 from zmk_shield_fleet.core import (
     FleetError,
     apply_campaign,
@@ -154,6 +155,71 @@ class ManifestTests(unittest.TestCase):
             duplicate = text.replace('id = "two"', 'id = "one"')
             fixture.manifest_path.write_text(duplicate, encoding="utf-8")
             with self.assertRaisesRegex(FleetError, "duplicate repository id"):
+                load_manifest(fixture.manifest_path)
+
+    def test_next_actions_are_validated_and_sorted(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            with fixture.manifest_path.open("a", encoding="utf-8") as manifest_file:
+                manifest_file.write(
+                    textwrap.dedent(
+                        """
+
+                        [[next_actions]]
+                        id = "hardware-wait"
+                        state = "waiting"
+                        priority = "high"
+                        order = 2
+                        repository = "one"
+                        action = "Validate hardware"
+                        completion = "Hardware passes"
+                        blocker = "Waiting for hardware"
+                        pr = "https://github.com/example/one/pull/1"
+
+                        [[next_actions]]
+                        id = "fix-ci"
+                        state = "active"
+                        priority = "medium"
+                        order = 1
+                        repository = "external-module"
+                        repository_url = "https://github.com/example/external-module"
+                        action = "Repair CI"
+                        completion = "CI passes"
+                        blocker = ""
+                        """
+                    )
+                )
+            manifest = load_manifest(fixture.manifest_path)
+            self.assertEqual(["fix-ci", "hardware-wait"], [item.id for item in manifest.next_actions])
+            self.assertEqual("external-module", manifest.next_actions[0].repository)
+            self.assertEqual("https://github.com/example/one/pull/1", manifest.next_actions[1].pr)
+            dashboard_profile = build_profile(fixture.manifest_path)
+            self.assertEqual("fix-ci", dashboard_profile["next_actions"][0]["id"])
+            self.assertEqual("waiting", dashboard_profile["next_actions"][1]["state"])
+
+    def test_invalid_next_action_state_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            with fixture.manifest_path.open("a", encoding="utf-8") as manifest_file:
+                manifest_file.write(
+                    textwrap.dedent(
+                        """
+
+                        [[next_actions]]
+                        id = "bad-state"
+                        state = "soon"
+                        priority = "high"
+                        order = 1
+                        repository = "one"
+                        action = "Do work"
+                        completion = "Done"
+                        blocker = ""
+                        """
+                    )
+                )
+            with self.assertRaisesRegex(FleetError, "state must be one of"):
                 load_manifest(fixture.manifest_path)
 
 

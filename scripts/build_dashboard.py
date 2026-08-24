@@ -2,30 +2,48 @@
 from __future__ import annotations
 
 import json
-import tomllib
+import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "site" / "data.json"
+sys.path.insert(0, str(ROOT / "src"))
+
+from zmk_shield_fleet.core import load_manifest  # noqa: E402
 
 
 def build_profile(manifest_path: Path) -> dict:
-    manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
-    repository_rows = manifest.get("repositories", [])
+    manifest = load_manifest(manifest_path)
     repositories = []
-    for row in repository_rows:
+    for row in manifest.repositories.values():
         repositories.append(
             {
-                "id": row["id"],
-                "github": row.get("github"),
-                "architecture": row["architecture"],
-                "rollout_order": row.get("rollout_order"),
-                "modules": row.get("modules", []),
-                "tags": row.get("tags", []),
-                "ci": row.get("ci", True),
+                "id": row.id,
+                "github": row.github,
+                "architecture": row.architecture,
+                "rollout_order": row.rollout_order,
+                "modules": list(row.modules),
+                "tags": list(row.tags),
+                "ci": row.ci,
             }
         )
+
+    next_actions = [
+        {
+            "id": action.id,
+            "state": action.state,
+            "priority": action.priority,
+            "order": action.order,
+            "repository": action.repository,
+            "action": action.action,
+            "completion": action.completion,
+            "blocker": action.blocker,
+            "pr": action.pr,
+            "repository_url": action.repository_url,
+        }
+        for action in manifest.next_actions
+    ]
 
     changes = []
     for path in sorted((manifest_path.parent / "changes").glob("*.json")):
@@ -35,6 +53,7 @@ def build_profile(manifest_path: Path) -> dict:
         changes.append(
             {
                 "id": raw["id"],
+                "dashboard_label": raw.get("dashboard_label"),
                 "title": raw["title"],
                 "description": raw.get("description", ""),
                 "source": raw.get("source", {}),
@@ -48,8 +67,9 @@ def build_profile(manifest_path: Path) -> dict:
 
     return {
         "id": manifest_path.parent.name,
-        "owner": manifest["fleet"]["owner"],
+        "owner": manifest.owner,
         "repositories": repositories,
+        "next_actions": next_actions,
         "changes": changes,
     }
 

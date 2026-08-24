@@ -18,6 +18,8 @@ from typing import Any, Mapping, Sequence
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 GITHUB_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 MAX_TEXT_FILE_SIZE = 2 * 1024 * 1024
+NEXT_ACTION_STATES = frozenset({"active", "waiting", "later"})
+NEXT_ACTION_PRIORITIES = frozenset({"high", "medium", "low"})
 
 
 class FleetError(RuntimeError):
@@ -62,12 +64,27 @@ class MirrorSpec:
 
 
 @dataclass(frozen=True)
+class NextActionSpec:
+    id: str
+    state: str
+    priority: str
+    order: int
+    repository: str
+    action: str
+    completion: str
+    blocker: str
+    pr: str | None = None
+    repository_url: str | None = None
+
+
+@dataclass(frozen=True)
 class Manifest:
     path: Path
     owner: str
     default_workspace: Path
     repositories: Mapping[str, RepositorySpec]
     mirrors: tuple[MirrorSpec, ...]
+    next_actions: tuple[NextActionSpec, ...]
 
 
 @dataclass(frozen=True)
@@ -217,6 +234,13 @@ def _optional_string(value: Any, context: str) -> str | None:
     return _require_string(value, context)
 
 
+def _optional_http_url(value: Any, context: str) -> str | None:
+    url = _optional_string(value, context)
+    if url is not None and not re.fullmatch(r"https?://[^\s]+", url):
+        raise FleetError(f"{context} must be an http(s) URL")
+    return url
+
+
 def _string_tuple(value: Any, context: str, *, nonempty: bool = False) -> tuple[str, ...]:
     if not isinstance(value, list) or not all(isinstance(item, str) and item for item in value):
         raise FleetError(f"{context} must be an array of non-empty strings")
@@ -313,6 +337,56 @@ def load_manifest(path: str | Path) -> Manifest:
             ci=ci,
         )
 
+    next_actions: list[NextActionSpec] = []
+    seen_next_actions: set[str] = set()
+    for index, item in enumerate(raw.get("next_actions", [])):
+        table = _require_mapping(item, f"next_actions[{index}]")
+        action_id = _validate_id(
+            _require_string(table.get("id"), f"next_actions[{index}].id"),
+            f"next_actions[{index}]",
+        )
+        if action_id in seen_next_actions:
+            raise FleetError(f"duplicate next action id: {action_id}")
+        seen_next_actions.add(action_id)
+        state = _require_string(table.get("state"), f"next_actions[{index}].state")
+        if state not in NEXT_ACTION_STATES:
+            allowed = ", ".join(sorted(NEXT_ACTION_STATES))
+            raise FleetError(f"next_actions[{index}].state must be one of: {allowed}")
+        priority = _require_string(
+            table.get("priority"), f"next_actions[{index}].priority"
+        )
+        if priority not in NEXT_ACTION_PRIORITIES:
+            allowed = ", ".join(sorted(NEXT_ACTION_PRIORITIES))
+            raise FleetError(f"next_actions[{index}].priority must be one of: {allowed}")
+        order = table.get("order")
+        if not isinstance(order, int) or isinstance(order, bool) or order < 1:
+            raise FleetError(f"next_actions[{index}].order must be a positive integer")
+        next_actions.append(
+            NextActionSpec(
+                id=action_id,
+                state=state,
+                priority=priority,
+                order=order,
+                repository=_require_string(
+                    table.get("repository"), f"next_actions[{index}].repository"
+                ),
+                action=_require_string(table.get("action"), f"next_actions[{index}].action"),
+                completion=_require_string(
+                    table.get("completion"), f"next_actions[{index}].completion"
+                ),
+                blocker=_require_string(
+                    table.get("blocker", ""),
+                    f"next_actions[{index}].blocker",
+                    allow_empty=True,
+                ),
+                pr=_optional_http_url(table.get("pr"), f"next_actions[{index}].pr"),
+                repository_url=_optional_http_url(
+                    table.get("repository_url"),
+                    f"next_actions[{index}].repository_url",
+                ),
+            )
+        )
+
     mirrors: list[MirrorSpec] = []
     seen_mirrors: set[str] = set()
     for index, item in enumerate(raw.get("mirrors", [])):
@@ -371,6 +445,7 @@ def load_manifest(path: str | Path) -> Manifest:
         default_workspace=default_workspace,
         repositories=repositories,
         mirrors=tuple(mirrors),
+        next_actions=tuple(sorted(next_actions, key=lambda action: (action.order, action.id))),
     )
 
 

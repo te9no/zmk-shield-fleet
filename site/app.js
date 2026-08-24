@@ -1,19 +1,9 @@
-const state = { data: null, profile: null, filter: "all", matrixFilter: "all", search: "" };
+const state = { data: null, profile: null, actionFilter: "all", filter: "all", matrixFilter: "all", search: "" };
 const terminalStatuses = new Set(["applied", "merged", "not-applicable"]);
-const changeLabels = {
-  "analog-battery-oversampling": "Analog battery",
-  "build-health-badge-no-commits": "Build badges",
-  "cdc-acm-zephyr-4.1": "CDC Debug",
-  "cormoran-zmk-core-zmk-0.4": "cormoran ZMK core",
-  "dya-studio-v2-zmk-0.4": "Studio V2",
-  "iqs9151-upstream-zmk-0.4": "IQS9151",
-  "mkb-joystick-pointer-speed": "Joystick motion",
-  "mkb-peripheral-oled-role-identity": "MKB OLED",
-  "mkb-trackball-axis-rotation": "MKB TB axis",
-  "pmw3610-cormoran-custom-studio-rpc": "PMW3610 RPC",
-  "solstice-oled-zmk-0.4-boot": "Solstice OLED",
-  "studio-rpc-usb-cdc-endpoint-budget": "USB CDC budget",
-  "west-revision-pinning": "Revision pins",
+const actionStates = {
+  active: { label: "今進める", detail: "Actionable now" },
+  waiting: { label: "実機/外部待ち", detail: "Waiting" },
+  later: { label: "後回し/対象外", detail: "Later / out of scope" },
 };
 
 const escapeHtml = (value) => String(value ?? "")
@@ -31,7 +21,7 @@ function targetNeedsAction(target) {
 }
 
 function shortChangeLabel(change) {
-  return changeLabels[change.id] ?? change.title;
+  return change.dashboard_label ?? change.id.replaceAll("-", " ");
 }
 
 function counts(change) {
@@ -60,44 +50,42 @@ function renderStats(profile) {
 }
 
 function renderActions(profile) {
-  const queue = profile.repositories.map((repo) => {
-    const items = profile.changes.flatMap((change) => {
-      const target = change.tracking[repo.id];
-      return targetNeedsAction(target) ? [{ change, target }] : [];
-    });
-    return {
-      repo,
-      items,
-      openPrs: items.filter(({ target }) => target.status === "pr-open").length,
-      validations: items.filter(({ target }) => Object.values(target.validation ?? {}).includes("pending")).length,
-    };
-  }).filter(({ repo, items }) => items.length && (repo.rollout_order ?? 50) < 99)
-    .sort((a, b) => (a.repo.rollout_order ?? 50) - (b.repo.rollout_order ?? 50) || b.openPrs - a.openPrs || a.repo.id.localeCompare(b.repo.id));
-
+  const allActions = [...(profile.next_actions ?? [])]
+    .sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+  const visible = allActions.filter((action) => state.actionFilter === "all" || action.state === state.actionFilter);
+  const totals = Object.fromEntries(Object.keys(actionStates)
+    .map((key) => [key, allActions.filter((action) => action.state === key).length]));
   const grid = document.querySelector("#action-grid");
-  const visible = queue.slice(0, 6);
-  const lowPriority = profile.repositories.filter((repo) => (repo.rollout_order ?? 0) >= 99).length;
-  document.querySelector("#action-summary").textContent = `${queue.length} active repositories · ${lowPriority} lowest-priority deferred`;
+  document.querySelector("#action-summary").textContent = allActions.length
+    ? `${totals.active} actionable now · ${totals.waiting} waiting · ${totals.later} later`
+    : "No explicit next actions in this profile";
 
   if (!visible.length) {
-    grid.innerHTML = '<div class="empty">No active rollout work. The fleet is accounted for.</div>';
+    grid.innerHTML = '<div class="empty">No next actions match this filter.</div>';
     return;
   }
 
-  grid.innerHTML = visible.map(({ repo, items, openPrs, validations }) => {
-    const rank = repo.rollout_order ? `#${repo.rollout_order}` : "queued";
-    const itemLinks = items.slice(0, 3).map(({ change, target }) => {
-      const reason = target.status === "pr-open" ? "review" : Object.values(target.validation ?? {}).includes("pending") ? "validate" : "apply";
-      const text = `<span>${escapeHtml(shortChangeLabel(change))}</span><small>${reason}</small>`;
-      return target.pr
-        ? `<a href="${escapeHtml(target.pr)}" target="_blank" rel="noopener">${text}</a>`
-        : `<span>${text}</span>`;
-    }).join("");
-    return `<article class="action-card">
-      <div class="action-card-head"><span class="priority-badge">${escapeHtml(rank)}</span><span>${items.length} item${items.length === 1 ? "" : "s"}</span></div>
-      <h3><a href="#repo-${escapeHtml(repo.id)}">${escapeHtml(repo.id)}</a></h3>
-      <p>${openPrs ? `${openPrs} open PR${openPrs === 1 ? "" : "s"}` : "No open PR"}${validations ? ` · ${validations} validation pending` : ""}</p>
-      <div class="action-list">${itemLinks}</div>
+  grid.innerHTML = visible.map((action) => {
+    const knownRepository = profile.repositories.some((repo) => repo.id === action.repository);
+    const repositoryHref = knownRepository ? `#repo-${encodeURIComponent(action.repository)}` : action.repository_url;
+    const repository = repositoryHref
+      ? `<a href="${escapeHtml(repositoryHref)}"${knownRepository ? "" : ' target="_blank" rel="noopener"'}>${escapeHtml(action.repository)}</a>`
+      : escapeHtml(action.repository);
+    const stateMeta = actionStates[action.state];
+    const blocker = action.blocker || "No blocker — ready to proceed.";
+    return `<article class="action-card ${escapeHtml(action.state)}" id="action-${escapeHtml(action.id)}" aria-labelledby="action-title-${escapeHtml(action.id)}">
+      <div class="action-card-head">
+        <span class="action-state ${escapeHtml(action.state)}">${escapeHtml(stateMeta.label)}</span>
+        <a class="action-anchor" href="#action-${escapeHtml(action.id)}" aria-label="Link to ${escapeHtml(action.repository)} next action">#</a>
+      </div>
+      <div class="action-order"><span class="priority-badge ${escapeHtml(action.priority)}">${escapeHtml(action.priority)} priority</span><span>Order #${escapeHtml(action.order)}</span></div>
+      <h3 id="action-title-${escapeHtml(action.id)}">${repository}</h3>
+      <p class="action-task">${escapeHtml(action.action)}</p>
+      <dl class="action-details">
+        <div><dt>Done when / 完了条件</dt><dd>${escapeHtml(action.completion)}</dd></div>
+        <div class="blocker"><dt>Blocker / 保留理由</dt><dd>${escapeHtml(blocker)}</dd></div>
+      </dl>
+      <div class="action-footer"><span>${escapeHtml(stateMeta.detail)}</span>${action.pr ? `<a href="${escapeHtml(action.pr)}" target="_blank" rel="noopener">Related PR ↗</a>` : ""}</div>
     </article>`;
   }).join("");
 }
@@ -217,12 +205,27 @@ async function init() {
     select.innerHTML = state.data.profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.id)}</option>`).join("");
     select.addEventListener("change", (event) => {
       state.profile = event.target.value;
+      state.actionFilter = "all";
       state.search = "";
       state.matrixFilter = "all";
       document.querySelector("#repo-search").value = "";
       document.querySelectorAll(".matrix-filter").forEach((item) => item.classList.toggle("active", item.dataset.matrixFilter === "all"));
+      document.querySelectorAll(".action-filter").forEach((item) => {
+        const active = item.dataset.actionFilter === "all";
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
       render();
     });
+    document.querySelectorAll(".action-filter").forEach((button) => button.addEventListener("click", () => {
+      state.actionFilter = button.dataset.actionFilter;
+      document.querySelectorAll(".action-filter").forEach((item) => {
+        const active = item === button;
+        item.classList.toggle("active", active);
+        item.setAttribute("aria-pressed", String(active));
+      });
+      renderActions(currentProfile());
+    }));
     document.querySelectorAll(".filter").forEach((button) => button.addEventListener("click", () => {
       state.filter = button.dataset.filter;
       document.querySelectorAll(".filter").forEach((item) => item.classList.toggle("active", item === button));

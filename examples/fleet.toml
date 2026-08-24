@@ -4,6 +4,27 @@ schema = 1
 owner = "example"
 workspace = "../../../my-zmk-workspace"
 
+[[next_actions]]
+id = "verify-keyboard-a"
+state = "active"
+priority = "high"
+order = 1
+repository = "keyboard-a"
+action = "Flash the validation firmware and exercise the shared trackball change."
+completion = "Pointer input and the bootloader recovery path pass on hardware."
+blocker = ""
+pr = "https://github.com/example/zmk-config-keyboard-a/pull/12"
+
+[[next_actions]]
+id = "wait-for-keyboard-b"
+state = "waiting"
+priority = "medium"
+order = 2
+repository = "keyboard-b"
+action = "Run the same validation when the second keyboard is available."
+completion = "The hardware result is recorded in the change ledger."
+blocker = "The keyboard is currently with an external tester."
+
 [[repositories]]
 id = "keyboard-a"
 checkout = "zmk-config-keyboard-a"

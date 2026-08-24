@@ -5,6 +5,73 @@ owner = "te9no"
 # This repository normally lives beside the managed checkouts under config/.
 workspace = "../../.."
 
+[[next_actions]]
+id = "cornix-madula-tb-hardware"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "Madula Trackball実機でtrackball入力とsplit動作を最終確認する。"
+completion = "Madula TBのpointer入力、左右接続、CDC Debug、DYA Studioがすべて実機合格する。"
+blocker = "Madula Trackball実機の接続・操作確認待ち。実機合格までmerge不可。"
+pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+
+[[next_actions]]
+id = "saa-zmk-0-4-hardware-validation"
+state = "active"
+priority = "high"
+order = 2
+repository = "saa"
+action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象moduleを書き込み、左右実機を検証する。"
+completion = "1200 baud boot、DYA Studio UI、両手接続、対象module入力が合格し、専用branchの検証証跡が揃う。"
+blocker = "実機moduleと書き込み時間が必要。stable masterは対象外。"
+pr = "https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3"
+
+[[next_actions]]
+id = "polaris-right-cdc-hardware"
+state = "waiting"
+priority = "high"
+order = 3
+repository = "polaris"
+action = "右TB/TPD/IQSの対象firmwareを書き込み、通常targetのCDC Debugと1200 baud bootを確認する。"
+completion = "右のCDCログ、1200 baudでのbootloader遷移とCOM復帰、split/module入力が実機合格する。"
+blocker = "Polaris右実機がWindowsでUSB列挙されていない。安全に識別できるまでflash不可。"
+pr = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+
+[[next_actions]]
+id = "dongle-display-lvgl9-ci"
+state = "active"
+priority = "medium"
+order = 4
+repository = "zmk-dongle-display"
+repository_url = "https://github.com/te9no/zmk-dongle-display"
+action = "Draft PR #3のLVGL9/ZMK 0.4 CI失敗を調査し、安全な範囲でbuildをgreenにする。"
+completion = "PR #3のCIが成功し、実機OLED検証手順とmerge gateが明記される。"
+blocker = "CI修正は今実行可能だが、実機OLED合格までmodule repoへmerge不可。"
+pr = "https://github.com/te9no/zmk-dongle-display/pull/3"
+
+[[next_actions]]
+id = "mlx90393-out-of-scope"
+state = "later"
+priority = "low"
+order = 98
+repository = "zmk-driver-MLX90393"
+repository_url = "https://github.com/te9no/zmk-driver-MLX90393"
+action = "今回は作業せず、Draft PRも現状のまま維持する。"
+completion = "ユーザーがMLX90393を再度scopeに入れ、必要な実機検証を指定する。"
+blocker = "ユーザー指示により対象外。PR #1には触らない。"
+pr = "https://github.com/te9no/zmk-driver-MLX90393/pull/1"
+
+[[next_actions]]
+id = "lowest-priority-fleet"
+state = "later"
+priority = "low"
+order = 99
+repository = "mdk / mrm / torabo / berkut51 / kozakura / sparagmos"
+action = "高優先度の実機検証とactive PRを終えた後に、古いZMK基準とCDC/Studio差分を監査する。"
+completion = "各repositoryに対し、専用検証branchへ進むかnot-applicableとするかが記録される。"
+blocker = "最低優先度群。stable main/masterへの反映は次アクションに含めない。"
+
 [[repositories]]
 id = "polaris"
 github = "te9no/zmk-config-GeaconPolaris"

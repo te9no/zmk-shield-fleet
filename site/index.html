@@ -43,15 +43,28 @@
         <div class="stats" id="stats" aria-live="polite"></div>
       </section>
 
-      <section class="section action-section" aria-labelledby="actions-heading">
+      <section class="section action-section" id="next-actions" aria-labelledby="actions-heading">
         <div class="section-heading">
           <div>
             <p class="eyebrow">WORK QUEUE</p>
-            <h2 id="actions-heading">Next actions</h2>
+            <h2 id="actions-heading">Next actions <span>/ 次にやること</span></h2>
           </div>
-          <p class="section-copy" id="action-summary"></p>
+          <div class="action-toolbar">
+            <p class="section-copy" id="action-summary" aria-live="polite"></p>
+            <div class="action-filters" role="group" aria-label="Next action status filter">
+              <button class="action-filter active" data-action-filter="all" aria-pressed="true">All / すべて</button>
+              <button class="action-filter" data-action-filter="active" aria-pressed="false">Now / 今進める</button>
+              <button class="action-filter" data-action-filter="waiting" aria-pressed="false">Waiting / 実機・外部待ち</button>
+              <button class="action-filter" data-action-filter="later" aria-pressed="false">Later / 後回し・対象外</button>
+            </div>
+          </div>
         </div>
-        <div class="action-grid" id="action-grid"></div>
+        <div class="action-legend" aria-label="Next action status legend">
+          <span class="action-state active">今進める</span>
+          <span class="action-state waiting">実機/外部待ち</span>
+          <span class="action-state later">後回し/対象外</span>
+        </div>
+        <div class="action-grid" id="action-grid" aria-live="polite"></div>
       </section>
 
       <section class="section" aria-labelledby="changes-heading">
