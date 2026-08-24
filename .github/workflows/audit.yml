@@ -53,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           for manifest in users/*/fleet.toml; do
-            shield-fleet ledger evidence --manifest "$manifest"
+            shield-fleet ledger evidence --manifest "$manifest" --strict
           done
 
       - name: Clone CI-managed repositories
