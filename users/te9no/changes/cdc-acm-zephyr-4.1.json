@@ -38,19 +38,27 @@
     "polaris": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-      "commit": "c208d124a2447e7c692a2fc55863b8d4dd61c152",
-      "notes": "zmk-0.4起点の専用Draft PR #7で、廃止したIQS専用debug artifact/snippetに代えて右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。board CDCを無効化し、USB loggingの1 CDCに1200 baud boot triggerを接続した。左のStudio/boot/Bongo構成は変更なし。just.sh build-fast all --pristine=alwaysは9/9成功、Actions 32685858214も全9 target成功。Windowsで右実機はUSB列挙されておらず、書き込み・CDCログ・1200 baud bootは実機待ち。",
+      "commit": "07bd951a1e73319cc6fa93004306945c6cdab958",
+      "notes": "zmk-0.4起点の専用Draft PR #7で、廃止したIQS専用debug artifact/snippetに代えて右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。board CDCを無効化し、USB loggingの1 CDCに1200 baud boot triggerを接続した。左のStudio/boot/Bongo構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機のCOM327を1200 baud+DTRでI:XIAO-BOOTへ遷移させ、新UF2を書き込み、COM327復帰、CDC trigger初期化、ZMK boot、Peripheral connectedを確認した。IQSログをerror以上に限定したartifactでRDY timeoutとERRがないことも確認済み。TB/TPDのmodule固有入力は別途実機待ち。Draftを維持し、zmk-0.4へは未merge。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
         "ci": "passed",
-        "right-hardware": "pending"
+        "flash": "passed",
+        "cdc-enumeration": "passed",
+        "1200-baud": "passed",
+        "cdc-log": "passed",
+        "iqs-hardware": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32685858214",
-        "right-hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186",
+        "flash": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "cdc-enumeration": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "1200-baud": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "cdc-log": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "iqs-hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
       }
     },
     "mdk": {

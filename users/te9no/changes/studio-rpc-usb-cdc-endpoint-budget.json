@@ -38,18 +38,18 @@
     "polaris": {
       "status": "pr-open",
       "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-      "commit": "c208d124a2447e7c692a2fc55863b8d4dd61c152",
-      "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。右実機は未接続のためhardware pending。",
+      "commit": "07bd951a1e73319cc6fa93004306945c6cdab958",
+      "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機でCOM327のCDC Debug、1200 baudによるI:XIAO-BOOT遷移、書き戻し後のCOM327復帰とZMK/Peripheral接続を確認し、右側1 CDC構成を実機合格とした。PR #7はDraftのまま。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32685858214",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
       }
     },

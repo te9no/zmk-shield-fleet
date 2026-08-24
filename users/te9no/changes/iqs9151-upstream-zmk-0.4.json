@@ -31,7 +31,19 @@
       "status": "applied",
       "pr": null,
       "commit": "b95a554c545b9a24fe3ca0fcb24981e261e4a20a",
-      "notes": "基準実装"
+      "notes": "基準実装。ユーザーがIQSのpointer/gesture動作を実機確認済み。2026-08-25にはDraft PR #7のcommit 07bd951a1e73319cc6fa93004306945c6cdab958を右IQSへ書き込み、IQS初期化でRDY timeout/ERRなし、ZMK bootとPeripheral connectedを確認した。PR #7はCDC Debug検証branchのため、このupstream driver基準実装のstatus/prは変更しない。",
+      "validation": {
+        "input": "passed",
+        "init": "passed",
+        "split-connectivity": "passed",
+        "ci": "passed"
+      },
+      "validation_urls": {
+        "input": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+        "init": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "split-connectivity": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
+      }
     },
     "saa": {
       "status": "applied",

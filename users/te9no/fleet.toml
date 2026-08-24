@@ -28,14 +28,14 @@ blocker = "実機moduleと書き込み時間が必要。stable masterは対象�
 repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
 
 [[next_actions]]
-id = "polaris-right-cdc-hardware"
+id = "polaris-right-tb-tpd-cdc-hardware"
 state = "waiting"
-priority = "high"
+priority = "medium"
 order = 3
 repository = "polaris"
-action = "右TB/TPD/IQSの対象firmwareを書き込み、通常targetのCDC Debugと1200 baud bootを確認する。"
-completion = "右のCDCログ、1200 baudでのbootloader遷移とCOM復帰、split/module入力が実機合格する。"
-blocker = "Polaris右実機がWindowsでUSB列挙されていない。安全に識別できるまでflash不可。"
+action = "右IQSで合格したCDC Debug/1200 baud構成を、右TB/TPDの各module firmwareでも書き込み・入力確認する。"
+completion = "右TB/TPDのCDCログ、1200 baud boot、COM復帰、split/module入力がそれぞれ実機合格する。"
+blocker = "右IQSは2026-08-25に実機合格済み。残るTB/TPD moduleの接続・操作確認待ち。"
 pr = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
 
 [[next_actions]]
