@@ -6,6 +6,7 @@ import tempfile
 import textwrap
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from scripts.build_dashboard import build_profile
 from zmk_shield_fleet.core import (
@@ -13,15 +14,19 @@ from zmk_shield_fleet.core import (
     apply_campaign,
     audit_fleet,
     campaign_matrix,
+    evidence_audit,
     load_campaign,
     load_ledger_entry,
     load_manifest,
     mark_ledger_target,
     plan_campaign,
     resolve_workspace,
+    revision_baseline_issues,
     revision_findings,
     select_repositories,
     sync_ledger_entry,
+    target_validation_complete,
+    validate_next_action_references,
 )
 
 
@@ -60,6 +65,7 @@ class FleetFixture:
                 id = "one"
                 checkout = "one"
                 default_branch = "main"
+                maintenance_branch = "validation"
                 architecture = "snippets"
                 modules = ["trackball"]
                 tags = ["test"]
@@ -70,6 +76,7 @@ class FleetFixture:
                 id = "two"
                 checkout = "two"
                 default_branch = "main"
+                maintenance_branch = "validation"
                 architecture = "snippets"
                 modules = ["trackball"]
                 tags = ["test"]
@@ -89,10 +96,18 @@ class FleetFixture:
             (root / "config").mkdir(parents=True)
             (root / "config" / "module.conf").write_text(value, encoding="utf-8")
             subprocess.run(
-                ["git", "init", "-q", str(root)],
+                ["git", "init", "-q", "-b", "validation", str(root)],
                 check=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
+            )
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(
+                [
+                    "git", "-C", str(root), "-c", "user.name=Fleet Test",
+                    "-c", "user.email=fleet@example.invalid", "commit", "-qm", "fixture",
+                ],
+                check=True,
             )
 
     def write_campaign(self, *, expected_two: int = 1) -> Path:
@@ -155,6 +170,55 @@ class ManifestTests(unittest.TestCase):
             duplicate = text.replace('id = "two"', 'id = "one"')
             fixture.manifest_path.write_text(duplicate, encoding="utf-8")
             with self.assertRaisesRegex(FleetError, "duplicate repository id"):
+                load_manifest(fixture.manifest_path)
+
+    def test_unknown_keys_and_http_urls_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8")
+            fixture.manifest_path.write_text(
+                text.replace('id = "one"', 'id = "one"\nrolluot_enabled = true', 1),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(FleetError, "unknown key.*rolluot_enabled"):
+                load_manifest(fixture.manifest_path)
+
+            fixture.write_manifest()
+            with fixture.manifest_path.open("a", encoding="utf-8") as handle:
+                handle.write(textwrap.dedent("""
+
+                    [[next_actions]]
+                    id = "unsafe-url"
+                    state = "active"
+                    priority = "high"
+                    order = 1
+                    repository = "one"
+                    action = "Inspect"
+                    completion = "Done"
+                    blocker = ""
+                    pr = "http://github.com/example/one/pull/1"
+                """))
+            with self.assertRaisesRegex(FleetError, "public HTTPS URL"):
+                load_manifest(fixture.manifest_path)
+
+    def test_rollout_requires_explicit_nondefault_owned_branch(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8")
+            text = text.replace(
+                'id = "one"\ncheckout = "one"',
+                'id = "one"\ngithub = "outside/one"\nrollout_enabled = true\ncheckout = "one"',
+            )
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "allow_external"):
+                load_manifest(fixture.manifest_path)
+
+            text = text.replace('github = "outside/one"', 'github = "example/one"')
+            text = text.replace('maintenance_branch = "validation"', 'maintenance_branch = "main"', 1)
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "must differ"):
                 load_manifest(fixture.manifest_path)
 
     def test_next_actions_are_validated_and_sorted(self) -> None:
@@ -224,6 +288,80 @@ class ManifestTests(unittest.TestCase):
 
 
 class CampaignTests(unittest.TestCase):
+    def test_unknown_step_key_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            raw = json.loads(fixture.write_campaign().read_text(encoding="utf-8"))
+            raw["steps"][0]["already_patterns"] = "VALUE=new"
+            path = fixture.root / "align-value.json"
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "unknown key.*already_patterns"):
+                load_campaign(load_manifest(fixture.manifest_path), path)
+
+    def test_default_branch_requires_explicit_override(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            fixture.init_repositories()
+            text = fixture.manifest_path.read_text(encoding="utf-8").replace(
+                'maintenance_branch = "validation"', 'maintenance_branch = "main"'
+            )
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            for name in ("one", "two"):
+                subprocess.run(
+                    ["git", "-C", str(fixture.workspace / name), "branch", "-m", "main"],
+                    check=True,
+                )
+            manifest = load_manifest(fixture.manifest_path)
+            campaign = load_campaign(manifest, fixture.write_campaign())
+            with self.assertRaisesRegex(FleetError, "stable/default"):
+                plan_campaign(manifest, fixture.workspace, campaign)
+            plan = plan_campaign(
+                manifest, fixture.workspace, campaign, allow_default_branch=True
+            )
+            self.assertEqual(2, len(plan.changes))
+
+    def test_apply_rechecks_files_and_rolls_back_partial_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            fixture.init_repositories()
+            manifest = load_manifest(fixture.manifest_path)
+            campaign = load_campaign(manifest, fixture.write_campaign())
+            plan = plan_campaign(manifest, fixture.workspace, campaign)
+
+            first = fixture.workspace / "one" / "config" / "module.conf"
+            first.write_text("VALUE=changed-after-plan\n", encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "changed after planning"):
+                apply_campaign(manifest, fixture.workspace, plan, allow_dirty=True)
+            first.write_text("VALUE=old\n", encoding="utf-8")
+
+            real_replace = __import__("os").replace
+            failed = False
+
+            def flaky_replace(source, destination):
+                nonlocal failed
+                if (
+                    not failed
+                    and str(source).endswith(".fleet-tmp")
+                    and Path(destination).parts[-3:] == ("two", "config", "module.conf")
+                ):
+                    failed = True
+                    raise OSError("injected replacement failure")
+                return real_replace(source, destination)
+
+            with mock.patch("zmk_shield_fleet.core.os.replace", side_effect=flaky_replace):
+                with self.assertRaisesRegex(FleetError, "rolled back"):
+                    apply_campaign(manifest, fixture.workspace, plan, allow_dirty=True)
+            for name in ("one", "two"):
+                self.assertEqual(
+                    "VALUE=old\n",
+                    (fixture.workspace / name / "config" / "module.conf").read_text(
+                        encoding="utf-8"
+                    ),
+                )
+
     def test_one_change_can_update_west_overlay_and_conf(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
@@ -303,6 +441,7 @@ class CampaignTests(unittest.TestCase):
             manifest = load_manifest(fixture.manifest_path)
             campaign = load_campaign(manifest, fixture.write_campaign())
             plan = plan_campaign(manifest, fixture.workspace, campaign)
+            (fixture.workspace / "one" / "unrelated.tmp").write_text("dirty", encoding="utf-8")
             with self.assertRaisesRegex(FleetError, "dirty repositories"):
                 apply_campaign(manifest, fixture.workspace, plan)
 
@@ -313,10 +452,10 @@ class CampaignTests(unittest.TestCase):
             text = fixture.manifest_path.read_text(encoding="utf-8")
             text = text.replace(
                 'id = "one"\ncheckout = "one"',
-                'id = "one"\ngithub = "example/one"\ncheckout = "one"',
+                'id = "one"\ngithub = "example/one"\nrollout_enabled = true\ncheckout = "one"',
             ).replace(
                 'id = "two"\ncheckout = "two"',
-                'id = "two"\ngithub = "example/two"\ncheckout = "two"',
+                'id = "two"\ngithub = "example/two"\nrollout_enabled = true\ncheckout = "two"',
             ).replace("ci = false", "ci = true")
             fixture.manifest_path.write_text(text, encoding="utf-8")
             manifest = load_manifest(fixture.manifest_path)
@@ -326,6 +465,101 @@ class CampaignTests(unittest.TestCase):
 
 
 class LedgerTests(unittest.TestCase):
+    def test_next_action_references_typed_ledger_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            with fixture.manifest_path.open("a", encoding="utf-8") as handle:
+                handle.write(textwrap.dedent("""
+
+                    [[next_actions]]
+                    id = "validate-left"
+                    state = "active"
+                    priority = "high"
+                    order = 1
+                    repository = "one"
+                    action = "Validate left"
+                    completion = "Hardware passes"
+                    blocker = ""
+                    change_id = "align-value"
+                    validation_keys = ["hardware"]
+                    variant_ids = ["left"]
+                    evidence = [
+                      { label = "Hardware log", status = "pending", url = "https://github.com/example/one/actions/runs/1" },
+                    ]
+                """))
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["variants"] = [
+                {"id": "left", "status": "pending", "validation": {"hardware": "pending"}}
+            ]
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, path)
+            validate_next_action_references(manifest, [entry])
+            raw["tracking"]["one"]["variants"] = []
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "unknown validation"):
+                validate_next_action_references(
+                    manifest, [load_ledger_entry(manifest, path)]
+                )
+
+    def test_not_applicable_validation_contradiction_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"].update(
+                {"status": "not-applicable", "validation": {"hardware": "waived"}}
+            )
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            with self.assertRaisesRegex(FleetError, "not-applicable.*validation"):
+                load_ledger_entry(load_manifest(fixture.manifest_path), path)
+
+    def test_variant_validation_is_typed_and_required_for_completion(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"].update(
+                {
+                    "status": "applied",
+                    "validation": {"ci": "passed"},
+                    "required_validation": ["ci"],
+                    "branch": "zmk-0.4",
+                    "base_branch": "validation",
+                    "pr_head": "a" * 40,
+                    "variants": [
+                        {
+                            "id": "left",
+                            "status": "pending",
+                            "validation": {"hardware": "pending"},
+                        }
+                    ],
+                }
+            )
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            target = load_ledger_entry(load_manifest(fixture.manifest_path), path).tracking["one"]
+            self.assertFalse(target_validation_complete(target))
+            raw["tracking"]["one"]["variants"][0]["status"] = "passed"
+            raw["tracking"]["one"]["variants"][0]["validation"]["hardware"] = "passed"
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            target = load_ledger_entry(load_manifest(fixture.manifest_path), path).tracking["one"]
+            self.assertTrue(target_validation_complete(target))
+
+    def test_terminal_without_validation_is_not_complete(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["status"] = "applied"
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            target = load_ledger_entry(load_manifest(fixture.manifest_path), path).tracking["one"]
+            self.assertFalse(target_validation_complete(target))
+
     def test_applied_can_retain_pending_hardware_validation(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))
@@ -457,25 +691,130 @@ class LedgerTests(unittest.TestCase):
             path = fixture.write_ledger()
             entry = load_ledger_entry(manifest, path)
 
-            def fake_fetch(repository: str, branch: str):
+            def fake_fetch(repository: str, branch: str, base_branch: str):
                 self.assertEqual("fleet/align-value", branch)
+                self.assertEqual("validation", base_branch)
                 if repository.endswith("/one"):
                     return [{"state": "OPEN", "url": "https://example/pr/1", "updatedAt": "2"}]
                 return [{"state": "MERGED", "mergedAt": "now", "url": "https://example/pr/2",
-                         "mergeCommit": {"oid": "abc123"}, "updatedAt": "3"}]
+                         "mergeCommit": {"oid": "a" * 40}, "updatedAt": "3"}]
 
             synced = sync_ledger_entry(manifest, entry, write=True, fetcher=fake_fetch)
             self.assertEqual("pr-open", synced["one"].status)
             self.assertEqual("merged", synced["two"].status)
-            self.assertEqual("abc123", synced["two"].commit)
+            self.assertEqual("a" * 40, synced["two"].commit)
 
             reloaded = load_ledger_entry(manifest, path)
             self.assertEqual("https://example/pr/1", reloaded.tracking["one"].pr)
-            mark_ledger_target(reloaded, "one", "applied", commit="def456")
+            mark_ledger_target(reloaded, "one", "applied", commit="d" * 40)
             self.assertEqual("applied", load_ledger_entry(manifest, path).tracking["one"].status)
+
+    def test_sync_stops_when_multiple_prs_match(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8")
+            text = text.replace('checkout = "one"', 'github = "example/one"\ncheckout = "one"')
+            text = text.replace('checkout = "two"', 'github = "example/two"\ncheckout = "two"')
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, fixture.write_ledger())
+            candidates = [
+                {"number": 1, "url": "https://github.com/example/one/pull/1"},
+                {"number": 2, "url": "https://github.com/example/one/pull/2"},
+            ]
+            with self.assertRaisesRegex(FleetError, "multiple PR candidates"):
+                sync_ledger_entry(
+                    manifest, entry, fetcher=lambda repository, head, base: candidates
+                )
+
+    def test_sync_stops_when_pr_head_sha_disagrees(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8")
+            text = text.replace('checkout = "one"', 'github = "example/one"\ncheckout = "one"')
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"].update(
+                {"branch": "fleet/align-value", "base_branch": "validation", "pr_head": "a" * 40}
+            )
+            raw["tracking"]["two"]["status"] = "not-applicable"
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, path)
+            candidate = [{
+                "state": "OPEN",
+                "url": "https://github.com/example/one/pull/1",
+                "headRefName": "fleet/align-value",
+                "baseRefName": "validation",
+                "headRefOid": "b" * 40,
+            }]
+            with self.assertRaisesRegex(FleetError, "head SHA mismatch"):
+                sync_ledger_entry(
+                    manifest, entry, fetcher=lambda repository, head, base: candidate
+                )
 
 
 class AuditTests(unittest.TestCase):
+    def test_revision_baseline_detects_increase(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"]["findings"] = 0
+            raw["tracking"]["two"]["findings"] = 0
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, path)
+            finding = type("Finding", (), {"repository": "one"})()
+            issues = revision_baseline_issues(
+                entry, [finding], select_repositories(manifest)
+            )
+            self.assertEqual("error", issues[0].level)
+            self.assertIn("increased", issues[0].message)
+
+    def test_remote_evidence_compares_pr_state_base_head_and_ci(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            fixture = FleetFixture(Path(directory))
+            fixture.write_manifest()
+            text = fixture.manifest_path.read_text(encoding="utf-8").replace(
+                'checkout = "one"', 'github = "example/one"\ncheckout = "one"'
+            )
+            fixture.manifest_path.write_text(text, encoding="utf-8")
+            path = fixture.write_ledger()
+            raw = json.loads(path.read_text(encoding="utf-8"))
+            raw["tracking"]["one"].update(
+                {
+                    "status": "pr-open",
+                    "pr": "https://github.com/example/one/pull/1",
+                    "base_branch": "validation",
+                    "branch": "fleet/align-value",
+                    "pr_head": "a" * 40,
+                    "validation": {"ci": "passed"},
+                }
+            )
+            path.write_text(json.dumps(raw), encoding="utf-8")
+            manifest = load_manifest(fixture.manifest_path)
+            entry = load_ledger_entry(manifest, path)
+            issues = evidence_audit(
+                manifest,
+                [entry],
+                fetcher=lambda url: {
+                    "url": url,
+                    "state": "OPEN",
+                    "baseRefName": "validation",
+                    "headRefName": "fleet/align-value",
+                    "headRefOid": "a" * 40,
+                    "statusCheckRollup": [{"conclusion": "FAILURE"}],
+                },
+                branch_fetcher=lambda repository, branch: {"commit": {"sha": "a" * 40}},
+            )
+            self.assertEqual(1, len(issues))
+            self.assertIn("marks CI passed", issues[0].message)
+
     def test_revision_audit_finds_moving_refs_and_short_shas(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             fixture = FleetFixture(Path(directory))

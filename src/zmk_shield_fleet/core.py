@@ -10,16 +10,18 @@ import stat
 import subprocess
 import tempfile
 import tomllib
+import urllib.parse
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
-from typing import Any, Mapping, Sequence
-
+from typing import Any
 
 ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 GITHUB_PATTERN = re.compile(r"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")
 MAX_TEXT_FILE_SIZE = 2 * 1024 * 1024
 NEXT_ACTION_STATES = frozenset({"active", "waiting", "later"})
 NEXT_ACTION_PRIORITIES = frozenset({"high", "medium", "low"})
+EVIDENCE_STATUSES = frozenset({"passed", "pending", "failed", "waived", "info"})
 
 
 class FleetError(RuntimeError):
@@ -39,6 +41,8 @@ class RepositorySpec:
     rollout_order: int | None = None
     github: str | None = None
     ci: bool = True
+    rollout_enabled: bool = False
+    allow_external: bool = False
 
     @property
     def clone_url(self) -> str | None:
@@ -75,6 +79,17 @@ class NextActionSpec:
     blocker: str
     pr: str | None = None
     repository_url: str | None = None
+    change_id: str | None = None
+    validation_keys: tuple[str, ...] = ()
+    variant_ids: tuple[str, ...] = ()
+    evidence: tuple[EvidenceSpec, ...] = ()
+
+
+@dataclass(frozen=True)
+class EvidenceSpec:
+    label: str
+    status: str
+    url: str
 
 
 @dataclass(frozen=True)
@@ -156,6 +171,37 @@ class TargetTracking:
     notes: str
     validation: Mapping[str, str]
     validation_urls: Mapping[str, str]
+    branch: str | None = None
+    base_branch: str | None = None
+    pr_head: str | None = None
+    required_validation: tuple[str, ...] = ()
+    variants: tuple[ValidationVariant, ...] = ()
+    findings: int | None = None
+
+
+@dataclass(frozen=True)
+class ValidationVariant:
+    id: str
+    status: str
+    validation: Mapping[str, str]
+    evidence: tuple[EvidenceSpec, ...]
+
+
+@dataclass(frozen=True)
+class LocalRevisionBaseline:
+    repository: str
+    findings: int
+    status: str
+
+
+@dataclass(frozen=True)
+class RevisionMetrics:
+    finding_total: int | None = None
+    measured_at: str | None = None
+    fleet_commit: str | None = None
+    audit_run: str | None = None
+    measurement_scope: str | None = None
+    local_only_baseline: LocalRevisionBaseline | None = None
 
 
 @dataclass(frozen=True)
@@ -166,6 +212,7 @@ class LedgerEntry:
     scope_module: str | None
     scope_all: bool
     tracking: Mapping[str, TargetTracking]
+    metrics: RevisionMetrics | None = None
 
     @property
     def path(self) -> Path:
@@ -214,12 +261,21 @@ class CampaignPlan:
     selected_repositories: tuple[str, ...]
     results: tuple[StepResult, ...]
     changes: tuple[FileChange, ...]
+    checkout_heads: Mapping[str, str] = field(default_factory=dict)
 
 
 def _require_mapping(value: Any, context: str) -> Mapping[str, Any]:
     if not isinstance(value, dict):
         raise FleetError(f"{context} must be an object/table")
     return value
+
+
+def _reject_unknown_keys(
+    value: Mapping[str, Any], allowed: set[str] | frozenset[str], context: str
+) -> None:
+    unknown = sorted(set(value).difference(allowed))
+    if unknown:
+        raise FleetError(f"{context} contains unknown key(s): {', '.join(unknown)}")
 
 
 def _require_string(value: Any, context: str, *, allow_empty: bool = False) -> str:
@@ -236,9 +292,50 @@ def _optional_string(value: Any, context: str) -> str | None:
 
 def _optional_http_url(value: Any, context: str) -> str | None:
     url = _optional_string(value, context)
-    if url is not None and not re.fullmatch(r"https?://[^\s]+", url):
-        raise FleetError(f"{context} must be an http(s) URL")
+    if url is not None:
+        parsed = urllib.parse.urlsplit(url)
+        if parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password:
+            raise FleetError(f"{context} must be a public HTTPS URL")
     return url
+
+
+def _require_https_url(value: Any, context: str) -> str:
+    url = _optional_http_url(value, context)
+    if url is None:
+        raise FleetError(f"{context} must be a public HTTPS URL")
+    return url
+
+
+def _require_bool(value: Any, context: str, *, default: bool | None = None) -> bool:
+    if value is None and default is not None:
+        return default
+    if not isinstance(value, bool):
+        raise FleetError(f"{context} must be a boolean")
+    return value
+
+
+def _parse_evidence(value: Any, context: str) -> tuple[EvidenceSpec, ...]:
+    if not isinstance(value, list):
+        raise FleetError(f"{context} must be an array")
+    result: list[EvidenceSpec] = []
+    for index, item in enumerate(value):
+        evidence_context = f"{context}[{index}]"
+        table = _require_mapping(item, evidence_context)
+        _reject_unknown_keys(table, {"label", "status", "url"}, evidence_context)
+        status = _require_string(table.get("status"), f"{evidence_context}.status")
+        if status not in EVIDENCE_STATUSES:
+            raise FleetError(
+                f"{evidence_context}.status must be one of: "
+                + ", ".join(sorted(EVIDENCE_STATUSES))
+            )
+        result.append(
+            EvidenceSpec(
+                label=_require_string(table.get("label"), f"{evidence_context}.label"),
+                status=status,
+                url=_require_https_url(table.get("url"), f"{evidence_context}.url"),
+            )
+        )
+    return tuple(result)
 
 
 def _string_tuple(value: Any, context: str, *, nonempty: bool = False) -> tuple[str, ...]:
@@ -247,6 +344,28 @@ def _string_tuple(value: Any, context: str, *, nonempty: bool = False) -> tuple[
     if nonempty and not value:
         raise FleetError(f"{context} must not be empty")
     return tuple(value)
+
+
+def _optional_branch(value: Any, context: str) -> str | None:
+    branch = _optional_string(value, context)
+    if branch is None:
+        return None
+    if (
+        branch.startswith("-")
+        or branch.endswith((".", "/"))
+        or ".." in branch
+        or "@{" in branch
+        or re.search(r"[\s~^:?*\[\\]", branch)
+    ):
+        raise FleetError(f"{context} is not a safe Git branch name")
+    return branch
+
+
+def _optional_sha(value: Any, context: str) -> str | None:
+    revision = _optional_string(value, context)
+    if revision is not None and not re.fullmatch(r"[0-9a-fA-F]{40}", revision):
+        raise FleetError(f"{context} must be a full 40-character commit SHA")
+    return revision
 
 
 def _validate_id(value: str, context: str) -> str:
@@ -271,9 +390,13 @@ def load_manifest(path: str | Path) -> Manifest:
     except tomllib.TOMLDecodeError as exc:
         raise FleetError(f"invalid TOML in {manifest_path}: {exc}") from exc
 
+    _reject_unknown_keys(
+        raw, {"schema", "fleet", "repositories", "next_actions", "mirrors"}, "manifest"
+    )
     if raw.get("schema") != 1:
         raise FleetError("fleet manifest schema must be 1")
     fleet = _require_mapping(raw.get("fleet"), "fleet")
+    _reject_unknown_keys(fleet, {"owner", "workspace"}, "fleet")
     owner = _require_string(fleet.get("owner"), "fleet.owner")
     workspace_value = _require_string(fleet.get("workspace", ".."), "fleet.workspace")
     default_workspace = (manifest_path.parent / workspace_value).resolve()
@@ -285,6 +408,15 @@ def load_manifest(path: str | Path) -> Manifest:
 
     for index, item in enumerate(raw_repositories):
         table = _require_mapping(item, f"repositories[{index}]")
+        _reject_unknown_keys(
+            table,
+            {
+                "id", "github", "checkout", "default_branch", "maintenance_branch",
+                "architecture", "modules", "tags", "required_globs", "rollout_order",
+                "ci", "rollout_enabled", "allow_external",
+            },
+            f"repositories[{index}]",
+        )
         repo_id = _validate_id(
             _require_string(table.get("id"), f"repositories[{index}].id"),
             f"repositories[{index}]",
@@ -301,11 +433,19 @@ def load_manifest(path: str | Path) -> Manifest:
             github = _require_string(github_value, f"repositories[{index}].github")
             if not GITHUB_PATTERN.fullmatch(github):
                 raise FleetError(f"invalid GitHub repository name: {github!r}")
-        ci = table.get("ci", True)
-        if not isinstance(ci, bool):
-            raise FleetError(f"repositories[{index}].ci must be a boolean")
+        ci = _require_bool(table.get("ci"), f"repositories[{index}].ci", default=True)
         if ci and github is None:
             raise FleetError(f"repository {repo_id!r} is enabled for CI but has no github value")
+        rollout_enabled = _require_bool(
+            table.get("rollout_enabled"),
+            f"repositories[{index}].rollout_enabled",
+            default=False,
+        )
+        allow_external = _require_bool(
+            table.get("allow_external"),
+            f"repositories[{index}].allow_external",
+            default=False,
+        )
         rollout_order = table.get("rollout_order")
         if rollout_order is not None and (
             not isinstance(rollout_order, int)
@@ -314,16 +454,41 @@ def load_manifest(path: str | Path) -> Manifest:
         ):
             raise FleetError(f"repositories[{index}].rollout_order must be a positive integer")
 
+        default_branch = _optional_branch(
+            table.get("default_branch"), f"repositories[{index}].default_branch"
+        )
+        if default_branch is None:
+            raise FleetError(f"repositories[{index}].default_branch must be a non-empty string")
+        maintenance_branch = _optional_branch(
+            table.get("maintenance_branch", default_branch),
+            f"repositories[{index}].maintenance_branch",
+        )
+        assert maintenance_branch is not None
+        if github is not None:
+            github_owner = github.split("/", 1)[0].casefold()
+            if github_owner != owner.casefold() and not allow_external:
+                raise FleetError(
+                    f"repository {repo_id!r} belongs to external owner {github_owner!r}; "
+                    "set allow_external = true explicitly"
+                )
+        if rollout_enabled:
+            if github is None:
+                raise FleetError(f"repository {repo_id!r} enables rollout without github")
+            if "maintenance_branch" not in table:
+                raise FleetError(
+                    f"repository {repo_id!r} enables rollout without an explicit maintenance_branch"
+                )
+            if maintenance_branch == default_branch:
+                raise FleetError(
+                    f"repository {repo_id!r} rollout maintenance_branch must differ from "
+                    "default_branch"
+                )
+
         repositories[repo_id] = RepositorySpec(
             id=repo_id,
             checkout=checkout,
-            default_branch=_require_string(
-                table.get("default_branch"), f"repositories[{index}].default_branch"
-            ),
-            maintenance_branch=_require_string(
-                table.get("maintenance_branch", table.get("default_branch")),
-                f"repositories[{index}].maintenance_branch",
-            ),
+            default_branch=default_branch,
+            maintenance_branch=maintenance_branch,
             architecture=_require_string(
                 table.get("architecture"), f"repositories[{index}].architecture"
             ),
@@ -335,12 +500,23 @@ def load_manifest(path: str | Path) -> Manifest:
             rollout_order=rollout_order,
             github=github,
             ci=ci,
+            rollout_enabled=rollout_enabled,
+            allow_external=allow_external,
         )
 
     next_actions: list[NextActionSpec] = []
     seen_next_actions: set[str] = set()
     for index, item in enumerate(raw.get("next_actions", [])):
         table = _require_mapping(item, f"next_actions[{index}]")
+        _reject_unknown_keys(
+            table,
+            {
+                "id", "state", "priority", "order", "repository", "action", "completion",
+                "blocker", "pr", "repository_url", "change_id", "validation_keys",
+                "variant_ids", "evidence",
+            },
+            f"next_actions[{index}]",
+        )
         action_id = _validate_id(
             _require_string(table.get("id"), f"next_actions[{index}].id"),
             f"next_actions[{index}]",
@@ -361,6 +537,17 @@ def load_manifest(path: str | Path) -> Manifest:
         order = table.get("order")
         if not isinstance(order, int) or isinstance(order, bool) or order < 1:
             raise FleetError(f"next_actions[{index}].order must be a positive integer")
+        validation_keys = _string_tuple(
+            table.get("validation_keys", []), f"next_actions[{index}].validation_keys"
+        )
+        variant_ids = _string_tuple(
+            table.get("variant_ids", []), f"next_actions[{index}].variant_ids"
+        )
+        for field_name, values in (("validation_keys", validation_keys), ("variant_ids", variant_ids)):
+            if len(values) != len(set(values)):
+                raise FleetError(f"next_actions[{index}].{field_name} contains duplicates")
+            for value in values:
+                _validate_id(value, f"next_actions[{index}].{field_name}")
         next_actions.append(
             NextActionSpec(
                 id=action_id,
@@ -384,6 +571,21 @@ def load_manifest(path: str | Path) -> Manifest:
                     table.get("repository_url"),
                     f"next_actions[{index}].repository_url",
                 ),
+                change_id=(
+                    _validate_id(
+                        _require_string(
+                            table.get("change_id"), f"next_actions[{index}].change_id"
+                        ),
+                        f"next_actions[{index}].change_id",
+                    )
+                    if table.get("change_id") is not None
+                    else None
+                ),
+                validation_keys=validation_keys,
+                variant_ids=variant_ids,
+                evidence=_parse_evidence(
+                    table.get("evidence", []), f"next_actions[{index}].evidence"
+                ),
             )
         )
 
@@ -391,6 +593,9 @@ def load_manifest(path: str | Path) -> Manifest:
     seen_mirrors: set[str] = set()
     for index, item in enumerate(raw.get("mirrors", [])):
         table = _require_mapping(item, f"mirrors[{index}]")
+        _reject_unknown_keys(
+            table, {"id", "description", "enforce", "members"}, f"mirrors[{index}]"
+        )
         mirror_id = _validate_id(
             _require_string(table.get("id"), f"mirrors[{index}].id"), f"mirrors[{index}]"
         )
@@ -403,6 +608,11 @@ def load_manifest(path: str | Path) -> Manifest:
         members: list[MirrorMember] = []
         for member_index, member_item in enumerate(raw_members):
             member = _require_mapping(member_item, f"mirrors[{index}].members[{member_index}]")
+            _reject_unknown_keys(
+                member,
+                {"repository", "path", "include", "exclude"},
+                f"mirrors[{index}].members[{member_index}]",
+            )
             repository = _require_string(
                 member.get("repository"), f"mirrors[{index}].members[{member_index}].repository"
             )
@@ -516,6 +726,57 @@ def current_branch(root: Path) -> str:
     return result.stdout.strip() or "(detached/unborn)"
 
 
+def _checkout_contract_errors(
+    repo: RepositorySpec,
+    root: Path,
+    *,
+    allow_checkout_mismatch: bool = False,
+    allow_default_branch: bool = False,
+) -> tuple[str, ...]:
+    errors: list[str] = []
+    is_git, _ = git_status(root)
+    if not is_git:
+        return ("not a Git repository",)
+    if repo.github:
+        remote = _run_git(root, "remote", "get-url", "origin", check=False)
+        if remote.returncode != 0:
+            errors.append("origin remote is missing")
+        elif _normalize_remote(remote.stdout) != _normalize_remote(repo.github):
+            errors.append(
+                f"origin mismatch: expected {repo.github}, found {remote.stdout.strip()}"
+            )
+    branch = current_branch(root)
+    if branch != repo.maintenance_branch:
+        errors.append(
+            f"branch mismatch: expected maintenance branch {repo.maintenance_branch!r}, "
+            f"found {branch!r}"
+        )
+    if branch == repo.default_branch and not allow_default_branch:
+        errors.append(
+            f"current branch {branch!r} is the stable/default branch; explicit override required"
+        )
+    if allow_checkout_mismatch:
+        errors = [message for message in errors if not message.startswith(("origin ", "branch "))]
+    return tuple(errors)
+
+
+def _verify_checkout_contract(
+    repo: RepositorySpec,
+    root: Path,
+    *,
+    allow_checkout_mismatch: bool = False,
+    allow_default_branch: bool = False,
+) -> None:
+    errors = _checkout_contract_errors(
+        repo,
+        root,
+        allow_checkout_mismatch=allow_checkout_mismatch,
+        allow_default_branch=allow_default_branch,
+    )
+    if errors:
+        raise FleetError(f"unsafe checkout for {repo.id}: " + "; ".join(errors))
+
+
 def _normalize_remote(value: str) -> str:
     remote = value.strip().removesuffix(".git")
     remote = re.sub(r"^git@github\.com:", "github.com/", remote)
@@ -546,6 +807,8 @@ def inventory_rows(
                 "branch": branch,
                 "state": git_state,
                 "ci": repo.ci,
+                "rollout_enabled": repo.rollout_enabled,
+                "allow_external": repo.allow_external,
                 "github": repo.github,
                 "path": str(root),
             }
@@ -598,6 +861,34 @@ def revision_findings(
                 )
             )
     return tuple(findings)
+
+
+def revision_baseline_issues(
+    entry: LedgerEntry,
+    findings: Sequence[RevisionFinding],
+    repositories: Sequence[RepositorySpec],
+) -> tuple[AuditIssue, ...]:
+    counts = {repo.id: 0 for repo in repositories}
+    for finding in findings:
+        if finding.repository in counts:
+            counts[finding.repository] += 1
+    issues: list[AuditIssue] = []
+    for repo_id, count in counts.items():
+        target = entry.tracking.get(repo_id)
+        if target is None or target.findings is None:
+            issues.append(
+                AuditIssue("error", repo_id, "revision baseline has no typed findings count")
+            )
+            continue
+        if count > target.findings:
+            issues.append(
+                AuditIssue(
+                    "error",
+                    repo_id,
+                    f"moving revision count increased from {target.findings} to {count}",
+                )
+            )
+    return tuple(issues)
 
 
 def _matches_required_glob(root: Path, pattern: str) -> bool:
@@ -663,6 +954,17 @@ def audit_fleet(
                     )
                 )
 
+        branch = current_branch(root)
+        if branch != repo.maintenance_branch:
+            issues.append(
+                AuditIssue(
+                    "error",
+                    repo.id,
+                    f"branch mismatch: expected maintenance branch "
+                    f"{repo.maintenance_branch!r}, found {branch!r}",
+                )
+            )
+
         for pattern in repo.required_globs:
             if not _matches_required_glob(root, pattern):
                 issues.append(
@@ -720,7 +1022,7 @@ def clone_repositories(
         if depth is not None:
             command.extend(["--depth", str(depth)])
         command.extend([repo.clone_url, str(target)])
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(command, text=True, capture_output=True, check=False)
         if result.returncode != 0:
             detail = result.stderr.strip() or result.stdout.strip()
             raise FleetError(f"clone failed for {repo.id}: {detail}")
@@ -736,6 +1038,7 @@ def _parse_expectation(value: Any, context: str) -> Expectation:
             raise FleetError(f"{context} must not be negative")
         return Expectation(value, value)
     table = _require_mapping(value, context)
+    _reject_unknown_keys(table, {"min", "max"}, context)
     minimum = table.get("min")
     maximum = table.get("max")
     if (
@@ -774,6 +1077,14 @@ def load_campaign(
     except json.JSONDecodeError as exc:
         raise FleetError(f"invalid JSON in {campaign_path}: {exc}") from exc
     table = _require_mapping(raw, "campaign")
+    _reject_unknown_keys(
+        table,
+        {
+            "schema", "id", "enabled", "title", "description", "repositories", "steps",
+            "source", "trigger", "scope", "tracking", "metrics", "dashboard_label",
+        },
+        "campaign",
+    )
     if table.get("schema") != 1:
         raise FleetError("campaign schema must be 1")
     campaign_id = _validate_id(_require_string(table.get("id"), "campaign.id"), "campaign")
@@ -800,6 +1111,14 @@ def load_campaign(
     seen_step_ids: set[str] = set()
     for index, item in enumerate(raw_steps):
         step = _require_mapping(item, f"campaign.steps[{index}]")
+        _reject_unknown_keys(
+            step,
+            {
+                "id", "repositories", "paths", "operation", "find", "replace", "expect",
+                "flags", "already_pattern",
+            },
+            f"campaign.steps[{index}]",
+        )
         step_id = _validate_id(
             _require_string(step.get("id"), f"campaign.steps[{index}].id"),
             f"campaign.steps[{index}]",
@@ -876,6 +1195,74 @@ def load_campaign(
     )
 
 
+def _parse_validation(
+    value: Any, context: str
+) -> dict[str, str]:
+    table = _require_mapping(value, context)
+    result: dict[str, str] = {}
+    for check_name, status_value in table.items():
+        check_id = _validate_id(_require_string(check_name, f"{context} key"), context)
+        check_status = _require_string(status_value, f"{context}.{check_id}")
+        if check_status not in VALIDATION_STATUSES:
+            raise FleetError(
+                f"{context}.{check_id} must be one of: "
+                + ", ".join(sorted(VALIDATION_STATUSES))
+            )
+        result[check_id] = check_status
+    return result
+
+
+def _parse_validation_urls(
+    value: Any, validation: Mapping[str, str], context: str
+) -> dict[str, str]:
+    table = _require_mapping(value, context)
+    result: dict[str, str] = {}
+    for check_name, url_value in table.items():
+        check_id = _validate_id(_require_string(check_name, f"{context} key"), context)
+        if check_id not in validation:
+            raise FleetError(f"{context}.{check_id} has no matching validation check")
+        result[check_id] = _optional_http_url(url_value, f"{context}.{check_id}") or ""
+    return result
+
+
+def _required_validation(
+    value: Any, validation: Mapping[str, str], context: str
+) -> tuple[str, ...]:
+    required = _string_tuple(value, context)
+    if len(required) != len(set(required)):
+        raise FleetError(f"{context} contains duplicates")
+    for check_id in required:
+        _validate_id(check_id, context)
+    missing = sorted(set(required).difference(validation))
+    if missing:
+        raise FleetError(f"{context} references unknown validation(s): {', '.join(missing)}")
+    return required
+
+
+def target_validation_complete(target: TargetTracking) -> bool:
+    """Return completion using explicit gates; terminal status alone is insufficient."""
+    if target.status == "not-applicable":
+        return not target.validation and not target.variants
+    if target.status not in {"merged", "applied"}:
+        return False
+
+    required = target.required_validation or tuple(target.validation)
+    if not required and not target.variants:
+        return False
+    if any(target.validation.get(key) not in {"passed", "waived"} for key in required):
+        return False
+    for variant in target.variants:
+        if variant.status != "passed":
+            return False
+        variant_required = tuple(variant.validation)
+        if any(
+            variant.validation.get(key) not in {"passed", "waived"}
+            for key in variant_required
+        ):
+            return False
+    return True
+
+
 def load_ledger_entry(
     manifest: Manifest, source: str | Path, *, allow_disabled: bool = True
 ) -> LedgerEntry:
@@ -885,14 +1272,92 @@ def load_ledger_entry(
     except (OSError, json.JSONDecodeError) as exc:  # load_campaign normally catches these
         raise FleetError(f"cannot read ledger entry {campaign.path}: {exc}") from exc
     table = _require_mapping(raw, "change")
+    _reject_unknown_keys(
+        table,
+        {
+            "schema", "id", "enabled", "title", "description", "repositories", "steps",
+            "source", "trigger", "scope", "tracking", "metrics", "dashboard_label",
+        },
+        "change",
+    )
+    metrics_info = None
+    if table.get("metrics") is not None:
+        metrics = _require_mapping(table.get("metrics"), "change.metrics")
+        _reject_unknown_keys(
+            metrics,
+            {
+                "finding_total", "measured_at", "fleet_commit", "audit_run",
+                "measurement_scope", "local_only_baseline",
+            },
+            "change.metrics",
+        )
+        finding_total = metrics.get("finding_total")
+        if finding_total is not None and (
+            not isinstance(finding_total, int)
+            or isinstance(finding_total, bool)
+            or finding_total < 0
+        ):
+            raise FleetError("change.metrics.finding_total must be a non-negative integer")
+        measured_at = _optional_string(metrics.get("measured_at"), "change.metrics.measured_at")
+        if measured_at is not None and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", measured_at):
+            raise FleetError("change.metrics.measured_at must use YYYY-MM-DD")
+        local_baseline_info = None
+        if metrics.get("local_only_baseline") is not None:
+            local_baseline = _require_mapping(
+                metrics.get("local_only_baseline"), "change.metrics.local_only_baseline"
+            )
+            _reject_unknown_keys(
+                local_baseline,
+                {"repository", "findings", "status"},
+                "change.metrics.local_only_baseline",
+            )
+            local_findings = local_baseline.get("findings")
+            if (
+                not isinstance(local_findings, int)
+                or isinstance(local_findings, bool)
+                or local_findings < 0
+            ):
+                raise FleetError(
+                    "change.metrics.local_only_baseline.findings must be a non-negative integer"
+                )
+            local_baseline_info = LocalRevisionBaseline(
+                repository=_require_string(
+                    local_baseline.get("repository"),
+                    "change.metrics.local_only_baseline.repository",
+                ),
+                findings=local_findings,
+                status=_require_string(
+                    local_baseline.get("status"),
+                    "change.metrics.local_only_baseline.status",
+                ),
+            )
+        metrics_info = RevisionMetrics(
+            finding_total=finding_total,
+            measured_at=measured_at,
+            fleet_commit=_optional_sha(
+                metrics.get("fleet_commit"), "change.metrics.fleet_commit"
+            ),
+            audit_run=_optional_http_url(metrics.get("audit_run"), "change.metrics.audit_run"),
+            measurement_scope=_optional_string(
+                metrics.get("measurement_scope"), "change.metrics.measurement_scope"
+            ),
+            local_only_baseline=local_baseline_info,
+        )
+    if table.get("dashboard_label") is not None:
+        _require_string(table.get("dashboard_label"), "change.dashboard_label")
     source_table = _require_mapping(table.get("source"), "change.source")
+    _reject_unknown_keys(
+        source_table,
+        {"repository", "from_revision", "to_revision", "change_url", "notes"},
+        "change.source",
+    )
     source_info = ChangeSource(
         repository=_require_string(source_table.get("repository"), "change.source.repository"),
         from_revision=_optional_string(
             source_table.get("from_revision"), "change.source.from_revision"
         ),
         to_revision=_require_string(source_table.get("to_revision"), "change.source.to_revision"),
-        change_url=_optional_string(source_table.get("change_url"), "change.source.change_url"),
+        change_url=_optional_http_url(source_table.get("change_url"), "change.source.change_url"),
         notes=_require_string(
             source_table.get("notes", ""), "change.source.notes", allow_empty=True
         ),
@@ -900,12 +1365,17 @@ def load_ledger_entry(
     trigger_info = None
     if table.get("trigger") is not None:
         trigger_table = _require_mapping(table.get("trigger"), "change.trigger")
+        _reject_unknown_keys(
+            trigger_table,
+            {"repository", "revision", "change_url", "notes"},
+            "change.trigger",
+        )
         trigger_info = ChangeTrigger(
             repository=_require_string(
                 trigger_table.get("repository"), "change.trigger.repository"
             ),
             revision=_require_string(trigger_table.get("revision"), "change.trigger.revision"),
-            change_url=_require_string(
+            change_url=_require_https_url(
                 trigger_table.get("change_url"), "change.trigger.change_url"
             ),
             notes=_require_string(
@@ -948,64 +1418,104 @@ def load_ledger_entry(
         raise FleetError("change.tracking keys must exactly match change.repositories")
     tracking: dict[str, TargetTracking] = {}
     for repo_id in campaign.repositories:
-        target = _require_mapping(tracking_table[repo_id], f"change.tracking.{repo_id}")
-        status = _require_string(target.get("status"), f"change.tracking.{repo_id}.status")
+        context = f"change.tracking.{repo_id}"
+        target = _require_mapping(tracking_table[repo_id], context)
+        _reject_unknown_keys(
+            target,
+            {
+                "status", "pr", "commit", "notes", "validation", "validation_urls",
+                "branch", "base_branch", "pr_head", "required_validation", "variants",
+                "findings",
+            },
+            context,
+        )
+        status = _require_string(target.get("status"), f"{context}.status")
         if status not in LEDGER_STATUSES:
             raise FleetError(
-                f"change.tracking.{repo_id}.status must be one of: "
+                f"{context}.status must be one of: "
                 + ", ".join(sorted(LEDGER_STATUSES))
             )
-        validation_table = _require_mapping(
-            target.get("validation", {}), f"change.tracking.{repo_id}.validation"
+        validation = _parse_validation(target.get("validation", {}), f"{context}.validation")
+        validation_urls = _parse_validation_urls(
+            target.get("validation_urls", {}), validation, f"{context}.validation_urls"
         )
-        validation: dict[str, str] = {}
-        for check_name, check_status_value in validation_table.items():
-            check_id = _validate_id(
-                _require_string(check_name, f"change.tracking.{repo_id}.validation key"),
-                f"change.tracking.{repo_id}.validation",
-            )
-            check_status = _require_string(
-                check_status_value,
-                f"change.tracking.{repo_id}.validation.{check_id}",
-            )
-            if check_status not in VALIDATION_STATUSES:
-                raise FleetError(
-                    f"change.tracking.{repo_id}.validation.{check_id} must be one of: "
-                    + ", ".join(sorted(VALIDATION_STATUSES))
-                )
-            validation[check_id] = check_status
-        validation_urls_table = _require_mapping(
-            target.get("validation_urls", {}),
-            f"change.tracking.{repo_id}.validation_urls",
+        required_validation = _required_validation(
+            target.get("required_validation", []), validation, f"{context}.required_validation"
         )
-        validation_urls: dict[str, str] = {}
-        for check_name, url_value in validation_urls_table.items():
-            check_id = _validate_id(
-                _require_string(check_name, f"change.tracking.{repo_id}.validation_urls key"),
-                f"change.tracking.{repo_id}.validation_urls",
+        variants_value = target.get("variants", [])
+        if not isinstance(variants_value, list):
+            raise FleetError(f"{context}.variants must be an array")
+        variants: list[ValidationVariant] = []
+        seen_variant_ids: set[str] = set()
+        for variant_index, variant_value in enumerate(variants_value):
+            variant_context = f"{context}.variants[{variant_index}]"
+            variant = _require_mapping(variant_value, variant_context)
+            _reject_unknown_keys(
+                variant, {"id", "status", "validation", "evidence"}, variant_context
             )
-            if check_id not in validation:
-                raise FleetError(
-                    f"change.tracking.{repo_id}.validation_urls.{check_id} has no matching "
-                    "validation check"
-                )
-            url = _require_string(
-                url_value, f"change.tracking.{repo_id}.validation_urls.{check_id}"
+            variant_id = _validate_id(
+                _require_string(variant.get("id"), f"{variant_context}.id"), variant_context
             )
-            if not re.fullmatch(r"https://[^\s]+", url):
-                raise FleetError(
-                    f"change.tracking.{repo_id}.validation_urls.{check_id} must be an HTTPS URL"
+            if variant_id in seen_variant_ids:
+                raise FleetError(f"{context}.variants contains duplicate id {variant_id!r}")
+            seen_variant_ids.add(variant_id)
+            variant_context = f"{context}.variants.{variant_id}"
+            variant_status = _require_string(
+                variant.get("status"), f"{variant_context}.status"
+            )
+            if variant_status not in {"passed", "pending"}:
+                raise FleetError(f"{variant_context}.status must be passed or pending")
+            variant_validation = _parse_validation(
+                variant.get("validation", {}), f"{variant_context}.validation"
+            )
+            evidence = _parse_evidence(
+                variant.get("evidence", []), f"{variant_context}.evidence"
+            )
+            if variant_status == "passed":
+                incomplete_gates = sorted(
+                    key
+                    for key, gate_status in variant_validation.items()
+                    if gate_status not in {"passed", "waived"}
                 )
-            validation_urls[check_id] = url
+                incomplete_evidence = [
+                    item.label for item in evidence if item.status in {"pending", "failed"}
+                ]
+                if incomplete_gates or incomplete_evidence:
+                    details = incomplete_gates + incomplete_evidence
+                    raise FleetError(
+                        f"{variant_context} is passed but has incomplete evidence/gates: "
+                        + ", ".join(details)
+                    )
+            variants.append(ValidationVariant(
+                id=variant_id,
+                status=variant_status,
+                validation=variant_validation,
+                evidence=evidence,
+            ))
+        findings = target.get("findings")
+        if findings is not None and (
+            not isinstance(findings, int) or isinstance(findings, bool) or findings < 0
+        ):
+            raise FleetError(f"{context}.findings must be a non-negative integer")
+        if status == "not-applicable" and (
+            validation or validation_urls or required_validation or variants
+        ):
+            raise FleetError(f"{context} is not-applicable but declares validation")
         tracking[repo_id] = TargetTracking(
             status=status,
-            pr=_optional_string(target.get("pr"), f"change.tracking.{repo_id}.pr"),
-            commit=_optional_string(target.get("commit"), f"change.tracking.{repo_id}.commit"),
+            pr=_optional_http_url(target.get("pr"), f"{context}.pr"),
+            commit=_optional_sha(target.get("commit"), f"{context}.commit"),
             notes=_require_string(
-                target.get("notes", ""), f"change.tracking.{repo_id}.notes", allow_empty=True
+                target.get("notes", ""), f"{context}.notes", allow_empty=True
             ),
             validation=validation,
             validation_urls=validation_urls,
+            branch=_optional_branch(target.get("branch"), f"{context}.branch"),
+            base_branch=_optional_branch(target.get("base_branch"), f"{context}.base_branch"),
+            pr_head=_optional_sha(target.get("pr_head"), f"{context}.pr_head"),
+            required_validation=required_validation,
+            variants=tuple(variants),
+            findings=findings,
         )
     return LedgerEntry(
         campaign=campaign,
@@ -1014,6 +1524,7 @@ def load_ledger_entry(
         scope_module=scope_module,
         scope_all=scope_all,
         tracking=tracking,
+        metrics=metrics_info,
     )
 
 
@@ -1021,7 +1532,122 @@ def list_ledger_entries(manifest: Manifest) -> tuple[LedgerEntry, ...]:
     directory = manifest.path.parent / "changes"
     if not directory.exists():
         return ()
-    return tuple(load_ledger_entry(manifest, path) for path in sorted(directory.glob("*.json")))
+    entries = tuple(
+        load_ledger_entry(manifest, path) for path in sorted(directory.glob("*.json"))
+    )
+    validate_next_action_references(manifest, entries)
+    return entries
+
+
+def validate_next_action_references(
+    manifest: Manifest, entries: Sequence[LedgerEntry]
+) -> None:
+    by_id = {entry.campaign.id: entry for entry in entries}
+    for action in manifest.next_actions:
+        if (action.validation_keys or action.variant_ids) and action.change_id is None:
+            raise FleetError(
+                f"next action {action.id!r} references validation/variants without change_id"
+            )
+        if action.change_id is None:
+            continue
+        entry = by_id.get(action.change_id)
+        if entry is None:
+            raise FleetError(
+                f"next action {action.id!r} references unknown change {action.change_id!r}"
+            )
+        group_ids = tuple(
+            part.strip() for part in action.repository.split(" / ") if part.strip()
+        )
+        if " / " in action.repository:
+            unknown_group_ids = sorted(set(group_ids).difference(entry.tracking))
+            if unknown_group_ids:
+                raise FleetError(
+                    f"next action {action.id!r} repository group references unknown "
+                    "target(s): " + ", ".join(unknown_group_ids)
+                )
+            group_checks: set[str] = set()
+            group_variants: set[str] = set()
+            for repo_id in group_ids:
+                candidate = entry.tracking[repo_id]
+                group_checks.update(candidate.validation)
+                for variant in candidate.variants:
+                    group_variants.add(variant.id)
+                    group_checks.update(variant.validation)
+            missing_group_checks = sorted(set(action.validation_keys).difference(group_checks))
+            missing_group_variants = sorted(set(action.variant_ids).difference(group_variants))
+            if missing_group_checks or missing_group_variants:
+                details = missing_group_checks + missing_group_variants
+                raise FleetError(
+                    f"next action {action.id!r} repository group references unknown "
+                    "validation/variant(s): " + ", ".join(details)
+                )
+            continue
+        target = entry.tracking.get(action.repository)
+        if target is None:
+            if action.repository_url is None:
+                raise FleetError(
+                    f"next action {action.id!r} references repository {action.repository!r} "
+                    f"outside change {action.change_id!r} without repository_url"
+                )
+            if not action.variant_ids:
+                available_change_checks: set[str] = set()
+                for candidate in entry.tracking.values():
+                    available_change_checks.update(candidate.validation)
+                    for variant in candidate.variants:
+                        available_change_checks.update(variant.validation)
+                missing_change_checks = sorted(
+                    set(action.validation_keys).difference(available_change_checks)
+                )
+                if missing_change_checks:
+                    raise FleetError(
+                        f"next action {action.id!r} references unknown change-level "
+                        "validation(s): " + ", ".join(missing_change_checks)
+                    )
+                continue
+            candidates: list[TargetTracking] = []
+            for candidate in entry.tracking.values():
+                candidate_variants = {variant.id: variant for variant in candidate.variants}
+                if not set(action.variant_ids).issubset(candidate_variants):
+                    continue
+                candidate_checks = set(candidate.validation)
+                selected = (
+                    [candidate_variants[variant_id] for variant_id in action.variant_ids]
+                    if action.variant_ids
+                    else candidate.variants
+                )
+                for variant in selected:
+                    candidate_checks.update(variant.validation)
+                if set(action.validation_keys).issubset(candidate_checks):
+                    candidates.append(candidate)
+            if len(candidates) != 1:
+                raise FleetError(
+                    f"next action {action.id!r} has an ambiguous external repository "
+                    f"reference for change {action.change_id!r}: {len(candidates)} targets match"
+                )
+            target = candidates[0]
+        variants_by_id = {variant.id: variant for variant in target.variants}
+        available_checks = set(target.validation)
+        selected_variants = (
+            [variants_by_id[variant_id] for variant_id in action.variant_ids if variant_id in variants_by_id]
+            if action.variant_ids
+            else target.variants
+        )
+        for variant in selected_variants:
+            available_checks.update(variant.validation)
+        missing_checks = sorted(set(action.validation_keys).difference(available_checks))
+        if missing_checks:
+            raise FleetError(
+                f"next action {action.id!r} references unknown validation(s): "
+                + ", ".join(missing_checks)
+            )
+        missing_variants = sorted(
+            set(action.variant_ids).difference(variants_by_id)
+        )
+        if missing_variants:
+            raise FleetError(
+                f"next action {action.id!r} references unknown variant(s): "
+                + ", ".join(missing_variants)
+            )
 
 
 def mark_ledger_target(
@@ -1039,6 +1665,10 @@ def mark_ledger_target(
         raise FleetError(f"repository {repository!r} is not tracked by change {entry.campaign.id!r}")
     if status not in LEDGER_STATUSES:
         raise FleetError(f"invalid ledger status: {status!r}")
+    if pr:
+        _optional_http_url(pr, "pull request URL")
+    if commit:
+        _optional_sha(commit, "commit")
     raw = json.loads(entry.path.read_text(encoding="utf-8"))
     target = raw["tracking"][repository]
     updated_validation = dict(target.get("validation", {}))
@@ -1057,6 +1687,10 @@ def mark_ledger_target(
             if not re.fullmatch(r"https://[^\s]+", url):
                 raise FleetError(f"validation URL {check_id!r} must use HTTPS")
             updated_validation_urls[check_id] = url
+    if status == "not-applicable" and (
+        updated_validation or entry.tracking[repository].variants
+    ):
+        raise FleetError("not-applicable targets cannot retain validation or variants")
     target["status"] = status
     if pr is not None:
         target["pr"] = pr or None
@@ -1086,19 +1720,161 @@ def _write_json_atomic(path: Path, value: Any) -> None:
         raise
 
 
-def github_pull_requests(repository: str, branch: str) -> list[dict[str, Any]]:
+def github_pull_requests(
+    repository: str, branch: str, base_branch: str | None = None
+) -> list[dict[str, Any]]:
     command = [
         "gh", "pr", "list", "--repo", repository, "--head", branch, "--state", "all",
         "--limit", "20", "--json",
-        "number,url,state,isDraft,mergedAt,mergeCommit,createdAt,updatedAt",
+        "number,url,state,isDraft,mergedAt,mergeCommit,createdAt,updatedAt,baseRefName,headRefName,headRefOid",
     ]
+    if base_branch:
+        command[8:8] = ["--base", base_branch]
     try:
-        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(command, text=True, capture_output=True, check=False)
     except FileNotFoundError as exc:
         raise FleetError("gh is required for ledger sync") from exc
     if result.returncode != 0:
         raise FleetError(f"cannot query {repository}: {result.stderr.strip()}")
     return json.loads(result.stdout)
+
+
+def github_pr_evidence(pr_url: str) -> Mapping[str, Any]:
+    command = [
+        "gh", "pr", "view", pr_url, "--json",
+        "url,state,mergedAt,mergeCommit,baseRefName,headRefName,headRefOid,statusCheckRollup",
+    ]
+    try:
+        result = subprocess.run(command, text=True, capture_output=True, check=False)
+    except FileNotFoundError as exc:
+        raise FleetError("gh is required for evidence audit") from exc
+    if result.returncode != 0:
+        raise FleetError(f"cannot inspect {pr_url}: {result.stderr.strip()}")
+    return _require_mapping(json.loads(result.stdout), f"PR evidence {pr_url}")
+
+
+def github_branch_evidence(repository: str, branch: str) -> Mapping[str, Any]:
+    encoded_branch = urllib.parse.quote(branch, safe="")
+    command = ["gh", "api", f"repos/{repository}/branches/{encoded_branch}"]
+    try:
+        result = subprocess.run(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    except FileNotFoundError as exc:
+        raise FleetError("gh is required for evidence audit") from exc
+    if result.returncode != 0:
+        raise FleetError(
+            f"cannot inspect branch {repository}@{branch}: {result.stderr.strip()}"
+        )
+    return _require_mapping(json.loads(result.stdout), f"branch evidence {repository}@{branch}")
+
+
+def evidence_audit(
+    manifest: Manifest,
+    entries: Sequence[LedgerEntry],
+    *,
+    fetcher=github_pr_evidence,
+    branch_fetcher=github_branch_evidence,
+) -> tuple[AuditIssue, ...]:
+    """Read remote PR evidence without mutating either the ledger or repositories."""
+    issues: list[AuditIssue] = []
+    for entry in entries:
+        for repo_id, target in entry.tracking.items():
+            spec = manifest.repositories[repo_id]
+            subject = f"{entry.campaign.id}/{repo_id}"
+            if (
+                target.branch
+                and spec.github
+                and target.status in {"pending", "pr-open"}
+            ):
+                try:
+                    branch_evidence = branch_fetcher(spec.github, target.branch)
+                except (FleetError, OSError, ValueError, json.JSONDecodeError) as exc:
+                    issues.append(
+                        AuditIssue("warning", subject, f"cannot verify tracked branch: {exc}")
+                    )
+                else:
+                    branch_sha = (branch_evidence.get("commit") or {}).get("sha")
+                    if target.pr_head and branch_sha not in {None, target.pr_head}:
+                        issues.append(
+                            AuditIssue(
+                                "error", subject,
+                                f"tracked branch SHA is {branch_sha!r}, expected {target.pr_head!r}",
+                            )
+                        )
+            if target.pr is None:
+                continue
+            expected_prefix = f"https://github.com/{spec.github}/pull/" if spec.github else None
+            if expected_prefix and not target.pr.startswith(expected_prefix):
+                issues.append(
+                    AuditIssue("error", subject, f"PR URL does not belong to {spec.github}")
+                )
+                continue
+            try:
+                evidence = fetcher(target.pr)
+            except (FleetError, OSError, ValueError, json.JSONDecodeError) as exc:
+                issues.append(AuditIssue("warning", subject, f"cannot verify PR evidence: {exc}"))
+                continue
+            if evidence.get("url") not in {None, target.pr}:
+                issues.append(AuditIssue("error", subject, "PR evidence URL mismatch"))
+            remote_state = evidence.get("state")
+            expected_states = {
+                "pr-open": {"OPEN"},
+                "merged": {"MERGED"},
+                "closed": {"CLOSED"},
+            }.get(target.status)
+            if expected_states and remote_state not in expected_states:
+                issues.append(
+                    AuditIssue(
+                        "error",
+                        subject,
+                        f"ledger status {target.status!r} conflicts with PR state {remote_state!r}",
+                    )
+                )
+            expected_base = target.base_branch or spec.maintenance_branch
+            if evidence.get("baseRefName") not in {None, expected_base}:
+                issues.append(
+                    AuditIssue(
+                        "error", subject,
+                        f"PR base is {evidence.get('baseRefName')!r}, expected {expected_base!r}",
+                    )
+                )
+            if target.branch and evidence.get("headRefName") not in {None, target.branch}:
+                issues.append(
+                    AuditIssue(
+                        "error", subject,
+                        f"PR head branch is {evidence.get('headRefName')!r}, "
+                        f"expected {target.branch!r}",
+                    )
+                )
+            if target.pr_head and evidence.get("headRefOid") not in {None, target.pr_head}:
+                issues.append(
+                    AuditIssue(
+                        "error", subject,
+                        f"PR head SHA is {evidence.get('headRefOid')!r}, "
+                        f"expected {target.pr_head!r}",
+                    )
+                )
+            checks = evidence.get("statusCheckRollup") or []
+            conclusions = {
+                str(check.get("conclusion") or check.get("state") or "").upper()
+                for check in checks
+                if isinstance(check, dict)
+            }
+            failed = conclusions.intersection(
+                {"FAILURE", "ERROR", "CANCELLED", "TIMED_OUT", "ACTION_REQUIRED"}
+            )
+            ledger_ci_passed = any(
+                status == "passed"
+                and (key == "ci" or key.endswith("-ci") or "build" in key)
+                for key, status in target.validation.items()
+            )
+            if ledger_ci_passed and failed:
+                issues.append(
+                    AuditIssue(
+                        "error", subject,
+                        "ledger marks CI passed but PR checks contain: " + ", ".join(sorted(failed)),
+                    )
+                )
+    return tuple(issues)
 
 
 def sync_ledger_entry(
@@ -1110,17 +1886,37 @@ def sync_ledger_entry(
 ) -> Mapping[str, TargetTracking]:
     updated = dict(entry.tracking)
     raw = json.loads(entry.path.read_text(encoding="utf-8")) if write else None
-    branch = f"fleet/{entry.campaign.id}"
     for repo_id, current in entry.tracking.items():
         if current.status == "not-applicable":
             continue
         spec = manifest.repositories[repo_id]
         if spec.github is None:
             continue
-        pulls = fetcher(spec.github, branch)
+        head_branch = current.branch or f"fleet/{entry.campaign.id}"
+        base_branch = current.base_branch or spec.maintenance_branch
+        pulls = fetcher(spec.github, head_branch, base_branch)
         if not pulls:
             continue
-        pull = max(pulls, key=lambda item: item.get("updatedAt") or item.get("createdAt") or "")
+        if len(pulls) != 1:
+            urls = ", ".join(str(item.get("url") or item.get("number")) for item in pulls)
+            raise FleetError(
+                f"multiple PR candidates for {repo_id} head {head_branch!r} "
+                f"base {base_branch!r}: {urls}"
+            )
+        pull = pulls[0]
+        if pull.get("headRefName") not in {None, head_branch}:
+            raise FleetError(
+                f"PR candidate head mismatch for {repo_id}: {pull.get('headRefName')!r}"
+            )
+        if pull.get("baseRefName") not in {None, base_branch}:
+            raise FleetError(
+                f"PR candidate base mismatch for {repo_id}: {pull.get('baseRefName')!r}"
+            )
+        if current.pr_head and pull.get("headRefOid") != current.pr_head:
+            raise FleetError(
+                f"PR candidate head SHA mismatch for {repo_id}: "
+                f"expected {current.pr_head}, found {pull.get('headRefOid')}"
+            )
         if pull.get("mergedAt"):
             status = "merged"
         elif pull.get("state") == "OPEN":
@@ -1128,18 +1924,36 @@ def sync_ledger_entry(
         else:
             status = "closed"
         merge_commit = pull.get("mergeCommit") or {}
+        pr_url = pull.get("url") or current.pr
+        if pr_url:
+            pr_url = _require_https_url(pr_url, f"PR candidate URL for {repo_id}")
+        merge_oid = merge_commit.get("oid") or current.commit
+        if merge_oid:
+            merge_oid = _optional_sha(merge_oid, f"merge commit for {repo_id}")
         tracked = TargetTracking(
             status=status,
-            pr=pull.get("url") or current.pr,
-            commit=merge_commit.get("oid") or current.commit,
+            pr=pr_url,
+            commit=merge_oid,
             notes=current.notes,
             validation=current.validation,
             validation_urls=current.validation_urls,
+            branch=head_branch,
+            base_branch=base_branch,
+            pr_head=current.pr_head,
+            required_validation=current.required_validation,
+            variants=current.variants,
+            findings=current.findings,
         )
         updated[repo_id] = tracked
         if raw is not None:
             raw["tracking"][repo_id].update(
-                {"status": tracked.status, "pr": tracked.pr, "commit": tracked.commit}
+                {
+                    "status": tracked.status,
+                    "pr": tracked.pr,
+                    "commit": tracked.commit,
+                    "base_branch": tracked.base_branch,
+                    "branch": tracked.branch,
+                }
             )
     if raw is not None:
         _write_json_atomic(entry.path, raw)
@@ -1186,6 +2000,9 @@ def plan_campaign(
     workspace: Path,
     campaign: Campaign,
     repository_ids: Sequence[str] | None = None,
+    *,
+    allow_checkout_mismatch: bool = False,
+    allow_default_branch: bool = False,
 ) -> CampaignPlan:
     selected = tuple(repository_ids or campaign.repositories)
     unknown = set(selected).difference(campaign.repositories)
@@ -1197,15 +2014,23 @@ def plan_campaign(
         raise FleetError("campaign repository filter selected no repositories")
 
     roots: dict[str, Path] = {}
+    checkout_heads: dict[str, str] = {}
     for repo_id in selected:
         repo = manifest.repositories[repo_id]
         root = repository_path(workspace, repo)
         if not root.is_dir():
             raise FleetError(f"campaign checkout is missing for {repo_id}: {root}")
-        is_git, _ = git_status(root)
-        if not is_git:
-            raise FleetError(f"campaign checkout is not a Git repository for {repo_id}: {root}")
+        _verify_checkout_contract(
+            repo,
+            root,
+            allow_checkout_mismatch=allow_checkout_mismatch,
+            allow_default_branch=allow_default_branch,
+        )
+        head = _run_git(root, "rev-parse", "HEAD", check=False)
+        if head.returncode != 0 or not head.stdout.strip():
+            raise FleetError(f"campaign checkout has no committed HEAD for {repo_id}: {root}")
         roots[repo_id] = root
+        checkout_heads[repo_id] = head.stdout.strip()
 
     current: dict[tuple[str, Path], str] = {}
     original: dict[tuple[str, Path], str] = {}
@@ -1297,6 +2122,7 @@ def plan_campaign(
         selected_repositories=selected,
         results=tuple(results),
         changes=tuple(changes),
+        checkout_heads=checkout_heads,
     )
 
 
@@ -1306,10 +2132,33 @@ def apply_campaign(
     plan: CampaignPlan,
     *,
     allow_dirty: bool = False,
+    allow_checkout_mismatch: bool = False,
+    allow_default_branch: bool = False,
 ) -> None:
+    changed_repositories = sorted(set(plan.selected_repositories))
+    for repo_id in changed_repositories:
+        repo = manifest.repositories[repo_id]
+        root = repository_path(workspace, repo)
+        _verify_checkout_contract(
+            repo,
+            root,
+            allow_checkout_mismatch=allow_checkout_mismatch,
+            allow_default_branch=allow_default_branch,
+        )
+        head = _run_git(root, "rev-parse", "HEAD").stdout.strip()
+        if head != plan.checkout_heads.get(repo_id):
+            raise FleetError(
+                f"checkout changed after planning for {repo_id}: "
+                f"expected {plan.checkout_heads.get(repo_id)}, found {head}"
+            )
+    for change in plan.changes:
+        if _read_text_bytes(change.path) != change.before:
+            raise FleetError(
+                f"campaign target changed after planning: "
+                f"{change.repository}/{change.relative_path}"
+            )
     if not plan.changes:
         return
-    changed_repositories = sorted({change.repository for change in plan.changes})
     if not allow_dirty:
         dirty = []
         for repo_id in changed_repositories:
@@ -1324,7 +2173,8 @@ def apply_campaign(
                 + "; use fresh clones or pass --allow-dirty explicitly"
             )
 
-    prepared: list[tuple[FileChange, Path]] = []
+    prepared: list[tuple[FileChange, Path, Path]] = []
+    replaced: list[tuple[FileChange, Path]] = []
     try:
         for change in plan.changes:
             mode = stat.S_IMODE(change.path.stat().st_mode)
@@ -1337,13 +2187,39 @@ def apply_campaign(
                 handle.flush()
                 os.fsync(handle.fileno())
             os.chmod(temporary, mode)
-            prepared.append((change, temporary))
-        for change, temporary in prepared:
+            backup_descriptor, backup_name = tempfile.mkstemp(
+                prefix=f".{change.path.name}.", suffix=".fleet-backup", dir=change.path.parent
+            )
+            backup = Path(backup_name)
+            with os.fdopen(backup_descriptor, "wb") as handle:
+                handle.write(change.before.encode("utf-8"))
+                handle.flush()
+                os.fsync(handle.fileno())
+            os.chmod(backup, mode)
+            prepared.append((change, temporary, backup))
+        for change, temporary, backup in prepared:
             os.replace(temporary, change.path)
+            replaced.append((change, backup))
+    except BaseException as exc:
+        rollback_failures: list[str] = []
+        for change, backup in reversed(replaced):
+            try:
+                os.replace(backup, change.path)
+            except BaseException as rollback_exc:  # noqa: BLE001 - report every rollback failure
+                rollback_failures.append(
+                    f"{change.repository}/{change.relative_path}: {rollback_exc}"
+                )
+        if rollback_failures:
+            raise FleetError(
+                f"campaign apply failed ({exc}); rollback also failed for: "
+                + "; ".join(rollback_failures)
+            ) from exc
+        raise FleetError(f"campaign apply failed and was rolled back: {exc}") from exc
     finally:
-        for _, temporary in prepared:
-            if temporary.exists():
-                temporary.unlink()
+        for _, temporary, backup in prepared:
+            for artifact in (temporary, backup):
+                if artifact.exists():
+                    artifact.unlink()
 
 
 def campaign_diff(plan: CampaignPlan) -> str:
@@ -1378,6 +2254,8 @@ def campaign_matrix(
     for repo_id in selected_ids:
         repo = manifest.repositories[repo_id]
         if ci_only and not repo.ci:
+            continue
+        if not repo.rollout_enabled:
             continue
         if repo.github is None:
             raise FleetError(f"campaign repository {repo_id!r} has no GitHub remote")

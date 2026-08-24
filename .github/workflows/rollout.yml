@@ -21,15 +21,16 @@ concurrency:
 
 jobs:
   matrix:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     outputs:
       targets: ${{ steps.targets.outputs.targets }}
     steps:
       - name: Checkout fleet repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
 
@@ -56,10 +57,16 @@ jobs:
           targets="$(shield-fleet change targets "$CHANGE" \
             --manifest "$MANIFEST" --ci-only --github-matrix)"
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
+          echo '## Rollout target preview' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          python -m json.tool <<< "$targets" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
 
   rollout:
     needs: matrix
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: fleet-rollout
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.matrix.outputs.targets) }}
@@ -75,12 +82,12 @@ jobs:
           fi
 
       - name: Checkout fleet repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           path: fleet
 
       - name: Checkout target repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: ${{ matrix.github }}
           ref: ${{ matrix.maintenance_branch }}
@@ -88,7 +95,7 @@ jobs:
           path: workspace/${{ matrix.checkout }}
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.12'
 
@@ -109,7 +116,7 @@ jobs:
 
       - name: Create draft pull request
         id: pull-request
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         with:
           path: workspace/${{ matrix.checkout }}
           token: ${{ secrets.FLEET_TOKEN }}
