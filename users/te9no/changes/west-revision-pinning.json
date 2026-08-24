@@ -3,7 +3,7 @@
   "id": "west-revision-pinning",
   "enabled": true,
   "title": "west dependency revisionsを検証済みcommitへ固定する",
-  "description": "moving branchと短縮SHAをなくし、全キーボードのbuildを再現可能にする。",
+  "description": "tag、named branch/ref、短縮SHAを含む40文字commit SHA以外のrevisionをなくし、全キーボードのbuildを再現可能にする。",
   "scope": {
     "all": true
   },
@@ -12,14 +12,15 @@
     "from_revision": null,
     "to_revision": "40-character-commit-sha-policy",
     "change_url": "https://github.com/te9no/zmk-shield-fleet/pull/1",
-    "notes": "shield-fleet revisionsでmain/master/branch refと短縮SHAを継続検査する。"
+    "notes": "shield-fleet revisions --strict-shaでtag、named branch/ref、短縮SHAを含む40文字SHA以外のrevisionを継続検査する。"
   },
   "metrics": {
-    "finding_total": 43,
+    "finding_total": 54,
     "measured_at": "2026-08-25",
-    "fleet_commit": "ab3093b06b413c6b320979186a20e7dee11d61dd",
-    "audit_run": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676",
-    "measurement_scope": "CI-managed repositories at maintenance_branch when configured, otherwise default_branch; local-only cagime excluded",
+    "measurement_mode": "strict-sha",
+    "measurement_command": "shield-fleet revisions --manifest users/te9no/fleet.toml --strict-sha",
+    "measurement_scope": "Fresh clones of CI-managed repositories at maintenance_branch when configured, otherwise default_branch; counts include every non-40-character revision including tags and named refs; local-only cagime excluded",
+    "evidence_status": "local-fresh-clone-observation-pending-public-ci-run",
     "local_only_baseline": {
       "repository": "cagime",
       "findings": 16,
@@ -46,14 +47,14 @@
       "pr": null,
       "commit": null,
       "findings": 0,
-      "notes": "moving ref/短縮SHAなし。zmk-nice-oled@c511d7f64ba0f186051943d027333d247ad8e206はmodule mainではなくcodex/portrait-split-layout由来の固定pin。",
+      "notes": "fresh cloneのstrict-sha監査で0 findings。zmk-nice-oled@c511d7f64ba0f186051943d027333d247ad8e206はmodule mainではなくcodex/portrait-split-layout由来の固定pin。",
       "validation": {
         "ci": "passed",
         "revision-audit": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717",
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
       },
       "branch": "zmk-0.4",
       "base_branch": "main"
@@ -62,13 +63,13 @@
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 7,
-      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "findings": 8,
+      "notes": "fresh cloneのstrict-sha監査で8 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-MDK/tree/main"
       }
     },
     "mkb2": {
@@ -85,7 +86,7 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
@@ -96,12 +97,12 @@
       "pr": null,
       "commit": null,
       "findings": 6,
-      "notes": "最新Fleet Auditで6 moving-ref findings。",
+      "notes": "fresh cloneのstrict-sha監査で6 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-MRM/tree/main"
       }
     },
     "saa": {
@@ -118,7 +119,7 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master"
@@ -138,20 +139,20 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-keyboard-cornix/tree/zmk-0.4"
       }
     },
     "torabo": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 7,
-      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "findings": 11,
+      "notes": "fresh cloneのstrict-sha監査で11 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-keyboard-torabo-tsuki-lp/tree/v0.3%2Bdya-studio"
       }
     },
     "cagime": {
@@ -166,20 +167,20 @@
       },
       "validation_urls": {
         "local-repository-bootstrap": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json",
-        "local-revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "local-revision-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json"
       }
     },
     "berkut51": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 7,
-      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "findings": 9,
+      "notes": "fresh cloneのstrict-sha監査で9 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-berkut51/tree/main"
       }
     },
     "solstice": {
@@ -196,7 +197,7 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
         "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4"
       },
       "branch": "zmk-0.4_validation_oled-custom-stack",
       "base_branch": "zmk-0.4",
@@ -206,26 +207,26 @@
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 7,
-      "notes": "最新Fleet Auditで7 moving-ref findings。",
+      "findings": 9,
+      "notes": "fresh cloneのstrict-sha監査で9 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-koZakura/tree/main"
       }
     },
     "sparagmos": {
       "status": "pending",
       "pr": null,
       "commit": null,
-      "findings": 9,
-      "notes": "最新Fleet Auditで9 moving-ref findings。",
+      "findings": 11,
+      "notes": "fresh cloneのstrict-sha監査で11 findings（tag/refを含む）。",
       "validation": {
         "revision-audit": "pending"
       },
       "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676"
+        "revision-audit": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master"
       }
     }
   },

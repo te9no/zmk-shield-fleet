@@ -180,13 +180,12 @@ priority = "low"
 order = 99
 repository = "mdk / mrm / torabo / berkut51 / kozakura / sparagmos"
 action = "高優先度の実機検証とactive PRを終えた後に、古いZMK基準とCDC/Studio差分を監査する。"
-completion = "各repositoryに対し、専用検証branchへ進むかnot-applicableとするかが記録される。"
-blocker = "最低優先度群。stable main/masterへの反映は次アクションに含めない。"
+completion = "strict-sha 54 findingsをrepository別に解消またはwaiveし、専用検証branchへ進むかnot-applicableとするかが記録される。"
+blocker = "fresh cloneのstrict-sha baselineはMDK 8、MRM 6、Torabo 11、Berkut51 9、koZakura 9、Sparagmos 11。最低優先度群で、stable main/masterへの反映は次アクションに含めない。"
 change_id = "west-revision-pinning"
 validation_keys = ["revision-audit"]
 evidence = [
-  { label = "Fleet revision audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/actions/runs/32744085676" },
-  { label = "Revision ledger", status = "info", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
+  { label = "Strict-sha baseline (54 findings; local fresh-clone audit)", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
 ]
 
 [[repositories]]
