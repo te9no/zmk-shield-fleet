@@ -6,17 +6,34 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
-id = "cornix-madula-tb-hardware"
+id = "cornix-madula-1200-baud"
 state = "waiting"
 priority = "high"
 order = 1
 repository = "cornix"
-action = "Madula Trackball実機でtrackball入力・split動作・1200 baud bootを最終確認する。"
-completion = "Madula TBのpointer入力、左右接続、CDC Debug、1200 baud boot、DYA Studioがすべて実機合格する。"
-blocker = "Madula Trackball実機の接続・操作確認待ち。実機合格までmerge不可。"
+action = "Madula Centralで1200 baud bootを実行し、bootloader移行とCOM復帰を確認する。"
+completion = "CDC Debug接続中に1200 baudを実行し、bootloaderと通常COMの復帰が実機合格する。"
+blocker = "CentralのUSB操作確認待ち。物理trackballは不要。"
+pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+change_id = "cdc-acm-zephyr-4.1"
+validation_keys = ["1200-baud"]
+evidence = [
+  { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/3" },
+  { label = "12/12 CI", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654" },
+]
+
+[[next_actions]]
+id = "cornix-madula-tb-hardware"
+state = "waiting"
+priority = "high"
+order = 2
+repository = "cornix"
+action = "Madula Trackball実機でPMW3610入力、split relay、source列挙、frame captureを確認する。"
+completion = "pointer方向・速度、左右接続、DYA Studioのsource 1/ALLとframe captureが実機合格する。"
+blocker = "Madula Trackball実機がないため保留。Draft PR #3は実機合格までmergeしない。"
 pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
-validation_keys = ["hardware", "1200-baud"]
+validation_keys = ["hardware"]
 variant_ids = ["madula-trackball"]
 evidence = [
   { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/3" },
@@ -24,10 +41,25 @@ evidence = [
 ]
 
 [[next_actions]]
+id = "cornix-madula-iqs-hardware"
+state = "waiting"
+priority = "high"
+order = 3
+repository = "cornix"
+action = "Madula IQS moduleで入力方向、応答、split経由のレポートを実機確認する。"
+completion = "Madula IQSのmodule固有入力が実機合格し、台帳のhardware validationがpassedになる。"
+blocker = "Madula IQS実機の接続・操作確認待ち。"
+change_id = "iqs9151-upstream-zmk-0.4"
+validation_keys = ["hardware"]
+evidence = [
+  { label = "Current zmk-0.4 12/12 CI", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32774773130" },
+]
+
+[[next_actions]]
 id = "saa-zmk-0-4-hardware-validation"
 state = "active"
 priority = "high"
-order = 2
+order = 4
 repository = "saa"
 action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象moduleを書き込み、左右実機を検証する。"
 completion = "1200 baud boot、DYA Studio UI、両手接続、対象module入力が合格し、専用branchの検証証跡が揃う。"
@@ -41,10 +73,28 @@ evidence = [
 ]
 
 [[next_actions]]
+id = "saa-pmw3610-hardware"
+state = "active"
+priority = "high"
+order = 5
+repository = "saa"
+action = "現行のzmk-0.4_validation_cormoran-zmkから左右TB artifactを書き込み、PMW3610入力とStudio診断を確認する。"
+completion = "左右PMW3610入力、split relay、DYA Studio source列挙が現行21-target branchで実機合格する。"
+blocker = "21/21 buildとPMW3610の統合は済み。実機moduleと書き込み時間が必要。stable masterは対象外。"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "studio-peripheral-preview-hardware"]
+variant_ids = ["left-tb", "right-tb"]
+evidence = [
+  { label = "Canonical 21-target branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk" },
+  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475" },
+]
+
+[[next_actions]]
 id = "polaris-right-tb-tpd-cdc-hardware"
 state = "waiting"
 priority = "medium"
-order = 3
+order = 6
 repository = "polaris"
 action = "右IQSで合格したCDC Debug/1200 baud構成を、右TB/TPDの各module firmwareでも書き込み・入力確認する。"
 completion = "右TB/TPDのCDCログ、1200 baud boot、COM復帰、split/module入力がそれぞれ実機合格する。"
@@ -62,7 +112,7 @@ evidence = [
 id = "dya-studio-upstream-pr-168"
 state = "waiting"
 priority = "medium"
-order = 4
+order = 7
 repository = "cormoran/dya-studio"
 repository_url = "https://github.com/cormoran/dya-studio"
 action = "外部PR #168のPeripheral PMW3610対応を確認し、採否はユーザー判断に委ねる。"
@@ -70,7 +120,7 @@ completion = "upstream側の判断が確定し、Fleetのupstream-pr validation�
 blocker = "外部所有repositoryのopen PR。Fleetから変更・close・mergeせず、ユーザー判断を待つ。"
 pr = "https://github.com/cormoran/dya-studio/pull/168"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
-validation_keys = ["studio-peripheral-preview-hardware"]
+validation_keys = ["upstream-pr"]
 evidence = [
   { label = "External PR #168", status = "pending", url = "https://github.com/cormoran/dya-studio/pull/168" },
 ]
@@ -79,14 +129,14 @@ evidence = [
 id = "polaris-joy-speed-hardware"
 state = "waiting"
 priority = "medium"
-order = 5
+order = 8
 repository = "polaris"
-action = "左右JOY firmwareでpointer scale、100 Hz report cadence、60秒継続入力を実機確認する。"
-completion = "方向・速度・滑らかさ・60秒後の継続入力が左右JOYで合格する。"
-blocker = "Polaris JOY moduleの書き込みと操作確認待ち。"
+action = "左JOY firmwareでpointer scale、100 Hz report cadence、60秒継続入力を実機確認する。"
+completion = "方向・速度・滑らかさ・60秒後の継続入力が左JOYで合格する。"
+blocker = "Polarisの現行build matrixには左JOYのみが存在。moduleの書き込みと操作確認待ち。"
 change_id = "mkb-joystick-pointer-speed"
 validation_keys = ["direction", "pointer-speed", "report-cadence", "60-second-continuity"]
-variant_ids = ["left-joy", "right-joy"]
+variant_ids = ["left-joy"]
 evidence = [
   { label = "Polaris zmk-0.4 branch", status = "info", url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4" },
 ]
@@ -95,34 +145,67 @@ evidence = [
 id = "polaris-pmw3610-hardware"
 state = "waiting"
 priority = "medium"
-order = 6
+order = 9
 repository = "polaris"
-action = "zmk-0.4の右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
-completion = "PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
-blocker = "機能コードはzmk-0.4へ統合済み。Polaris trackball実機が未接続のため、右TBの実動作証跡だけが残っている。stable mainは対象外。"
+action = "zmk-0.4の左/右TB firmwareをそれぞれ書き込み、入力・split relay・Studio診断を確認する。"
+completion = "左右PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
+blocker = "機能コードはzmk-0.4へ統合済み。Polaris trackball実機が未接続のため左右TBの実動作証跡が残っている。stable mainは対象外。"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
 validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
-variant_ids = ["right-tb"]
+variant_ids = ["left-tb", "right-tb"]
 evidence = [
   { label = "PR #6 merged into zmk-0.4", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6" },
   { label = "zmk-0.4 10/10 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602" },
 ]
 
 [[next_actions]]
-id = "saa-pmw3610-hardware"
-state = "later"
+id = "mkb-right-joy-hardware"
+state = "waiting"
 priority = "medium"
-order = 7
-repository = "saa"
-action = "SAAの通常21-target実機確認後、別PMW3610検証branchの左右TBを検証する。"
-completion = "左右PMW3610入力、split relay、DYA Studio source列挙が実機合格する。"
-blocker = "専用branchの21/21 buildは成功済みだが実機未検証。SAA基本検証を先に完了する。"
-change_id = "pmw3610-cormoran-custom-studio-rpc"
-validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "studio-peripheral-preview-hardware"]
-variant_ids = ["left-tb", "right-tb"]
+order = 10
+repository = "mkb2"
+action = "MKB右JOY firmwareを書き込み、方向、速度、100 Hz、60秒継続入力を確認する。"
+completion = "右JOYが左JOYと同じ滑らかさで動作し、60秒後も入力が継続する。"
+blocker = "左JOYは実機合格済み。右JOYの書き込みと操作確認待ち。"
+change_id = "mkb-joystick-pointer-speed"
+validation_keys = ["direction", "pointer-speed", "report-cadence", "60-second-continuity"]
+variant_ids = ["right-joy"]
 evidence = [
-  { label = "Dedicated PMW3610 branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc" },
-  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195" },
+  { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
+  { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
+]
+
+[[next_actions]]
+id = "mkb-remaining-pmw3610-hardware"
+state = "waiting"
+priority = "medium"
+order = 11
+repository = "mkb2"
+action = "MKB左TBと右TBv3 firmwareを書き込み、PMW3610入力、split relay、Studio診断を確認する。"
+completion = "左TBと右TBv3が、合格済みの右TBv4と同じくsource列挙、frame capture、pointer入力に合格する。"
+blocker = "右TBv4は実機合格済み。左TBと右TBv3の実機確認待ち。"
+change_id = "pmw3610-cormoran-custom-studio-rpc"
+validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
+variant_ids = ["left-tb", "right-tbv3"]
+evidence = [
+  { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
+  { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
+]
+
+[[next_actions]]
+id = "mopolia-modernization-audit"
+state = "later"
+priority = "low"
+order = 90
+repository = "mopolia"
+action = "Mopoliaの現行6DoF/badjeff構成を保ったまま、CDC、Cormoran ZMK、DYA Studio、endpoint budget、revision固定の5項目を適用または不要判定する。"
+completion = "5項目すべてに適用/不要の根拠が記録され、必要な場合のみ非default検証branchとbuild証跡が用意される。"
+blocker = "優先度は低。stable mainは変更せず、固有6DoF/badjeff構成を壊さないことが前提。strict-sha findingsは6。"
+change_id = "west-revision-pinning"
+validation_keys = ["revision-audit"]
+evidence = [
+  { label = "Current main build", status = "passed", url = "https://github.com/te9no/GeaconMopolia-zmk-config/actions/runs/32332348530" },
+  { label = "Fleet strict-sha public audit", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/actions/runs/32794525332" },
 ]
 
 [[next_actions]]
@@ -131,13 +214,14 @@ state = "later"
 priority = "low"
 order = 99
 repository = "sparagmos"
-action = "高優先度の実機検証とactive PRを終えた後に、古いZMK基準とCDC/Studio差分を監査する。"
-completion = "Sparagmosのstrict-sha 11 findingsを解消またはwaiveし、専用検証branchへ進むかnot-applicableとするかが記録される。"
-blocker = "fresh cloneのstrict-sha baselineはSparagmos 11。最低優先度で、stable masterへの反映は次アクションに含めない。"
+action = "高優先度の実機検証後に、SparagmosのCDC、Cormoran ZMK、DYA Studio、endpoint budget、JOY、analog battery、revision固定を項目ごとに分類する。"
+completion = "7機能項目とrevision固定の全8項目が適用/不要に分類され、11 strict-sha findingsを解消またはwaiveする方針が記録される。"
+blocker = "最低優先度。現行buildは失敗しており、stable masterは変更せず非default検証branchから始める。"
 change_id = "west-revision-pinning"
 validation_keys = ["revision-audit"]
 evidence = [
-  { label = "Sparagmos strict-sha baseline (11 findings; local fresh-clone audit)", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
+  { label = "Fleet strict-sha public audit (11 findings)", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/actions/runs/32794525332" },
+  { label = "Latest Sparagmos build failure", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconSparagmos/actions/runs/23621955018" },
 ]
 
 [[repositories]]

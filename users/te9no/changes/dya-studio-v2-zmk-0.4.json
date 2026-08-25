@@ -81,7 +81,7 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
       "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "PR #1がmainへmerge済み。Polarisと同じ固定revision群を採用し、Madula対応を含む全12 firmware matrix成功。後続Draft PR #3の実機でDYA Studio接続も確認済み。",
+      "notes": "PR #1で一般的なZMK 0.4・DYA Studio・TPS43基準をmainへmerge済み。Madula Trackball固有のPMW3610/runtime拡張は別件のDraft PR #3でzmk-0.4向けに継続中。現行zmk-0.4は12/12 CIとDYA Studio接続に合格。",
       "branch": "codex/promote-madula-zmk-0.4-to-main",
       "base_branch": "main",
       "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
@@ -90,8 +90,8 @@
         "dya-studio": "passed"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32774773130",
+        "dya-studio": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
       }
     },
     "solstice": {

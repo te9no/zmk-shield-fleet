@@ -35,7 +35,7 @@
       "notes": "統合PR #14でMKB/zmk-0.4へ速度・100 Hz連続report修整を反映。2026-08-22に左JOYで滑らかな移動を実機確認。旧PR #10はclosed-unmergedの統合前履歴。",
       "validation": {
         "ci": "passed",
-        "hardware": "passed"
+        "hardware": "pending"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
@@ -43,16 +43,27 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
-      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
-    },
-    "polaris": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "基準機を含め、analog inputのscaleとsampling/report intervalが実機で滑らかか再監査する。",
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858",
       "variants": [
         {
           "id": "left-joy",
+          "status": "passed",
+          "validation": {
+            "direction": "passed",
+            "pointer-speed": "passed",
+            "report-cadence": "passed",
+            "60-second-continuity": "passed"
+          },
+          "evidence": [
+            {
+              "label": "MKB left-JOY owner hardware record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
+            }
+          ]
+        },
+        {
+          "id": "right-joy",
           "status": "pending",
           "validation": {
             "direction": "pending",
@@ -62,14 +73,32 @@
           },
           "evidence": [
             {
-              "label": "Polaris zmk-0.4 hardware gate",
+              "label": "MKB right-JOY hardware gate",
               "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+              "url": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
             }
           ]
-        },
+        }
+      ]
+    },
+    "polaris": {
+      "status": "applied",
+      "pr": null,
+      "commit": "10885439f82c58cd65c1cdccc935e97954bbe0c9",
+      "notes": "Polaris/zmk-0.4はJOY inputを100 Hz、report-interval-ms=8、scale-divisor=1で構成済み。現行build.yamlにJOY firmwareは左側だけ存在し、右JOY variantはない。コードと10/10 CIは適用済みだが、左JOYの方向・速度・滑らかさ・60秒継続は実機待ち。stable mainは未変更。",
+      "validation": {
+        "ci": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+      },
+      "branch": "zmk-0.4",
+      "base_branch": "main",
+      "variants": [
         {
-          "id": "right-joy",
+          "id": "left-joy",
           "status": "pending",
           "validation": {
             "direction": "pending",
