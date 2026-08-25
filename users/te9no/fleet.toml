@@ -97,15 +97,15 @@ state = "waiting"
 priority = "medium"
 order = 6
 repository = "polaris"
-action = "専用PMW3610検証branchの右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
+action = "zmk-0.4の右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
 completion = "PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
-blocker = "Polaris trackball実機未検証。CI 10/10成功だけではmerge不可。"
+blocker = "機能コードはzmk-0.4へ統合済み。Polaris trackball実機が未接続のため、右TBの実動作証跡だけが残っている。stable mainは対象外。"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
 validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
 variant_ids = ["right-tb"]
 evidence = [
-  { label = "Dedicated PMW3610 branch", status = "info", url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc" },
-  { label = "10/10 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625" },
+  { label = "PR #6 merged into zmk-0.4", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6" },
+  { label = "zmk-0.4 10/10 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602" },
 ]
 
 [[next_actions]]
