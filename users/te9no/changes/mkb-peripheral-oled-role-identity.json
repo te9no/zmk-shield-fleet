@@ -18,7 +18,8 @@
     "notes": "2026-08-23のMKB左右実機確認で、Bongo Catの位置、Peripheralの情報密度、Central接続状態の表示を調整して確定した。"
   },
   "repositories": [
-    "mkb2"
+    "mkb2",
+    "mopolia"
   ],
   "tracking": {
     "mkb2": {
@@ -33,6 +34,12 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
+    },
+    "mopolia": {
+      "status": "not-applicable",
+      "pr": null,
+      "commit": null,
+      "notes": "右手単体の非split shieldでOLEDを搭載しないため対象外。"
     }
   },
   "steps": []

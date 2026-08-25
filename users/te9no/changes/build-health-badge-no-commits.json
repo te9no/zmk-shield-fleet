@@ -21,7 +21,8 @@
     "polaris",
     "mkb2",
     "saa",
-    "cornix"
+    "cornix",
+    "mopolia"
   ],
   "tracking": {
     "polaris": {
@@ -87,6 +88,12 @@
       "branch": "codex/stop-build-health-commits",
       "base_branch": "main",
       "pr_head": "1637c596483920582f28a29049fc8fb55f90d42c"
+    },
+    "mopolia": {
+      "status": "not-applicable",
+      "pr": null,
+      "commit": null,
+      "notes": "workflowはpush/pull_request/workflow_dispatchのみで、日次status commitやscheduleを持たないため対象外。"
     }
   },
   "steps": []

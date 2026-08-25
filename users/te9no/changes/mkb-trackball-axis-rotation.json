@@ -18,7 +18,8 @@
     "notes": "2026-08-22の右TBv4実機試験でポインタ方向が90度ずれていることを確認。PolarisとMKBのセンサー実装角差と一致する。"
   },
   "repositories": [
-    "mkb2"
+    "mkb2",
+    "mopolia"
   ],
   "tracking": {
     "mkb2": {
@@ -37,6 +38,12 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
+    },
+    "mopolia": {
+      "status": "not-applicable",
+      "pr": null,
+      "commit": null,
+      "notes": "trackballを搭載しないため対象外。"
     }
   },
   "steps": []

@@ -22,15 +22,10 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
     "cornix",
-    "torabo",
-    "berkut51",
     "solstice",
-    "kozakura",
     "sparagmos"
   ],
   "tracking": {
@@ -75,12 +70,6 @@
         }
       ]
     },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。単純置換せず別途適合性を判断"
-    },
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
@@ -103,12 +92,6 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
-    },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "最低優先度。現行badjeff moving mainのpmw3610-alt系で、compatible/Kconfigが別系統。MDKと同時に適合性を判断"
     },
     "saa": {
       "status": "pending",
@@ -227,18 +210,6 @@
         }
       ]
     },
-    "torabo": {
-      "status": "not-applicable",
-      "pr": null,
-      "commit": null,
-      "notes": "trackballはPMW3610ではなくPAW3222。今回のdriver横展開対象外"
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "最低優先群。現行cormoran/zmk-pmw3610-driver moving mainで、custom Studio RPC版とは別repository。固定revision化と移行が必要"
-    },
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
@@ -255,12 +226,6 @@
       "branch": "zmk-0.4_validation_oled-custom-stack",
       "base_branch": "zmk-0.4",
       "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
-    },
-    "kozakura": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "最低優先群。現行efogdev moving main、左右PMW3610構成。複数sensor識別とsplit relayの確認が必要"
     },
     "sparagmos": {
       "status": "pending",

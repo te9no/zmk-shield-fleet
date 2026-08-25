@@ -22,11 +22,8 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
-    "berkut51",
     "solstice",
     "sparagmos"
   ],
@@ -47,12 +44,6 @@
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/6a7b21fa878e718472102b787f6dd21e0ee113db"
       }
     },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "module未導入"
-    },
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
@@ -70,12 +61,6 @@
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
     },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "module未導入"
-    },
     "saa": {
       "status": "applied",
       "pr": null,
@@ -91,12 +76,6 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master"
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "module利用あり。59fc126へのpinと実機確認が必要"
     },
     "solstice": {
       "status": "merged",

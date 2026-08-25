@@ -22,16 +22,12 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
     "cornix",
-    "torabo",
-    "berkut51",
     "solstice",
-    "kozakura",
-    "sparagmos"
+    "sparagmos",
+    "mopolia"
   ],
   "tracking": {
     "polaris": {
@@ -47,12 +43,6 @@
       },
       "branch": "zmk-0.4",
       "base_branch": "main"
-    },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "DYA Studio V2固定module群なし"
     },
     "mkb2": {
       "status": "merged",
@@ -70,12 +60,6 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
-    },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "DYA Studio V2固定module群なし"
     },
     "saa": {
       "status": "applied",
@@ -110,18 +94,6 @@
         "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
       }
     },
-    "torabo": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "ZMK v0.3-branch+dyaと旧Studio stack"
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "旧DYA runtime stackを使用中"
-    },
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
@@ -144,17 +116,23 @@
       "base_branch": "zmk-0.4",
       "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
-    "kozakura": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "旧DYA runtime stackを使用中"
-    },
     "sparagmos": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "notes": "旧DYA runtime stackを使用中"
+    },
+    "mopolia": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "build.yamlのStudio snippetはコメントアウトされ、DYA Studio V2は未導入。単体shieldでの導入可否を未検証。",
+      "validation": {
+        "studio-integration": "pending"
+      },
+      "validation_urls": {
+        "studio-integration": "https://github.com/te9no/GeaconMopolia-zmk-config/tree/main"
+      }
     }
   },
   "steps": []

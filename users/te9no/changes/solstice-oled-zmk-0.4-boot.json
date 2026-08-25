@@ -18,7 +18,8 @@
     "notes": "2026-08-23のSolstice左実機検証で、te9no forkによる白背景対策が3回とも無効だったため、本家ZMK 0.4対応版へ切り替えた。本家版でBongo Catが右端の文字と重なったため、compact 32pxレイアウトの検証を開始した。"
   },
   "repositories": [
-    "solstice"
+    "solstice",
+    "mopolia"
   ],
   "tracking": {
     "solstice": {
@@ -53,6 +54,12 @@
       "branch": "zmk-0.4_validation_oled-custom-stack",
       "base_branch": "zmk-0.4",
       "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
+    },
+    "mopolia": {
+      "status": "not-applicable",
+      "pr": null,
+      "commit": null,
+      "notes": "OLEDを搭載しない単体shieldのため対象外。"
     }
   },
   "steps": []

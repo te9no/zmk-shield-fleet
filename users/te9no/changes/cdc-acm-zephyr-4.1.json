@@ -22,16 +22,12 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
     "cornix",
-    "torabo",
-    "berkut51",
     "solstice",
-    "kozakura",
-    "sparagmos"
+    "sparagmos",
+    "mopolia"
   ],
   "tracking": {
     "polaris": {
@@ -117,12 +113,6 @@
         }
       ]
     },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "現行west.ymlにmoduleなし"
-    },
     "mkb2": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
@@ -139,12 +129,6 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
-    },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "現行west.ymlにmoduleなし"
     },
     "saa": {
       "status": "applied",
@@ -185,18 +169,6 @@
       "base_branch": "zmk-0.4",
       "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
     },
-    "torabo": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "旧v0.2とZMK 0.3を使用中"
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "DYA Studio利用あり、CDC trigger未導入"
-    },
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
@@ -211,17 +183,23 @@
       "base_branch": "zmk-0.4",
       "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
-    "kozakura": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "DYA Studio利用あり、CDC trigger未導入"
-    },
     "sparagmos": {
       "status": "pending",
       "pr": null,
       "commit": null,
       "notes": "DYA Studio利用あり、CDC trigger未導入"
+    },
+    "mopolia": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "現行mainはUSB loggingを有効化しているが、CDC boot trigger moduleと1200 baud boot設定は未導入。Zephyr 4.1対応の適用可否を未検証。",
+      "validation": {
+        "cdc-integration": "pending"
+      },
+      "validation_urls": {
+        "cdc-integration": "https://github.com/te9no/GeaconMopolia-zmk-config/tree/main"
+      }
     }
   },
   "steps": []
