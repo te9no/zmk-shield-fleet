@@ -75,8 +75,8 @@
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32774773130",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/zmk-0.4"
       }
     }
   },

@@ -42,10 +42,32 @@
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
       },
-      "branch": "zmk-0.4",
+      "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "da95be27ed47a2661742e0a0c4e61d7da1fee075",
       "variants": [
+        {
+          "id": "left-tb",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Polaris zmk-0.4 left-TB hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+            },
+            {
+              "label": "zmk-0.4 10/10 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602"
+            }
+          ]
+        },
         {
           "id": "right-tb",
           "status": "pending",
@@ -78,8 +100,8 @@
       "notes": "統合PR #14でMKB/zmk-0.4へfirmwareを反映し、15/15 CI、右TBv4のPMW入力、split relay、Product ID/Revision/CPI、484-pixel frame capture、streamingを実機確認。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。外部cormoran/dya-studio PR #168はfirmware commitではなく、Peripheral UI対応の独立したopen upstream validationとして追跡する。",
       "validation": {
         "ci": "passed",
-        "hardware-input": "passed",
-        "upstream-local-ci": "passed",
+        "hardware-input": "pending",
+        "upstream-local-ci": "pending",
         "studio-peripheral-preview-hardware": "passed",
         "upstream-pr": "pending"
       },
@@ -92,24 +114,85 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
-      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858",
+      "variants": [
+        {
+          "id": "left-tb",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB left-TB hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+            }
+          ]
+        },
+        {
+          "id": "right-tbv3",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB right-TBv3 hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+            }
+          ]
+        },
+        {
+          "id": "right-tbv4",
+          "status": "passed",
+          "validation": {
+            "hardware": "passed",
+            "module-input": "passed",
+            "split-connectivity": "passed",
+            "source-enumeration": "passed",
+            "frame-capture": "passed"
+          },
+          "evidence": [
+            {
+              "label": "MKB right-TBv4 owner hardware record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
+            },
+            {
+              "label": "MKB 15/15 CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330"
+            }
+          ]
+        }
+      ]
     },
     "saa": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "4486e6ece2427d139967428b7312270f644e9b8a",
-      "notes": "SAA/feat/add-iqs-module-and-led-support@5d1d4e3（ZMK 0.4、IQS upstream、oversampling、CDC固定済み）からSAA/zmk-0.4_validation_pmw3610-cormoran-rpcを作成。cormoran PMW driver@5c34ea0とcustom settings@c6a7fefを固定し、左右pixart,pmw3610をcormoran,pmw3610へ移行。settings-idはsaa-ltb/saa-rtb、右CentralでStudio/custom settings/PMW relay、左Peripheralでcustom settings/PMW relayを有効化。split payloadは240、low-priority stackは4096。./just.sh build-fast . --pristine=alwaysで全21 targetが成功。検証branchは4486e6e（feat: validate cormoran PMW3610 across SAA）としてpush済み。実機未検証、PR未作成、SAA/masterおよびSAA/feat/add-iqs-module-and-led-support未反映。未検証のSAA/master昇格をrevertする既存方針を維持。左Peripheral PMWはDYA Studio PR #168 previewでsource 1を確認する",
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "notes": "PMW実装commit 4486e6eは現行の専用zmk-0.4_validation_cormoran-zmkへ取り込み済み。cormoran PMW driver@5c34ea0とcustom settings@c6a7fefを固定し、左右をcormoran,pmw3610へ移行、右CentralでStudio/custom settings/PMW relay、左Peripheralでcustom settings/PMW relayを有効化している。fc64d9fでcormoran ZMK coreと統合し、remote head 4e54e1cは21生成UF2まで含む。Actions 32628652475で21/21成功。旧PMW専用branchの固有差分は生成UF2だけで、今後の実機検証は現行統合branchで行う。stable masterは変更しない。左右TBとPeripheral source表示は実機待ち。",
       "validation": {
         "ci": "passed",
         "studio-peripheral-preview-hardware": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195",
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475",
         "studio-peripheral-preview-hardware": "https://github.com/cormoran/dya-studio/pull/168",
-        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master",
       "variants": [
         {
@@ -124,14 +207,14 @@
           },
           "evidence": [
             {
-              "label": "Dedicated PMW3610 branch",
+              "label": "Canonical SAA validation branch",
               "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
             },
             {
               "label": "21/21 CI",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195"
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475"
             }
           ]
         },
@@ -147,14 +230,14 @@
           },
           "evidence": [
             {
-              "label": "Dedicated PMW3610 branch",
+              "label": "Canonical SAA validation branch",
               "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
             },
             {
               "label": "21/21 CI",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32574538195"
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475"
             }
           ]
         }

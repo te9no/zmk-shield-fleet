@@ -41,7 +41,7 @@
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32644551717",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/6a7b21fa878e718472102b787f6dd21e0ee113db"
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
       }
     },
     "mkb2": {
@@ -51,7 +51,7 @@
       "notes": "統合PR #14でMKB/zmk-0.4へ反映済み。左右JOYを含む15 firmware variantとsettings_resetが成功し、2026-08-22に左JOYのAIN7 setup=0、analog input 100 Hz、60秒後の継続入力を実機確認。旧PR #7/#9/#10は統合前のclosed-unmerged履歴であり、現行証跡はPR #14。stable firmware mainは未変更。",
       "validation": {
         "ci": "passed",
-        "hardware": "passed"
+        "hardware": "pending"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
@@ -59,7 +59,39 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
-      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
+      "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858",
+      "variants": [
+        {
+          "id": "left-joy",
+          "status": "passed",
+          "validation": {
+            "hardware": "passed",
+            "60-second-continuity": "passed"
+          },
+          "evidence": [
+            {
+              "label": "MKB left-JOY oversampling hardware record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
+            }
+          ]
+        },
+        {
+          "id": "right-joy",
+          "status": "pending",
+          "validation": {
+            "hardware": "pending",
+            "60-second-continuity": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB right-JOY oversampling hardware gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+            }
+          ]
+        }
+      ]
     },
     "saa": {
       "status": "applied",

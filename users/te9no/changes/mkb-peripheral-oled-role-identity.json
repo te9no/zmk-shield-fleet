@@ -31,6 +31,10 @@
         "ci": "passed",
         "hardware": "passed"
       },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
+      },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
