@@ -5,11 +5,11 @@
   "title": "Solstice ZMK 0.4でのOLED起動停止を切り分ける",
   "description": "ZMK 0.4移行後にSolstice Centralが起動しない場合、カスタムdongle_displayを外してZMK標準OLED画面へ戻し、表示モジュールとSSD1306ハードウェアドライバを分離して検証する。",
   "source": {
-    "repository": "englmaxi/zmk-dongle-display",
+    "repository": "te9no/zmk-dongle-display",
     "from_revision": "f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52",
-    "to_revision": "2bb333f87136d33e94a49d86236ed9ec254a8060",
-    "change_url": "https://github.com/englmaxi/zmk-dongle-display/commit/2bb333f87136d33e94a49d86236ed9ec254a8060",
-    "notes": "左Centralの起動停止は表示thread stack拡張で解消。白背景に対するte9no forkの明示色style版、mono dark theme版、mono themeとSSD1306反転の併用版はいずれも改善せず。本家englmaxiのZMK 0.4対応版が論理白背景・黒文字を明示し、SSD1306 inversion-onとの組み合わせを前提としていることを確認したため、独自forkを中止して本家2bb333fへ固定した。本家には表示event throttlingとZMK API修正も含まれる。te9no/zmk-dongle-displayの積み上げPR #4（明示色/mono theme）はこの実機不合格を根拠に2026-08-24にsupersededとしてcloseし、PR #3のLVGL 9移行Draftにも取り込まない。右手位置は専用Solstice_R_Offset snippetで修正し、実機合格。128x32 OLEDでは本家のBongo Cat右下配置が文字と重なるため、上流ベースのcompact 32pxレイアウトを提案し、猫を中央配置してレイヤーwidgetを無効化する検証版を作成した。"
+    "to_revision": "b724f0a1275b32c330b2d78a7ec758a8657501dc",
+    "change_url": "https://github.com/te9no/zmk-dongle-display/commit/b724f0a1275b32c330b2d78a7ec758a8657501dc",
+    "notes": "左Centralの起動停止は表示thread stack拡張で解消。白背景に対するte9no forkの明示色style版、mono dark theme版、mono themeとSSD1306反転の併用版はいずれも改善せず。本家englmaxiのZMK 0.4対応2bb333fを基準にし、表示event throttlingとZMK API修正を維持したまま128x32 OLED向けcompactレイアウトを加えたte9no/zmk-dongle-display@b724f0aへ固定した。右手位置は専用Solstice_R_Offset snippetで修正し、左右OLED・背景極性・Peripheral電池表示を実機合格。旧PR #3 head f6c1c0d0を参照していたSolsticeの4非default branchはzmk-0.4へ全修正が集約済みであることを確認後、2026-08-25に削除した。依存が消えたPR #3はcloseし、head branchも削除済み。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconSolstice",

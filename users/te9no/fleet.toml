@@ -59,32 +59,10 @@ evidence = [
 ]
 
 [[next_actions]]
-id = "dongle-display-lvgl9-ci"
-state = "active"
-priority = "medium"
-order = 4
-repository = "zmk-dongle-display"
-repository_url = "https://github.com/te9no/zmk-dongle-display"
-action = "Draft PR #3のLVGL9/ZMK 0.4 CI失敗を調査し、Solstice側の固定参照を安全に移行できる状態まで記録する。"
-completion = "PR #3のCI成功・実機OLED検証手順に加え、head f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52を参照するSolstice 4 branchが参照移行済みまたは廃止確認済みとなり、merge/close gateが満たされる。"
-blocker = "PR #3 head f6c1c0d0b73ac7e579d6eaeec2d15a01c7c89d52はSolsticeの4非default branchから固定参照中。全参照の移行または各branchの廃止確認までPRのmerge/closeおよびhead branch削除不可。実機OLED合格も必要。"
-pr = "https://github.com/te9no/zmk-dongle-display/pull/3"
-change_id = "solstice-oled-zmk-0.4-boot"
-validation_keys = ["ci", "hardware"]
-evidence = [
-  { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-dongle-display/pull/3" },
-  { label = "Latest CI", status = "failed", url = "https://github.com/te9no/zmk-dongle-display/actions/runs/32478508598" },
-  { label = "Solstice codex/zmk-0.4-baseline reference migration", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-baseline" },
-  { label = "Solstice zmk-0.4_validation_oled-default reference migration", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4_validation_oled-default" },
-  { label = "Solstice zmk-0.4_validation_peripheral-cdc-debug reference migration", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4_validation_peripheral-cdc-debug" },
-  { label = "Solstice zmk-0.4_validation_pmw3610-cormoran-rpc reference migration", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4_validation_pmw3610-cormoran-rpc" },
-]
-
-[[next_actions]]
 id = "dya-studio-upstream-pr-168"
 state = "waiting"
 priority = "medium"
-order = 5
+order = 4
 repository = "cormoran/dya-studio"
 repository_url = "https://github.com/cormoran/dya-studio"
 action = "外部PR #168のPeripheral PMW3610対応を確認し、採否はユーザー判断に委ねる。"
@@ -101,7 +79,7 @@ evidence = [
 id = "polaris-joy-speed-hardware"
 state = "waiting"
 priority = "medium"
-order = 6
+order = 5
 repository = "polaris"
 action = "左右JOY firmwareでpointer scale、100 Hz report cadence、60秒継続入力を実機確認する。"
 completion = "方向・速度・滑らかさ・60秒後の継続入力が左右JOYで合格する。"
@@ -117,7 +95,7 @@ evidence = [
 id = "polaris-pmw3610-hardware"
 state = "waiting"
 priority = "medium"
-order = 7
+order = 6
 repository = "polaris"
 action = "専用PMW3610検証branchの右TB firmwareを書き込み、入力・split relay・Studio診断を確認する。"
 completion = "PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
@@ -134,7 +112,7 @@ evidence = [
 id = "saa-pmw3610-hardware"
 state = "later"
 priority = "medium"
-order = 8
+order = 7
 repository = "saa"
 action = "SAAの通常21-target実機確認後、別PMW3610検証branchの左右TBを検証する。"
 completion = "左右PMW3610入力、split relay、DYA Studio source列挙が実機合格する。"
