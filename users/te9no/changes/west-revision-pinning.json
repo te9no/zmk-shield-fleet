@@ -15,7 +15,7 @@
     "notes": "shield-fleet revisions --strict-shaでtag、named branch/ref、短縮SHAを含む40文字SHA以外のrevisionを継続検査する。"
   },
   "metrics": {
-    "finding_total": 54,
+    "finding_total": 17,
     "measured_at": "2026-08-25",
     "measurement_mode": "strict-sha",
     "measurement_command": "shield-fleet revisions --manifest users/te9no/fleet.toml --strict-sha",
@@ -24,16 +24,12 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
     "cornix",
-    "torabo",
-    "berkut51",
     "solstice",
-    "kozakura",
-    "sparagmos"
+    "sparagmos",
+    "mopolia"
   ],
   "tracking": {
     "polaris": {
@@ -52,19 +48,6 @@
       },
       "branch": "zmk-0.4",
       "base_branch": "main"
-    },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 8,
-      "notes": "fresh cloneのstrict-sha監査で8 findings（tag/refを含む）。",
-      "validation": {
-        "revision-audit": "pending"
-      },
-      "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-config-MDK/tree/main"
-      }
     },
     "mkb2": {
       "status": "merged",
@@ -85,19 +68,6 @@
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
       "pr_head": "13e1cdb84aea0e4a3cfc4e4e805a104c964b0858"
-    },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 6,
-      "notes": "fresh cloneのstrict-sha監査で6 findings（tag/refを含む）。",
-      "validation": {
-        "revision-audit": "pending"
-      },
-      "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-config-MRM/tree/main"
-      }
     },
     "saa": {
       "status": "applied",
@@ -136,32 +106,6 @@
         "revision-audit": "https://github.com/te9no/zmk-keyboard-cornix/tree/zmk-0.4"
       }
     },
-    "torabo": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 11,
-      "notes": "fresh cloneのstrict-sha監査で11 findings（tag/refを含む）。",
-      "validation": {
-        "revision-audit": "pending"
-      },
-      "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-keyboard-torabo-tsuki-lp/tree/v0.3%2Bdya-studio"
-      }
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 9,
-      "notes": "fresh cloneのstrict-sha監査で9 findings（tag/refを含む）。",
-      "validation": {
-        "revision-audit": "pending"
-      },
-      "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-config-berkut51/tree/main"
-      }
-    },
     "solstice": {
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
@@ -182,19 +126,6 @@
       "base_branch": "zmk-0.4",
       "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
     },
-    "kozakura": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "findings": 9,
-      "notes": "fresh cloneのstrict-sha監査で9 findings（tag/refを含む）。",
-      "validation": {
-        "revision-audit": "pending"
-      },
-      "validation_urls": {
-        "revision-audit": "https://github.com/te9no/zmk-config-koZakura/tree/main"
-      }
-    },
     "sparagmos": {
       "status": "pending",
       "pr": null,
@@ -207,6 +138,19 @@
       "validation_urls": {
         "revision-audit": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master"
       }
+    },
+    "mopolia": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "fresh cloneのmain@479ce3897fd2df351a9c5d24ae71dd106cd9ad4eをstrict-sha監査し、40文字SHAではないmoving revisionを6件確認。固定revisionへの移行とbuild/実機確認は未実施。",
+      "validation": {
+        "revision-audit": "pending"
+      },
+      "validation_urls": {
+        "revision-audit": "https://github.com/te9no/GeaconMopolia-zmk-config/tree/479ce3897fd2df351a9c5d24ae71dd106cd9ad4e/config"
+      },
+      "findings": 6
     }
   },
   "steps": []

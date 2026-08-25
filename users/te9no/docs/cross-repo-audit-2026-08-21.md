@@ -14,15 +14,10 @@ Madula向け共通変更に参加します。
 | Repository | IQS本家/ZMK 0.4 | Analog電圧oversampling | CDC Zephyr 4.1 | DYA Studio V2 |
 | --- | --- | --- | --- | --- |
 | Polaris | applied | applied | applied | applied |
-| MDK | n/a | pending | pending | pending |
 | MKB2 | n/a | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) | validation branch・実機待ち ([#7](https://github.com/te9no/zmk-config-MKB2/pull/7)) |
-| MRM | n/a | pending | pending | pending |
 | SparAkashaAnanta | validation branch・実機待ち ([#2](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/2), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#4](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/4), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) | validation branch・実機待ち ([#3](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/3), [revert #6](https://github.com/te9no/zmk-config-SparAkashaAnanta/pull/6)) |
 | Cornix | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) | n/a | applied（repository内同等実装、[#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)） | applied ([#1](https://github.com/te9no/zmk-keyboard-cornix/pull/1)) |
-| Torabo | n/a | n/a | pending (v0.2) | pending (ZMK 0.3) |
-| Berkut51 | n/a | pending | pending | pending (旧stack) |
 | GeaconSolstice | n/a | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) | validation branch・実機待ち ([#1](https://github.com/te9no/zmk-config-GeaconSolstice/pull/1)) |
-| koZakura | n/a | n/a | pending | pending (旧stack) |
 | GeaconSparagmos | n/a | pending | pending | pending (旧stack) |
 
 ## Registered triggers
@@ -38,8 +33,8 @@ Madula向け共通変更に参加します。
 
 ## Inventory findings
 
-Berkut51、GeaconSolstice、koZakura、GeaconSparagmosが旧DYA stackを利用していたため、
-初期fleetの対象漏れとして追加しました。MKBtestは`te9no/zmk-config-MKB2`をoriginにする
+GeaconSolstice、GeaconSparagmosが旧DYA stackを利用していたため、初期fleetの対象漏れとして
+追加しました。MKBtestは`te9no/zmk-config-MKB2`をoriginにする
 試験checkoutであり、独立した配布先ではないため重複登録していません。
 
 この表は「導入候補」を示し、各機種への無条件適用を意味しません。`pending`はbuildと

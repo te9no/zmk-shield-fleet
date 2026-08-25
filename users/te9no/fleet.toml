@@ -148,14 +148,14 @@ id = "lowest-priority-fleet"
 state = "later"
 priority = "low"
 order = 99
-repository = "mdk / mrm / torabo / berkut51 / kozakura / sparagmos"
+repository = "sparagmos"
 action = "高優先度の実機検証とactive PRを終えた後に、古いZMK基準とCDC/Studio差分を監査する。"
-completion = "strict-sha 54 findingsをrepository別に解消またはwaiveし、専用検証branchへ進むかnot-applicableとするかが記録される。"
-blocker = "fresh cloneのstrict-sha baselineはMDK 8、MRM 6、Torabo 11、Berkut51 9、koZakura 9、Sparagmos 11。最低優先度群で、stable main/masterへの反映は次アクションに含めない。"
+completion = "Sparagmosのstrict-sha 11 findingsを解消またはwaiveし、専用検証branchへ進むかnot-applicableとするかが記録される。"
+blocker = "fresh cloneのstrict-sha baselineはSparagmos 11。最低優先度で、stable masterへの反映は次アクションに含めない。"
 change_id = "west-revision-pinning"
 validation_keys = ["revision-audit"]
 evidence = [
-  { label = "Strict-sha baseline (54 findings; local fresh-clone audit)", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
+  { label = "Sparagmos strict-sha baseline (11 findings; local fresh-clone audit)", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/changes/west-revision-pinning.json" },
 ]
 
 [[repositories]]
@@ -176,23 +176,6 @@ required_globs = [
 ]
 
 [[repositories]]
-id = "mdk"
-rollout_enabled = false
-allow_external = false
-rollout_order = 99
-github = "te9no/zmk-config-MDK"
-checkout = "zmk-config-MDK"
-default_branch = "main"
-architecture = "slot-snippets"
-modules = ["encoder", "joystick", "keys", "trackball", "touchpad"]
-tags = ["mekabu", "modular-input", "three-slot", "xiao"]
-required_globs = [
-  "build.yaml",
-  "snippets/Slot*/snippet.yml",
-  "snippets/Slot*/*.overlay",
-]
-
-[[repositories]]
 id = "mkb2"
 rollout_enabled = false
 allow_external = false
@@ -208,23 +191,6 @@ required_globs = [
   "build.yaml",
   "boards/shields/MKB/MKB_*_*.overlay",
   "boards/shields/MKB/MKB_*_*.conf",
-]
-
-[[repositories]]
-id = "mrm"
-rollout_enabled = false
-allow_external = false
-rollout_order = 99
-github = "te9no/zmk-config-MRM"
-checkout = "zmk-config-MRM"
-default_branch = "main"
-architecture = "slot-snippets"
-modules = ["encoder", "joystick", "keys", "trackball", "touchpad"]
-tags = ["mekabu", "modular-input", "three-slot", "xiao"]
-required_globs = [
-  "build.yaml",
-  "snippets/Slot*/snippet.yml",
-  "snippets/Slot*/*.overlay",
 ]
 
 [[repositories]]
@@ -264,40 +230,6 @@ required_globs = [
 ]
 
 [[repositories]]
-id = "torabo"
-rollout_enabled = false
-allow_external = false
-rollout_order = 99
-github = "te9no/zmk-keyboard-torabo-tsuki-lp"
-checkout = "zmk-keyboard-torabo-tsuki-lp"
-default_branch = "v0.3+dya-studio"
-architecture = "module-snippets"
-modules = ["trackball", "touchpad"]
-tags = ["modular-input", "split", "xiao"]
-required_globs = [
-  "build.yaml",
-  "snippets/input-*/snippet.yml",
-  "snippets/input-*/*.overlay",
-]
-
-[[repositories]]
-id = "berkut51"
-rollout_enabled = false
-allow_external = false
-rollout_order = 99
-github = "te9no/zmk-config-berkut51"
-checkout = "zmk-config-berkut51"
-default_branch = "main"
-architecture = "modular-shield"
-modules = ["encoder", "joystick", "trackball", "touchpad"]
-tags = ["mekabu", "modular-input", "dya-studio", "xiao"]
-required_globs = [
-  "build.yaml",
-  "boards/shields/Berkut51/*.overlay",
-  "boards/shields/Berkut51/*.conf",
-]
-
-[[repositories]]
 id = "solstice"
 rollout_enabled = false
 allow_external = false
@@ -316,20 +248,23 @@ required_globs = [
 ]
 
 [[repositories]]
-id = "kozakura"
+id = "mopolia"
 rollout_enabled = false
 allow_external = false
-rollout_order = 99
-github = "te9no/zmk-config-koZakura"
-checkout = "zmk-config-koZakura"
+github = "te9no/GeaconMopolia-zmk-config"
+checkout = "GeaconMopolia-zmk-config"
 default_branch = "main"
+maintenance_branch = "main"
 architecture = "integrated-shield"
-modules = ["encoder", "trackball"]
-tags = ["dya-studio", "split", "xiao"]
+modules = ["magnetic-sensor"]
+tags = ["6dof", "hid-joystick", "integrated", "right-hand-only", "xiao"]
 required_globs = [
   "build.yaml",
-  "boards/shields/koZakura48/*.overlay",
-  "boards/shields/koZakura48/*.conf",
+  "config/west.yml",
+  "boards/shields/geaconmopolia/geaconmopolia.overlay",
+  "boards/shields/geaconmopolia/geaconmopolia.conf",
+  "boards/shields/geaconmopolia/geaconmopolia.zmk.yml",
+  "snippets/geacon-ipad-gamepad/snippet.yml",
 ]
 
 [[repositories]]
@@ -347,13 +282,4 @@ required_globs = [
   "build.yaml",
   "boards/shields/GeaconSparagmos/*.overlay",
   "boards/shields/GeaconSparagmos/*.conf",
-]
-
-[[mirrors]]
-id = "mdk-mrm-slot-snippets"
-description = "MDK and MRM began with the same three-slot module snippet set."
-enforce = false
-members = [
-  { repository = "mdk", path = "snippets", include = ["Slot*/**"], exclude = [] },
-  { repository = "mrm", path = "snippets", include = ["Slot*/**"], exclude = [] },
 ]

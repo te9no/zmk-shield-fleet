@@ -22,11 +22,8 @@
   },
   "repositories": [
     "polaris",
-    "mdk",
     "mkb2",
-    "mrm",
     "saa",
-    "berkut51",
     "solstice",
     "sparagmos"
   ],
@@ -90,18 +87,6 @@
         }
       ]
     },
-    "mdk": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "JOY slotあり。最低優先度で監査する。"
-    },
-    "mrm": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "JOY slotあり。最低優先度で監査する。"
-    },
     "saa": {
       "status": "applied",
       "pr": null,
@@ -117,12 +102,6 @@
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "master"
-    },
-    "berkut51": {
-      "status": "pending",
-      "pr": null,
-      "commit": null,
-      "notes": "joystick対象。最低優先度で監査する。"
     },
     "solstice": {
       "status": "merged",
