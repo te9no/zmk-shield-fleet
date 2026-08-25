@@ -30,20 +30,21 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pending",
-      "pr": null,
-      "commit": "59d4f17e591adec5586142ddc14b18317746e8cd",
-      "notes": "第1群。既存のPolaris/codex/polaris-dya-studio-v2@6e0ca94にはcormoran PMW driver@5c34ea0、左右TB compatible移行、DYA対応がある。Polaris/zmk-0.4_validation_pmw3610-cormoran-rpcでMKB横並びにsplit relay payloadを256から240へ、low-priority stackを2048から4096へ調整し、custom settings split RPC relayとPMW custom settingsを右TBだけに限定。初回全体buildは右IQS 2件へPMW settingsが誤適用されlink失敗し8/10だったためTB_R限定へ修正。IQS 2/2とTB_R個別成功後、./just.sh build-fast . --pristine=alwaysで全10 targetが成功。検証branchは59d4f17（fix: align PMW3610 split RPC validation）としてpush済み。実機未検証、PR未作成、Polaris/mainおよび既存Polaris/codex/polaris-dya-studio-v2未反映。センサーがPeripheral配置の場合、横展開前にDYA Studio UIがsource 1/ALL列挙とdeferred PeripheralResponseを扱えることを確認する",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
+      "commit": "53cbeec1040ce2043d4489e8e5d4e52db99b1ba9",
+      "notes": "cormoran PMW driver@5c34ea0、custom settings@c6a7fef、左右TBのcormoran,pmw3610 compatible、Studio/custom-settings split relay、240-byte relay payload、4096-byte low-priority stackをPolaris/zmk-0.4へ統合済み。元のPMW検証commit 59d4f17はzmk-0.4の祖先で、専用branchとの差は生成UF2 10個だけ、ソース差分は0であることを2026-08-25に再監査した。現行zmk-0.4の10 target CIも成功。stable mainは未変更。残るgateは右TB実機での入力、split、source 1/ALL、frame capture確認のみ。",
       "validation": {
         "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
+      "pr_head": "da95be27ed47a2661742e0a0c4e61d7da1fee075",
       "variants": [
         {
           "id": "right-tb",
@@ -57,14 +58,14 @@
           },
           "evidence": [
             {
-              "label": "Dedicated PMW3610 branch",
-              "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4_validation_pmw3610-cormoran-rpc"
+              "label": "PR #6 merged into zmk-0.4",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6"
             },
             {
-              "label": "10/10 CI",
+              "label": "zmk-0.4 10/10 CI",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32572631625"
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602"
             }
           ]
         }
