@@ -30,21 +30,28 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
-      "commit": "53cbeec1040ce2043d4489e8e5d4e52db99b1ba9",
-      "notes": "cormoran PMW driver@5c34ea0、custom settings@c6a7fef、左右TBのcormoran,pmw3610 compatible、Studio/custom-settings split relay、240-byte relay payload、4096-byte low-priority stackをPolaris/zmk-0.4へ統合済み。元のPMW検証commit 59d4f17はzmk-0.4の祖先で、専用branchとの差は生成UF2 10個だけ、ソース差分は0であることを2026-08-25に再監査した。現行zmk-0.4の10 target CIも成功。stable mainは未変更。残るgateは右TB実機での入力、split、source 1/ALL、frame capture確認のみ。",
+      "status": "applied",
+      "pr": null,
+      "commit": "30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
+      "notes": "PR #6でcormoran PMW driver@5c34ea0、Studio/custom-settings split relay等をzmk-0.4へ統合済みだが、Polaris右TBのP0.05共有SDIOはZephyr 4.1の標準SPIで全readが0x3eとなった。原版cormoran driverを変更せず、te9no/zmk-driver-spi-three-wire main@4362133を使う専用branch codex/zmk-0.4-three-wire-spi-module@30fe2bdで解消を検証。Polaris_R_MODULE_TBをjust.sh build成功、Iへflash成功。2026-08-26のCOM327 CDCでcontroller ready、OBSERVATION=0x7f（low nibble 0xf）、Product ID=0x3e、起動時転送result=0、PMW3610 initialized、init error=0を確認した。通信・初期化は実機合格、ポインタの物理方向・感度、split、source列挙、frame captureは未確認。stable mainとzmk-0.4は未変更。",
       "validation": {
         "ci": "passed",
+        "targeted-build": "passed",
+        "flash": "passed",
+        "cdc-log": "passed",
+        "sensor-init": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
+        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
       },
-      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "branch": "codex/zmk-0.4-three-wire-spi-module",
       "base_branch": "zmk-0.4",
-      "pr_head": "da95be27ed47a2661742e0a0c4e61d7da1fee075",
       "variants": [
         {
           "id": "left-tb",
@@ -72,6 +79,11 @@
           "id": "right-tb",
           "status": "pending",
           "validation": {
+            "targeted-build": "passed",
+            "flash": "passed",
+            "cdc-enumeration": "passed",
+            "cdc-log": "passed",
+            "sensor-init": "passed",
             "hardware": "pending",
             "module-input": "pending",
             "split-connectivity": "pending",
@@ -80,14 +92,24 @@
           },
           "evidence": [
             {
-              "label": "PR #6 merged into zmk-0.4",
+              "label": "Generic three-wire SPI module main@4362133",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6"
+              "url": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/4362133dbfbf66788b66b0a3e3c410b9232c06cb"
             },
             {
-              "label": "zmk-0.4 10/10 CI",
+              "label": "Polaris three-wire validation branch@30fe2bd",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602"
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/30fe2bd63dd254ab0f2c08e5df2ce9387707f787"
+            },
+            {
+              "label": "Build, flash, and CDC sensor-init record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+            },
+            {
+              "label": "Pointer direction and sensitivity gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
             }
           ]
         }
