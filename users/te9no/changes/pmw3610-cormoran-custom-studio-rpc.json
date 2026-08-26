@@ -39,9 +39,13 @@
       "status": "pending",
       "pr": null,
       "commit": "59d4f17",
-      "notes": "第1群。既存のPolaris/codex/polaris-dya-studio-v2@6e0ca94にはcormoran PMW driver@5c34ea0、左右TB compatible移行、DYA対応がある。Polaris/zmk-0.4_validation_pmw3610-cormoran-rpcでMKB横並びにsplit relay payloadを256から240へ、low-priority stackを2048から4096へ調整し、custom settings split RPC relayとPMW custom settingsを右TBだけに限定。初回全体buildは右IQS 2件へPMW settingsが誤適用されlink失敗し8/10だったためTB_R限定へ修正。IQS 2/2とTB_R個別成功後、./just.sh build-fast . --pristine=alwaysで全10 targetが成功。検証branchは59d4f17（fix: align PMW3610 split RPC validation）としてpush済み。実機未検証、PR未作成、Polaris/mainおよび既存Polaris/codex/polaris-dya-studio-v2未反映。センサーがPeripheral配置の場合、横展開前にDYA Studio UIがsource 1/ALL列挙とdeferred PeripheralResponseを扱えることを確認する",
+      "notes": "高優先度・未解決。採用候補は元のcormoran/zmk-driver-pmw3610-with-custom-studio-rpc@5c34ea0を維持する。MKBとPolarisは同じZMK/Zephyr、driver revision、PMW3610 moduleだが、MKBはSDIO=P0.04/IRQ=P0.05、PolarisはSDIO=P0.05/IRQ=P0.04。Polaris右TBでは元driverのMOSI/MISOを同一GPIOへ割り当てる方式で全register readが0x3eとなり、OBSERVATIONの期待値low nibble 0xfを満たさず初期化できない。GPIO bit-bangでSDIOの出力/入力turnaroundを行う診断実装では自己診断、PERFORMANCE=0x01、初期化、ポインタ入力まで実機成功した。te9no/zmk-driver-pmw3610-with-custom-studio-rpcのcodex/three-wire-sdio@6be42a0は原因切り分け用であり、本採用・横展開・完了扱いにしない。元cormoran driverのままP0.05単線SDIOを成立させる方法を調査し、右TB実機で通常入力とDYA Studio診断を再確認してから適用判定する。Polaris/mainおよびzmk-0.4への反映、PR作成は未実施",
       "validation": {
         "ci": "passed",
+        "original-driver-hardware": "failed",
+        "diagnostic-three-wire-build": "passed",
+        "diagnostic-three-wire-hardware": "passed",
+        "production-driver-resolution": "pending",
         "hardware": "pending"
       }
     },
