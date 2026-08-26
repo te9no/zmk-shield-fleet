@@ -9,7 +9,7 @@
     "from_revision": null,
     "to_revision": "4362133dbfbf66788b66b0a3e3c410b9232c06cb",
     "change_url": "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0",
-    "notes": "GPIO-backed SPI controllerの公開版v0.1.0。PMW3610 childはcormoran,pmw3610のまま、共有SDIO、turnaround、recovery、disable-burst-readをkeyboard側Devicetreeで指定する。"
+    "notes": "GPIO-backed SPI controllerの公開版v0.1.0。PMW3610 childはcormoran,pmw3610のまま、共有SDIO、turnaround、recovery、disable-burst-readをkeyboard側Devicetreeで指定する。v0.1.0と同じcontroller実装をRenode nRF52840上で検証するprotocol fixtureをcodex/renode-half-duplex@a601287へ追加し、正常なSDIO turnaroundと0x3e固定読み故障の検出を2/2合格。電圧・信号品質・実時間marginは対象外。"
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconPolaris",
@@ -33,6 +33,7 @@
       "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、CDCによるcontroller/PMW3610初期化は合格。stable mainとzmk-0.4は未変更。ポインタ方向・感度、split、DYA Studio診断は実機確認待ち。",
       "validation": {
         "targeted-build": "passed",
+        "renode-protocol": "passed",
         "flash": "passed",
         "cdc-log": "passed",
         "sensor-init": "passed",
@@ -42,6 +43,7 @@
       },
       "validation_urls": {
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
         "flash": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
         "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
         "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
@@ -60,6 +62,7 @@
       "validation": {
         "targeted-build": "passed",
         "regression-build": "passed",
+        "renode-protocol": "passed",
         "revision-pin": "passed",
         "cdc-config": "passed",
         "hardware": "pending",
@@ -72,6 +75,7 @@
       "validation_urls": {
         "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
         "regression-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
         "revision-pin": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
         "cdc-config": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
@@ -151,6 +155,7 @@
       "validation": {
         "targeted-build": "passed",
         "regression-build": "passed",
+        "renode-protocol": "passed",
         "revision-pin": "passed",
         "cdc-config": "passed",
         "hardware": "pending",
@@ -163,6 +168,7 @@
       "validation_urls": {
         "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
         "regression-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
         "revision-pin": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
         "cdc-config": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
         "hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
@@ -183,6 +189,7 @@
       "validation": {
         "targeted-build": "passed",
         "regression-build": "passed",
+        "renode-protocol": "passed",
         "revision-pin": "passed",
         "cdc-config": "passed",
         "hardware": "pending",
@@ -195,6 +202,7 @@
       "validation_urls": {
         "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
         "regression-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
         "revision-pin": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
         "cdc-config": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",

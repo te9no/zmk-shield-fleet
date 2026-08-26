@@ -37,6 +37,23 @@ it does not mark physical direction or sensitivity as passed.
   Python bytecode, or cache directory is included.
 - `tests/verify_build.py` passed against the `just.sh` Polaris right-TB build.
 
+## Renode protocol regression
+
+- Test branch: `te9no/zmk-driver-spi-three-wire`
+  `codex/renode-half-duplex`
+- Test revision: `a60128717261b7f12a6ec402b1c44a43c3096352`
+- The pure Zephyr 4.1 nRF52840 fixture passed both Robot scenarios.
+- The normal scenario observed three command bytes, three returned bytes, and
+  three shared-SDIO turnarounds. Both the cormoran-style leading-discard read
+  and explicit `SPI_HALF_DUPLEX` read returned Product ID `0x3e`; OBSERVATION
+  returned `0x0f`.
+- The injected constant-`0x3e` fault preserved the apparently valid Product ID
+  but made OBSERVATION read `0x3e`, and the fixture detected it explicitly.
+
+This is protocol-level evidence for the unchanged v0.1.0 controller source. It
+does not replace hardware checks for voltage levels, signal integrity, timing
+margins, pointer behavior, or split transport.
+
 These results demonstrate that the generic controller can run the original
 cormoran driver on the Polaris P0.05 shared-SDIO wiring without modifying that
 driver.
