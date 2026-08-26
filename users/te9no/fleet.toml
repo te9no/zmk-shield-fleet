@@ -97,16 +97,16 @@ state = "waiting"
 priority = "medium"
 order = 6
 repository = "polaris"
-action = "右TBで残るポインタ入力・splitを確認し、右TPDでもCDC/boot/input一式を検証する。"
-completion = "右TB/TPDのCDCログ、1200 baud boot、COM復帰、split/module入力がそれぞれ実機合格する。"
-blocker = "右TBは2026-08-26に1200 baudでI:XIAO-BOOTへ移行し、flash、COM327復帰、CDC上のPMW初期化まで合格。右TBの物理入力・splitと右TPD一式が残る。"
+action = "右TPDでCDC Debug、1200 baud boot、COM復帰、module入力、split relayを実機検証する。"
+completion = "右TPDのCDCログ、1200 baud boot、COM復帰、split/module入力が実機合格する。"
+blocker = "右TBは2026-08-26にflash、COM327 CDC、PMW初期化、ポインタ入力、split relayまで合格。右TPD一式のみ残る。"
 pr = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
 change_id = "cdc-acm-zephyr-4.1"
 validation_keys = ["flash", "cdc-enumeration", "1200-baud", "cdc-log", "module-input", "split-connectivity"]
-variant_ids = ["right-tb", "right-tpd"]
+variant_ids = ["right-tpd"]
 evidence = [
   { label = "Draft PR #7", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7" },
-  { label = "Right-TB 1200-baud, flash, and COM327 CDC", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
+  { label = "Right-TB flash, COM327 CDC, pointer, and split", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
   { label = "9/9 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186" },
 ]
 
@@ -149,9 +149,9 @@ state = "waiting"
 priority = "medium"
 order = 9
 repository = "polaris"
-action = "書き込み済みの右TBでポインタ方向・感度、split relay、Studio診断を確認し、その後に左TBを検証する。"
+action = "右TBの方向・感度とStudio診断を確認し、その後に左TBを検証する。"
 completion = "左右PMW3610入力、source 1/ALL列挙、frame capture、split再接続が実機合格する。"
-blocker = "右TBの3-wire通信とPMW初期化は実機合格。ポインタの物理方向・感度、split/source/frame captureと左TBが未確認。修正は専用branchにあり、stable mainとzmk-0.4は対象外。"
+blocker = "右TBは3-wire通信、PMW初期化、ポインタ入力、split relayまで実機合格。方向・感度、source/frame captureと左TBが未確認。修正は専用branchにあり、stable mainとzmk-0.4は対象外。"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
 validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
 variant_ids = ["left-tb", "right-tb"]
@@ -159,7 +159,7 @@ evidence = [
   { label = "PR #6 merged into zmk-0.4", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6" },
   { label = "Three-wire controller v0.1.0@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0" },
   { label = "Polaris validation branch@30fe2bd", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/30fe2bd63dd254ab0f2c08e5df2ce9387707f787" },
-  { label = "Build, flash, and CDC sensor-init", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
+  { label = "Build, flash, CDC, pointer, and split", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
 ]
 
 [[next_actions]]

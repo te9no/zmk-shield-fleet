@@ -37,7 +37,7 @@
       "branch": "codex/zmk-0.4-cdc-debug-right",
       "base_branch": "zmk-0.4",
       "pr_head": "db78208e1d007aff6bbe8cce2a3572dd49439be3",
-      "notes": "zmk-0.4起点の専用Draft PR #7で、右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。Actions 32742627186で全9 target成功。2026-08-25に右IQSで1200 baud、flash、COM327復帰、CDC log、module入力を実機確認。2026-08-26にはthree-wire PMW検証branch@30fe2bdの右TBをCOM327の1200 baud+DTRでI:XIAO-BOOTへ移行し、flash、COM327復帰、controller/PMW3610起動ログ、全初期転送result=0を確認した。右TBの物理入力・splitと右TPDは未確認。Draftを維持し、zmk-0.4へは未merge。",
+      "notes": "zmk-0.4起点の専用Draft PR #7で、右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。Actions 32742627186で全9 target成功。2026-08-25に右IQSで1200 baud、flash、COM327復帰、CDC log、module入力を実機確認。2026-08-26にはthree-wire PMW検証branch@30fe2bdの右TBをCOM327の1200 baud+DTRでI:XIAO-BOOTへ移行し、flash、COM327復帰、controller/PMW3610起動ログ、全初期転送result=0を確認した。再flash後に右TBのポインタ入力とPeripheralからCentralへのsplit relayも実機合格。右TPDのみ未確認。Draftを維持し、zmk-0.4へは未merge。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
@@ -75,14 +75,14 @@
         },
         {
           "id": "right-tb",
-          "status": "pending",
+          "status": "passed",
           "validation": {
             "flash": "passed",
             "cdc-enumeration": "passed",
             "1200-baud": "passed",
             "cdc-log": "passed",
-            "module-input": "pending",
-            "split-connectivity": "pending"
+            "module-input": "passed",
+            "split-connectivity": "passed"
           },
           "evidence": [
             {
@@ -91,8 +91,8 @@
               "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
             },
             {
-              "label": "Pointer and split gate",
-              "status": "pending",
+              "label": "Pointer input and split relay",
+              "status": "passed",
               "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
             }
           ]

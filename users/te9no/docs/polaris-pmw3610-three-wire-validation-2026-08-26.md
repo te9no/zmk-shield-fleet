@@ -30,6 +30,12 @@ it does not mark physical direction or sensitivity as passed.
 - Product ID was the expected `0x3e`.
 - The PMW3610 driver reported `PMW3610 initialized` with initialization error
   zero.
+- A second `just.sh` flash to `I:XIAO-BOOT` returned on `COM327`. Its startup
+  trace reported Product ID `0x3e`, OBSERVATION `0x6f` (expected low nibble
+  `0x0f`), every logged transfer with `result=0`, and `PMW3610 initialized`.
+- The user then confirmed physical pointer input from the right trackball. As
+  this half was running as the connected Peripheral, the observed host pointer
+  input also validates the right-to-Central split relay path.
 - The public `v0.1.0` tag and its remote ref both resolve to controller commit
   `4362133dbfbf66788b66b0a3e3c410b9232c06cb`.
 - The release is public and non-draft. Its source archive contains only tracked
@@ -60,9 +66,7 @@ driver.
 
 ## Pending gates
 
-- Physical pointer direction
-- Pointer sensitivity
-- Split reconnection and relayed input
+- Physical pointer direction and sensitivity
 - DYA Studio source enumeration and frame capture
 - Left-hand Polaris trackball variant
 

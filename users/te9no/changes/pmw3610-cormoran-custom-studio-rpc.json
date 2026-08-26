@@ -33,7 +33,7 @@
       "status": "applied",
       "pr": null,
       "commit": "30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
-      "notes": "PR #6でcormoran PMW driver@5c34ea0、Studio/custom-settings split relay等をzmk-0.4へ統合済みだが、Polaris右TBのP0.05共有SDIOはZephyr 4.1の標準SPIで全readが0x3eとなった。原版cormoran driverを変更せず、公開済みte9no/zmk-driver-spi-three-wire v0.1.0@4362133を使う専用branch codex/zmk-0.4-three-wire-spi-module@30fe2bdで解消を検証。Polaris_R_MODULE_TBをjust.sh build成功、Iへflash成功。2026-08-26のCOM327 CDCでcontroller ready、OBSERVATION=0x7f（low nibble 0xf）、Product ID=0x3e、起動時転送result=0、PMW3610 initialized、init error=0を確認した。公開タグとremote SHA、配布アーカイブ、fixture verifierも机上確認済み。通信・初期化は実機合格、ポインタの物理方向・感度、split、source列挙、frame captureは未確認。stable mainとzmk-0.4は未変更。",
+      "notes": "PR #6でcormoran PMW driver@5c34ea0、Studio/custom-settings split relay等をzmk-0.4へ統合済みだが、Polaris右TBのP0.05共有SDIOはZephyr 4.1の標準SPIで全readが0x3eとなった。原版cormoran driverを変更せず、公開済みte9no/zmk-driver-spi-three-wire v0.1.0@4362133を使う専用branch codex/zmk-0.4-three-wire-spi-module@30fe2bdで解消を検証。Polaris_R_MODULE_TBをjust.sh buildしIへflash成功。2026-08-26の再検証ではCOM327 CDCでcontroller ready、OBSERVATION=0x6f（low nibble 0xf）、Product ID=0x3e、全起動時転送result=0、PMW3610 initializedを確認し、ユーザー操作でポインタ入力とPeripheralからCentralへのsplit relayも合格した。公開タグとremote SHA、配布アーカイブ、fixture verifierも机上確認済み。右TBの方向・感度、source列挙、frame captureと左TBは未確認。stable mainとzmk-0.4は未変更。",
       "validation": {
         "ci": "passed",
         "targeted-build": "passed",
@@ -84,9 +84,9 @@
             "cdc-enumeration": "passed",
             "cdc-log": "passed",
             "sensor-init": "passed",
-            "hardware": "pending",
-            "module-input": "pending",
-            "split-connectivity": "pending",
+            "hardware": "passed",
+            "module-input": "passed",
+            "split-connectivity": "passed",
             "source-enumeration": "pending",
             "frame-capture": "pending"
           },
@@ -107,7 +107,7 @@
               "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
             },
             {
-              "label": "Pointer direction and sensitivity gate",
+              "label": "Pointer direction, sensitivity, and Studio gate",
               "status": "pending",
               "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
             }

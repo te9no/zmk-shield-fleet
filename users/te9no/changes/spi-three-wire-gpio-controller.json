@@ -30,15 +30,15 @@
       "commit": "30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
       "branch": "codex/zmk-0.4-three-wire-spi-module",
       "base_branch": "zmk-0.4",
-      "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、CDCによるcontroller/PMW3610初期化は合格。stable mainとzmk-0.4は未変更。ポインタ方向・感度、split、DYA Studio診断は実機確認待ち。",
+      "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、COM327 CDCによるcontroller/PMW3610初期化は合格。2026-08-26の再flashではProduct ID=0x3e、OBSERVATION=0x6f（low nibble 0xf）、全startup transfer result=0を取得し、ユーザー操作で右TBのポインタ入力とPeripheralからCentralへのsplit relayを実機合格とした。stable mainとzmk-0.4は未変更。方向・感度、DYA Studio診断は実機確認待ち。",
       "validation": {
         "targeted-build": "passed",
         "renode-protocol": "passed",
         "flash": "passed",
         "cdc-log": "passed",
         "sensor-init": "passed",
-        "module-input": "pending",
-        "split-connectivity": "pending",
+        "module-input": "passed",
+        "split-connectivity": "passed",
         "studio-diagnostics": "pending"
       },
       "validation_urls": {
