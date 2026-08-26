@@ -18,6 +18,8 @@ it does not mark physical direction or sensitivity as passed.
 
 - `just.sh` built `Polaris_R_MODULE_TB` successfully: FLASH 308260 bytes and
   RAM 120884 bytes.
+- Opening `COM327` at 1200 baud with DTR entered the right-hand
+  `I:XIAO-BOOT` loader.
 - `just.sh` flashed the firmware successfully to the right-hand `I` boot drive.
 - The right half returned as CDC `COM327`.
 - The three-wire controller reported ready for the Polaris SCK/SDIO wiring.

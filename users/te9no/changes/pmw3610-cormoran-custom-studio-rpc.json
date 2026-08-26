@@ -45,9 +45,9 @@
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
-        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
-        "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
-        "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
       },
       "branch": "codex/zmk-0.4-three-wire-spi-module",
@@ -104,7 +104,7 @@
             {
               "label": "Build, flash, and CDC sensor-init record",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
             },
             {
               "label": "Pointer direction and sensitivity gate",
