@@ -156,7 +156,7 @@ validation_keys = ["hardware", "module-input", "split-connectivity", "source-enu
 variant_ids = ["left-tb", "right-tb"]
 evidence = [
   { label = "PR #6 merged into zmk-0.4", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6" },
-  { label = "Three-wire controller main@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/commit/4362133dbfbf66788b66b0a3e3c410b9232c06cb" },
+  { label = "Three-wire controller v0.1.0@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0" },
   { label = "Polaris validation branch@30fe2bd", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/30fe2bd63dd254ab0f2c08e5df2ce9387707f787" },
   { label = "Build, flash, and CDC sensor-init", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
 ]

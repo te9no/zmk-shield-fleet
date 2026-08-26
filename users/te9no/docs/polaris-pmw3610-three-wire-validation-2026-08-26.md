@@ -8,7 +8,7 @@ it does not mark physical direction or sensitivity as passed.
 
 - Firmware branch: `codex/zmk-0.4-three-wire-spi-module`
 - Firmware revision: `30fe2bd63dd254ab0f2c08e5df2ce9387707f787`
-- Generic controller: `te9no/zmk-driver-spi-three-wire` `main`
+- Generic controller: `te9no/zmk-driver-spi-three-wire` release `v0.1.0`
 - Controller revision: `4362133dbfbf66788b66b0a3e3c410b9232c06cb`
 - PMW3610 driver: unchanged
   `cormoran/zmk-driver-pmw3610-with-custom-studio-rpc`
@@ -30,6 +30,12 @@ it does not mark physical direction or sensitivity as passed.
 - Product ID was the expected `0x3e`.
 - The PMW3610 driver reported `PMW3610 initialized` with initialization error
   zero.
+- The public `v0.1.0` tag and its remote ref both resolve to controller commit
+  `4362133dbfbf66788b66b0a3e3c410b9232c06cb`.
+- The release is public and non-draft. Its source archive contains only tracked
+  source, binding, fixture, documentation, and license files; no build output,
+  Python bytecode, or cache directory is included.
+- `tests/verify_build.py` passed against the `just.sh` Polaris right-TB build.
 
 These results demonstrate that the generic controller can run the original
 cormoran driver on the Polaris P0.05 shared-SDIO wiring without modifying that
