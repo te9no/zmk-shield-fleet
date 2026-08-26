@@ -4,10 +4,14 @@ This record covers only the right-hand Polaris trackball variant. It records
 transport and sensor-initialization evidence separately from pointer behavior;
 it does not mark physical direction or sensitivity as passed.
 
-## Revisions under test
+## Revisions
 
-- Firmware branch: `codex/zmk-0.4-three-wire-spi-module`
-- Firmware revision: `30fe2bd63dd254ab0f2c08e5df2ce9387707f787`
+- Validated source branch: `codex/zmk-0.4-three-wire-spi-module`
+- Validated source revision: `30fe2bd63dd254ab0f2c08e5df2ce9387707f787`
+- Integrated maintenance branch: `zmk-0.4`
+- Integrated revision: `ac1a312bd471f014b90f506e31c7f48da21346de`
+- Integration method: source-only squash without generated `firmware/` or UF2
+  changes; no PR was created and stable `main` was not changed.
 - Generic controller: `te9no/zmk-driver-spi-three-wire` release `v0.1.0`
 - Controller revision: `4362133dbfbf66788b66b0a3e3c410b9232c06cb`
 - PMW3610 driver: unchanged
@@ -42,6 +46,13 @@ it does not mark physical direction or sensitivity as passed.
   source, binding, fixture, documentation, and license files; no build output,
   Python bytecode, or cache directory is included.
 - `tests/verify_build.py` passed against the `just.sh` Polaris right-TB build.
+- The source-only `zmk-0.4` integration was rebuilt from a dedicated clean
+  build directory. `Polaris_R_MODULE_TB` passed at FLASH 308260 / RAM 120884
+  bytes, `Polaris_L_MODULE_JOY` passed at FLASH 499908 / RAM 174184 bytes, and
+  `settings_reset` passed at FLASH 55884 / RAM 17328 bytes.
+- The user confirmed that Local mod DYA Studio reports the right Peripheral
+  PMW3610 source. Source enumeration and Studio diagnostics therefore pass;
+  frame capture was not confirmed in this session.
 
 ## Renode protocol regression
 
@@ -67,8 +78,9 @@ driver.
 ## Pending gates
 
 - Physical pointer direction and sensitivity
-- DYA Studio source enumeration and frame capture
+- DYA Studio frame capture
 - Left-hand Polaris trackball variant
 
-Until those checks pass, the validation branch must not be treated as a
-completed hardware rollout or promoted to the stable firmware branch.
+The validated source is integrated into the development maintenance branch
+`zmk-0.4`. Until the remaining checks pass, it must not be treated as a
+completed hardware rollout or promoted to stable `main`.

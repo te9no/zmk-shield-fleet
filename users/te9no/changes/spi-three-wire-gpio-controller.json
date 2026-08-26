@@ -13,9 +13,9 @@
   },
   "trigger": {
     "repository": "te9no/zmk-config-GeaconPolaris",
-    "revision": "30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
-    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
-    "notes": "Polaris右TBでhardware SPIのreadが0x3eへ張り付く症状を切り分け、汎用3-wire controllerでOBSERVATION=0x7f、Product ID=0x3e、PMW3610初期化成功をCDC実機確認した。"
+    "revision": "ac1a312bd471f014b90f506e31c7f48da21346de",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
+    "notes": "Polaris右TBでhardware SPIのreadが0x3eへ張り付く症状を切り分け、汎用3-wire controllerでOBSERVATION=0x7f、Product ID=0x3e、PMW3610初期化成功をCDC実機確認した。検証済みsourceを生成UF2なしでzmk-0.4へ統合した。"
   },
   "repositories": [
     "polaris",
@@ -25,12 +25,12 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "applied",
+      "status": "merged",
       "pr": null,
-      "commit": "30fe2bd63dd254ab0f2c08e5df2ce9387707f787",
-      "branch": "codex/zmk-0.4-three-wire-spi-module",
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、COM327 CDCによるcontroller/PMW3610初期化は合格。2026-08-26の再flashではProduct ID=0x3e、OBSERVATION=0x6f（low nibble 0xf）、全startup transfer result=0を取得し、ユーザー操作で右TBのポインタ入力とPeripheralからCentralへのsplit relayを実機合格とした。stable mainとzmk-0.4は未変更。方向・感度、DYA Studio診断は実機確認待ち。",
+      "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、COM327 CDCによるcontroller/PMW3610初期化は合格。2026-08-26の再flashではProduct ID=0x3e、OBSERVATION=0x6f（low nibble 0xf）、全startup transfer result=0を取得し、ユーザー操作で右TBのポインタ入力とPeripheralからCentralへのsplit relayを実機合格とした。Local mod DYA Studioで右TBのsource列挙とStudio診断も合格。検証済みsourceだけをac1a312でzmk-0.4へ直接統合し、生成UF2、PR、stable mainは変更していない。右TBの方向・感度、frame captureと左TBは未確認。",
       "validation": {
         "targeted-build": "passed",
         "renode-protocol": "passed",
@@ -39,17 +39,21 @@
         "sensor-init": "passed",
         "module-input": "passed",
         "split-connectivity": "passed",
-        "studio-diagnostics": "pending"
+        "source-enumeration": "passed",
+        "frame-capture": "pending",
+        "studio-diagnostics": "passed"
       },
       "validation_urls": {
-        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
         "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
         "flash": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
         "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
         "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
-        "module-input": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
-        "split-connectivity": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module",
-        "studio-diagnostics": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-three-wire-spi-module"
+        "module-input": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "split-connectivity": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "source-enumeration": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "frame-capture": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "studio-diagnostics": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
       }
     },
     "mkb2": {
