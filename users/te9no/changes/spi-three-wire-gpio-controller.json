@@ -150,37 +150,37 @@
       ]
     },
     "cornix": {
-      "status": "applied",
+      "status": "merged",
       "pr": null,
-      "commit": "c675e9c445fa2146e7d4bab6647eca10296b55ec",
-      "branch": "codex/zmk-0.4-three-wire-spi-module",
-      "base_branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "notes": "Madula Trackball targetの共有SDIOを汎用controllerへ移行。just.sh pristineでtrackball/trackpoint/IQSの3/3が成功し、CDC Debug、Studio RPC、1200-baud boot triggerを生成設定で確認。Madula Trackball実機がないためflashとPMW入力は保留。",
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "branch": "main",
+      "base_branch": "main",
+      "notes": "Madula Trackballの共有SDIOを汎用controllerへ移行しCornix mainへ統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格。実機でPMW3610初期化、source ready、ポインター入力を確認した。MadulaはCentral一体型のためsplit relayは対象外。Studio preview/diagnosticsはtransport統合の必須gate外として別途扱う。PR #3はclosed、2本のvalidation branchは削除し、zmk-0.4は保持した。",
       "validation": {
         "targeted-build": "passed",
         "regression-build": "passed",
         "renode-protocol": "passed",
         "revision-pin": "passed",
         "cdc-config": "passed",
-        "hardware": "pending",
-        "module-input": "pending",
-        "split-connectivity": "pending",
-        "source-enumeration": "pending",
-        "studio-peripheral-preview-hardware": "pending",
-        "studio-diagnostics": "pending"
+        "hardware": "passed",
+        "module-input": "passed",
+        "split-connectivity": "waived",
+        "source-enumeration": "passed",
+        "studio-peripheral-preview-hardware": "waived",
+        "studio-diagnostics": "waived"
       },
       "validation_urls": {
-        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
-        "regression-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
+        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "regression-build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
         "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
-        "revision-pin": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
-        "cdc-config": "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "split-connectivity": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "studio-diagnostics": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module"
+        "revision-pin": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-config": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "split-connectivity": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "studio-diagnostics": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
       }
     },
     "saa": {

@@ -105,25 +105,24 @@
       "base_branch": "master"
     },
     "cornix": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
-      "notes": "Fleet最優先。既存Draft PR #3でcormoran/zmk@e5c9b69へ直接固定。存在しないboard_cdc_acm_uart参照という既存build blockerも除去し、Madula 3構成とCornix/TPS43を含む./just.sh build-fast all --pristine=alwaysが12/12成功。次は物理Madula trackball moduleを装着して、PMW3610入力・local source診断・frame captureを実機確認する。未接続のためDraftを維持し、mainには反映しない。",
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "Cornix mainへcormoran/zmk@e5c9b69の直接固定を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格。Madula TrackballはPMW3610初期化、source ready、実ポインター入力も合格した。PR #3はclosed、validation branchは削除し、保守用zmk-0.4は保持した。",
       "validation": {
         "build": "passed",
         "dya-studio": "passed",
         "ci": "passed",
-        "trackball-hardware": "pending"
+        "trackball-hardware": "passed"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "base_branch": "zmk-0.4",
-      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
+      "branch": "main",
+      "base_branch": "main"
     },
     "solstice": {
       "status": "merged",

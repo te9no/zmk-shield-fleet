@@ -148,10 +148,10 @@
       "base_branch": "master"
     },
     "cornix": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
-      "notes": "Madula Trackballの生成devicetreeでboard CDC・Studio RPC・USB loggingの3 CDC構成を検出。Draft PR #3で未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ修正。just.sh pristineでMadula 3/3 target成功。2026-08-23に実機へ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙およびDYA Studio接続を確認。USB endpoint対策は実機合格。",
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "未使用board CDCを無効化し、Studio RPCとDebug/CDC Bootの2 CDCへ収める対策をCornix mainへ統合。just.sh manifest 12/12、通常Trackball pristine再build、Actions 32991787396が合格。実機ではDebug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙およびDYA Studio接続を確認済み。PR #3はclosed、validation branchは削除した。",
       "validation": {
         "build": "passed",
         "flash": "passed",
@@ -160,15 +160,14 @@
         "hardware": "passed"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "ui": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "ui": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "base_branch": "zmk-0.4",
-      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
+      "branch": "main",
+      "base_branch": "main"
     },
     "solstice": {
       "status": "merged",

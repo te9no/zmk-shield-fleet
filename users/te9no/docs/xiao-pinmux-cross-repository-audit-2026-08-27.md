@@ -18,7 +18,7 @@ The Zephyr XIAO BLE board enables connector peripherals with these default pins:
 
 ## Trigger and validated pattern
 
-Cornix/Madula commit [`0ed7388`](https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc) is the trigger.
+Cornix/Madula commit [`0ed7388`](https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc) is the original trigger. The completed reference is Cornix [`main@794987c`](https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8).
 
 It applies the reusable sequence:
 
@@ -28,14 +28,16 @@ It applies the reusable sequence:
 4. Let only the selected module snippet enable its dedicated `spi0` or `i2c0` controller.
 5. Inspect the generated DTS and run pristine builds for all affected variants.
 
-The generated Madula Trackball DTS reports all three XIAO connector nodes as disabled. Trackball, TrackPoint, and IQS pristine builds passed 3/3. Hardware CDC diagnostics for Trackball reported Product ID `0x3e`, Revision `0x01`, `ready=true`, and `init_err=0`. The owner then confirmed real pointer/module-input operation. Madula is an integrated Central target, so split relay is not applicable; frame capture and the DYA Studio UI remain unverified.
+The generated Madula Trackball DTS reports all three XIAO connector nodes as disabled. The final main integration qualifies the Madula Trackball, TrackPoint, and IQS targets as well as TPS43 production, host-bond-reset, and Central settings-reset. It also releases the unused connector peripherals in both Madula and TPS43 common overlays.
+
+Cornix `just.sh` manifest builds passed 12/12, the `madula-pmw-debug` opt-in build passed, the normal Trackball pristine rebuild passed, and [GitHub Actions run 32991787396](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396) succeeded. Hardware CDC diagnostics for Trackball reported Product ID `0x3e`, Revision `0x01`, `ready=true`, and `init_err=0`; the owner confirmed real pointer/module-input operation. Madula is an integrated Central target, so split relay is not applicable. PR #3 is closed, remote validation branches `zmk-0.4_validation_pmw3610-cormoran-rpc` and `codex/zmk-0.4-three-wire-spi-module` were deleted, and the maintenance branch `zmk-0.4` was retained.
 
 ## Fleet findings
 
 | Repository | Priority | Result | Required follow-up |
 | --- | --- | --- | --- |
-| Cornix Madula | Applied | Three module targets are qualified; unused connector nodes are disabled; build 3/3, PMW init, and real pointer/module-input passed. | Confirm frame capture and DYA Studio UI. |
-| Cornix TPS43 | P0 | Production and host-bond-reset still use bare `xiao_ble`. TPS43 uses P0.05 for its dedicated I2C clock and P0.04 for reset while default `xiao_i2c` also claims P0.04/P0.05. | Apply the Madula qualifier/battery/pin-release pattern and rebuild both variants. Qualify the Central settings-reset target as well. |
+| Cornix Madula | Complete | Three module targets are qualified; unused connector nodes are disabled; main integration, manifest 12/12, debug opt-in, normal pristine rebuild, CI, PMW init, and real pointer/module-input passed. | None for this pin-release item. |
+| Cornix TPS43 | Complete | Production, host-bond-reset, and Central settings-reset are qualified. The common overlay releases unused connector peripherals; main and CI builds passed. | None for this pin-release item. |
 | Polaris | P0 | All ZMK 0.4 targets are qualified, but generated DTS keeps `xiao_spi` and `xiao_i2c` enabled. Left OLED uses P1.14/P1.15; right modules reuse P1.13, P0.05, and P0.04. | Disable unused `xiao_spi` in the base and unused `xiao_i2c` on affected right targets; re-enable only an intentionally used controller. |
 | MKB2 | P0 | All targets are qualified, but generated DTS keeps `xiao_spi` enabled. OLED always uses P1.14/P1.15, while TB, encoder, and LPPS variants also use P1.13. | Disable unused `xiao_spi` in both base shields and rebuild the full matrix. Keep the deliberately overridden OLED I2C controller. |
 | Solstice | P0 | All four US/JIS targets are qualified and serial is disabled. Both key matrices use D8-D10/P1.13-P1.15 while default `xiao_spi` remains enabled. | Disable `xiao_spi` in both base shields and rebuild US/JIS left/right plus settings-reset. |
@@ -45,7 +47,7 @@ The generated Madula Trackball DTS reports all three XIAO connector nodes as dis
 
 ## Source evidence
 
-- Cornix: `build.yaml`, `boards/shields/madula_central/madula_central.overlay`, and `boards/shields/cornix_tps43_central/cornix_tps43_central.overlay` at `0ed7388`.
+- Cornix: `build.yaml`, `boards/shields/madula_central/madula_central.overlay`, and `boards/shields/cornix_tps43_central/cornix_tps43_central.overlay` at `main@794987c`.
 - Polaris: `boards/shields/GeaconPolaris/Polaris_pins.dtsi`, `Polaris_L_Base.overlay`, and `snippets/TB_R/TB_R.overlay` on `zmk-0.4`.
 - MKB2: `boards/shields/MKB/MKB_{L,R}_Base.overlay`, `MKB_pinctrl_{L,R}.dtsi`, and module overlays on `zmk-0.4`.
 - Solstice: `boards/shields/GeaconSolstice/Solstice_{L,R}.overlay` and pinctrl files on `zmk-0.4`.

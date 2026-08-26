@@ -151,10 +151,10 @@
       "base_branch": "master"
     },
     "cornix": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
-      "notes": "Draft PR #3でMadulaを含む対象構成へCDC Debugと1200 baud bootを統合。12/12 CI、書き込み、2 CDC列挙、DYA Studio接続は実機合格。1200 baudによるbootloader遷移のみ未確認のためDraftを維持する。",
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "Cornix mainへCDC Debugと1200 baud boot設定を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格し、書き込み、2 CDC列挙、DYA Studio接続も実機合格。1200 baudによるbootloader遷移のみ未確認。PR #3はclosed、validation branchは削除し、保守用zmk-0.4は保持した。",
       "validation": {
         "build": "passed",
         "flash": "passed",
@@ -163,15 +163,14 @@
         "1200-baud": "pending"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "base_branch": "zmk-0.4",
-      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
+      "branch": "main",
+      "base_branch": "main"
     },
     "solstice": {
       "status": "merged",

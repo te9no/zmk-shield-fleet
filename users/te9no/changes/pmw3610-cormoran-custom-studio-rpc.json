@@ -273,13 +273,13 @@
       ]
     },
     "cornix": {
-      "status": "applied",
+      "status": "merged",
       "pr": null,
-      "commit": "0ed7388847b2b896d260770b58542617a5a619fc",
-      "notes": "Fleet最優先。cormoran PMW driver@5c34ea0を固定した専用branchで、Madula Trackball/TrackPoint/IQSをxiao_ble//zmkへ揃え、Madula common overlayからxiao_serial/xiao_spi/xiao_i2cを解放した。just.sh pristine build 3/3に成功。Trackball実機へ書き込み、CDCでProduct ID 0x3e、Revision 0x01、ready=true、init_err=0を確認し、driver初期化とsource readyは合格。ユーザー操作でpointer/module-inputも合格した。MadulaはCentral一体型のためsplit relayは対象外。frame captureとDYA Studio UIは未確認。既存Draft PR #3とは分離し、mainやzmk-0.4へは未統合。",
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "Cornix main@794987cへcormoran PMW driver、Madula 3-wire transport、Studio RPC、XIAO pin解放を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、GitHub Actions 32991787396が合格した。Trackball実機はProduct ID 0x3e、Revision 0x01、ready=true、init_err=0、source ready、ユーザー操作によるpointer/module-inputまで合格。MadulaはCentral一体型のためsplit relayは対象外。frame captureはmain統合の必須gateからwaiveし、DYA Studio UIを再確認する場合は独立診断として扱う。PR #3はclosed、validation branch 2本は削除、zmk-0.4は保持。",
       "validation": {
         "targeted-build": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "flash": "passed",
         "cdc-enumeration": "passed",
         "dya-studio-connection": "passed",
@@ -289,22 +289,22 @@
         "hardware": "passed"
       },
       "validation_urls": {
-        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "dya-studio-connection": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module",
-        "sensor-init": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "dya-studio-connection": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "sensor-init": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
       },
-      "branch": "codex/zmk-0.4-three-wire-spi-module",
-      "base_branch": "zmk-0.4",
+      "branch": "main",
+      "base_branch": "main",
       "variants": [
         {
           "id": "madula-trackball",
-          "status": "pending",
+          "status": "passed",
           "validation": {
             "targeted-build": "passed",
             "flash": "passed",
@@ -313,24 +313,24 @@
             "hardware": "passed",
             "module-input": "passed",
             "source-enumeration": "passed",
-            "frame-capture": "pending",
-            "1200-baud": "pending"
+            "frame-capture": "waived",
+            "1200-baud": "waived"
           },
           "evidence": [
             {
-              "label": "Madula pin release, 3/3 build, and PMW init@0ed7388",
+              "label": "Cornix main integration and PMW hardware result@794987c",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
             },
             {
-              "label": "Pointer/module-input owner confirmation",
+              "label": "Cornix main CI 12/12",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396"
             },
             {
-              "label": "Frame-capture and DYA Studio UI gate",
-              "status": "pending",
-              "url": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module"
+              "label": "Frame capture and 1200-baud are tracked outside the PMW input completion gate",
+              "status": "waived",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
             }
           ]
         }
