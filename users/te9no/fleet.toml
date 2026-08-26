@@ -30,7 +30,7 @@ order = 2
 repository = "cornix"
 action = "Madula Trackball実機でPMW3610入力、split relay、source列挙、frame captureを確認する。"
 completion = "pointer方向・速度、左右接続、DYA Studioのsource 1/ALLとframe captureが実機合格する。"
-blocker = "Madula Trackball実機がないため保留。Draft PR #3は実機合格までmergeしない。"
+blocker = "公開3-wire module v0.1.0を固定した専用branchでMadula 3/3 build済み。Trackball実機がないためflashと入力確認は保留。既存Draft PR #3へは未反映で、mergeしない。"
 pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
 validation_keys = ["hardware"]
@@ -38,6 +38,7 @@ variant_ids = ["madula-trackball"]
 evidence = [
   { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/3" },
   { label = "12/12 CI", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654" },
+  { label = "Three-wire preparation@c675e9c (just.sh 3/3)", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec" },
 ]
 
 [[next_actions]]
@@ -78,16 +79,16 @@ state = "active"
 priority = "high"
 order = 5
 repository = "saa"
-action = "現行のzmk-0.4_validation_cormoran-zmkから左右TB artifactを書き込み、PMW3610入力とStudio診断を確認する。"
-completion = "左右PMW3610入力、split relay、DYA Studio source列挙が現行21-target branchで実機合格する。"
-blocker = "21/21 buildとPMW3610の統合は済み。実機moduleと書き込み時間が必要。stable masterは対象外。"
-repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-change_id = "pmw3610-cormoran-custom-studio-rpc"
+action = "専用codex/zmk-0.4-three-wire-spi-moduleから左右TB artifactを書き込み、PMW3610入力とStudio診断を確認する。"
+completion = "左右PMW3610入力、split relay、DYA Studio source列挙が公開3-wire module固定branchで実機合格する。"
+blocker = "公開3-wire module v0.1.0を固定してjust.sh全21/21・TB関連4/4 build済み。実機moduleと書き込み時間が必要。stable masterは対象外。"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module"
+change_id = "spi-three-wire-gpio-controller"
 validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "studio-peripheral-preview-hardware"]
 variant_ids = ["left-tb", "right-tb"]
 evidence = [
-  { label = "Canonical 21-target branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk" },
-  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475" },
+  { label = "Three-wire preparation@c9f6779 (just.sh 21/21)", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd" },
+  { label = "Three-wire controller v0.1.0@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0" },
 ]
 
 [[next_actions]]
@@ -186,13 +187,14 @@ order = 11
 repository = "mkb2"
 action = "MKB左TBと右TBv3 firmwareを書き込み、PMW3610入力、split relay、Studio診断を確認する。"
 completion = "左TBと右TBv3が、合格済みの右TBv4と同じくsource列挙、frame capture、pointer入力に合格する。"
-blocker = "右TBv4は実機合格済み。左TBと右TBv3の実機確認待ち。"
-change_id = "pmw3610-cormoran-custom-studio-rpc"
+blocker = "右TBv4は従来構成で実機合格済み。公開3-wire module固定branchはjust.shでTB 3/3＋KEY回帰2/2 build済みだが未flash。左TB、右TBv3、右TBv4の再確認待ち。"
+change_id = "spi-three-wire-gpio-controller"
 validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
 variant_ids = ["left-tb", "right-tbv3"]
 evidence = [
   { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
   { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
+  { label = "Three-wire preparation@8f83136 (just.sh 5/5)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50" },
 ]
 
 [[next_actions]]
