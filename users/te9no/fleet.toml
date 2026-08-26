@@ -6,6 +6,24 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
+id = "board-pinmux-release"
+state = "active"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "Madulaで実証したXIAO qualifier・vbatt override・未使用peripheral解放を、まずCornix TPS43へ適用し、その後Polaris、MKB、Solstice、SAAを生成DTS付きで順に是正する。"
+completion = "P0対象のbare xiao_bleが解消され、xiao_serial/xiao_spi/xiao_i2cとshield pinの重複が生成DTSから消え、各repositoryの全target pristine buildと代表実機入力が合格する。"
+blocker = "監査は完了。Madula@0ed7388で手順とPMW初期化を実証済み。各repositoryは検証branchで個別に実装し、stable branchやPRへ自動反映しない。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module"
+change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
+validation_keys = ["board-qualifier", "generated-dts", "targeted-build", "hardware"]
+variant_ids = ["cornix-tps43-production", "cornix-tps43-host-bond-reset"]
+evidence = [
+  { label = "Madula pin-release trigger@0ed7388", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc" },
+  { label = "Cross-repository XIAO pinmux audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md" },
+]
+
+[[next_actions]]
 id = "cornix-madula-1200-baud"
 state = "waiting"
 priority = "high"
@@ -28,17 +46,17 @@ state = "waiting"
 priority = "high"
 order = 2
 repository = "cornix"
-action = "Madula Trackball実機でPMW3610入力、split relay、source列挙、frame captureを確認する。"
-completion = "pointer方向・速度、左右接続、DYA Studioのsource 1/ALLとframe captureが実機合格する。"
-blocker = "公開3-wire module v0.1.0を固定した専用branchでMadula 3/3 build済み。Trackball実機がないためflashと入力確認は保留。既存Draft PR #3へは未反映で、mergeしない。"
+action = "Madula TrackballをDYA Studioで開き、source列挙とframe captureを確認する。"
+completion = "DYA Studioのsource 1/ALLとframe captureが実機合格する。"
+blocker = "Madula@0ed7388でconnector pinを解放し、3/3 pristine build、Trackball flash、Product ID 0x3e、Revision 0x01、ready=true、init_err=0、ユーザー操作によるpointer/module-inputまで合格。MadulaはCentral一体型のためsplit relayは対象外。既存Draft PR #3へは未反映で、mergeしない。"
 pr = "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
-validation_keys = ["hardware"]
+validation_keys = ["frame-capture"]
 variant_ids = ["madula-trackball"]
 evidence = [
   { label = "Draft PR #3", status = "pending", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/3" },
   { label = "12/12 CI", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654" },
-  { label = "Three-wire preparation@c675e9c (just.sh 3/3)", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/c675e9c445fa2146e7d4bab6647eca10296b55ec" },
+  { label = "Madula pin-release and PMW init@0ed7388 (just.sh 3/3)", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc" },
 ]
 
 [[next_actions]]

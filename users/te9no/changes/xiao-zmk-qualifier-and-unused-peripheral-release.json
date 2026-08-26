@@ -1,0 +1,278 @@
+{
+  "schema": 1,
+  "id": "xiao-zmk-qualifier-and-unused-peripheral-release",
+  "enabled": true,
+  "title": "XIAO ZMK qualifierと未使用peripheralのpin解放を揃える",
+  "description": "Zephyr 4.1世代のXIAO BLE targetではboardをxiao_ble//zmkへ揃え、shieldが使用しないxiao_serial、xiao_spi、xiao_i2cを明示的に無効化する。qualifierはZMK向けboard設定を追加するが、すべてのconnector peripheralを無効化するわけではない。shield、matrix、LED、sensorとP1.11/P1.12、P1.13-P1.15、P0.04/P0.05を共有する場合は、targetごとの有効nodeを生成DTSで監査する。",
+  "source": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "from_revision": null,
+    "to_revision": "0ed7388847b2b896d260770b58542617a5a619fc",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+    "notes": "XIAO BLEの標準connector peripheralはxiao_serial=P1.11/P1.12、xiao_spi=P1.13/P1.14/P1.15、xiao_i2c=P0.04/P0.05を使用する。ZMK qualifierは少なくともxiao_serialを解放するが、xiao_spiとxiao_i2cはshield側の利用状況に応じて明示的に管理する。汎用手順は、qualifier化、board提供vbattのshield値へのoverride、未使用nodeのdisable、必要なmodule overlayだけでのre-enable、生成DTS監査、pristine build、実機確認の順とする。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "revision": "0ed7388847b2b896d260770b58542617a5a619fc",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+    "notes": "Madula Trackballが電気的に正常でもPMW3610初期化に失敗したため、3 module targetをxiao_ble//zmkへ変更し、Madula common overlayでxiao_serial、xiao_spi、xiao_i2cを無効化した。board提供vbattをMadulaのA0 1M/1Mへoverrideし、不要なspi0 disableも除去。Trackball/TrackPoint/IQSのpristine build 3/3に成功し、Trackball実機でProduct ID 0x3e、Revision 0x01、ready=true、init_err=0を確認した。"
+  },
+  "repositories": [
+    "cornix",
+    "polaris",
+    "mkb2",
+    "solstice",
+    "saa",
+    "mopolia",
+    "sparagmos"
+  ],
+  "tracking": {
+    "cornix": {
+      "status": "applied",
+      "pr": null,
+      "commit": "0ed7388847b2b896d260770b58542617a5a619fc",
+      "branch": "codex/zmk-0.4-three-wire-spi-module",
+      "base_branch": "zmk-0.4",
+      "notes": "Madula Trackball/TrackPoint/IQSはqualifier化とconnector peripheral解放を適用済み。生成DTSで3 nodeのdisabledを確認し、just.sh pristine build 3/3が合格。Trackballは実機初期化、source ready、ユーザー操作によるpointer/module-inputまで合格した。MadulaはCentral一体型なのでsplit relayは対象外。frame captureとDYA Studio UIは未確認。Cornix TPS43 production/host-bond-resetはbare xiao_bleのままで、独自i2c0のP0.05とreset P0.04が標準xiao_i2cと競合するためP0横展開対象。中央settings-resetもqualifier統一が必要。",
+      "validation": {
+        "board-qualifier": "passed",
+        "source-audit": "passed",
+        "generated-dts": "passed",
+        "targeted-build": "passed",
+        "sensor-init": "passed",
+        "source-enumeration": "passed",
+        "module-input": "passed",
+        "hardware": "passed"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "sensor-init": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+      },
+      "variants": [
+        {
+          "id": "madula-trackball",
+          "status": "pending",
+          "validation": {
+            "board-qualifier": "passed",
+            "generated-dts": "passed",
+            "targeted-build": "passed",
+            "sensor-init": "passed",
+            "source-enumeration": "passed",
+            "module-input": "passed",
+            "hardware": "passed",
+            "frame-capture": "pending",
+            "dya-studio-ui": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Madula pin release and PMW init@0ed7388",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+            },
+            {
+              "label": "Pointer/module-input owner confirmation",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+            },
+            {
+              "label": "Frame capture and DYA Studio UI gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/zmk-0.4-three-wire-spi-module"
+            }
+          ]
+        },
+        {
+          "id": "madula-trackpoint",
+          "status": "pending",
+          "validation": {
+            "board-qualifier": "passed",
+            "generated-dts": "passed",
+            "targeted-build": "passed",
+            "hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Madula TrackPoint pristine build@0ed7388",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+            }
+          ]
+        },
+        {
+          "id": "madula-iqs",
+          "status": "pending",
+          "validation": {
+            "board-qualifier": "passed",
+            "generated-dts": "passed",
+            "targeted-build": "passed",
+            "hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Madula IQS pristine build@0ed7388",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/0ed7388847b2b896d260770b58542617a5a619fc"
+            }
+          ]
+        },
+        {
+          "id": "cornix-tps43-production",
+          "status": "pending",
+          "validation": {
+            "board-qualifier": "pending",
+            "source-audit": "passed",
+            "generated-dts": "pending",
+            "targeted-build": "pending",
+            "hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Bare xiao_ble and P0.04/P0.05 conflict audit",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md"
+            }
+          ]
+        },
+        {
+          "id": "cornix-tps43-host-bond-reset",
+          "status": "pending",
+          "validation": {
+            "board-qualifier": "pending",
+            "source-audit": "passed",
+            "generated-dts": "pending",
+            "targeted-build": "pending"
+          },
+          "evidence": [
+            {
+              "label": "Bare xiao_ble and P0.04/P0.05 conflict audit",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md"
+            }
+          ]
+        }
+      ]
+    },
+    "polaris": {
+      "status": "pending",
+      "pr": null,
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "notes": "P0。build targetはqualifier済みでxiao_serialは解放されるが、生成DTSではxiao_spiとxiao_i2cがokay。左はOLED用P1.14/P1.15と標準xiao_spiが競合し、右TBではP1.13、P0.05、P0.04をmoduleと標準peripheralが共有する。unused xiao_spiをbaseでdisableし、右targetではunused xiao_i2cもdisableしてmoduleごとの必要nodeだけを有効化する。",
+      "validation": {
+        "board-qualifier": "passed",
+        "source-audit": "passed",
+        "generated-dts": "failed",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+      }
+    },
+    "mkb2": {
+      "status": "pending",
+      "pr": null,
+      "commit": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "notes": "P0。全targetはqualifier済み。生成DTSでxiao_spiがokayのままで、OLED用P1.14/P1.15と常時競合し、TB/ENC/LPPSではP1.13も共有する。xiao_i2cはOLED用i2c1としてpinを上書きしているため意図的。MKB baseでunused xiao_spiを明示disableし、全targetをpristine buildする。",
+      "validation": {
+        "board-qualifier": "passed",
+        "source-audit": "passed",
+        "generated-dts": "failed",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+      }
+    },
+    "solstice": {
+      "status": "pending",
+      "pr": null,
+      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "notes": "P0。US/JIS左右4 targetはqualifier済みでserialもoverlayからdisabled。左右matrixがD8-D10=P1.13-P1.15を使う一方、標準xiao_spiが有効なため競合する。右xiao_i2cはdisabled、左はOLED用custom pinctrlへ上書き済み。両baseでxiao_spiを明示disableして4 targetとsettings-resetを再buildする。",
+      "validation": {
+        "board-qualifier": "passed",
+        "source-audit": "passed",
+        "generated-dts": "pending",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4"
+      }
+    },
+    "saa": {
+      "status": "pending",
+      "pr": null,
+      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
+      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "base_branch": "master",
+      "notes": "P0。qualifier済みだが標準xiao_i2c P0.04/P0.05は共通LED powerとmatrix colに競合する。標準xiao_spi P1.13-P1.15はENC、TPD、IQSと競合し、TB targetだけがspi2をtrackball用へ意図的に上書きする。baseでxiao_i2c/xiao_spiをdisableし、TB/IQS/TPD overlayだけで必要controllerをre-enableして専用branch全21 targetを再buildする。",
+      "validation": {
+        "board-qualifier": "passed",
+        "source-audit": "passed",
+        "generated-dts": "pending",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+      }
+    },
+    "mopolia": {
+      "status": "not-applicable",
+      "pr": null,
+      "commit": null,
+      "branch": "main",
+      "base_branch": "main",
+      "notes": "現状安全。全targetがqualifier済みでuart0を明示disableし、spi2はMLX90393用P1.13/P1.14へ意図的に上書きしている。標準xiao_i2cのP0.04/P0.05はshield、matrix、LEDで未使用。source監査時点では修正不要だが、ZMKやmodule revision更新時に生成DTSを再確認する。"
+    },
+    "sparagmos": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "branch": "master",
+      "base_branch": "master",
+      "notes": "P3。現行はZMK v0.3と旧seeeduino_xiao_ble boardを使うため、このZMK 0.4 qualifier修正を直接適用しない。将来の専用ZMK 0.4 migration branchでqualifier、vbatt、xiao connector peripheral、生成DTSをgateとして監査する。stable masterは変更しない。",
+      "validation": {
+        "board-qualifier": "pending",
+        "source-audit": "passed",
+        "generated-dts": "pending",
+        "migration-gate": "pending"
+      },
+      "validation_urls": {
+        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master",
+        "migration-gate": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master"
+      }
+    }
+  }
+}
