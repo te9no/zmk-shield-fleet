@@ -3,13 +3,13 @@
   "id": "polaris-esb-usb-only-trial",
   "enabled": true,
   "title": "ESB split transportをPolarisでUSB-only試験",
-  "description": "Polaris限定のUSB Central/ESB Peripheral試験。te9no公開ESB fork58c8f91の4修正はhost87cases(ASan/UBSan)とfork CIに合格。Polaris候補3b7cc78はjust.sh pristine2/2と115assertionsに合格し、firmware CIはpending。今回は未flash、接続中の両手は旧72801a6+upstream314c7cbのまま。旧実機結果を新候補へ転用しない。BLE同居不可、USB必須、他機種展開なし、1ms/電力未測定。",
+  "description": "Polaris限定USB Central/ESB Peripheral試験。DYA Studioの左右間RPC relayをte9no fork656477cに追加し、候補64860ddへ統合。host96件ASan/UBSanと独立レビュー合格、fork CI成功。左右just.sh pristineと生成物監査を実施。未flash、RPC往復/入力/CDC実機確認はpending。BLE同居・暗号認証・live-link切断検知は未対応。",
   "source": {
     "repository": "te9no/zmk-feature-split-esb",
-    "from_revision": "314c7cbaf4a74e1add1d6ffc8249de3e29965b8c",
-    "to_revision": "58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
-    "change_url": "https://github.com/te9no/zmk-feature-split-esb/commit/58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
-    "notes": "公開fork mainの修正revision。in-flight retry識別、RX不完全frameの無限loop、小command保留、radio enable失敗伝播の4件を修正。host87cases ASan/UBSan合格、旧314c7cbの4負例検出。短い不正payloadの型別長拒否、retry順A,A,B、queuefull等も含む。host stubsによる検証でRF/実機を再現したものではない。Polarisはこのfork SHAへ固定しjust.sh updateで公開repoから取得確認。ZMK cormoran e5c9b691、NCS9b3d2623、nrfxlib dfadf173は維持。暗号/auth無し、常時ALL_CONNECTED、遠隔RPC非対応、ローカルPMW初期化失敗は4修正の解消対象ではない。upstream PRなし。"
+    "from_revision": "58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
+    "to_revision": "656477caa56d8909ac78e024cbd943caa6aaa7d7",
+    "change_url": "https://github.com/te9no/zmk-feature-split-esb/commit/656477caa56d8909ac78e024cbd943caa6aaa7d7",
+    "notes": "codex/esb-cormoran-relayで公開。48byte無線パケットに収まる転送ID/全長/offset付き分割と再結合、500ms再結合期限、source/recipient検証、キュー満杯時の保持とcallback競合回復を追加。Cormoran peripheralの未設定event_type_sizeを正規化。host96件は実ソース抽出によるASan/UBSanで、serializer・両role RX・キュー競合を含む。RF実機試験ではない。元58c8f91の4修正を維持。ZMK cormoran e5c9b691/NCS/PMW driver/3wire/pinsは変更なし。1 peripheral限定で試験し、連続stream/自動切断検知/暗号認証/nRF53は未検証または対象外。本家へのPRなし。"
   },
   "repositories": [
     "polaris"
@@ -18,9 +18,9 @@
     "polaris": {
       "status": "pending",
       "pr": null,
-      "commit": "3b7cc78b99c6f1ed76b4349e8c75560b81fb63db",
+      "commit": "64860dde60bf7b20d35bfec0d3d5f61925141be9",
       "branch": "codex/zmk-0.4-esb-validation",
-      "notes": "trackingは未flashの新候補3b7cc78b99c6f1ed76b4349e8c75560b81fb63dbを指す。ESB参照をte9no fork58c8f91へ固定し専用firmware branchへpush済み。変更はconfig URL/SHAとdocsのみ。変更していないjust.shでupdateとbuild-fast ESB --pristine=alwaysを実行し2/2成功。check-esb-fork.py115assertions(既存112+forkURL/取得checkoutSHA/clean3)合格。左UF2 763904B/SHA82e58e58...、右256000B/SHA cff7d2e0...、完全hashは検証報告。forkCI33058361591success、PolarisCI33058405841pending。接続実機は両手とも旧72801a6+upstream314c7cbで今回はflashなし。旧版の左右flash/CDC/DBG抑制合格と右PMW PID00初期化failedはrevision付き履歴として保持し、新候補のflash/CDC/log-runtime/sensor/input/hardwareは全pending。host87casesはRF/実機確認ではない。通常BLEは元8421728/maintenanceと元profileを使用し、このESB branchで9target build可能とはしない。maintenance/stable merge、upstream PR、他機種展開なし。",
+      "notes": "候補64860ddはrelay-capable ESB656477cに固定。左右relay/PMW/custom-settings/core-settings RPCと左PMW Studio subsystemを有効化。両CDCに5秒間隔上限の再結合済みrelay受信件数を追加（payload/設定値を出力しない）。host96件ASan/UBSan、独立レビュー、fork CI33066224904成功。just.sh pristine左右と生成DTS/config/ELF/CDC/UF2監査の結果・hashは検証報告参照。現在は未flashで、最終記録上の実機は旧72801a6+upstream314c7cb。旧版CDC合格/右PMW PID00・OBSff失敗を新候補へ転用しない。新候補のhardware/CDC/入力/remote RPC往復は全pending。初回は右source1への単発GetInfo/診断/設定確認。ALL_CONNECTEDはlivenessではなく、stream自動停止を保証しない。通常BLE・stable/maintenanceは未変更。",
       "validation": {
         "dependency-pins": "passed",
         "source-audit": "passed",
@@ -47,19 +47,24 @@
         "left-joy-input": "pending",
         "right-tb-sensor-init": "pending",
         "left-oled-trial-display": "pending",
-        "hardware": "pending"
+        "hardware": "pending",
+        "relay-host": "passed",
+        "relay-rpc-roundtrip": "pending",
+        "relay-disconnect": "pending",
+        "relay-streaming": "pending"
       },
       "validation_urls": {
-        "dependency-pins": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/3b7cc78b99c6f1ed76b4349e8c75560b81fb63db/config/west.yml",
-        "retry-identity-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
-        "rx-progress-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
-        "small-command-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
-        "init-error-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
-        "fork-ci": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33058405841",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
-        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
-        "generated-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md"
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33066366370",
+        "dependency-pins": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/64860dde60bf7b20d35bfec0d3d5f61925141be9/config/west.yml",
+        "retry-identity-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904",
+        "rx-progress-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904",
+        "small-command-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904",
+        "init-error-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904",
+        "fork-ci": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-relay-validation-2026-08-27.md",
+        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-relay-validation-2026-08-27.md",
+        "generated-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-relay-validation-2026-08-27.md",
+        "relay-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33066224904"
       },
       "variants": [
         {
@@ -74,7 +79,8 @@
             "esb-key-input": "pending",
             "esb-pointer-relay": "pending",
             "joy-input": "pending",
-            "oled-trial-display": "pending"
+            "oled-trial-display": "pending",
+            "relay-rpc-roundtrip": "pending"
           }
         },
         {
@@ -89,7 +95,8 @@
             "esb-key-input": "pending",
             "esb-pointer-relay": "pending",
             "esb-reconnect": "pending",
-            "sensor-init": "pending"
+            "sensor-init": "pending",
+            "relay-rpc-roundtrip": "pending"
           }
         }
       ]

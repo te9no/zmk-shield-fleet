@@ -2,8 +2,12 @@
 
 Date: 2026-08-27
 
+Historical report. The newer `64860dd` / ESB `656477c` relay-capable candidate
+is documented in [the DYA relay validation report](polaris-esb-relay-validation-2026-08-27.md).
+Neither candidate was flashed by its implementation/build task.
+
 This is a **Polaris-only experiment**, not rollout approval for other keyboards.
-The latest built candidate is `3b7cc78` with the public fixed ESB fork `58c8f91`:
+The candidate at the time of this report was `3b7cc78` with the public fixed ESB fork `58c8f91`:
 87 host cases, pristine 2/2 and 115 audit assertions passed. It was **not flashed**.
 Both connected halves still run the previous `72801a6` / upstream `314c7cb` pair;
 their earlier CDC success and right-PMW failure are preserved below, not assigned
