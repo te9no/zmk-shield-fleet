@@ -3,13 +3,13 @@
   "id": "polaris-esb-usb-only-trial",
   "enabled": true,
   "title": "ESB split transportをPolarisでUSB-only試験",
-  "description": "Polarisの左JOYをUSB Central、右TBをESB Peripheralとする専用branchの限定試験。Polarisだけを対象とし、他keyboardへの自動横展開は行わない。BLEとの同居は不可でPC接続はUSB必須。現行72801a6は左右just.sh pristine2/2・112 assertions・再flash/CDC起動・DBG抑制が合格。右PMW初期化はfailed、ESB接続/キー/ポインターと実機入力は未確認。1ms応答や消費電力は計測していない。",
+  "description": "Polaris限定のUSB Central/ESB Peripheral試験。te9no公開ESB fork58c8f91の4修正はhost87cases(ASan/UBSan)とfork CIに合格。Polaris候補3b7cc78はjust.sh pristine2/2と115assertionsに合格し、firmware CIはpending。今回は未flash、接続中の両手は旧72801a6+upstream314c7cbのまま。旧実機結果を新候補へ転用しない。BLE同居不可、USB必須、他機種展開なし、1ms/電力未測定。",
   "source": {
-    "repository": "badjeff/zmk-feature-split-esb",
-    "from_revision": null,
-    "to_revision": "314c7cbaf4a74e1add1d6ffc8249de3e29965b8c",
-    "change_url": "https://github.com/badjeff/zmk-feature-split-esb/commit/314c7cbaf4a74e1add1d6ffc8249de3e29965b8c",
-    "notes": "採用ESB module revisionでありPolaris試験sourceのcommitではない。trackingは現行ログ上限追加版72801a6を指し、初回ea2ca2cは検証報告に履歴保持。badjeff/sdk-nrf@9b3d2623fdcd9c0fd0284f860beea924568c9826、nrfconnect/sdk-nrfxlib@dfadf17305d8f000eda9aa74a5b9ff1c5647a23eを追加し、cormoran/zmk@e5c9b6915b56801193e359dd9bad4a167ce0d1b8は維持。ESBは暗号化/認証なし、CRCと固有addressは機密性/認証を提供しない。Cormoran RELAY_EVENT未対応でPMW/custom settingsの遠隔RPCは対象外。get_statusは常時ALL_CONNECTEDなので表示だけで接続合格にしない。"
+    "repository": "te9no/zmk-feature-split-esb",
+    "from_revision": "314c7cbaf4a74e1add1d6ffc8249de3e29965b8c",
+    "to_revision": "58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
+    "change_url": "https://github.com/te9no/zmk-feature-split-esb/commit/58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
+    "notes": "公開fork mainの修正revision。in-flight retry識別、RX不完全frameの無限loop、小command保留、radio enable失敗伝播の4件を修正。host87cases ASan/UBSan合格、旧314c7cbの4負例検出。短い不正payloadの型別長拒否、retry順A,A,B、queuefull等も含む。host stubsによる検証でRF/実機を再現したものではない。Polarisはこのfork SHAへ固定しjust.sh updateで公開repoから取得確認。ZMK cormoran e5c9b691、NCS9b3d2623、nrfxlib dfadf173は維持。暗号/auth無し、常時ALL_CONNECTED、遠隔RPC非対応、ローカルPMW初期化失敗は4修正の解消対象ではない。upstream PRなし。"
   },
   "repositories": [
     "polaris"
@@ -18,37 +18,48 @@
     "polaris": {
       "status": "pending",
       "pr": null,
-      "commit": "72801a643a640d2db6b0955b5b9d7b7cd6ddf446",
+      "commit": "3b7cc78b99c6f1ed76b4349e8c75560b81fb63db",
       "branch": "codex/zmk-0.4-esb-validation",
-      "notes": "両手の現行firmwareは72801a643a640d2db6b0955b5b9d7b7cd6ddf446。ea2ca2cからのコード変更はLOG_MAX_LEVEL=3のみ。just.sh pristine2/2と112 assertions(元97+MAX/OVERRIDE4+binary DBG不在8+INFO保持3)合格。UF2は左764416B/SHA14660871...、右256512B/SHA05256070...、完全hashは検証報告参照。左COM326→H→COM325、右COM327→I→COM327で再flash/起動し、新bootlogsにDBGなし。左JOYは100Hz/report8ms ready、USB endpoint選択まで確認し動作合格にはしない。右PMW PID00初期化失敗は再現。ESB実受信/キー/ポインター/再接続、JOY操作、OLED目視はpending。右の文字キー数回の非機密操作を依頼してcapture待ち。HFclock/常時接続表示だけでは接続合格にしない。専用counterはsource0 keyevent件数の5秒集計のみ、ACK直接計数/キー値保存/1ms・電力測定なし。左標準OLED/USB Studio、右CDC/3-wire、settings遠隔RPC OFF。ESB専用2targetsを監査済み、通常BLEは元8421728/maintenanceと元profileから作る。同manifest BLE smoke失敗と旧PMW/pinmux失敗履歴は保持。maintenance/stable mergeや他機種展開はしない。",
+      "notes": "trackingは未flashの新候補3b7cc78b99c6f1ed76b4349e8c75560b81fb63dbを指す。ESB参照をte9no fork58c8f91へ固定し専用firmware branchへpush済み。変更はconfig URL/SHAとdocsのみ。変更していないjust.shでupdateとbuild-fast ESB --pristine=alwaysを実行し2/2成功。check-esb-fork.py115assertions(既存112+forkURL/取得checkoutSHA/clean3)合格。左UF2 763904B/SHA82e58e58...、右256000B/SHA cff7d2e0...、完全hashは検証報告。forkCI33058361591success、PolarisCI33058405841pending。接続実機は両手とも旧72801a6+upstream314c7cbで今回はflashなし。旧版の左右flash/CDC/DBG抑制合格と右PMW PID00初期化failedはrevision付き履歴として保持し、新候補のflash/CDC/log-runtime/sensor/input/hardwareは全pending。host87casesはRF/実機確認ではない。通常BLEは元8421728/maintenanceと元profileを使用し、このESB branchで9target build可能とはしない。maintenance/stable merge、upstream PR、他機種展開なし。",
       "validation": {
         "dependency-pins": "passed",
         "source-audit": "passed",
+        "retry-identity-host": "passed",
+        "rx-progress-host": "passed",
+        "small-command-host": "passed",
+        "init-error-host": "passed",
+        "fork-ci": "passed",
         "security-review": "pending",
         "log-privacy-cap": "passed",
+        "log-privacy-runtime": "pending",
         "targeted-build": "passed",
         "ci": "pending",
         "ble-target-isolation": "passed",
         "generated-config": "passed",
-        "left-flash": "passed",
-        "right-flash": "passed",
-        "cdc-debug": "passed",
+        "left-flash": "pending",
+        "right-flash": "pending",
+        "cdc-debug": "pending",
         "usb-host-input": "pending",
         "esb-connectivity": "pending",
         "esb-key-input": "pending",
         "esb-pointer-relay": "pending",
         "esb-reconnect": "pending",
         "left-joy-input": "pending",
-        "right-tb-sensor-init": "failed",
+        "right-tb-sensor-init": "pending",
         "left-oled-trial-display": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
-        "dependency-pins": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/72801a643a640d2db6b0955b5b9d7b7cd6ddf446/config/west.yml",
-        "source-audit": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/72801a643a640d2db6b0955b5b9d7b7cd6ddf446",
-        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/72801a643a640d2db6b0955b5b9d7b7cd6ddf446/docs/esb-validation.md",
-        "generated-config": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/72801a643a640d2db6b0955b5b9d7b7cd6ddf446/docs/esb-validation.md",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33045609894"
+        "dependency-pins": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/3b7cc78b99c6f1ed76b4349e8c75560b81fb63db/config/west.yml",
+        "retry-identity-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
+        "rx-progress-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
+        "small-command-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
+        "init-error-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
+        "fork-ci": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33058405841",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
+        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
+        "generated-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md"
       },
       "variants": [
         {
@@ -57,8 +68,8 @@
           "validation": {
             "targeted-build": "passed",
             "generated-config": "passed",
-            "flash": "passed",
-            "cdc-debug": "passed",
+            "flash": "pending",
+            "cdc-debug": "pending",
             "usb-host-input": "pending",
             "esb-key-input": "pending",
             "esb-pointer-relay": "pending",
@@ -72,13 +83,13 @@
           "validation": {
             "targeted-build": "passed",
             "generated-config": "passed",
-            "flash": "passed",
-            "cdc-debug": "passed",
+            "flash": "pending",
+            "cdc-debug": "pending",
             "esb-connectivity": "pending",
             "esb-key-input": "pending",
             "esb-pointer-relay": "pending",
             "esb-reconnect": "pending",
-            "sensor-init": "failed"
+            "sensor-init": "pending"
           }
         }
       ]

@@ -11,12 +11,12 @@ state = "waiting"
 priority = "high"
 order = 1
 repository = "polaris"
-action = "現行72801a6のPolaris右の文字キーを数回押してもらい、source0 keyevent件数と実受信を確認する。続いて再接続、JOY動作、OLEDを確認する。ACK直接計数なし、USB必須、機密入力禁止。"
-completion = "専用branchの確定commitと左右artifactを記録し、build/config/flash/CDC/USB入力/実ESB event/再接続/JOY/TB/OLEDのgateを個別に確認する。接続表示だけで合格にせず、既存PMW失敗を解消扱いしない。"
-blocker = "両手72801a6再flash/CDC起動済み。just.sh pristine2/2・112assertions・DBG抑制合格、公開専用branchのCIはpending。右PMW PID00初期化失敗は別件として継続。ESB実受信/入力/再接続とJOY/OLEDは未確認で、右キー操作を依頼してcapture中。通常BLEは元branch/profile、1ms/電力未測定。"
+action = "fork58c8f91を使うPolaris候補3b7cc78の実機確認は、次回の明示依頼後に行う。今回はbuild/監査までで書き込まない。host合格とRF/実機合格を分ける。"
+completion = "新候補のflash/CDC/入力/hardwareを対象revisionで実測して記録する。今回の公開fork・host87cases・左右build2/2・115assertionsの完了だけで実機完了にはしない。"
+blocker = "fork58c8f91公開/host87cases ASan/UBSan/forkCI成功。候補3b7cc78はjust.sh pristine2/2・115assertions成功、PolarisCIはpending。未flashで両手は旧72801a6+upstream314c7cb。旧CDC合格・PMW失敗は履歴、新候補の実機gateは全pending。upstream PRなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-esb-validation"
 change_id = "polaris-esb-usb-only-trial"
-validation_keys = ["security-review", "log-privacy-cap", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
+validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
 variant_ids = ["left-joy-usb-central", "right-tb-esb-peripheral"]
 
 [[next_actions]]
