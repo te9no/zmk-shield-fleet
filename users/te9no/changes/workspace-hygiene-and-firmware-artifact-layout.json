@@ -11,9 +11,9 @@
   "source": {
     "repository": "te9no/zmk-workspace",
     "from_revision": "1ebf2c4a",
-    "to_revision": "7e19e13cd4bfee531318674b95014a391a1fedeb",
-    "change_url": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
-    "notes": "main@7e19e13cまで公開済み。4a979e52、9b461ad5、9e10e81fでprofile/artifact処理、CDC bootloader切断処理、repository配置規約を整備し、97420d11でlocal Visual Studio workspace dataを除外、7e19e13cでreusable badge workflowのvalidationを修正した。workspace保守はmainへ直接蓄積し、PRを作らない運用。"
+    "to_revision": "148383705c155920be46a48a79d6c6e26127b879",
+    "change_url": "https://github.com/te9no/zmk-workspace/commit/148383705c155920be46a48a79d6c6e26127b879",
+    "notes": "workspace main@14838370へ直接push済み。現在checkout優先のartifact保存先、CDCとの共通resolver、profile内ログ、実機に触れない--resolveを追加。18件の回帰テストはlocal/CIとも合格。再監査でMKB消失登録を履歴保全して退避し、退避SAAと現存FleetのGit参照を修復。容量一覧と保持理由も更新した。ファーム変更・build・flash・他者PR・大容量削除は行っていない。"
   },
   "repositories": [
     "polaris",
@@ -29,45 +29,53 @@
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に保持し、active repository/worktree参照を修復。現行Polaris/MKB build profiles 6.9 GiB、共有ccache 3.8 GiB、archived repository snapshots 2.2 GiBは意図的に保持。workspace main@7e19e13cはremoteへ反映済みで、reusable workflow名がGitHubに正常認識され、無効なpush runが生成されない状態を確認。残るのは保持容量の次回レビューだけ。",
+      "notes": "workspace再監査・修正済み。8 profiles 31.11 GiB、ccache 3.74 GiB、旧build/west退避45.22 GiB、旧firmware324.21 MiB、Fleet source退避2.12 GiBを保持理由付きで記録。旧6.9/3.8/2.2 GiBの要約を訂正した。外部Polaris worktreeは実在を確認し、削除せず監査。全active Git参照とartifact/CDC resolverを検証、workspace main@14838370公開・18件CI合格。残るのは旧ESB/旧build等の削除候補を分類して明示承認を得る別作業。",
       "validation": {
         "canonical-layout": "passed",
         "active-repository-repair": "passed",
         "artifact-layout": "passed",
         "root-main-push": "passed",
         "reusable-workflow-validation": "passed",
-        "retained-storage-review": "pending"
+        "retained-storage-review": "passed",
+        "workspace-path-tests": "passed",
+        "cdc-artifact-resolution": "passed",
+        "storage-cleanup-approval": "pending"
       },
       "validation_urls": {
         "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "root-main-push": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
+        "root-main-push": "https://github.com/te9no/zmk-workspace/commit/148383705c155920be46a48a79d6c6e26127b879",
         "reusable-workflow-validation": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
-        "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "workspace-path-tests": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604",
+        "cdc-artifact-resolution": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604",
+        "storage-cleanup-approval": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "mkb2": {
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に統一。現行MKB/Polaris build profilesは実機検証継続用として保持し、firmware artifactはrepository/branch単位の正規配置へ縮約した。",
+      "notes": "canonical checkoutはconfig/、一時作業はwork/を維持。消失済みMKB-main登録はdetached HEADをrecovery refで保護しmetadataごと退避。mkb-three-wire-moduleの現在branch codex/mkb-via-supportへartifact保存先が追従することを確認。2つのMKB profileは保持理由を記録して維持、ファーム/実機結果は変更していない。",
       "validation": {
         "canonical-layout": "passed",
         "artifact-layout": "passed",
-        "active-profile-retention": "passed"
+        "active-profile-retention": "passed",
+        "profile-resolution": "passed"
       },
       "validation_urls": {
         "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "active-profile-retention": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "active-profile-retention": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "profile-resolution": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604"
       }
     },
     "saa": {
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に統一し、active SAA worktree参照を修復。専用validation branchと実機検証待ちの台帳状態は変更していない。",
+      "notes": "canonical checkoutをconfig/に維持。再監査で旧.tmpのSAA worktreeを45.22 GiB archive内に発見し両方向のGit参照を修復、保全lockを付与。metadataを別途backupし、既存改行差分・専用branch・実機検証待ちは維持。archive全体を単なるcacheとして削除しない。",
       "validation": {
         "canonical-layout": "passed",
         "active-repository-repair": "passed",
@@ -83,16 +91,18 @@
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に統一し、一時clone/worktreeをwork/またはarchive inventoryへ分離。firmwareやCornix mainの内容は変更していない。",
+      "notes": "canonical checkoutはconfig/、一時clone/worktreeはwork/またはarchiveを維持。madula-lpps-validationが現在のCornix mainを参照し、firmware/zmk-keyboard-cornix/mainへ保存・CDC解決することを読み取り専用で確認。旧metadataのcodex-madula-lpps-pinoutへの固定を解消。firmwareやCornix main、LPPS実機結果は変更していない。",
       "validation": {
         "canonical-layout": "passed",
         "worktree-audit": "passed",
-        "inventory-preservation": "passed"
+        "inventory-preservation": "passed",
+        "profile-resolution": "passed"
       },
       "validation_urls": {
         "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "profile-resolution": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604"
       }
     },
     "solstice": {

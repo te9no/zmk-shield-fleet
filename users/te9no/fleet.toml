@@ -229,19 +229,21 @@ evidence = [
 ]
 
 [[next_actions]]
-id = "workspace-retained-storage-review"
-state = "later"
+id = "workspace-obsolete-storage-cleanup-approval"
+state = "waiting"
 priority = "low"
 order = 95
 repository = "te9no/zmk-workspace"
 repository_url = "https://github.com/te9no/zmk-workspace/tree/main"
-action = "MKB/Polaris profiles 6.9 GiB、ccache 3.8 GiB、archived snapshots 2.2 GiBを次回容量監査で再評価する。"
-completion = "保持理由と使用状況を再確認し、維持または削除の判断を新しいinventoryへ記録する。"
-blocker = "現在は実機検証・build高速化・復旧用として意図的に保持。削除には新しいinventoryと明示承認が必要。"
+action = "旧ESB profile約3.69 GiBと旧build/west退避45.22 GiBから削除候補を分離し、正確なパス・保持対象を提示して明示承認を得る。"
+completion = "最新inventoryでsource worktree・dirty files・必要なログを保持対象として分離し、削除対象ごとの承認または継続保持の判断が記録される。承認前は削除しない。"
+blocker = "容量再監査は完了。8 profiles 31.11 GiB、ccache 3.74 GiB、旧build/west45.22 GiB、旧firmware324.21 MiB、Fleet source2.12 GiBを現在は保持。45.22 GiB archiveには修復したSAA worktreeも含まれるため、全体削除は不可。"
 change_id = "workspace-hygiene-and-firmware-artifact-layout"
-validation_keys = ["retained-storage-review"]
+validation_keys = ["storage-cleanup-approval"]
 evidence = [
-  { label = "Retained storage inventory", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
+  { label = "Re-audit and retention inventory", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
+  { label = "Workspace path tests 18/18", status = "passed", url = "https://github.com/te9no/zmk-workspace/actions/runs/33083235604" },
+  { label = "Cleanup requires explicit approval", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
 ]
 
 [[next_actions]]
