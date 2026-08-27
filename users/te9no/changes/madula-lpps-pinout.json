@@ -16,12 +16,13 @@
   ],
   "tracking": {
     "cornix": {
-      "status": "applied",
-      "pr": null,
-      "commit": "81644c2608da34a483209f0512fa8291f701b3ce",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/4",
+      "commit": "880be0cbea1acc8179f2b7b3bbdef3a7d8058fdf",
+      "pr_head": "81644c2608da34a483209f0512fa8291f701b3ce",
       "branch": "codex/madula-lpps-pinout",
       "base_branch": "main",
-      "notes": "81644c2 removes dominant-axis-lock; build/flash/CDC/ADS diagnostics and user-confirmed direction/free-XY input passed. Firmware CI remains pending. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked. Firmware remains on the validation branch.",
+      "notes": "User-authorized PR #4 merged the verified LPPS fixes into Cornix main at 880be0c. Its Git tree exactly matches tested head 81644c2. Source CI run 33076389402 passed 12/12 builds, and its madula_trackpoint UF2 hash matches the user-accepted local firmware. Direction and free-XY input passed; no new flashing was performed. Historical 373edbc had up→left and 819f6e7 fixed orientation but retained axis lock. The automatic post-merge main CI is separate from the already-passed source CI.",
       "validation": {
         "targeted-build": "passed",
         "generated-dts": "passed",
@@ -29,7 +30,8 @@
         "flash-boot": "passed",
         "cdc-debug": "passed",
         "ads-init": "passed",
-        "ci": "pending",
+        "ci": "passed",
+        "main-integration": "passed",
         "physical-input": "passed",
         "hardware": "passed"
       },
@@ -41,6 +43,7 @@
         "cdc-debug": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
         "ads-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402",
+        "main-integration": "https://github.com/te9no/zmk-keyboard-cornix/pull/4",
         "physical-input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
         "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md"
       },

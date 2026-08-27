@@ -50,7 +50,46 @@ the user confirmed **「すごい、かんぺき」**, accepting direction and u
 XY/diagonal input. Clean build, audit, and COM447 flash/boot passed at
 22:21:30/22:22 JST; UF2 SHA-256 is `15e79ee5814df791c2ea709945c4d5500ed09c96e87ffd12aef7bffab3b0b088`,
 boot-log SHA-256 is `110feed37c79ed85cd8e8f779a0bb751a1c6cf42ceb2a502924c6756257f6bab`,
-and CI [33076389402](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402) is pending.
+and CI [33076389402](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402) was pending at the time of the hardware test.
 
-Hardware acceptance is complete for this LPPS revision. Firmware CI is a
-separate pending gate, and no firmware-main merge has been performed.
+Hardware acceptance is complete for this LPPS revision. The later CI audit and
+subsequently authorized firmware-main integration are recorded separately below.
+
+## CI evidence audit — 2026-08-27
+
+Scope: profile `te9no`, repository `cornix`, change `madula-lpps-pinout`, and
+next action `cornix-madula-lpps-ci`, against ledger snapshot `21fef57`.
+
+- **Code:** the remote validation branch still points to
+  `81644c2608da34a483209f0512fa8291f701b3ce`, matching the audited source and CI head SHA.
+  The existing source/generated-DTS/config audit passed again without a rebuild.
+- **CI build:** workflow [33076389402](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402)
+  completed with `success` at 22:36:29 JST. All 12 build jobs and the publish job
+  succeeded. The relevant [madula_trackpoint job](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402/job/98534156765)
+  succeeded at 22:31:57 JST; this is firmware-build evidence, not keymap-rendering evidence.
+- **Artifact:** downloaded `artifact-madula_trackpoint` from that exact run.
+  Its `madula_trackpoint.uf2` is 638,976 bytes, SHA-256
+  `15e79ee5814df791c2ea709945c4d5500ed09c96e87ffd12aef7bffab3b0b088`.
+  This exactly matches the recorded local UF2 that received the user's hardware acceptance.
+- **Hardware:** retained the earlier direction/free-XY acceptance and verified
+  the retained boot-log hash. No new device observations, resets, or writes
+  were performed during this audit.
+
+The `ci` gate is now passed. The completed `cornix-madula-lpps-ci` action is
+removed from the waiting list. No other repository or change was updated.
+
+## Authorized Cornix main integration — 2026-08-27
+
+After the audit, the user authorized publishing the ledger and updating the
+Cornix repository. [Cornix PR #4](https://github.com/te9no/zmk-keyboard-cornix/pull/4)
+was merged into `main` at 22:46:04 JST, producing commit
+`880be0cbea1acc8179f2b7b3bbdef3a7d8058fdf`.
+
+Both that merge commit and the tested head `81644c2` have Git tree
+`1bee6c24a453942d1821d28024bcfe94a083052d`: the merged code is identical to
+the source that passed CI and hardware verification. The PR contains only
+the LPPS overlay and README changes. No new firmware writes were performed.
+
+The push also triggered [main CI 33078567395](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33078567395).
+That post-merge run was queued at integration; the existing `ci: passed` gate
+continues to cite the completed source-head run, not this new run.
