@@ -1,0 +1,64 @@
+{
+  "schema": 1,
+  "id": "module-pin-ownership-conflicts",
+  "enabled": true,
+  "title": "有効module同士のpin・controller共有を実配線と照合する",
+  "description": "未使用XIAO peripheralの解放とは別に、意図的に有効なOLED・TPD・IQSが同じpinまたはcontrollerを異なる用途へ割り当てていないか確認する。既存配線と対応module組合せを確認する前にpin移動やtarget削除を行わない。",
+  "source": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "from_revision": null,
+    "to_revision": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+    "change_url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#separate-module-pin-ownership-findings",
+    "notes": "XIAO pin-releaseの生成DTS監査で、既定peripheralではなく有効module同士の既存競合を発見した。参照commitは発見時の検証revisionであり、競合の導入commitではない。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942",
+    "notes": "Polaris左TPDのDRDYとOLED SDAがP1.14を共有し、生成DTSで両deviceがokay。SAAでは左右TPD_IQS構成のi2c1 pinctrl指定が異なることをsourceから確認した。今回のpin-releaseと切り離して追跡し、勝手なpin変更は行わない。"
+  },
+  "repositories": [
+    "polaris",
+    "saa"
+  ],
+  "tracking": {
+    "polaris": {
+      "status": "pending",
+      "pr": null,
+      "commit": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "base_branch": "zmk-0.4",
+      "notes": "左TPD+OLEDのみの既存pin競合。TPD DRDYとOLED SDAはともにP1.14で両nodeがokay。pin-release source/buildは合格しているが、この物理pin共有は未解決。実配線とサポート対象の組合せを確認後に修正方針を決める。実機確認なし、今回pin再割当なし。",
+      "validation": {
+        "source-audit": "passed",
+        "generated-dts-pin-ownership": "failed",
+        "wiring-confirmation": "pending",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "source-audit": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942",
+        "generated-dts-pin-ownership": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#separate-module-pin-ownership-findings"
+      }
+    },
+    "saa": {
+      "status": "pending",
+      "pr": null,
+      "commit": "0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "base_branch": "zmk-0.4_validation_cormoran-zmk",
+      "notes": "左右TPD_IQSの2 targetが対象。0540667の生成DTSで両sensor status okayだが、後段IQS snippetがi2c1 pinctrlをP1.03/P1.14へ上書きし、TPD配線P0.03/P0.28へ接続されないことを確認した。既存source由来の競合で今回pin変更なし。pin-releaseの21/21 build・786 assertions成功とは分離し、この組合せをhardware-readyとしない。実配線・同時利用の要否を確認してからcontroller/配線/対応targetを判断する。stable masterは対象外。",
+      "validation": {
+        "source-audit": "passed",
+        "generated-dts-pin-ownership": "failed",
+        "wiring-confirmation": "pending",
+        "targeted-build": "pending",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "source-audit": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
+        "generated-dts-pin-ownership": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#separate-module-pin-ownership-findings"
+      }
+    }
+  }
+}
