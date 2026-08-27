@@ -57,9 +57,9 @@
         "init-error-host": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
         "fork-ci": "https://github.com/te9no/zmk-feature-split-esb/actions/runs/33058361591",
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33058405841",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-esb-fork-fixes/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
-        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-esb-fork-fixes/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
-        "generated-config": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-esb-fork-fixes/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md"
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
+        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md",
+        "generated-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-esb-usb-only-validation-2026-08-27.md"
       },
       "variants": [
         {

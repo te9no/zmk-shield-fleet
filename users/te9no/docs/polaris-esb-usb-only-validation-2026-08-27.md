@@ -18,7 +18,7 @@ fork is published at
 [`58c8f912dae87b8197c4d6229e3f2df8cc52daaf`](https://github.com/te9no/zmk-feature-split-esb/commit/58c8f912dae87b8197c4d6229e3f2df8cc52daaf).
 Polaris candidate
 [`3b7cc78b99c6f1ed76b4349e8c75560b81fb63db`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/3b7cc78b99c6f1ed76b4349e8c75560b81fb63db)
-is pushed to `codex/zmk-0.4-esb-validation`. Its changes from `72801a6` are the
+is pushed to `codex/zmk-0.4-esb-validation`. Its source changes from `72801a6` are the
 ESB manifest URL/SHA and documentation; firmware maintenance/stable branches are
 unchanged.
 
