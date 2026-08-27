@@ -39,3 +39,11 @@ The boot-log SHA-256 is `43cec627b2bf8c131e2ec38a85e887fffd788b59eca1a605dddbdaa
 Physical direction remains pending for this new revision. Firmware CI
 [33076040353](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076040353)
 is pending; only Draw ZMK Keymaps run 33076040423 has passed.
+
+The latest [`81644c2608da34a483209f0512fa8291f701b3ce`](https://github.com/te9no/zmk-keyboard-cornix/commit/81644c2608da34a483209f0512fa8291f701b3ce)
+removes only `dominant-axis-lock`; the generated DTS confirms it is `0`.
+Direction remained unchanged from user-accepted `819f6e7`, but free XY physical
+acceptance is pending. Clean build, audit, and COM447 flash/boot passed at
+22:21:30/22:22 JST; UF2 SHA-256 is `15e79ee5814df791c2ea709945c4d5500ed09c96e87ffd12aef7bffab3b0b088`,
+boot-log SHA-256 is `110feed37c79ed85cd8e8f779a0bb751a1c6cf42ceb2a502924c6756257f6bab`,
+and CI [33076389402](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402) is pending.
