@@ -11,15 +11,17 @@ state = "waiting"
 priority = "high"
 order = 2
 repository = "polaris"
-action = "接続中Polarisの左右moduleを照合してからpin-release検証firmwareを書き込み、CDC、OLED、代表module入力、左右接続を確認する。"
-completion = "8421728の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。別件の左TPD/OLED pin競合を解消済みとは扱わない。"
-blocker = "just.sh9/9・101 assertions・CI合格。GeaconPolaris COM325/326は確認済みだが左右module照合待ちで未flash。実機未確認、stable/maintenance未merge、PRなし。source8421728とCIのUF2公開commit a7f3074を区別し、後の統合はsource-onlyとする。"
+action = "右USB切断・電池OFF・TB接続確認後の再接続を待ち、CDCでPMW初期化を再確認する。左JOY入力とOLEDも目視確認する。"
+completion = "右PMW初期化/入力と左JOY/OLEDが実機合格し、対象revision付きで記録される。新旧同症状の原因未確定を解消し、旧版rollbackを復旧成功と混同しない。"
+blocker = "左JOY/右TB照合・8421728書込済み。左はCOM326→H→COM325起動、右はCOM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4 UF2でも同症状。右は旧版、左は新JOY版。完全powercycle等をユーザーへ依頼済みで待機。左JOY/OLED未確認、mergeなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["hardware"]
+validation_keys = ["right-tb-sensor-init", "right-tb-baseline-sensor-init", "right-tb-comparison-rollback", "left-joy-module-input", "left-oled-visual", "hardware"]
+variant_ids = ["left-joy", "right-tb"]
 evidence = [
   { label = "Polaris validation@8421728 (9/9, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942" },
   { label = "Polaris CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324" },
+  { label = "New and baseline UF2: PMW init failed; CDC/boot/split passed", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md" },
 ]
 
 [[next_actions]]
@@ -30,12 +32,13 @@ order = 2
 repository = "mkb2"
 action = "MKBのpin-release検証firmwareでCDC、OLED、JOYなど代表module入力と左右接続を実機確認する。"
 completion = "3361c9eの代表実機入力が合格し、今回のhardware validationへ証跡が記録される。3-wire moduleの別準備branchと混同しない。"
-blocker = "just.sh全16/16 pristine・258 assertions合格。CI run33037699063はsettings_reset待ちで最終pending。未flash・実機未確認、PR/maintenance mergeなし。3-wire moduleはmaintenance基点に存在せず今回未統合。"
+blocker = "just.sh全16/16 pristine・258 assertions・CI run33037699063最終success。未flash・実機未確認、PR/maintenance mergeなし。3-wire moduleはmaintenance基点に存在せず今回未統合。"
 repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
 validation_keys = ["hardware"]
 evidence = [
   { label = "MKB validation@3361c9e (16/16, 258 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3" },
+  { label = "MKB CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063" },
 ]
 
 [[next_actions]]
@@ -63,13 +66,13 @@ order = 2
 repository = "saa"
 action = "SAAのpin-release検証branchでOLED、LED、JOYなど代表module入力と左右接続、右CDC/Studioを実機確認する。"
 completion = "0540667の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。左右TPD_IQSは別pin競合解消まで対象を分ける。"
-blocker = "just.sh21/21・786 assertions合格、CI run33038522353進行中。未flash・実機未確認、PR/stable/maintenance mergeなし。左CDCはbaseline同様なし。TPD_IQS2 targetは既存I2C競合がDTSでもfailed。"
+blocker = "just.sh21/21・786 assertions・CI run33038522353最終success。未flash・実機未確認、PR/stable/maintenance mergeなし。左CDCはbaseline同様なし。TPD_IQS2 targetは既存I2C競合がDTSでもfailed。"
 repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
 validation_keys = ["hardware"]
 evidence = [
   { label = "SAA validation@0540667 (21/21, 786 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f" },
-  { label = "SAA CI awaiting final result", status = "pending", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353" },
+  { label = "SAA CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353" },
 ]
 
 [[next_actions]]

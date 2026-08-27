@@ -38,7 +38,7 @@ Cornix `just.sh` manifest builds passed 12/12, the `madula-pmw-debug` opt-in bui
 | --- | --- | --- | --- |
 | Cornix Madula | Complete | Three module targets are qualified; unused connector nodes are disabled; main integration, manifest 12/12, debug opt-in, normal pristine rebuild, CI, PMW init, and real pointer/module-input passed. | None for this pin-release item. |
 | Cornix TPS43 | Complete | Production, host-bond-reset, and Central settings-reset are qualified. The common overlay releases unused connector peripherals; main and CI builds passed. | None for this pin-release item. |
-| Polaris | P0 / hardware pending | Validation branch `8421728` passes `just.sh` pristine 9/9 and 101 generated-DTS/config assertions. Unused connector nodes are released while left OLED I2C1 and module controllers remain available. | Flash and verify representative hardware; do not merge into maintenance/stable or mark complete yet. Track the existing left-TPD/OLED pin conflict separately. |
+| Polaris | P0 / sensor failure under diagnosis | `8421728` passed build/DTS/CI and was flashed to left JOY/right TB. CDC/boot and right split connect pass, but right PMW init fails; the hash-verified old UF2 reproduces the same failure. | Complete right-side power-cycle/module checks. Left JOY/OLED remain unverified. Do not attribute the failure to pin release or mark hardware complete. |
 | MKB2 | P0 / hardware pending | Validation branch `3361c9e` passes `just.sh` pristine 16/16 and 258 generated-DTS/config assertions. Common shield disables unused UART/SPI and keeps OLED I2C1, battery, CDC, and module pin assignments. | Flash and verify representative hardware before maintenance integration. The separate 3-wire preparation is not included in this branch. |
 | Solstice | P0 / hardware pending | Validation branch `643a256` passes `just.sh` pristine 5/5 and 101 generated-DTS/config assertions. Four added overlay lines disable unused SPI while keeping matrix, left OLED/analog, right TB, battery, and CDC configuration. | Verify representative hardware on the new revision before maintenance integration. |
 | SAA | P0 / hardware pending | Validation branch `0540667` passes `just.sh` pristine 21/21 and 786 generated-DTS/config assertions for unused-bus release and preserved settings. Existing TPD+IQS pin ownership fails separately in generated DTS. | Verify representative hardware; resolve the separate TPD+IQS wiring/controller conflict before claiming that combination ready. |
@@ -67,14 +67,14 @@ The successful CI subsequently advanced the branch to artifact-publication commi
 - Generated DTS and `.config` checks passed 101 assertions. The 8 keyboard variants disable unused UART/SPI; right-side I2C is disabled, and left OLED I2C1 remains enabled.
 - Battery sensing keeps Polaris's A0, 470 kΩ/1.47 MΩ divider and NiMH thresholds. The inherited board power GPIO is removed with a property deletion, not replaced by an empty GPIO property.
 - JOY oversampling, CDC, cormoran ZMK, Bongo Cat, and the existing 3-wire transport remain configured.
-- These results establish source/build validation only. The changed firmware has not been flashed or hardware-tested; previous hardware results from other revisions are not transferred to this revision.
+- A later left-JOY/right-TB flash verified CDC/boot and right split connectivity, but right PMW3610 initialization failed on both new and old UF2 files. Left JOY input/OLED visual checks remain pending. See the [2026-08-27 hardware comparison](polaris-pinmux-hardware-validation-2026-08-27.md); prior hardware successes are preserved as historical results, not transferred to this revision.
 
 ## MKB validation branch
 
 The source changes are pushed as [`3361c9e`](https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3) on `codex/zmk-0.4-xiao-pinmux`, based on the verified remote maintenance tip `zmk-0.4@7b02e9b`. Only `MKB.dtsi` changes: 13 added lines release unused UART/SPI in the common shield. No PR, maintenance merge, or hardware flash has been performed.
 
 - `just.sh` pristine builds passed all 16 manifest targets: 15 keyboard variants and settings reset. Generated DTS and `.config` checks passed 258 assertions.
-- [CI run 33037699063](https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063) has passed the 15 regular targets, but settings reset is still queued at this ledger update. Final CI remains pending.
+- [CI run 33037699063](https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063) finished successfully, including settings reset.
 - All 15 keyboard variants disable the unused connector UART/SPI while preserving OLED I2C1 on P1.14/P1.15 and each module's intended controller/pins.
 - XIAO battery sensing remains AIN7, power control P0.14 active-low/open-drain, and the 510 kΩ/1.51 MΩ divider. Do not copy Cornix's external A0 battery configuration into MKB.
 - CDC and Bongo Cat remain configured in all 15 keyboard variants; both JOY variants retain oversampling and ADC channels 2/3.
@@ -101,7 +101,7 @@ The source changes are pushed as [`0540667`](https://github.com/te9no/zmk-config
 - The common shield disables default UART/SPI/I2C; selected module overlays re-enable their required controller. OLED I2C0 and LED SPI3 remain configured.
 - Battery configuration now overrides `&vbatt`, retains AIN0, 470 kΩ/1.47 MΩ and NiMH thresholds, and deletes the inherited board `power-gpios` property.
 - Right-side CDC and Studio remain configured. Left-side CDC remains absent as in the maintenance baseline; this change does not claim to add it.
-- [CI run 33038522353](https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353) is in progress at this ledger update and remains pending.
+- [CI run 33038522353](https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353) finished successfully.
 - Both TPD+IQS variants have a separate, confirmed generated-DTS pin-ownership failure below. Passing the pin-release assertions does not establish hardware readiness for those combinations. All hardware validation remains pending.
 
 ## Separate module pin-ownership findings
