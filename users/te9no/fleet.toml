@@ -57,6 +57,24 @@ evidence = [
 ]
 
 [[next_actions]]
+id = "cornix-madula-lpps-hardware"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "Madula LPPS pinout修正373edbcを書き込み済みfirmwareでphysical LPPS入力をユーザー実測する。StudioはこのLPPS firmwareに未搭載で対象外。"
+completion = "LPPSのphysical inputが合格し、CDC debug、flash/boot、ADS初期化と区別してrevision付きで記録する。"
+blocker = "373edbcはbuild、生成DTS/config audit、COM447 flash/boot、ADS初期化とpoll loopまで合格したが、physical LPPS入力は未確認。CIも未確認。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/madula-lpps-pinout"
+change_id = "madula-lpps-pinout"
+validation_keys = ["ci", "physical-input", "hardware"]
+variant_ids = ["madula-lpps"]
+evidence = [
+  { label = "LPPS pinout source@373edbc", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/373edbcb9c9a9909040fa4a3c896ee73facf64b1" },
+  { label = "LPPS local build, flash, CDC, and ADS initialization", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md" },
+]
+
+[[next_actions]]
 id = "cornix-madula-1200-baud"
 state = "waiting"
 priority = "high"
