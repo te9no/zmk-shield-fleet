@@ -42,8 +42,6 @@ The rollback/comparison procedure is complete, but it did **not** recover PMW361
 
 The diagnostic source comparison found matching SHA-256 values for the old/new 3-wire C implementation; the `TB_R` overlay/config differ only in line endings. As a hypothesis, OBSERVATION command `0x2d` ending in bit 1 followed by `0xff`, and Product-ID command `0x00` ending in bit 0 followed by `0x00`, are consistent with an undriven SDIO line retaining the final command level. This is **not a confirmed diagnosis** of wiring, power, or sensor failure.
 
-## Current state and next checks
-
 ## Right TB BLE restore
 
 At **2026-08-27 21:02:45 JST**, after the user ended the ESB experiment, the
@@ -59,13 +57,14 @@ cause for their differing outcomes, or prove pointer input.
 
 ## Matched BLE restore and Studio RPC
 
-After the DYA client released COM326, the left `8421728` UF2 was copied at
-**21:04:23.687 JST** through `COM326` → `H` using serial
-`7192CB7FFA85E5D1`; `COM325` then returned with a whitelisted boot banner. The
+After the DYA client released COM326, the left `8421728` UF2 copy completed
+through `COM326` → `H` using serial `7192CB7FFA85E5D1`; `COM325` then returned
+with a whitelisted boot banner observed at **21:04:23.687 JST**. The
 right link capture recorded a BLE security callback at **21:04:23.401 JST**.
 Both halves therefore run the matched normal-BLE `8421728` pair. The retained
 boot/link logs are `hardware-ble-restore-8421728-left-boot.log`,
-`hardware-ble-restore-8421728-right-boot.log`, and `right-link.log`.
+`hardware-ble-restore-8421728-right-boot.log`, and
+`hardware-ble-restore-8421728-right-link.log`.
 Their SHA-256 digests are, respectively,
 `f42cccc904376df33e102b135bbaeeb539fff81897bb586b97c566ab360fc145`,
 `20b74333119ee47afbeb02cd2a6958d45e6e18af2006d467406b108e0ab9d6f1`, and
@@ -76,6 +75,9 @@ baud enumerated the PMW subsystem at index **2** (not the retired ESB index 0).
 A source-1 GetInfo request received an immediate deferred response and a
 PeripheralResponse for request 1: Device ready, Product ID `0x3e`, revision
 `0x01`, no reported init error, runtime CPI 800, and the right-TB settings ID.
+The safe read-only frames were
+`AB0A0F0802A2060A1208080212044A020801AD` and
+`AB1242A2063F0A3D080212391237080110011A31122F0A2D0801103E18012A1C08A00620012801300138800140882748E884015028586460F403680E3A0772696768747462AD`.
 This passes the normal-BLE remote PMW read RPC and supports the observed split
 connection. No settings write, stream, or keymap dump was performed.
 
@@ -86,4 +88,4 @@ acceptance: physical left-JOY/right-TB input and left OLED checks remain pending
 - Left JOY input/OLED visual appearance and right TB pointer/module input remain unverified.
 - Do not mark overall hardware passed until the physical input and OLED checks are complete.
 - No firmware source change, maintenance/stable merge, or firmware PR was made for this comparison.
-- The successful right-TB pointer/split observations recorded on 2026-08-26 remain historical evidence. This report adds a new failed observation and baseline comparison; it does not erase or transfer the earlier result to the current session.
+- The successful right-TB pointer/split observations recorded on 2026-08-26 remain historical evidence. This report preserves the earlier failed observation and baseline comparison alongside the later recovery; it does not transfer any historical result to the current physical-input session.

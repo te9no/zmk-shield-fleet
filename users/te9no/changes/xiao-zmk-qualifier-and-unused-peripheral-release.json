@@ -188,8 +188,7 @@
         "studio-peripheral-read-rpc": "passed",
         "left-joy-module-input": "pending",
         "left-oled-visual": "pending",
-        "right-tb-comparison-rollback": "passed",
-        "right-tb-baseline-sensor-init": "failed",
+        "right-tb-module-input": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
@@ -206,8 +205,6 @@
         "right-tb-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-ble-restore",
         "ble-restore-pair": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc",
         "studio-peripheral-read-rpc": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc",
-        "right-tb-comparison-rollback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
-        "right-tb-baseline-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
         "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md"
       },
       "variants": [
@@ -245,9 +242,7 @@
             "sensor-init": "passed",
             "studio-peripheral-read-rpc": "passed",
             "module-input": "pending",
-            "comparison-rollback": "passed",
-            "baseline-sensor-init": "failed",
-            "hardware": "failed"
+            "hardware": "pending"
           },
           "evidence": [
             {
@@ -259,6 +254,11 @@
               "label": "Historical 8421728 attempt: PMW Product ID 0x00, init step 2 failed",
               "status": "failed",
               "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-sensor-failure"
+            },
+            {
+              "label": "Historical ed5cba4 comparison: same PMW initialization failure after rollback",
+              "status": "failed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback"
             }
           ]
         }

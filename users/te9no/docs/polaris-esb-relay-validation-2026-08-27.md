@@ -1,10 +1,10 @@
 # Polaris: ESB / DYA Studio relay candidate (2026-08-27)
 
-## Current state
+## Retired state
 
 Implementation, local build verification, and a matched-pair flash are complete.
-**Hardware/RPC acceptance remains pending.** Do not transfer historical CDC or
-input results from the previously installed firmware to this candidate.
+**ESB hardware/RPC acceptance remains pending.** Do not transfer historical CDC
+or input results from the previously installed firmware to this candidate.
 
 ## Retirement
 
@@ -15,6 +15,8 @@ link-loss, and streaming gates remain unaccepted. The public fork, branch,
 artifacts, and all evidence are intentionally preserved. Ordinary Fleet work
 resumes with the regular BLE Polaris `8421728` left-JOY/right-TB pinmux hardware
 validation, followed by the existing Cornix, MKB, Solstice, and SAA priorities.
+The matched BLE restoration is recorded in
+[the Polaris pinmux hardware validation](polaris-pinmux-hardware-validation-2026-08-27.md).
 
 | Source | Revision / branch |
 | --- | --- |
@@ -23,7 +25,7 @@ validation, followed by the existing Cornix, MKB, Solstice, and SAA priorities.
 | ESB documentation follow-up | `26ea77246fbc8eb4043cc99e09dde0009a51b1d2` (no production code change) |
 | ZMK | Cormoran `e5c9b6915b56801193e359dd9bad4a167ce0d1b8`, unchanged |
 | Previously recorded installed pair | `72801a6` + upstream ESB `314c7cb` (historical) |
-| Current installed pair | `64860dd` + ESB `656477c`, flashed 2026-08-27 20:32 JST |
+| Last ESB installed pair | `64860dd` + ESB `656477c`, flashed 2026-08-27 20:32 JST |
 
 Only the owner's fork/experimental firmware branch were published. No upstream
 PR or firmware stable/maintenance merge was performed.
@@ -127,7 +129,7 @@ ESB connectivity, identify a delivery/receive cause, or change the passed
 right-sensor initialization result. Input, stream, reconnect and link-loss
 checks remain pending.
 
-## Remaining hardware gates and limits
+## Historical unaccepted gates and limits
 
 1. Diagnose ESB delivery and receive handling for the failed source 1 GetInfo
    request, preserving the exact revision and without blindly reflashing the
