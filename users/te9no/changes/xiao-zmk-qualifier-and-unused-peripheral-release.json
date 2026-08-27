@@ -171,7 +171,7 @@
       "commit": "84217286bbc5d064b1d6a3e3b3f671017e687942",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。zmk-0.4@ed5cba4を基点とする検証branch@8421728へsource修正を適用しpush済み。just.sh全9/9 pristine build、生成DTS/.configの101 assertions、GitHub Actions run33037002324の最終success（9 target）を確認。通常8 targetすべての未使用UART/SPIを無効化し、右I2Cを無効化、左OLED用I2C1を保持した。vbattはA0・470k/1.47M・NiMH閾値を保持し、board由来power GPIOのみ削除。JOY oversampling、CDC、cormoran ZMK、Bongo Cat、3-wire transportを保持。今回のfirmwareは未flash・実機未確認のため完了扱いにしない。stable/maintenance branchへ未merge、PRなし。左TPD DRDYとOLED SDAのP1.14共有は既存の別課題module-pin-ownership-conflictsで追跡する。",
+      "notes": "P0。検証source8421728は9/9 pristine・101 assertions・CI合格。未使用UART/SPIと右I2Cを解放し、左OLED I2C1・A0/470k/1.47M/NiMH・JOY oversampling・CDC・cormoran ZMK・Bongo Cat・3-wireを保持。2026-08-27、ユーザーが左JOY/右TBを照合後に8421728 UF2を両手へ書込。左COM326(Studio)→H→Debug COM325復帰とZephyr起動を確認。COM325 trigger無反応は対象port違いで故障としない。右COM327→I→COM327復帰、起動とsplit接続は合格したがPMW Product ID=0x00(expected0x3e)、OBSERVATION=0xff、11 attempts後step2失敗。右のみhash照合済みed5cba4配布UF2へ戻しても同じ初期化失敗を再現。比較rollback操作は完了だが復旧ではなく、新pin-release起因の回帰は未立証。右は旧版、左は新JOY版のまま。次は右完全powercycle・物理module配線確認。左JOY入力/OLED目視も未確認、hardware完了扱いにしない。過去pointer合格記録は保持。stable/maintenance未merge、firmware PRなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
@@ -180,6 +180,14 @@
         "preserved-config": "passed",
         "ci": "passed",
         "artifact-publication": "passed",
+        "left-joy-flash-boot": "passed",
+        "right-tb-flash-boot": "passed",
+        "right-tb-split-connectivity": "passed",
+        "right-tb-sensor-init": "failed",
+        "left-joy-module-input": "pending",
+        "left-oled-visual": "pending",
+        "right-tb-comparison-rollback": "passed",
+        "right-tb-baseline-sensor-init": "failed",
         "hardware": "pending"
       },
       "validation_urls": {
@@ -190,8 +198,59 @@
         "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#polaris-validation-branch",
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324",
         "artifact-publication": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/a7f307497a467bfefa91a6e00392b87447c2af13",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
-      }
+        "left-joy-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
+        "right-tb-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
+        "right-tb-split-connectivity": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
+        "right-tb-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-sensor-failure",
+        "right-tb-comparison-rollback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
+        "right-tb-baseline-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md"
+      },
+      "variants": [
+        {
+          "id": "left-joy",
+          "status": "pending",
+          "validation": {
+            "flash": "passed",
+            "1200-baud": "passed",
+            "cdc-return": "passed",
+            "boot": "passed",
+            "module-input": "pending",
+            "oled-visual": "pending",
+            "hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "COM326 Studio trigger to H, Debug COM325 return and boot",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md"
+            }
+          ]
+        },
+        {
+          "id": "right-tb",
+          "status": "pending",
+          "validation": {
+            "flash": "passed",
+            "1200-baud": "passed",
+            "cdc-return": "passed",
+            "boot": "passed",
+            "split-connectivity": "passed",
+            "sensor-init": "failed",
+            "module-input": "pending",
+            "comparison-rollback": "passed",
+            "baseline-sensor-init": "failed",
+            "hardware": "failed"
+          },
+          "evidence": [
+            {
+              "label": "COM327 flash/boot/split passed; PMW Product ID 0x00, init step 2 failed",
+              "status": "failed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-sensor-failure"
+            }
+          ]
+        }
+      ]
     },
     "mkb2": {
       "status": "applied",
@@ -199,14 +258,14 @@
       "commit": "3361c9e2e40a1d05f88ba47447b4a14050699ad3",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。zmk-0.4@7b02e9bを基点とする検証branch@3361c9eへsource修正を適用しpush済み。共通MKB.dtsiの13行追加のみで未使用UART/SPIをdisable。just.sh全16/16 pristine build、生成DTS/.configの258 assertionsに合格。CI run33037699063は通常15 target合格・settings_reset待ちのため最終CIはpending。通常15 targetのOLED用I2C1 P1.14/P1.15、XIAO既定battery AIN7・power P0.14 active-low/open-drain・510k/1.51M、CDC、Bongo Cat、左右JOY oversampling/ADC2/3、各module pinを保持。maintenance基点には3-wire moduleが元からなく、別準備branchを今回統合したわけではない。transportの追加削除は行っていない。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
+      "notes": "P0。zmk-0.4@7b02e9bを基点とする検証branch@3361c9eへsource修正を適用しpush済み。共通MKB.dtsiの13行追加のみで未使用UART/SPIをdisable。just.sh全16/16 pristine build、生成DTS/.configの258 assertions、CI run33037699063の最終successに合格。通常15 targetのOLED用I2C1 P1.14/P1.15、XIAO既定battery AIN7・power P0.14 active-low/open-drain・510k/1.51M、CDC、Bongo Cat、左右JOY oversampling/ADC2/3、各module pinを保持。maintenance基点には3-wire moduleが元からなく、別準備branchを今回統合したわけではない。transportの追加削除は行っていない。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
         "generated-dts": "passed",
         "targeted-build": "passed",
         "preserved-config": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
@@ -251,14 +310,14 @@
       "commit": "0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4_validation_cormoran-zmk",
-      "notes": "P0。専用zmk-0.4_validation_cormoran-zmk@4e54e1cを基点とする検証branch@0540667へsource修正を適用しpush済み。SAA.dtsi 1fileのみで既定UART/SPI/I2Cを停止し、module overlayで必要controllerを再有効化。vbattは&vbatt overrideへ変更し、AIN0・470k/1.47M・NiMH閾値を保持、board power-gpiosを削除した。just.sh全21/21 pristine buildと生成DTS/.config786 assertionsに合格。OLED I2C0、LED SPI3、右CDC/Studioを保持し、左はbaselineどおりCDCなし。CI run33038522353は進行中につきpending。左右TPD_IQSの既存I2C pin競合は生成DTSで確認済みで別課題module-pin-ownership-conflictsのfailed gateへ分離。今回未修正でhardware-readyとは扱わない。全target実機未検証、PR/stable/maintenance mergeなし。",
+      "notes": "P0。専用zmk-0.4_validation_cormoran-zmk@4e54e1cを基点とする検証branch@0540667へsource修正を適用しpush済み。SAA.dtsi 1fileのみで既定UART/SPI/I2Cを停止し、module overlayで必要controllerを再有効化。vbattは&vbatt overrideへ変更し、AIN0・470k/1.47M・NiMH閾値を保持、board power-gpiosを削除した。just.sh全21/21 pristine build、生成DTS/.config786 assertions、CI run33038522353の最終successに合格。OLED I2C0、LED SPI3、右CDC/Studioを保持し、左はbaselineどおりCDCなし。左右TPD_IQSの既存I2C pin競合は生成DTSで確認済みで別課題module-pin-ownership-conflictsのfailed gateへ分離。今回未修正でhardware-readyとは扱わない。全target実機未検証、PR/stable/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
         "generated-dts": "passed",
         "targeted-build": "passed",
         "preserved-config": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
