@@ -57,14 +57,33 @@ evidence = [
 ]
 
 [[next_actions]]
+id = "cornix-madula-lpps-ci"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "Madula LPPS修正81644c2のfirmware CI結果を確認する。入力・向き・斜め移動は実機合格済みで、再テストは不要。"
+completion = "81644c2のfirmware CI成功をrun URL付きで台帳へ記録する。firmware mainへの統合判断は別に行う。"
+blocker = "just.sh build、生成DTS/config、CDC flash/boot、ADS初期化、ユーザーの自由なXY入力確認は合格。GitHub firmware CIはpending。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/codex/madula-lpps-pinout"
+change_id = "madula-lpps-pinout"
+validation_keys = ["ci"]
+variant_ids = ["madula-lpps"]
+evidence = [
+  { label = "LPPS free-XY source@81644c2", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/81644c2608da34a483209f0512fa8291f701b3ce" },
+  { label = "LPPS local build, flash, CDC, and ADS initialization", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md" },
+  { label = "LPPS direction and free-XY input: user accepted", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md" },
+]
+
+[[next_actions]]
 id = "cornix-madula-1200-baud"
 state = "waiting"
 priority = "high"
 order = 1
 repository = "cornix"
-action = "Madula Centralで1200 baud bootを実行し、bootloader移行とCOM復帰を確認する。"
-completion = "CDC Debug接続中に1200 baudを実行し、bootloaderと通常COMの復帰が実機合格する。"
-blocker = "main統合とCDC列挙は完了。Centralの1200 baud USB操作確認だけが残る。物理trackballは不要。"
+action = "main/TB firmwareで1200 baud bootを実行し、LPPSで確認済みのCOM447 reset/boot復帰を別variantへ転用せず確認する。"
+completion = "main/TB variantのCDC Debug接続中に1200 baudを実行し、bootloaderと通常COMの復帰が実機合格する。"
+blocker = "LPPS専用81644c2ではCOM447の1200 baud reset/boot復帰済み。main/TB variantは未確認で、LPPS結果を転用しない。"
 repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
 change_id = "cdc-acm-zephyr-4.1"
 validation_keys = ["1200-baud"]

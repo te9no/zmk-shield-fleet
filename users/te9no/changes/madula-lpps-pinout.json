@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "id": "madula-lpps-pinout",
+  "enabled": true,
+  "title": "Madula LPPSのpinout・方向・free XY入力を修正する",
+  "description": "Madula J4実配線へLPPS SPIを合わせ、方向を補正し、dominant-axis lockを外して自由なXY入力を復元する。",
+  "source": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "from_revision": "794987c0a15c903c107a06db28110f66f75ddda8",
+    "to_revision": "81644c2608da34a483209f0512fa8291f701b3ce",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/commit/81644c2608da34a483209f0512fa8291f701b3ce",
+    "notes": "LPPS pinout, direction, and free-XY only; no DYA, LED, ADC gain, driver revision, or trackball change."
+  },
+  "repositories": [
+    "cornix"
+  ],
+  "tracking": {
+    "cornix": {
+      "status": "applied",
+      "pr": null,
+      "commit": "81644c2608da34a483209f0512fa8291f701b3ce",
+      "branch": "codex/madula-lpps-pinout",
+      "base_branch": "main",
+      "notes": "81644c2 removes dominant-axis-lock; build/flash/CDC/ADS diagnostics and user-confirmed direction/free-XY input passed. Firmware CI remains pending. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked. Firmware remains on the validation branch.",
+      "validation": {
+        "targeted-build": "passed",
+        "generated-dts": "passed",
+        "source-audit": "passed",
+        "flash-boot": "passed",
+        "cdc-debug": "passed",
+        "ads-init": "passed",
+        "ci": "pending",
+        "physical-input": "passed",
+        "hardware": "passed"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "cdc-debug": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "ads-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402",
+        "physical-input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md"
+      },
+      "variants": [
+        {
+          "id": "madula-lpps",
+          "status": "passed",
+          "validation": {
+            "build": "passed",
+            "flash-boot": "passed",
+            "cdc-debug": "passed",
+            "ads-init": "passed",
+            "physical-input": "passed",
+            "hardware": "passed"
+          },
+          "evidence": [
+            {
+              "label": "81644c2 build/flash/CDC/ADS and user-confirmed direction/free-XY input",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "steps": []
+}
