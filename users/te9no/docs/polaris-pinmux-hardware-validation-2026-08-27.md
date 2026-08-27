@@ -89,3 +89,57 @@ acceptance: physical left-JOY/right-TB input and left OLED checks remain pending
 - Do not mark overall hardware passed until the physical input and OLED checks are complete.
 - No firmware source change, maintenance/stable merge, or firmware PR was made for this comparison.
 - The successful right-TB pointer/split observations recorded on 2026-08-26 remain historical evidence. This report preserves the earlier failed observation and baseline comparison alongside the later recovery; it does not transfer any historical result to the current physical-input session.
+
+## Left JOY orientation failure
+
+On the matched normal-BLE `8421728` pair, the user physically tested the left
+JOY and reported that **physical LEFT moved the cursor UP**. This is a 90-degree
+wrong orientation. The result is a failed physical module-input observation for
+the left JOY at `8421728`; it does not invalidate the separate right-TB boot,
+BLE, PMW initialization, or read-only Studio RPC evidence at that revision.
+
+## Left JOY orientation candidate
+
+The first experimental `codex/zmk-0.4-xiao-pinmux` candidate
+[`8de9473ba6fc229283fed2c8866ec80609e77b5d`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/8de9473ba6fc229283fed2c8866ec80609e77b5d)
+changed only `snippets/JOY/JOY.overlay` (three insertions and one deletion) to
+use `XY_SWAP | Y_INVERT`, which maps `(newX, newY) = (oldY, -oldX)`. Its
+left-only build and boot passed, but the user reported **「上下逆、左右も逆」**:
+the JOY direction test failed. The user also reported **「OLED、TBはOKです」**;
+that records a left OLED pass at `8de9473` and a right-TB physical-input pass
+at unchanged `8421728`, not a left-JOY pass.
+
+The replacement source candidate
+[`8de074a06c5bdca580fd4f1b26dc03647d41a10d`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/8de074a06c5bdca580fd4f1b26dc03647d41a10d)
+uses `XY_SWAP | X_INVERT` (param3). The published branch head
+[`1fdc244ce05d593abb71f8c3b04bf7d6f851c5dc`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/1fdc244ce05d593abb71f8c3b04bf7d6f851c5dc)
+publishes that source and preserves the earlier `8de9473` CI artifact
+`615f53a`; it is not evidence of a new right-side build.
+ADC, pointer speed, and trackball settings are unchanged.
+
+- A left-only incremental `just.sh build-fast` build passed for
+  `Polaris_L_MODULE_JOY` at 2026-08-27 21:37:05 JST. The produced UF2 is
+  999,936 bytes with SHA-256
+  `6de57ae4ce58c23364ea58670d23d5ecda266e80a5a5cf31510a46924c3579c0`.
+- The overlay/cardinal-vector audit and generated-DTS rotation check passed;
+  the preservation audit reported 101 assertions. This is left-only evidence:
+  the other seven DTS outputs remain evidence from `8421728`, not fresh
+  candidate builds.
+- At 2026-08-27 21:38:59.488 JST, only the left UF2 was copied through
+  COM326 at 1200 baud to drive H (serial `7192CB7FFA85E5D1`); Debug COM325 and
+  Studio COM326 returned and the filtered boot banner was observed. The retained
+  boot log SHA-256 is
+  `1dbfec224d0f8e4f11662c790fa361c388a9196d5f619f2c80ba999bdcded3df`.
+- The boot alone did not establish JOY input. The user subsequently accepted
+  the `8de074a` JOY direction and reported **「長時間動作もOKです」**. No
+  duration, speed measurement, or per-direction measurement is claimed. CI run
+  [33072085319](https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072085319)
+  for the earlier `8de9473` candidate succeeded; the latest source/artifact
+  head CI run [33072906476](https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072906476)
+  is in progress.
+
+The right half was not rebuilt or flashed for this candidate. It remains on
+`8421728` with UF2 SHA-256
+`296aad41178784752b89ebb94fd9dbe0f1fc38191f5462eaf4f06eaf02976d52`.
+Therefore `8de9473` is not a newly matched left/right build and does not update
+the right-TB physical-hardware status. ESB remains retired and disabled.
