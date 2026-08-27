@@ -6,6 +6,16 @@ Implementation, local build verification, and a matched-pair flash are complete.
 **Hardware/RPC acceptance remains pending.** Do not transfer historical CDC or
 input results from the previously installed firmware to this candidate.
 
+## Retirement
+
+The user ended this ESB experiment. It is retired from active Fleet work and
+this record is not a successful completion. The failed `relay-rpc-roundtrip`
+remains the last RPC result; ESB connectivity, physical input, OLED, reconnect,
+link-loss, and streaming gates remain unaccepted. The public fork, branch,
+artifacts, and all evidence are intentionally preserved. Ordinary Fleet work
+resumes with the regular BLE Polaris `8421728` left-JOY/right-TB pinmux hardware
+validation, followed by the existing Cornix, MKB, Solstice, and SAA priorities.
+
 | Source | Revision / branch |
 | --- | --- |
 | Polaris firmware source | [`64860dd`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/64860dde60bf7b20d35bfec0d3d5f61925141be9), `codex/zmk-0.4-esb-validation` |
