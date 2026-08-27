@@ -166,91 +166,109 @@
       ]
     },
     "polaris": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
-      "branch": "zmk-0.4",
+      "commit": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。build targetはqualifier済みでxiao_serialは解放されるが、生成DTSではxiao_spiとxiao_i2cがokay。左はOLED用P1.14/P1.15と標準xiao_spiが競合し、右TBではP1.13、P0.05、P0.04をmoduleと標準peripheralが共有する。unused xiao_spiをbaseでdisableし、右targetではunused xiao_i2cもdisableしてmoduleごとの必要nodeだけを有効化する。",
+      "notes": "P0。zmk-0.4@ed5cba4を基点とする検証branch@8421728へsource修正を適用しpush済み。just.sh全9/9 pristine build、生成DTS/.configの101 assertions、GitHub Actions run33037002324の最終success（9 target）を確認。通常8 targetすべての未使用UART/SPIを無効化し、右I2Cを無効化、左OLED用I2C1を保持した。vbattはA0・470k/1.47M・NiMH閾値を保持し、board由来power GPIOのみ削除。JOY oversampling、CDC、cormoran ZMK、Bongo Cat、3-wire transportを保持。今回のfirmwareは未flash・実機未確認のため完了扱いにしない。stable/maintenance branchへ未merge、PRなし。左TPD DRDYとOLED SDAのP1.14共有は既存の別課題module-pin-ownership-conflictsで追跡する。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
-        "generated-dts": "failed",
-        "targeted-build": "pending",
+        "generated-dts": "passed",
+        "targeted-build": "passed",
+        "preserved-config": "passed",
+        "ci": "passed",
+        "artifact-publication": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
-        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#polaris-validation-branch",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#polaris-validation-branch",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324",
+        "artifact-publication": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/a7f307497a467bfefa91a6e00392b87447c2af13",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
       }
     },
     "mkb2": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
-      "branch": "zmk-0.4",
+      "commit": "3361c9e2e40a1d05f88ba47447b4a14050699ad3",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。全targetはqualifier済み。生成DTSでxiao_spiがokayのままで、OLED用P1.14/P1.15と常時競合し、TB/ENC/LPPSではP1.13も共有する。xiao_i2cはOLED用i2c1としてpinを上書きしているため意図的。MKB baseでunused xiao_spiを明示disableし、全targetをpristine buildする。",
+      "notes": "P0。zmk-0.4@7b02e9bを基点とする検証branch@3361c9eへsource修正を適用しpush済み。共通MKB.dtsiの13行追加のみで未使用UART/SPIをdisable。just.sh全16/16 pristine build、生成DTS/.configの258 assertionsに合格。CI run33037699063は通常15 target合格・settings_reset待ちのため最終CIはpending。通常15 targetのOLED用I2C1 P1.14/P1.15、XIAO既定battery AIN7・power P0.14 active-low/open-drain・510k/1.51M、CDC、Bongo Cat、左右JOY oversampling/ADC2/3、各module pinを保持。maintenance基点には3-wire moduleが元からなく、別準備branchを今回統合したわけではない。transportの追加削除は行っていない。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
-        "generated-dts": "failed",
-        "targeted-build": "pending",
+        "generated-dts": "passed",
+        "targeted-build": "passed",
+        "preserved-config": "passed",
+        "ci": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
-        "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
+        "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
-        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#mkb-validation-branch",
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#mkb-validation-branch",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-xiao-pinmux"
       }
     },
     "solstice": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "branch": "zmk-0.4",
+      "commit": "643a2568e7bb14ed5cca7d513f4d8baa09334a62",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。US/JIS左右4 targetはqualifier済みでserialもoverlayからdisabled。左右matrixがD8-D10=P1.13-P1.15を使う一方、標準xiao_spiが有効なため競合する。右xiao_i2cはdisabled、左はOLED用custom pinctrlへ上書き済み。両baseでxiao_spiを明示disableして4 targetとsettings-resetを再buildする。",
+      "notes": "P0。zmk-0.4@6638e6cを基点とする検証branch@643a256へsource修正を適用しpush済み。左右overlayの4行追加のみでxiao_spiを停止。just.sh全5/5 pristine build、生成DTS/.configの101 assertions、CI run33037950369の最終successに合格。通常4 targetのUART/SPI停止、matrix pinを確認。左OLED用I2C1 P0.28/P0.29、analog ADC2/3・oversampling・Peripheral電池表示を保持。右TB SPI0 P0.04/P0.05/P0.28、CS P0.02、IRQ P0.29、CPI800、Y invert、col-offset8を保持。全4 targetのCDCとXIAO battery AIN7・power P0.14・510k/1.51Mも保持。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
-        "generated-dts": "pending",
-        "targeted-build": "pending",
+        "generated-dts": "passed",
+        "targeted-build": "passed",
+        "preserved-config": "passed",
+        "ci": "passed",
         "hardware": "pending"
       },
       "validation_urls": {
-        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
+        "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
-        "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4"
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-validation-branch",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-validation-branch",
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369",
+        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-xiao-pinmux"
       }
     },
     "saa": {
-      "status": "pending",
+      "status": "applied",
       "pr": null,
-      "commit": "4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8",
-      "branch": "zmk-0.4_validation_cormoran-zmk",
-      "base_branch": "master",
-      "notes": "P0。qualifier済みだが標準xiao_i2c P0.04/P0.05は共通LED powerとmatrix colに競合する。標準xiao_spi P1.13-P1.15はENC、TPD、IQSと競合し、TB targetだけがspi2をtrackball用へ意図的に上書きする。baseでxiao_i2c/xiao_spiをdisableし、TB/IQS/TPD overlayだけで必要controllerをre-enableして専用branch全21 targetを再buildする。",
+      "commit": "0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "base_branch": "zmk-0.4_validation_cormoran-zmk",
+      "notes": "P0。専用zmk-0.4_validation_cormoran-zmk@4e54e1cを基点とする検証branch@0540667へsource修正を適用しpush済み。SAA.dtsi 1fileのみで既定UART/SPI/I2Cを停止し、module overlayで必要controllerを再有効化。vbattは&vbatt overrideへ変更し、AIN0・470k/1.47M・NiMH閾値を保持、board power-gpiosを削除した。just.sh全21/21 pristine buildと生成DTS/.config786 assertionsに合格。OLED I2C0、LED SPI3、右CDC/Studioを保持し、左はbaselineどおりCDCなし。CI run33038522353は進行中につきpending。左右TPD_IQSの既存I2C pin競合は生成DTSで確認済みで別課題module-pin-ownership-conflictsのfailed gateへ分離。今回未修正でhardware-readyとは扱わない。全target実機未検証、PR/stable/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
-        "generated-dts": "pending",
-        "targeted-build": "pending",
+        "generated-dts": "passed",
+        "targeted-build": "passed",
+        "preserved-config": "passed",
+        "ci": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
-        "board-qualifier": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
+        "board-qualifier": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
-        "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
-        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#saa-validation-branch",
+        "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#saa-validation-branch",
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-xiao-pinmux"
       }
     },
     "mopolia": {

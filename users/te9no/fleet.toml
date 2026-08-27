@@ -6,21 +6,70 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
-id = "board-pinmux-release"
-state = "active"
+id = "polaris-pinmux-hardware"
+state = "waiting"
 priority = "high"
-order = 1
+order = 2
 repository = "polaris"
-action = "Cornix mainで実証したXIAO qualifier・vbatt override・未使用peripheral解放を、Polaris、MKB、Solstice、SAAへ生成DTS付きで順に横展開する。"
-completion = "P0対象のbare xiao_bleが解消され、xiao_serial/xiao_spi/xiao_i2cとshield pinの重複が生成DTSから消え、各repositoryの全target pristine buildと代表実機入力が合格する。"
-blocker = "Cornixはmain@794987c、just.sh 12/12、CI、Madula TB実機まで完了し横展開の基準になった。残る4 repositoryは検証branchで個別に実装し、stable branchやPRへ自動反映しない。"
-repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
+action = "接続中Polarisの左右moduleを照合してからpin-release検証firmwareを書き込み、CDC、OLED、代表module入力、左右接続を確認する。"
+completion = "8421728の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。別件の左TPD/OLED pin競合を解消済みとは扱わない。"
+blocker = "just.sh9/9・101 assertions・CI合格。GeaconPolaris COM325/326は確認済みだが左右module照合待ちで未flash。実機未確認、stable/maintenance未merge、PRなし。source8421728とCIのUF2公開commit a7f3074を区別し、後の統合はsource-onlyとする。"
+repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["board-qualifier", "generated-dts", "targeted-build", "hardware"]
+validation_keys = ["hardware"]
 evidence = [
-  { label = "Cornix main integration@794987c", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8" },
-  { label = "Cornix main CI 12/12", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396" },
-  { label = "Cross-repository XIAO pinmux audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md" },
+  { label = "Polaris validation@8421728 (9/9, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942" },
+  { label = "Polaris CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324" },
+]
+
+[[next_actions]]
+id = "mkb-pinmux-hardware"
+state = "waiting"
+priority = "high"
+order = 2
+repository = "mkb2"
+action = "MKBのpin-release検証firmwareでCDC、OLED、JOYなど代表module入力と左右接続を実機確認する。"
+completion = "3361c9eの代表実機入力が合格し、今回のhardware validationへ証跡が記録される。3-wire moduleの別準備branchと混同しない。"
+blocker = "just.sh全16/16 pristine・258 assertions合格。CI run33037699063はsettings_reset待ちで最終pending。未flash・実機未確認、PR/maintenance mergeなし。3-wire moduleはmaintenance基点に存在せず今回未統合。"
+repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-xiao-pinmux"
+change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
+validation_keys = ["hardware"]
+evidence = [
+  { label = "MKB validation@3361c9e (16/16, 258 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3" },
+]
+
+[[next_actions]]
+id = "solstice-pinmux-hardware"
+state = "waiting"
+priority = "high"
+order = 2
+repository = "solstice"
+action = "Solsticeのpin-release検証firmwareでCDC、OLEDとPeripheral電池表示、JOY、右TB、左右入力を実機確認する。"
+completion = "643a256の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。"
+blocker = "just.sh全5/5 pristine・101 assertions・CI run33037950369合格。未flash・実機未確認、PR/maintenance mergeなし。"
+repository_url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-xiao-pinmux"
+change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
+validation_keys = ["hardware"]
+evidence = [
+  { label = "Solstice validation@643a256 (5/5, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62" },
+  { label = "Solstice CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369" },
+]
+
+[[next_actions]]
+id = "saa-pinmux-hardware"
+state = "waiting"
+priority = "high"
+order = 2
+repository = "saa"
+action = "SAAのpin-release検証branchでOLED、LED、JOYなど代表module入力と左右接続、右CDC/Studioを実機確認する。"
+completion = "0540667の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。左右TPD_IQSは別pin競合解消まで対象を分ける。"
+blocker = "just.sh21/21・786 assertions合格、CI run33038522353進行中。未flash・実機未確認、PR/stable/maintenance mergeなし。左CDCはbaseline同様なし。TPD_IQS2 targetは既存I2C競合がDTSでもfailed。"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-xiao-pinmux"
+change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
+validation_keys = ["hardware"]
+evidence = [
+  { label = "SAA validation@0540667 (21/21, 786 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f" },
+  { label = "SAA CI awaiting final result", status = "pending", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353" },
 ]
 
 [[next_actions]]

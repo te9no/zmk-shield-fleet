@@ -38,10 +38,10 @@ Cornix `just.sh` manifest builds passed 12/12, the `madula-pmw-debug` opt-in bui
 | --- | --- | --- | --- |
 | Cornix Madula | Complete | Three module targets are qualified; unused connector nodes are disabled; main integration, manifest 12/12, debug opt-in, normal pristine rebuild, CI, PMW init, and real pointer/module-input passed. | None for this pin-release item. |
 | Cornix TPS43 | Complete | Production, host-bond-reset, and Central settings-reset are qualified. The common overlay releases unused connector peripherals; main and CI builds passed. | None for this pin-release item. |
-| Polaris | P0 | All ZMK 0.4 targets are qualified, but generated DTS keeps `xiao_spi` and `xiao_i2c` enabled. Left OLED uses P1.14/P1.15; right modules reuse P1.13, P0.05, and P0.04. | Disable unused `xiao_spi` in the base and unused `xiao_i2c` on affected right targets; re-enable only an intentionally used controller. |
-| MKB2 | P0 | All targets are qualified, but generated DTS keeps `xiao_spi` enabled. OLED always uses P1.14/P1.15, while TB, encoder, and LPPS variants also use P1.13. | Disable unused `xiao_spi` in both base shields and rebuild the full matrix. Keep the deliberately overridden OLED I2C controller. |
-| Solstice | P0 | All four US/JIS targets are qualified and serial is disabled. Both key matrices use D8-D10/P1.13-P1.15 while default `xiao_spi` remains enabled. | Disable `xiao_spi` in both base shields and rebuild US/JIS left/right plus settings-reset. |
-| SAA | P0 | All dedicated ZMK 0.4 targets are qualified. Default `xiao_i2c` conflicts with common LED power P0.04 and matrix P0.05. Default `xiao_spi` conflicts with encoder, trackpad, and IQS pins; Trackball alone deliberately overrides SPI2. | Disable both connector nodes in the base, then re-enable the required controller only in TB/IQS/TPD overlays. Rebuild all 21 targets on the dedicated branch. |
+| Polaris | P0 / hardware pending | Validation branch `8421728` passes `just.sh` pristine 9/9 and 101 generated-DTS/config assertions. Unused connector nodes are released while left OLED I2C1 and module controllers remain available. | Flash and verify representative hardware; do not merge into maintenance/stable or mark complete yet. Track the existing left-TPD/OLED pin conflict separately. |
+| MKB2 | P0 / hardware pending | Validation branch `3361c9e` passes `just.sh` pristine 16/16 and 258 generated-DTS/config assertions. Common shield disables unused UART/SPI and keeps OLED I2C1, battery, CDC, and module pin assignments. | Flash and verify representative hardware before maintenance integration. The separate 3-wire preparation is not included in this branch. |
+| Solstice | P0 / hardware pending | Validation branch `643a256` passes `just.sh` pristine 5/5 and 101 generated-DTS/config assertions. Four added overlay lines disable unused SPI while keeping matrix, left OLED/analog, right TB, battery, and CDC configuration. | Verify representative hardware on the new revision before maintenance integration. |
+| SAA | P0 / hardware pending | Validation branch `0540667` passes `just.sh` pristine 21/21 and 786 generated-DTS/config assertions for unused-bus release and preserved settings. Existing TPD+IQS pin ownership fails separately in generated DTS. | Verify representative hardware; resolve the separate TPD+IQS wiring/controller conflict before claiming that combination ready. |
 | Mopolia | Not applicable | Both targets are qualified, UART is disabled, and SPI2 is deliberately overridden for MLX90393. P0.04/P0.05 are unused by the shield. | No source change. Recheck generated DTS when ZMK or module revisions change. |
 | Sparagmos | P3 | The stable branch still uses ZMK 0.3 and `seeeduino_xiao_ble`. | Treat this audit as a gate for a future non-default ZMK 0.4 migration branch; do not change stable `master`. |
 
@@ -54,7 +54,66 @@ Cornix `just.sh` manifest builds passed 12/12, the `madula-pmw-debug` opt-in bui
 - SAA: `boards/shields/SparAkashaAnanta/SAA_pins.dtsi`, `SAA_led.dtsi`, module overlays, and `snippets/IQS/IQS.overlay` on `zmk-0.4_validation_cormoran-zmk`.
 - Mopolia: `boards/shields/geaconmopolia/geaconmopolia.dtsi` and `geaconmopolia_mlx90393.dtsi` on `main`.
 
-Generated DTS evidence was inspected for Madula, Polaris, and MKB2 from their `just.sh` profiles. Solstice, SAA, Mopolia, and Sparagmos retain a generated-DTS gate in the ledger until a current pristine build is inspected.
+Generated DTS evidence was inspected for Madula, Polaris, MKB2, Solstice, and SAA from their `just.sh` profiles. The four rollout repositories passed 51/51 pristine builds and 1,246 generated-DTS/config assertions in total. All four retain pending hardware gates. The maintenance refs remain at the stated base revisions; no firmware PR or maintenance/stable merge has been performed. Mopolia and Sparagmos retain a generated-DTS gate until a current pristine build is inspected.
+
+## Polaris validation branch
+
+The source changes are pushed as [`8421728`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942) on `codex/zmk-0.4-xiao-pinmux`, based on maintenance `zmk-0.4@ed5cba4`. Neither maintenance nor stable has been merged, and no PR has been created.
+
+The successful CI subsequently advanced the branch to artifact-publication commit [`a7f3074`](https://github.com/te9no/zmk-config-GeaconPolaris/commit/a7f307497a467bfefa91a6e00392b87447c2af13), whose parent is `8421728` and whose only changes add 9 generated UF2 files. The ledger's source-validation commit intentionally remains `8421728`. Any later maintenance integration must be **source-only**, excluding generated firmware/artifact-publication commits. This rollout does not change the automatic publication workflow.
+
+- `just.sh` pristine builds passed all 9 manifest targets: 8 keyboard variants and settings reset.
+- [GitHub Actions run 33037002324](https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324) finished successfully, including all 9 build targets and artifact publication.
+- Generated DTS and `.config` checks passed 101 assertions. The 8 keyboard variants disable unused UART/SPI; right-side I2C is disabled, and left OLED I2C1 remains enabled.
+- Battery sensing keeps Polaris's A0, 470 kΩ/1.47 MΩ divider and NiMH thresholds. The inherited board power GPIO is removed with a property deletion, not replaced by an empty GPIO property.
+- JOY oversampling, CDC, cormoran ZMK, Bongo Cat, and the existing 3-wire transport remain configured.
+- These results establish source/build validation only. The changed firmware has not been flashed or hardware-tested; previous hardware results from other revisions are not transferred to this revision.
+
+## MKB validation branch
+
+The source changes are pushed as [`3361c9e`](https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3) on `codex/zmk-0.4-xiao-pinmux`, based on the verified remote maintenance tip `zmk-0.4@7b02e9b`. Only `MKB.dtsi` changes: 13 added lines release unused UART/SPI in the common shield. No PR, maintenance merge, or hardware flash has been performed.
+
+- `just.sh` pristine builds passed all 16 manifest targets: 15 keyboard variants and settings reset. Generated DTS and `.config` checks passed 258 assertions.
+- [CI run 33037699063](https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063) has passed the 15 regular targets, but settings reset is still queued at this ledger update. Final CI remains pending.
+- All 15 keyboard variants disable the unused connector UART/SPI while preserving OLED I2C1 on P1.14/P1.15 and each module's intended controller/pins.
+- XIAO battery sensing remains AIN7, power control P0.14 active-low/open-drain, and the 510 kΩ/1.51 MΩ divider. Do not copy Cornix's external A0 battery configuration into MKB.
+- CDC and Bongo Cat remain configured in all 15 keyboard variants; both JOY variants retain oversampling and ADC channels 2/3.
+- The maintenance baseline does not include the separately prepared 3-wire module. This pin-release change neither adds nor removes that transport and must not be described as completing the 3-wire rollout.
+- Hardware validation remains pending. The build and static checks do not inherit previous hardware confirmations from another firmware revision.
+
+## Solstice validation branch
+
+The source changes are pushed as [`643a256`](https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62) on `codex/zmk-0.4-xiao-pinmux`, based on maintenance `zmk-0.4@6638e6c`. Four added lines across the left/right overlays disable `xiao_spi`. No PR, maintenance merge, or hardware flash has been performed.
+
+- `just.sh` pristine builds passed all 5 targets: US/JIS left/right and settings reset. Generated DTS and `.config` checks passed 101 assertions.
+- [GitHub Actions run 33037950369](https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369) finished successfully.
+- All 4 keyboard targets disable connector UART/SPI and preserve matrix P1.11-P1.15/P0.09/P0.10 with interrupt P0.03.
+- Left OLED I2C1 stays on P0.28/P0.29. Analog ADC channels 2/3, oversampling, and Peripheral battery display remain configured.
+- Right TB keeps SPI0 on P0.04/P0.05/P0.28, CS P0.02, IRQ P0.29, CPI 800, Y inversion, and column offset 8.
+- CDC and XIAO battery AIN7, power P0.14, and the 510 kΩ/1.51 MΩ divider remain configured in all 4 keyboard targets.
+- Hardware validation is pending for this firmware revision; earlier successful OLED/TB/analog observations do not complete this new gate.
+
+## SAA validation branch
+
+The source changes are pushed as [`0540667`](https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f) on `codex/zmk-0.4-xiao-pinmux`, based on dedicated maintenance `zmk-0.4_validation_cormoran-zmk@4e54e1c`. Only `SAA.dtsi` changes. No firmware PR, stable/maintenance merge, or flash has been performed.
+
+- `just.sh` pristine builds passed all 21 targets. Generated DTS and `.config` checks passed 786 assertions for unused-peripheral release and preserved configuration.
+- The common shield disables default UART/SPI/I2C; selected module overlays re-enable their required controller. OLED I2C0 and LED SPI3 remain configured.
+- Battery configuration now overrides `&vbatt`, retains AIN0, 470 kΩ/1.47 MΩ and NiMH thresholds, and deletes the inherited board `power-gpios` property.
+- Right-side CDC and Studio remain configured. Left-side CDC remains absent as in the maintenance baseline; this change does not claim to add it.
+- [CI run 33038522353](https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353) is in progress at this ledger update and remains pending.
+- Both TPD+IQS variants have a separate, confirmed generated-DTS pin-ownership failure below. Passing the pin-release assertions does not establish hardware readiness for those combinations. All hardware validation remains pending.
+
+## Separate module pin-ownership findings
+
+These findings predate this rollout and are tracked separately as `module-pin-ownership-conflicts`. Releasing unused board defaults does not resolve a conflict between two intentionally enabled devices.
+
+| Repository / variant | Evidence | Required follow-up |
+| --- | --- | --- |
+| Polaris left TPD with OLED | Generated DTS shows both devices enabled while TPD DRDY and OLED SDA use P1.14. | Confirm the physical wiring and supported module/display combination before changing the pin assignment. Then inspect generated DTS, rebuild, and verify TPD plus OLED together. No pin reassignment has been made. |
+| SAA left/right `TPD_IQS` | Generated DTS at `0540667` confirms both sensors are `okay`, but the later IQS snippet selects `i2c1` P1.03/P1.14, not the TPD wiring P0.03/P0.28. The two device addresses do not resolve different physical pin assignments. This is an existing conflict, not introduced or repaired by pin release. | Confirm the actual shared-bus/wiring design and supported combination, then decide whether a controller, wiring, or target-matrix change is required. Both variants fail the separate pin-ownership gate and must not be called hardware-ready. |
+
+The Polaris and SAA pin-release assertions are scoped to unused connector peripherals and preserved configuration; they do not claim that every independent module pin-ownership problem is resolved.
 
 ## Completion rule
 
