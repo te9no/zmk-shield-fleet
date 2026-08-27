@@ -11,7 +11,7 @@ import {
   targetComplete,
   targetNeedsAction,
   targetVariants,
-} from "./model.js";
+} from "./model.js?v=20260827-evidence";
 
 // Completion lives in model.js; its accepted-check predicate remains:
 // checks.every((status) => status === "passed" || status === "waived")
