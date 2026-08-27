@@ -47,7 +47,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
         "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
@@ -181,7 +181,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
@@ -203,7 +203,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
         "targeted-build": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4",
         "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
@@ -225,7 +225,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4",
         "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/zmk-0.4"
@@ -247,7 +247,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
         "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk",
         "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
@@ -276,7 +276,7 @@
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
         "generated-dts": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master",
         "migration-gate": "https://github.com/te9no/zmk-config-GeaconSparagmos/tree/master"
       }
