@@ -65,6 +65,13 @@ committing. Open <http://127.0.0.1:8000/#next-actions> to review the result, the
 enable GitHub Pages with **GitHub Actions** as its source. The included Pages
 workflow validates every enabled ledger before publishing it.
 
+On the dashboard, **対応したので確認を依頼** opens a copy-only audit request from
+an action, change card, or repository matrix detail. Select the repository when
+needed, optionally add your results, then copy the editable request into your
+conversation. Existing branches and commits are labeled as old ledger references;
+this does not send a message or change any status. The request limits work to
+evidence-based auditing and ledger updates, not firmware changes or rollout.
+
 Profiles may also declare a curated, ordered work queue. This metadata is
 optional and stays in the profile rather than dashboard JavaScript:
 

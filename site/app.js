@@ -1,7 +1,9 @@
 import {
   actionEvidence,
   branchSummary,
+  buildAuditRequest,
   changeCounts,
+  copyAuditRequest,
   scopeLabel,
   selectStartAction,
   sortedActions,
@@ -126,6 +128,10 @@ function repositoryMarkup(profile, action) {
     : escapeHtml(action.repository);
 }
 
+function auditRequestButton(changeId, repositoryId = "", actionId = "") {
+  return `<button type="button" class="audit-request-button" data-audit-request data-change-id="${escapeHtml(changeId)}" data-repository-id="${escapeHtml(repositoryId)}" data-action-id="${escapeHtml(actionId)}">対応したので確認を依頼</button>`;
+}
+
 function actionCard(profile, action) {
   const stateMeta = actionStates[action.state];
   const blocker = action.blocker || "No blocker — ready to proceed.";
@@ -139,6 +145,7 @@ function actionCard(profile, action) {
     <div class="action-order"><span class="priority-badge ${escapeHtml(action.priority)}">${escapeHtml(action.priority)} priority</span><span>Order #${escapeHtml(action.order)}</span></div>
     <h3 id="action-title-${escapeHtml(action.id)}">${repositoryMarkup(profile, action)}</h3>
     <p class="action-task">${escapeHtml(action.action)}</p>
+    ${auditRequestButton(action.change_id, action.repository, action.id)}
     ${renderBranch(actionBranch(profile, action))}
     ${variants.length ? `<p class="variant-list"><strong>Variants</strong> ${variants.map(escapeHtml).join(", ")}</p>` : ""}
     <dl class="action-details">
@@ -191,6 +198,7 @@ function renderChanges(profile) {
     return `<article class="change-card">
       <div class="change-meta"><span>${escapeHtml(scopeLabel(change.scope))}</span><span class="badge ${change.automated ? "" : "manual"}">${change.automated ? "PR ready" : "ledger only"}</span></div>
       <h3>${escapeHtml(change.title)}</h3><p>${escapeHtml(change.description)}</p>
+      ${Object.keys(change.tracking ?? {}).length ? auditRequestButton(change.id) : ""}
       <div class="progress-line" role="progressbar" aria-label="${escapeHtml(change.title)} completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><span style="width:${percent}%"></span></div>
       <div class="progress-copy"><strong>${progress.complete} / ${progress.total} accounted for</strong><span>${progress.incomplete} incomplete</span></div>
       ${sourceUrl ? externalLink(sourceUrl, "View reference implementation ↗", "source-link") : ""}
@@ -226,21 +234,22 @@ function renderVariants(variants) {
   return `<div class="variant-details"><strong>Variants</strong><ul>${variants.map((variant) => `<li><div><code>${escapeHtml(variant.id ?? variant.name ?? "unnamed")}</code><span class="variant-status ${escapeHtml(variant.status ?? "pending")}">${escapeHtml(variant.status ?? "pending")}</span></div>${renderEvidence(variantEvidence(variant), "No variant validation recorded.")}</li>`).join("")}</ul></div>`;
 }
 
-function targetDetailBody(repository, target) {
+function targetDetailBody(repository, target, changeId) {
   if (!target) return "";
   const summary = branchSummary(repository, target);
   const variants = targetVariants(target);
   const commit = target.commit ? `<p><strong>Commit</strong> <code>${escapeHtml(target.commit)}</code></p>` : "";
-  return `${renderEvidence(validationEvidence(target), "No validation checks recorded.")}
+  return `${auditRequestButton(changeId, repository.id)}
+    ${renderEvidence(validationEvidence(target), "No validation checks recorded.")}
     ${renderBranch(summary)}
     ${renderVariants(variants)}
     ${commit}<p class="target-notes">${escapeHtml(target.notes || "No notes recorded.")}</p>
   `;
 }
 
-function targetDetails(repository, target) {
+function targetDetails(repository, target, changeId) {
   if (!target) return "";
-  return `<details class="target-details"><summary>Evidence &amp; notes</summary>${targetDetailBody(repository, target)}</details>`;
+  return `<details class="target-details"><summary>Evidence &amp; notes</summary>${targetDetailBody(repository, target, changeId)}</details>`;
 }
 
 function statusCellClass(target) {
@@ -269,7 +278,7 @@ function renderMatrix(profile) {
   table.querySelector("tbody").innerHTML = repositories.map((repository) => `<tr id="repo-${escapeHtml(repository.id)}">
     <th scope="row"><span class="repo-name">${escapeHtml(repository.id)}</span><span class="repo-sub">${escapeHtml(repository.architecture)} · ${escapeHtml(repository.modules.join(", "))}</span><span class="repo-branches">maint: ${escapeHtml(repository.maintenance_branch)} · stable: ${escapeHtml(repository.default_branch)}</span></th>
     <td>${repository.rollout_order ? `<span class="status ${repository.rollout_order >= 99 ? "na" : "pr-open"}">${repository.rollout_order >= 99 ? "lowest" : `#${repository.rollout_order}`}</span>` : '<span class="status na">—</span>'}</td>
-    ${profile.changes.map((change) => { const target = change.tracking[repository.id]; return `<td class="${statusCellClass(target)}">${statusMarkup(target)}${targetDetails(repository, target)}</td>`; }).join("")}
+    ${profile.changes.map((change) => { const target = change.tracking[repository.id]; return `<td class="${statusCellClass(target)}">${statusMarkup(target)}${targetDetails(repository, target, change.id)}</td>`; }).join("")}
   </tr>`).join("") || '<tr><td class="empty" colspan="99">No repositories match.</td></tr>';
 
   document.querySelector("#matrix-cards").innerHTML = repositories.map((repository) => `<article class="matrix-card" id="mobile-repo-${escapeHtml(repository.id)}">
@@ -277,7 +286,7 @@ function renderMatrix(profile) {
     <p class="repo-branches">Maintenance: ${escapeHtml(repository.maintenance_branch)} · Stable: ${escapeHtml(repository.default_branch)}</p>
     <div class="mobile-change-list">${profile.changes.filter((change) => change.tracking[repository.id]).map((change) => {
       const target = change.tracking[repository.id];
-      return `<details class="mobile-change ${statusCellClass(target)}"><summary><span>${escapeHtml(shortChangeLabel(change))}</span>${statusMarkup(target)}</summary><div class="mobile-target-details">${targetDetailBody(repository, target)}</div></details>`;
+      return `<details class="mobile-change ${statusCellClass(target)}"><summary><span>${escapeHtml(shortChangeLabel(change))}</span>${statusMarkup(target)}</summary><div class="mobile-target-details">${targetDetailBody(repository, target, change.id)}</div></details>`;
     }).join("")}</div>
   </article>`).join("") || '<div class="empty">No repositories match.</div>';
 }
@@ -311,6 +320,105 @@ function updatePressed(selector, active) {
   });
 }
 
+function initAuditRequest() {
+  const dialog = document.querySelector("#audit-request-dialog");
+  const repository = document.querySelector("#audit-repository");
+  const notes = document.querySelector("#audit-notes");
+  const prompt = document.querySelector("#audit-prompt");
+  const copy = document.querySelector("#audit-copy");
+  const regenerate = document.querySelector("#audit-regenerate");
+  const status = document.querySelector("#audit-status");
+  let context = null;
+  let trigger = null;
+  let manualEdited = false;
+  let stale = false;
+  let copying = false;
+
+  function updateCopy() {
+    copy.disabled = !repository.value || !prompt.value.trim() || stale || copying;
+  }
+
+  function generate() {
+    manualEdited = false;
+    stale = false;
+    regenerate.hidden = true;
+    prompt.value = repository.value ? buildAuditRequest({
+      ...context, repositoryId: repository.value, details: notes.value,
+    }) : "";
+    status.textContent = repository.value ? "依頼文をコピーして、この会話へ貼り付けてください。" : "対象リポジトリを選んでください。";
+    updateCopy();
+  }
+
+  function inputsChanged() {
+    if (!manualEdited) { generate(); return; }
+    // Preserve hand edits until the user explicitly replaces them; never copy a stale target.
+    stale = true;
+    regenerate.hidden = false;
+    regenerate.disabled = !repository.value;
+    status.textContent = "編集済みの依頼文を保持しています。変更した対象・メモを反映するには「依頼文を作り直す」を押してください。";
+    updateCopy();
+  }
+
+  document.addEventListener("click", (event) => {
+    const button = event.target.closest?.("[data-audit-request]");
+    if (!button || dialog.open) return;
+    trigger = button;
+    const profile = currentProfile();
+    const { changeId, repositoryId, actionId } = button.dataset;
+    const change = changeFor(profile, changeId);
+    const action = (profile.next_actions ?? []).find((item) => item.id === actionId);
+    context = { profile, changeId, actionId, sourceCommit: state.data.source_commit, generatedAt: state.data.generated_at };
+    document.querySelector("#audit-target").textContent = change?.title || action?.action || changeId || "対象項目";
+    const choices = repositoryId ? [repositoryId] : Object.keys(change?.tracking ?? {});
+    repository.replaceChildren();
+    if (choices.length !== 1) repository.add(new Option("対象リポジトリを選択", ""));
+    for (const id of choices) repository.add(new Option(id, id));
+    repository.disabled = Boolean(repositoryId) || choices.length === 1;
+    notes.value = "";
+    copying = false;
+    generate();
+    dialog.showModal();
+  });
+
+  repository.addEventListener("change", inputsChanged);
+  notes.addEventListener("input", inputsChanged);
+  prompt.addEventListener("input", () => {
+    manualEdited = true;
+    if (!stale) status.textContent = "編集した依頼文をそのままコピーします。送信や台帳変更はしません。";
+    updateCopy();
+  });
+  regenerate.addEventListener("click", generate);
+  document.querySelector("#audit-close").addEventListener("click", () => dialog.close());
+  dialog.addEventListener("close", () => {
+    context = null;
+    if (trigger?.isConnected) trigger.focus();
+    trigger = null;
+  });
+  copy.addEventListener("click", async () => {
+    if (copy.disabled) return;
+    const session = context;
+    const text = prompt.value;
+    copying = true;
+    status.textContent = "コピーしています…";
+    updateCopy();
+    const copied = await copyAuditRequest(text, navigator.clipboard);
+    if (context !== session || !dialog.open) return;
+    copying = false;
+    updateCopy();
+    if (prompt.value !== text || stale) {
+      status.textContent = "文面が変更されました。現在の依頼文を確認して、もう一度コピーしてください。";
+      return;
+    }
+    if (copied) {
+      status.textContent = "依頼文をコピーしました。この会話へ貼り付けて送信してください。台帳は変更していません。";
+    } else {
+      prompt.focus();
+      prompt.select();
+      status.textContent = "自動コピーできませんでした。選択した依頼文を Ctrl+C / ⌘C（スマホは長押し）でコピーしてください。";
+    }
+  });
+}
+
 async function init() {
   try {
     const response = await fetch("data.json", { cache: "no-store" });
@@ -339,6 +447,7 @@ async function init() {
       state.matrixFilter = button.dataset.matrixFilter; updatePressed(".matrix-filter", button); renderMatrix(currentProfile());
     }));
     document.querySelector("#repo-search").addEventListener("input", (event) => { state.search = event.target.value; renderMatrix(currentProfile()); });
+    initAuditRequest();
     render();
   } catch (error) {
     document.querySelector("main").innerHTML = `<section class="section"><div class="empty" role="alert">Dashboard data could not be loaded: ${escapeHtml(error.message)}</div></section>`;
