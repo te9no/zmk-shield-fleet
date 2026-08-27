@@ -7,6 +7,7 @@ import {
   buildAuditRequest,
   changeCounts,
   copyAuditRequest,
+  evidenceCounts,
   scopeLabel,
   selectStartAction,
   targetComplete,
@@ -232,4 +233,43 @@ test("clipboard rejection and synchronous failure never report success", async (
 
 test("unsupported clipboard never reports success", async () => {
   for (const clipboard of [undefined, null, {}, { writeText: true }]) assert.equal(await copyAuditRequest("request", clipboard), false);
+});
+
+test("evidence summary counts each displayed status accurately", () => {
+  const statuses = ["failed", "pending", "passed", "waived", "failed", "pending", "info", "evidence"];
+  assert.deepEqual(evidenceCounts(statuses.map((status) => ({ status }))), {
+    total: 8, failed: 2, pending: 2, passed: 1, waived: 1, reference: 2,
+  });
+});
+
+test("unknown evidence statuses are reference, never silently passed", () => {
+  assert.deepEqual(evidenceCounts([{ status: "unknown" }, { status: "PASSED" }, { status: "__proto__" }]), {
+    total: 3, failed: 0, pending: 0, passed: 0, waived: 0, reference: 3,
+  });
+});
+
+test("missing evidence status matches the renderer's pending fallback", () => {
+  assert.deepEqual(evidenceCounts([{}, { status: "" }, { status: null }]), {
+    total: 3, failed: 0, pending: 3, passed: 0, waived: 0, reference: 0,
+  });
+});
+
+test("empty or missing evidence lists have zero counts", () => {
+  for (const entries of [[], undefined, null]) assert.deepEqual(evidenceCounts(entries), {
+    total: 0, failed: 0, pending: 0, passed: 0, waived: 0, reference: 0,
+  });
+});
+
+test("evidence counting does not mutate, drop or deduplicate displayed links", () => {
+  const entries = Object.freeze([
+    Object.freeze({ label: "CI", status: "passed", url: "https://example.test/ci" }),
+    Object.freeze({ label: "CI", status: "passed", url: "https://example.test/ci" }),
+    Object.freeze({ label: "Board log", status: "pending", url: "https://example.test/log" }),
+  ]);
+  const before = JSON.stringify(entries);
+  const counts = evidenceCounts(entries);
+  assert.equal(counts.total, 3);
+  assert.equal(counts.passed, 2);
+  assert.equal(JSON.stringify(entries), before);
+  assert.deepEqual(entries.map((entry) => entry.url), ["https://example.test/ci", "https://example.test/ci", "https://example.test/log"]);
 });

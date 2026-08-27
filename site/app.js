@@ -4,6 +4,7 @@ import {
   buildAuditRequest,
   changeCounts,
   copyAuditRequest,
+  evidenceCounts,
   scopeLabel,
   selectStartAction,
   sortedActions,
@@ -136,6 +137,11 @@ function actionCard(profile, action) {
   const stateMeta = actionStates[action.state];
   const blocker = action.blocker || "No blocker — ready to proceed.";
   const evidence = actionEvidence(profile, action);
+  const counts = evidenceCounts(evidence);
+  const evidenceSummary = [`Evidence / 証跡 ${counts.total}件`,
+    counts.failed ? `失敗 ${counts.failed}件` : "",
+    counts.pending ? `未確認 ${counts.pending}件` : "",
+    counts.reference ? `参考 ${counts.reference}件` : ""].filter(Boolean).join(" · ");
   const variants = action.variant_ids ?? [];
   return `<article class="action-card ${escapeHtml(action.state)}" id="action-${escapeHtml(action.id)}" aria-labelledby="action-title-${escapeHtml(action.id)}">
     <div class="action-card-head">
@@ -152,7 +158,7 @@ function actionCard(profile, action) {
       <div><dt>Done when / 完了条件</dt><dd>${escapeHtml(action.completion)}</dd></div>
       <div class="blocker"><dt>Blocker / 保留理由</dt><dd>${escapeHtml(blocker)}</dd></div>
     </dl>
-    ${evidence.length ? `<div class="action-evidence"><h4>Evidence / 証跡</h4>${renderEvidence(evidence)}</div>` : ""}
+    ${evidence.length ? `<details class="action-evidence"><summary>${escapeHtml(evidenceSummary)}</summary><div class="action-evidence-scroll" tabindex="0" role="region" aria-label="${escapeHtml(action.repository)}の証跡一覧">${renderEvidence(evidence)}</div></details>` : ""}
     <div class="action-footer"><span>${escapeHtml(stateMeta.detail)}</span>${action.pr ? externalLink(action.pr, "Related PR ↗") : ""}</div>
   </article>`;
 }
