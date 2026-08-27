@@ -20,8 +20,6 @@ validation_keys = ["ci", "left-joy-module-input", "left-oled-visual", "hardware"
 variant_ids = ["left-joy"]
 evidence = [
   { label = "Left-only orientation candidate@8de074a: incremental build, flash/boot, direction and continuous operation accepted", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate" },
-  { label = "8421728 left JOY physical test: LEFT moved cursor UP (90° wrong)", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-failure" },
-  { label = "8de9473 left JOY physical test: 「上下逆、左右も逆」", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate" },
   { label = "Right TB remains@8421728: user OK plus BLE/PMW read RPC", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc" },
   { label = "Latest left candidate CI 33072906476 (in progress)", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072906476" },
 ]

@@ -81,8 +81,9 @@ The safe read-only frames were
 This passes the normal-BLE remote PMW read RPC and supports the observed split
 connection. No settings write, stream, or keymap dump was performed.
 
-This is a complete firmware-pair restoration, not a complete hardware
-acceptance: physical left-JOY/right-TB input and left OLED checks remain pending.
+At this restoration checkpoint, physical left-JOY/right-TB input and left OLED
+checks were still pending. Their subsequent results are recorded in
+[Left JOY orientation candidate](#left-joy-orientation-candidate) below.
 
 - Both halves run normal BLE `8421728`; their boot, split, right PMW initialization, and remote read RPC are recorded above.
 - Left JOY input/OLED visual appearance and right TB pointer/module input remain unverified.
@@ -141,5 +142,6 @@ ADC, pointer speed, and trackball settings are unchanged.
 The right half was not rebuilt or flashed for this candidate. It remains on
 `8421728` with UF2 SHA-256
 `296aad41178784752b89ebb94fd9dbe0f1fc38191f5462eaf4f06eaf02976d52`.
-Therefore `8de9473` is not a newly matched left/right build and does not update
-the right-TB physical-hardware status. ESB remains retired and disabled.
+The current pair is left `8de074a` and right `8421728`, not two newly built
+halves. Right-TB acceptance comes from the user's unchanged-right test above,
+not from the left-only rebuild. ESB remains retired and disabled.
