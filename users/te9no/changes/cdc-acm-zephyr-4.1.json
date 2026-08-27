@@ -87,7 +87,7 @@
             {
               "label": "Right-TB 1200-baud, flash, and COM327 CDC record",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
             },
             {
               "label": "Pointer input and split relay",

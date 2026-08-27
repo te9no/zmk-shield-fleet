@@ -11,9 +11,9 @@
   "source": {
     "repository": "te9no/zmk-workspace",
     "from_revision": "1ebf2c4a",
-    "to_revision": "9e10e81fe97e710554dd4569249066c2952a2635",
-    "change_url": null,
-    "notes": "local main commits 4a979e52、9b461ad5、9e10e81fでprofile/artifact処理、CDC bootloader切断処理、repository配置規約を整備。3 commitは未push。workspace保守はmainへ直接蓄積し、PRを作らない運用とする。"
+    "to_revision": "7e19e13cd4bfee531318674b95014a391a1fedeb",
+    "change_url": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
+    "notes": "main@7e19e13cまで公開済み。4a979e52、9b461ad5、9e10e81fでprofile/artifact処理、CDC bootloader切断処理、repository配置規約を整備し、97420d11でlocal Visual Studio workspace dataを除外、7e19e13cでreusable badge workflowのvalidationを修正した。workspace保守はmainへ直接蓄積し、PRを作らない運用。"
   },
   "repositories": [
     "polaris",
@@ -29,20 +29,22 @@
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に保持し、active repository/worktree参照を修復。現行Polaris/MKB build profiles 6.9 GiB、共有ccache 3.8 GiB、archived repository snapshots 2.2 GiBは意図的に保持。root main 3 commitのpushと保持容量の次回レビューは独立pending。",
+      "notes": "canonical checkoutをconfig/に保持し、active repository/worktree参照を修復。現行Polaris/MKB build profiles 6.9 GiB、共有ccache 3.8 GiB、archived repository snapshots 2.2 GiBは意図的に保持。workspace main@7e19e13cはremoteへ反映済みで、reusable workflow名がGitHubに正常認識され、無効なpush runが生成されない状態を確認。残るのは保持容量の次回レビューだけ。",
       "validation": {
         "canonical-layout": "passed",
         "active-repository-repair": "passed",
         "artifact-layout": "passed",
-        "root-main-push": "pending",
+        "root-main-push": "passed",
+        "reusable-workflow-validation": "passed",
         "retained-storage-review": "pending"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "root-main-push": "https://github.com/te9no/zmk-workspace/tree/main",
-        "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "root-main-push": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
+        "reusable-workflow-validation": "https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb",
+        "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "mkb2": {
@@ -56,9 +58,9 @@
         "active-profile-retention": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "active-profile-retention": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-profile-retention": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "saa": {
@@ -72,9 +74,9 @@
         "inventory-preservation": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "cornix": {
@@ -88,9 +90,9 @@
         "inventory-preservation": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "solstice": {
@@ -104,9 +106,9 @@
         "inventory-preservation": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "sparagmos": {
@@ -120,9 +122,9 @@
         "inventory-preservation": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     },
     "mopolia": {
@@ -136,9 +138,9 @@
         "inventory-preservation": "passed"
       },
       "validation_urls": {
-        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
-        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
     }
   },

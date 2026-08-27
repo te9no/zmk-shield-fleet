@@ -37,15 +37,22 @@ explicitly approved operation.
 
 ## Workspace source state
 
-The workspace `main` contains three local commits that have not been pushed:
+The workspace changes are published through
+[`main@7e19e13c`](https://github.com/te9no/zmk-workspace/commit/7e19e13cd4bfee531318674b95014a391a1fedeb):
 
 - `4a979e52` — profile and firmware artifact handling;
 - `9b461ad5` — CDC bootloader disconnect handling during serial open;
-- `9e10e81f` — repository placement documentation.
+- `9e10e81f` — repository placement documentation;
+- `97420d11` — local Visual Studio workspace data exclusion;
+- `7e19e13c` — reusable badge workflow validation repair.
 
-Workspace maintenance is performed directly on local `main`; it does not use a
-feature branch or PR. Publishing these commits is a separate action and must not
-be inferred from this Fleet record.
+The reusable workflow now has a valid GitHub-recognized workflow name and input
+description. The malformed workflow no longer creates an invalid push run.
+Local `main` and `te9no/main` both resolve to `7e19e13c`.
+
+Workspace maintenance is performed directly on `main`; it does not use a
+feature branch or PR. This record documents the completed publication and does
+not authorize unrelated workspace changes.
 
 ## Intentionally retained storage
 
@@ -55,4 +62,3 @@ be inferred from this Fleet record.
 
 These are retained deliberately for current validation, build acceleration, and
 recovery. Any later deletion requires a fresh inventory and explicit approval.
-

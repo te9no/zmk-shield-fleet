@@ -20,24 +20,7 @@ validation_keys = ["board-qualifier", "generated-dts", "targeted-build", "hardwa
 evidence = [
   { label = "Cornix main integration@794987c", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8" },
   { label = "Cornix main CI 12/12", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396" },
-  { label = "Cross-repository XIAO pinmux audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md" },
-]
-
-[[next_actions]]
-id = "workspace-main-publish"
-state = "waiting"
-priority = "high"
-order = 2
-repository = "te9no/zmk-workspace"
-repository_url = "https://github.com/te9no/zmk-workspace/tree/main"
-action = "workspace local mainの3 commitを確認し、明示的に指示された時だけte9no/mainへ直接pushする。PRは作らない。"
-completion = "remote te9no/mainが4a979e52、9b461ad5、9e10e81fを含み、local mainとのahead差分が解消する。"
-blocker = "local mainは3 commit ahead。workspaceはmain direct運用だが、このFleet更新はroot repositoryのpushを認可しない。未commitの別作業も保持する。"
-change_id = "workspace-hygiene-and-firmware-artifact-layout"
-validation_keys = ["root-main-push"]
-evidence = [
-  { label = "Workspace cleanup record", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
-  { label = "Remote main awaits local commits", status = "pending", url = "https://github.com/te9no/zmk-workspace/tree/main" },
+  { label = "Cross-repository XIAO pinmux audit", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md" },
 ]
 
 [[next_actions]]
@@ -121,7 +104,7 @@ validation_keys = ["flash", "cdc-enumeration", "1200-baud", "cdc-log", "module-i
 variant_ids = ["right-tpd"]
 evidence = [
   { label = "Polaris zmk-0.4 integration@ac1a312", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de" },
-  { label = "Right-TB flash, COM327 CDC, pointer, and split", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
+  { label = "Right-TB flash, COM327 CDC, pointer, and split", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
   { label = "9/9 CI", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186" },
 ]
 
@@ -174,7 +157,7 @@ evidence = [
   { label = "PR #6 merged into zmk-0.4", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6" },
   { label = "Three-wire controller v0.1.0@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0" },
   { label = "Polaris zmk-0.4 integration@ac1a312", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de" },
-  { label = "Build, flash, CDC, pointer, split, and Studio source", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
+  { label = "Build, flash, CDC, pointer, split, and Studio source", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md" },
 ]
 
 [[next_actions]]
@@ -225,7 +208,7 @@ blocker = "現在は実機検証・build高速化・復旧用として意図的�
 change_id = "workspace-hygiene-and-firmware-artifact-layout"
 validation_keys = ["retained-storage-review"]
 evidence = [
-  { label = "Retained storage inventory", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
+  { label = "Retained storage inventory", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
 ]
 
 [[next_actions]]
