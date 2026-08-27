@@ -21,7 +21,7 @@
       "commit": "81644c2608da34a483209f0512fa8291f701b3ce",
       "branch": "codex/madula-lpps-pinout",
       "base_branch": "main",
-      "notes": "81644c removes dominant-axis-lock; build/flash/CDC/ADS diagnostics passed. Free-XY physical acceptance and CI pending. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked.",
+      "notes": "81644c2 removes dominant-axis-lock; build/flash/CDC/ADS diagnostics and user-confirmed direction/free-XY input passed. Firmware CI remains pending. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked. Firmware remains on the validation branch.",
       "validation": {
         "targeted-build": "passed",
         "generated-dts": "passed",
@@ -30,8 +30,8 @@
         "cdc-debug": "passed",
         "ads-init": "passed",
         "ci": "pending",
-        "physical-input": "pending",
-        "hardware": "pending"
+        "physical-input": "passed",
+        "hardware": "passed"
       },
       "validation_urls": {
         "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md",
@@ -47,18 +47,18 @@
       "variants": [
         {
           "id": "madula-lpps",
-          "status": "pending",
+          "status": "passed",
           "validation": {
             "build": "passed",
             "flash-boot": "passed",
             "cdc-debug": "passed",
             "ads-init": "passed",
-            "physical-input": "pending",
-            "hardware": "pending"
+            "physical-input": "passed",
+            "hardware": "passed"
           },
           "evidence": [
             {
-              "label": "81644c free-XY build/flash/CDC/ADS record",
+              "label": "81644c2 build/flash/CDC/ADS and user-confirmed direction/free-XY input",
               "status": "passed",
               "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-pinout-validation-2026-08-27.md"
             }

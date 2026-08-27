@@ -45,8 +45,12 @@ The latest [`81644c2608da34a483209f0512fa8291f701b3ce`](https://github.com/te9no
 removes only `dominant-axis-lock`. The property is absent from the generated
 DTS, and the generated C header explicitly defines
 `DT_N_S_analog_axis_hires_0_P_dominant_axis_lock` as `0`.
-Direction remained unchanged from user-accepted `819f6e7`, but free XY physical
-acceptance is pending. Clean build, audit, and COM447 flash/boot passed at
+Direction remained unchanged from user-accepted `819f6e7`. After this flash,
+the user confirmed **「すごい、かんぺき」**, accepting direction and unrestricted
+XY/diagonal input. Clean build, audit, and COM447 flash/boot passed at
 22:21:30/22:22 JST; UF2 SHA-256 is `15e79ee5814df791c2ea709945c4d5500ed09c96e87ffd12aef7bffab3b0b088`,
 boot-log SHA-256 is `110feed37c79ed85cd8e8f779a0bb751a1c6cf42ceb2a502924c6756257f6bab`,
 and CI [33076389402](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076389402) is pending.
+
+Hardware acceptance is complete for this LPPS revision. Firmware CI is a
+separate pending gate, and no firmware-main merge has been performed.
