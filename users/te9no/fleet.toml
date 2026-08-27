@@ -24,6 +24,23 @@ evidence = [
 ]
 
 [[next_actions]]
+id = "workspace-main-publish"
+state = "waiting"
+priority = "high"
+order = 2
+repository = "te9no/zmk-workspace"
+repository_url = "https://github.com/te9no/zmk-workspace/tree/main"
+action = "workspace local mainの3 commitを確認し、明示的に指示された時だけte9no/mainへ直接pushする。PRは作らない。"
+completion = "remote te9no/mainが4a979e52、9b461ad5、9e10e81fを含み、local mainとのahead差分が解消する。"
+blocker = "local mainは3 commit ahead。workspaceはmain direct運用だが、このFleet更新はroot repositoryのpushを認可しない。未commitの別作業も保持する。"
+change_id = "workspace-hygiene-and-firmware-artifact-layout"
+validation_keys = ["root-main-push"]
+evidence = [
+  { label = "Workspace cleanup record", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
+  { label = "Remote main awaits local commits", status = "pending", url = "https://github.com/te9no/zmk-workspace/tree/main" },
+]
+
+[[next_actions]]
 id = "cornix-madula-1200-baud"
 state = "waiting"
 priority = "high"
@@ -193,6 +210,22 @@ evidence = [
   { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
   { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
   { label = "Three-wire preparation@8f83136 (just.sh 5/5)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50" },
+]
+
+[[next_actions]]
+id = "workspace-retained-storage-review"
+state = "later"
+priority = "low"
+order = 95
+repository = "te9no/zmk-workspace"
+repository_url = "https://github.com/te9no/zmk-workspace/tree/main"
+action = "MKB/Polaris profiles 6.9 GiB、ccache 3.8 GiB、archived snapshots 2.2 GiBを次回容量監査で再評価する。"
+completion = "保持理由と使用状況を再確認し、維持または削除の判断を新しいinventoryへ記録する。"
+blocker = "現在は実機検証・build高速化・復旧用として意図的に保持。削除には新しいinventoryと明示承認が必要。"
+change_id = "workspace-hygiene-and-firmware-artifact-layout"
+validation_keys = ["retained-storage-review"]
+evidence = [
+  { label = "Retained storage inventory", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
 ]
 
 [[next_actions]]

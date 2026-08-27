@@ -1,4 +1,4 @@
-# PR and ledger audit — updated 2026-08-25
+# PR and ledger audit — updated 2026-08-27
 
 The authoritative inventory is `users/te9no/fleet.toml`. This refresh uses each
 repository's maintenance branch as the operational baseline: Polaris, MKB2,
@@ -9,7 +9,7 @@ changed. No external repository was changed.
 ## Current decisions
 
 - Polaris [PR #7](https://github.com/te9no/zmk-config-GeaconPolaris/pull/7) remains Draft against `zmk-0.4`. Its right TB/TPD/IQS 9/9 CI and generated config/DTS checks passed; right IQS flash, CDC Debug, 1200-baud boot, COM recovery, split, and module input passed on 2026-08-25. Only right TB/TPD hardware remains pending. PR #6 is the separately merged Cormoran/Bongo baseline.
-- Cornix [PR #3](https://github.com/te9no/zmk-keyboard-cornix/pull/3) remains the highest-priority Draft against `zmk-0.4`. Run [32627774654](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654), firmware flash, CDC enumeration, and DYA Studio passed. Physical Madula trackball validation and the trackball-independent 1200-baud transition are separate pending checks. PR #1 is already merged and is the authoritative general DYA/IQS/west baseline; Madula PMW3610/runtime extensions remain in Draft PR #3.
+- Cornix [PR #3](https://github.com/te9no/zmk-keyboard-cornix/pull/3) is closed. Its completed source was consolidated into [`main@794987c`](https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8); `just.sh` 12/12, [Actions 32991787396](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396), XIAO pinmux correction, PMW3610 initialization, and owner-confirmed Madula Trackball pointer input passed. The Trackball item is complete. Only the trackball-independent 1200-baud transition and physical Madula IQS input remain pending.
 - SAA's current source of truth is [the dedicated validation branch](https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk) at `4e54e1c51b1a161ffc1c174f72f9150ee31d6bb8`, not a PR. Run [32628652475](https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475) passed all 21 targets. Historical PRs #2/#3/#4 merged into the feature branch, but the attempted `master` promotion was reverted by PR #6; ledger status is therefore `applied`, never `merged` to stable `master`.
 - MKB2's integrated source of truth is merged [PR #14](https://github.com/te9no/zmk-config-MKB2/pull/14), run [32635837330](https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330), and the [hardware validation record](https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md). Closed-unmerged PRs #7/#9/#10 are retained only as historical notes.
 - Solstice PRs #4/#5 are merged into `zmk-0.4`. Both halves, OLED including Peripheral battery, DYA Studio, PMW3610, and analog-stick runtime are hardware passed. The obsolete branches `codex/zmk-0.4-baseline`, `zmk-0.4_validation_oled-default`, `zmk-0.4_validation_peripheral-cdc-debug`, and `zmk-0.4_validation_pmw3610-cormoran-rpc` had no unique commits outside `zmk-0.4` and were deleted on 2026-08-25. Stable `main` remains untouched.
@@ -19,7 +19,7 @@ changed. No external repository was changed.
 
 ## Prioritized next actions
 
-1. **Cornix / PR #3 — highest waiting priority:** attach the Madula trackball, verify PMW3610 direction/local diagnostics/frame capture, then verify the 1200-baud boot transition. Completion requires all hardware checks before reconsidering the Draft for `zmk-0.4`.
+1. **Cornix separate checks — waiting:** verify the Central 1200-baud boot transition and physical Madula IQS input. Madula Trackball is complete and is not part of this queue.
 2. **SAA dedicated branch — active:** flash the 21-target branch artifacts to the required JOY/IQS halves and verify direction/cadence, 60-second oversampling coexistence, local/split input, both-half connectivity, CDC boot, and DYA Studio. No stable `master` promotion is planned.
 3. **Polaris / PR #7 — waiting:** safely identify and flash the right TB/TPD/IQS hardware, then confirm CDC Debug, 1200-baud boot, COM recovery, split, and module input.
 4. **External PR #168 — waiting:** leave the external PR untouched and record the upstream/user decision when it arrives.

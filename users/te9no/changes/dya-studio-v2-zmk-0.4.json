@@ -79,19 +79,20 @@
     },
     "cornix": {
       "status": "merged",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
-      "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "PR #1で一般的なZMK 0.4・DYA Studio・TPS43基準をmainへmerge済み。Madula Trackball固有のPMW3610/runtime拡張は別件のDraft PR #3でzmk-0.4向けに継続中。現行zmk-0.4は12/12 CIとDYA Studio接続に合格。",
-      "branch": "codex/promote-madula-zmk-0.4-to-main",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "一般的なZMK 0.4・DYA Studio・TPS43基準に加え、Madula Trackball固有のPMW3610/runtime拡張もmain@794987cへ統合済み。just.sh manifest 12/12、Actions 32991787396、DYA Studio接続、Madula TrackballのPMW初期化と実ポインター入力に合格。PR #3はclosed、validation branchは削除した。Madula内で残る確認はTrackballとは独立した1200 baud bootとIQS個別実機入力のみ。",
+      "branch": "main",
       "base_branch": "main",
-      "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
       "validation": {
         "ci": "passed",
-        "dya-studio": "passed"
+        "dya-studio": "passed",
+        "trackball-hardware": "passed"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32774773130",
-        "dya-studio": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/hardware-validation-2026-08-25.md"
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "trackball-hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
       }
     },
     "solstice": {
