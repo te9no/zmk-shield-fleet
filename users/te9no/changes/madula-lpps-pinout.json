@@ -21,7 +21,7 @@
       "commit": "81644c2608da34a483209f0512fa8291f701b3ce",
       "branch": "codex/madula-lpps-pinout",
       "base_branch": "main",
-      "notes": "81644c2 removes dominant-axis-lock; build/flash/CDC/ADS diagnostics and user-confirmed direction/free-XY input passed. Firmware CI remains pending. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked. Firmware remains on the validation branch.",
+      "notes": "81644c2 removes dominant-axis-lock; build/flash/CDC/ADS diagnostics and user-confirmed direction/free-XY input passed. Audit confirmed firmware CI run 33076389402 completed successfully (12/12 builds); its madula_trackpoint UF2 SHA-256 matches the hardware-accepted local build. Historical 373edbc up→left; 819f6e7 directions user OK but axes were locked. Firmware remains on the validation branch; no new flash or merge was performed in this audit.",
       "validation": {
         "targeted-build": "passed",
         "generated-dts": "passed",
@@ -29,7 +29,7 @@
         "flash-boot": "passed",
         "cdc-debug": "passed",
         "ads-init": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "physical-input": "passed",
         "hardware": "passed"
       },
