@@ -7,27 +7,27 @@ workspace = "../../.."
 
 [[next_actions]]
 id = "polaris-esb-usb-only-trial"
-state = "waiting"
+state = "active"
 priority = "high"
 order = 1
 repository = "polaris"
-action = "次回の書込み依頼後、Polaris候補64860ddを左右へ入れ、DYA Studioで右source1の単発PMW診断を確認する。両CDCのrelay受信件数と実際のRPC応答を照合する。"
-completion = "対象revisionで左右flash/CDC、右PMW初期化、単発RPC往復とキー/ポインター入力を実測する。host96件・build合格だけでは実機完了にしない。"
-blocker = "ESB fork656477cのRPC relay実装とhost96件ASan/UBSan・独立レビュー・fork CIは合格。候補64860ddはjust.sh/生成物監査対象。未flash、RPC実機往復はpending。最終実機記録は旧72801a6。ALL_CONNECTEDは切断検知ではないため連続streamは別gate。upstream PRなし。"
+action = "Polaris候補64860ddで失敗したright source1 GetInfoのESB delivery/receiveを診断する。payloadを出さないESB TX/RX/ACK/error counterでlossを局所化し、blanket debugやkeystroke payload loggingを有効化しない。local Studio列挙/要求受理は再確認不要で、unchanged UF2の再flashだけやUIだけの再試験を依頼しない。"
+completion = "対象revisionでESB経由の単発RPC往復、キー/ポインター入力を実測する。host96件・build合格、local request受理や受信件数だけでは実機完了にしない。"
+blocker = "ESB fork656477cのRPC relay実装とhost96件ASan/UBSan・独立レビュー・fork CIは合格。候補64860ddはjust.sh/生成物監査とCI33066366370 success済みで、2026-08-27 20:32 JSTに左右flash/CDC boot・右PMW初期化を実測。native local Studioは左local custom subsystem列挙とright source1 GetInfo要求を受理したが、2回目20:39:04 JSTと3回目20:40:36 JSTを含む3回のGetInfoはdeferred応答後8秒間Peripheral応答なし、両Debug CDCにもrelay受信件数なしでrelay-rpc-roundtripはfailed。3回目は両DebugのDTR/RTSもassertしたが同じ結果で、DTR説明は支持されない。deferred responseはlocal enqueue/raise-event成功でradio ACK/deliveryの証拠ではない。compiled radio address/role/ACK/CRC/relay limitsには不一致の証跡がなく、INFOにはraw ACK telemetryがないため原因未特定。ESB接続、物理入力、OLEDはpending。旧72801a6の結果は歴史的記録のまま。ALL_CONNECTEDは切断検知ではないため連続streamは別gate。upstream PRなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-esb-validation"
 change_id = "polaris-esb-usb-only-trial"
-validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "relay-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "relay-rpc-roundtrip", "relay-disconnect", "relay-streaming", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
+validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "relay-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "local-studio-rpc", "relay-rpc-roundtrip", "relay-disconnect", "relay-streaming", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
 variant_ids = ["left-joy-usb-central", "right-tb-esb-peripheral"]
 
 [[next_actions]]
 id = "polaris-pinmux-hardware"
-state = "waiting"
-priority = "high"
+state = "later"
+priority = "medium"
 order = 2
 repository = "polaris"
-action = "右USB切断・電池OFF・TB接続確認後の再接続を待ち、CDCでPMW初期化を再確認する。左JOY入力とOLEDも目視確認する。"
-completion = "右PMW初期化/入力と左JOY/OLEDが実機合格し、対象revision付きで記録される。新旧同症状の原因未確定を解消し、旧版rollbackを復旧成功と混同しない。"
-blocker = "旧比較時の履歴: 左JOY/右TB照合・8421728書込、左COM326→H→COM325起動、右COM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4でも同症状で、比較直後は右旧版/左新JOY版だった。その後左右ともESB試験へ移行。最新状態はpolaris-esb-usb-only-trial参照。既存失敗gateと未確認JOY入力/OLEDは保持、mergeなし。"
+action = "このpinmux比較は歴史的記録として保持する。現行64860ddの実機確認はpolaris-esb-usb-only-trialを優先し、必要時だけ当時のrevisionを明示した再比較を行う。"
+completion = "8421728/ed5cba4の歴史的PMW失敗と64860ddの別revisionでの初期化合格を混同せず、必要なら対象revision付きで再比較を記録する。"
+blocker = "旧比較時の履歴: 左JOY/右TB照合・8421728書込、左COM326→H→COM325起動、右COM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4でも同症状で、比較直後は右旧版/左新JOY版だった。その後左右ともESB試験へ移行。64860ddでは2026-08-27に右PMW初期化が合格したが、これは旧失敗の原因やrelayの効果を確定しない。既存失敗結果と未確認JOY入力/OLEDは歴史的に保持、mergeなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
 validation_keys = ["right-tb-sensor-init", "right-tb-baseline-sensor-init", "right-tb-comparison-rollback", "left-joy-module-input", "left-oled-visual", "hardware"]
