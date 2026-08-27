@@ -245,6 +245,31 @@ footer { display: flex; justify-content: space-between; gap: 16px; padding: 28px
 .privacy-note { grid-column: 1 / -1; margin: 0; padding: 14px 16px; color: #56300b; background: #fff2dc; border-left: 4px solid var(--amber); font-size: 12px; line-height: 1.5; }
 .primary-link { width: fit-content; min-height: 44px; grid-column: 1 / -1; display: inline-flex; align-items: center; padding: 0 16px; color: #fff; background: var(--green); border-radius: 9px; font-weight: 750; }
 
+.audit-request-button, .audit-dialog button {
+  min-height: 44px; max-width: 100%; padding: 10px 14px; border: 1px solid var(--green);
+  border-radius: 8px; background: var(--surface); color: var(--green); font: inherit;
+  font-size: 13px; font-weight: 700; line-height: 1.5; white-space: normal; overflow-wrap: anywhere; cursor: pointer;
+}
+.audit-request-button { width: fit-content; margin: 4px 0 12px; }
+.audit-request-button:hover, .audit-dialog button:hover { background: #e6eee8; }
+.audit-dialog { width: min(720px, calc(100% - 24px)); max-height: 90vh; max-height: calc(100dvh - 24px); overflow: auto; padding: 24px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+.audit-dialog::backdrop { background: rgba(15, 27, 21, .6); }
+.audit-dialog-heading { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+.audit-dialog-heading h2 { margin: 0; font-family: inherit; font-size: 26px; line-height: 1.4; letter-spacing: 0; }
+.audit-dialog-heading button { flex-shrink: 0; }
+.audit-dialog p { overflow-wrap: anywhere; line-height: 1.6; }
+#audit-copy-notice, .audit-status { color: var(--muted); font-size: 13px; }
+.audit-target { font-weight: 700; }
+.audit-field { display: grid; min-width: 0; gap: 7px; margin: 16px 0; font-size: 14px; font-weight: 650; }
+.audit-field select, .audit-field textarea { width: 100%; min-width: 0; max-width: 100%; padding: 10px; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 6px; font: inherit; font-weight: 400; line-height: 1.6; }
+.audit-field textarea { resize: vertical; overflow-wrap: anywhere; }
+.audit-dialog :focus-visible, .audit-request-button:focus-visible { outline: 3px solid var(--green); outline-offset: 3px; }
+.audit-dialog-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: end; }
+.audit-dialog .audit-primary { color: #fff; background: var(--green); }
+.audit-dialog .audit-primary:hover { background: #24563f; }
+.audit-dialog button:disabled { opacity: .5; cursor: not-allowed; }
+.audit-status { min-height: 3em; margin-bottom: 0; }
+
 @media (max-width: 1100px) {
   .change-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -266,6 +291,9 @@ footer { display: flex; justify-content: space-between; gap: 16px; padding: 28px
 }
 
 @media (max-width: 640px) {
+  .audit-dialog { padding: 16px; }
+  .audit-dialog-heading h2 { font-size: 23px; }
+  .audit-dialog-actions button { width: 100%; }
   .topbar { height: auto; padding-block: 13px; align-items: flex-start; }
   .brand > span:last-child, .profile-control > span { display: none; }
   .topbar-actions { gap: 10px; }

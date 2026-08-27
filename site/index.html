@@ -152,6 +152,29 @@
       <span id="footer-source"></span>
     </footer>
 
+    <dialog id="audit-request-dialog" class="audit-dialog" aria-labelledby="audit-request-title" aria-describedby="audit-copy-notice" lang="ja">
+      <div class="audit-dialog-heading">
+        <h2 id="audit-request-title">確認依頼を作る</h2>
+        <button id="audit-close" type="button" autofocus>閉じる</button>
+      </div>
+      <p id="audit-copy-notice">依頼文のコピーだけを行います。自動送信や台帳の状態変更はしません。</p>
+      <p id="audit-target" class="audit-target"></p>
+      <label class="audit-field" for="audit-repository">対象リポジトリ
+        <select id="audit-repository"></select>
+      </label>
+      <label class="audit-field" for="audit-notes">対応内容・実機確認結果・PRなど（任意）
+        <textarea id="audit-notes" rows="3" placeholder="何も書かなくても依頼できます。機密情報は含めないでください。"></textarea>
+      </label>
+      <label class="audit-field" for="audit-prompt">依頼文（編集できます）
+        <textarea id="audit-prompt" rows="10" spellcheck="false"></textarea>
+      </label>
+      <div class="audit-dialog-actions">
+        <button id="audit-regenerate" type="button" hidden>依頼文を作り直す</button>
+        <button id="audit-copy" class="audit-primary" type="button">依頼文をコピー</button>
+      </div>
+      <p id="audit-status" class="audit-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    </dialog>
+
     <script type="module" src="app.js"></script>
   </body>
 </html>
