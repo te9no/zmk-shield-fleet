@@ -88,6 +88,17 @@ export function targetVariants(target) {
     : Object.entries(target.variants).map(([id, value]) => ({ id, ...value }));
 }
 
+/** Count displayed entries without dropping links or assuming unknown statuses passed. */
+export function evidenceCounts(items = []) {
+  const counts = { total: 0, failed: 0, pending: 0, passed: 0, waived: 0, reference: 0 };
+  for (const item of items ?? []) {
+    counts.total += 1;
+    const status = item?.status || "pending";
+    counts[["failed", "pending", "passed", "waived"].includes(status) ? status : "reference"] += 1;
+  }
+  return counts;
+}
+
 const requestText = (value) => typeof value === "string" ? value.trim() : "";
 const ownValue = (object, key) => object && Object.hasOwn(object, key) ? object[key] : null;
 
