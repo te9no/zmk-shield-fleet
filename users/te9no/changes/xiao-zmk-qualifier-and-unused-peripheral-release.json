@@ -171,7 +171,7 @@
       "commit": "84217286bbc5d064b1d6a3e3b3f671017e687942",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。検証source8421728は9/9 pristine・101 assertions・CI合格。未使用UART/SPIと右I2Cを解放し、左OLED I2C1・A0/470k/1.47M/NiMH・JOY oversampling・CDC・cormoran ZMK・Bongo Cat・3-wireを保持。2026-08-27、ユーザーが左JOY/右TBを照合後に8421728 UF2を両手へ書込。左COM326(Studio)→H→Debug COM325復帰とZephyr起動を確認。COM325 trigger無反応は対象port違いで故障としない。右COM327→I→COM327復帰、起動とsplit接続は合格したがPMW Product ID=0x00(expected0x3e)、OBSERVATION=0xff、11 attempts後step2失敗。右のみhash照合済みed5cba4配布UF2へ戻しても同じ初期化失敗を再現。比較rollback操作は完了だが復旧ではなく、新pin-release起因の回帰は未立証。右は旧版、左は新JOY版のまま。次は右完全powercycle・物理module配線確認。左JOY入力/OLED目視も未確認、hardware完了扱いにしない。過去pointer合格記録は保持。stable/maintenance未merge、firmware PRなし。",
+      "notes": "P0。以下はESB移行前の比較時履歴。検証source8421728は9/9 pristine・101 assertions・CI合格。未使用UART/SPIと右I2Cを解放し、左OLED I2C1・A0/470k/1.47M/NiMH・JOY oversampling・CDC・cormoran ZMK・Bongo Cat・3-wireを保持。2026-08-27、ユーザーが左JOY/右TBを照合後に8421728 UF2を両手へ書込。左COM326(Studio)→H→Debug COM325復帰とZephyr起動を確認。COM325 trigger無反応は対象port違いで故障としない。右COM327→I→COM327復帰、起動とsplit接続は合格したがPMW Product ID=0x00(expected0x3e)、OBSERVATION=0xff、11 attempts後step2失敗。右のみhash照合済みed5cba4配布UF2へ戻しても同じ初期化失敗を再現。比較rollback操作は完了だが復旧ではなく、新pin-release起因の回帰は未立証。比較直後は右旧版/左新JOY版で、右完全powercycle・物理module配線確認を依頼した。左JOY入力/OLED目視も未確認、hardware完了扱いにしない。過去pointer合格記録は保持。stable/maintenance未merge、firmware PRなし。その後左右ともESB試験へ移行し、現在のfirmware/実結果はpolaris-esb-usb-only-trialと同検証報告を参照。既存の失敗gateは変更しない。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",

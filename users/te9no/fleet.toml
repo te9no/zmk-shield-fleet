@@ -6,6 +6,20 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
+id = "polaris-esb-usb-only-trial"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "polaris"
+action = "現行72801a6のPolaris右の文字キーを数回押してもらい、source0 keyevent件数と実受信を確認する。続いて再接続、JOY動作、OLEDを確認する。ACK直接計数なし、USB必須、機密入力禁止。"
+completion = "専用branchの確定commitと左右artifactを記録し、build/config/flash/CDC/USB入力/実ESB event/再接続/JOY/TB/OLEDのgateを個別に確認する。接続表示だけで合格にせず、既存PMW失敗を解消扱いしない。"
+blocker = "両手72801a6再flash/CDC起動済み。just.sh pristine2/2・112assertions・DBG抑制合格、公開専用branchのCIはpending。右PMW PID00初期化失敗は別件として継続。ESB実受信/入力/再接続とJOY/OLEDは未確認で、右キー操作を依頼してcapture中。通常BLEは元branch/profile、1ms/電力未測定。"
+repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-esb-validation"
+change_id = "polaris-esb-usb-only-trial"
+validation_keys = ["security-review", "log-privacy-cap", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
+variant_ids = ["left-joy-usb-central", "right-tb-esb-peripheral"]
+
+[[next_actions]]
 id = "polaris-pinmux-hardware"
 state = "waiting"
 priority = "high"
@@ -13,7 +27,7 @@ order = 2
 repository = "polaris"
 action = "右USB切断・電池OFF・TB接続確認後の再接続を待ち、CDCでPMW初期化を再確認する。左JOY入力とOLEDも目視確認する。"
 completion = "右PMW初期化/入力と左JOY/OLEDが実機合格し、対象revision付きで記録される。新旧同症状の原因未確定を解消し、旧版rollbackを復旧成功と混同しない。"
-blocker = "左JOY/右TB照合・8421728書込済み。左はCOM326→H→COM325起動、右はCOM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4 UF2でも同症状。右は旧版、左は新JOY版。完全powercycle等をユーザーへ依頼済みで待機。左JOY/OLED未確認、mergeなし。"
+blocker = "旧比較時の履歴: 左JOY/右TB照合・8421728書込、左COM326→H→COM325起動、右COM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4でも同症状で、比較直後は右旧版/左新JOY版だった。その後左右ともESB試験へ移行。最新状態はpolaris-esb-usb-only-trial参照。既存失敗gateと未確認JOY入力/OLEDは保持、mergeなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
 validation_keys = ["right-tb-sensor-init", "right-tb-baseline-sensor-init", "right-tb-comparison-rollback", "left-joy-module-input", "left-oled-visual", "hardware"]
