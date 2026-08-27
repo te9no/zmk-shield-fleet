@@ -24,9 +24,9 @@ on `codex/madula-lpps-pinout` is based on `main@794987c`.
   calibration averages 58100/65375, and the polling loop. The expected warning
   is that the DRDY GPIO is not configured and timed polling is used.
 
-The user confirmed communication and movement, but reported **「90度傾いてる上に入れると左に行く」**. Thus this source has a failed orientation result, not a complete physical-input pass; a separate orientation correction is pending. LPPS Studio is not present
+The user confirmed movement on `373edbc`, but reported **「90度傾いてる上に入れると左に行く」**. This revision failed orientation; the correction and its acceptance are recorded below. LPPS Studio is not present
 in this firmware and is not a validation gate; a COM447 Studio-style response
-of zero would be non-diagnostic. CI has not yet been checked.
+of zero would be non-diagnostic.
 
 The replacement [`819f6e7f3480a470c01573194c6d4ce790d6df71`](https://github.com/te9no/zmk-keyboard-cornix/commit/819f6e7f3480a470c01573194c6d4ce790d6df71)
 uses `x=-ADC1, y=-ADC0`, mapping `(newX, newY)=(-oldY, oldX)`. Its clean
@@ -36,12 +36,15 @@ Source/generated DTS/config and direction audits passed. At 22:18 JST it was
 flashed through COM447 at 1200 baud; boot diagnostics, USB endpoint, ADS init,
 ADC1/ADC0 channel setup, and calibration averages 65712/58484 were observed.
 The boot-log SHA-256 is `43cec627b2bf8c131e2ec38a85e887fffd788b59eca1a605dddbdaabfccf3564`.
-Physical direction remains pending for this new revision. Firmware CI
-[33076040353](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33076040353)
-is pending; only Draw ZMK Keymaps run 33076040423 has passed.
+The user confirmed **「方向はOKです」**, but reported movement constrained to the
+four cardinal directions. Orientation therefore passed on this revision;
+unrestricted XY movement did not. A keymap-drawing CI success is not treated
+as a firmware-build pass.
 
 The latest [`81644c2608da34a483209f0512fa8291f701b3ce`](https://github.com/te9no/zmk-keyboard-cornix/commit/81644c2608da34a483209f0512fa8291f701b3ce)
-removes only `dominant-axis-lock`; the generated DTS confirms it is `0`.
+removes only `dominant-axis-lock`. The property is absent from the generated
+DTS, and the generated C header explicitly defines
+`DT_N_S_analog_axis_hires_0_P_dominant_axis_lock` as `0`.
 Direction remained unchanged from user-accepted `819f6e7`, but free XY physical
 acceptance is pending. Clean build, audit, and COM447 flash/boot passed at
 22:21:30/22:22 JST; UF2 SHA-256 is `15e79ee5814df791c2ea709945c4d5500ed09c96e87ffd12aef7bffab3b0b088`,
