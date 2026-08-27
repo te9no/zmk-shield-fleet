@@ -64,19 +64,30 @@
     },
     "cornix": {
       "status": "merged",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/1",
-      "commit": "63e784de595afa9dc1eb2a9308bbb99d0c9f2028",
-      "notes": "PR #1がmainへmerge済み。Polarisと同じdriver revisionおよび設定値をMadula IQSへ反映。buildは合格済みだが、Madula IQSのmodule固有入力は台帳上の実機証跡がないためpending。",
-      "branch": "codex/promote-madula-zmk-0.4-to-main",
+      "pr": null,
+      "commit": "578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
+      "notes": "2026-08-28にMadula IQSのSDAをP1.15からP1.14へ修正し、ROTATE_270で取り付け方向を補正。CDCでProduct ID 0x09bcと初期化完了、ユーザーが入力・方向OKを確認し、明示許可でmainへ統合・push。通常版just.sh buildと生成DTS検証は成功。実機確認は診断版で、統合後通常版の再flash、gesture、cold-start、長時間、split接続は未確認。ShiniNet本家driverとTWIMは変更なし。",
+      "branch": "main",
       "base_branch": "main",
-      "pr_head": "ed4f991931c8ddfa7b1b652c34dd4d144103bf40",
       "validation": {
-        "ci": "passed",
-        "hardware": "pending"
+        "build": "passed",
+        "config-dts": "passed",
+        "ci": "pending",
+        "init": "passed",
+        "input": "passed",
+        "direction": "passed",
+        "gestures": "pending",
+        "cold-start": "pending",
+        "long-duration": "pending",
+        "split-connectivity": "pending"
       },
       "validation_urls": {
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32774773130",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/zmk-0.4"
+        "build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "config-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33127943387",
+        "init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "direction": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md"
       }
     }
   },

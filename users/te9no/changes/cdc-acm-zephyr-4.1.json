@@ -154,20 +154,24 @@
       "status": "merged",
       "pr": null,
       "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
-      "notes": "Cornix mainへCDC Debugと1200 baud boot設定を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格し、書き込み、2 CDC列挙、DYA Studio接続も実機合格。1200 baudによるbootloader遷移のみ未確認。PR #3はclosed、validation branchは削除し、保守用zmk-0.4は保持した。",
+      "notes": "Cornix mainへCDC Debugと1200 baud boot設定を統合。既存12/12 buildとDYA Studio実機合格を維持。2026-08-28にMadula IQS診断版で1200 baud boot、flash、通常CDC復帰、IQS初期化ログを実機確認。IQSのSDA/方向修正はmain@578c9f1へ統合済み。main/TB variantの1200 baudは未確認のまま保持し、IQS/LPPSの結果を転用しない。",
       "validation": {
         "build": "passed",
         "flash": "passed",
         "cdc-enumeration": "passed",
         "dya-studio": "passed",
-        "1200-baud": "pending"
+        "1200-baud": "pending",
+        "iqs-1200-baud": "passed",
+        "iqs-cdc-log": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
         "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
         "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
         "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
-        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
+        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "iqs-1200-baud": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "iqs-cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md"
       },
       "branch": "main",
       "base_branch": "main"

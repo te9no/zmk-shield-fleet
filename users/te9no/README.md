@@ -5,8 +5,10 @@ ledger, and audit notes. It is data consumed by the generic `shield-fleet` CLI;
 none of it is required by other users of the project.
 
 `rollout_order` is the personal deployment queue shown on GitHub Pages. Cornix
-Madula Trackball is complete on `main@794987c`; its remaining 1200-baud and IQS
-checks are independent items. SAA is the currently active dedicated-branch
+Madula Trackball is complete on `main@794987c`. Madula IQS input/direction and
+its CDC boot/log path passed on 2026-08-28; the SDA/rotation fix is integrated in
+`main@578c9f1`. IQS extended checks and Trackball's 1200-baud check remain
+independent items. SAA is the currently active dedicated-branch
 validation; MKB2 and GeaconSolstice follow as already validated references, and
 order 99 is the lowest-priority backlog.
 CI success only advances a validation branch; default-branch promotion requires
