@@ -11,12 +11,12 @@ state = "waiting"
 priority = "high"
 order = 1
 repository = "polaris"
-action = "fork58c8f91を使うPolaris候補3b7cc78の実機確認は、次回の明示依頼後に行う。今回はbuild/監査までで書き込まない。host合格とRF/実機合格を分ける。"
-completion = "新候補のflash/CDC/入力/hardwareを対象revisionで実測して記録する。今回の公開fork・host87cases・左右build2/2・115assertionsの完了だけで実機完了にはしない。"
-blocker = "fork58c8f91公開/host87cases ASan/UBSan/forkCI成功。候補3b7cc78はjust.sh pristine2/2・115assertions成功、PolarisCIはpending。未flashで両手は旧72801a6+upstream314c7cb。旧CDC合格・PMW失敗は履歴、新候補の実機gateは全pending。upstream PRなし。"
+action = "次回の書込み依頼後、Polaris候補64860ddを左右へ入れ、DYA Studioで右source1の単発PMW診断を確認する。両CDCのrelay受信件数と実際のRPC応答を照合する。"
+completion = "対象revisionで左右flash/CDC、右PMW初期化、単発RPC往復とキー/ポインター入力を実測する。host96件・build合格だけでは実機完了にしない。"
+blocker = "ESB fork656477cのRPC relay実装とhost96件ASan/UBSan・独立レビュー・fork CIは合格。候補64860ddはjust.sh/生成物監査対象。未flash、RPC実機往復はpending。最終実機記録は旧72801a6。ALL_CONNECTEDは切断検知ではないため連続streamは別gate。upstream PRなし。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-esb-validation"
 change_id = "polaris-esb-usb-only-trial"
-validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
+validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "relay-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "relay-rpc-roundtrip", "relay-disconnect", "relay-streaming", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
 variant_ids = ["left-joy-usb-central", "right-tb-esb-peripheral"]
 
 [[next_actions]]
