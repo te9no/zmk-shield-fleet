@@ -1,9 +1,9 @@
 {
   "schema": 1,
   "id": "polaris-esb-usb-only-trial",
-  "enabled": true,
+  "enabled": false,
   "title": "ESB split transportをPolarisでUSB-only試験",
-  "description": "Polaris限定USB Central/ESB Peripheral試験。DYA Studioの左右間RPC relayをte9no fork656477cに追加し、候補64860ddへ統合。host96件ASan/UBSanと独立レビュー合格、fork CI成功。左右just.sh pristineと生成物監査を実施。2026-08-27 20:32 JSTに一致するUF2 pairをflashし、両CDC bootを確認。右PMW初期化はこの64860ddでのみ合格。local USB Studio列挙/要求受理は合格したが、right source1 GetInfoはPeripheral応答なしでrelay RPC往復が失敗。入力/OLEDはpending。BLE同居・暗号認証・live-link切断検知は未対応。",
+  "description": "ユーザー指示で終了したPolaris限定USB Central/ESB Peripheral試験であり、成功完了ではない。DYA Studioの左右間RPC relayをte9no fork656477cに追加し、候補64860ddへ統合。host96件ASan/UBSanと独立レビュー合格、fork CI成功。左右just.sh pristineと生成物監査を実施。2026-08-27 20:32 JSTに一致するUF2 pairをflashし、両CDC bootを確認。右PMW初期化はこの64860ddでのみ合格。local USB Studio列挙/要求受理は合格したが、right source1 GetInfoはPeripheral応答なしでrelay RPC往復が失敗。入力/OLEDはpending。BLE同居・暗号認証・live-link切断検知は未対応。",
   "source": {
     "repository": "te9no/zmk-feature-split-esb",
     "from_revision": "58c8f912dae87b8197c4d6229e3f2df8cc52daaf",
@@ -16,11 +16,11 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pending",
+      "status": "closed",
       "pr": null,
       "commit": "64860dde60bf7b20d35bfec0d3d5f61925141be9",
       "branch": "codex/zmk-0.4-esb-validation",
-      "notes": "候補64860ddはrelay-capable ESB656477cに固定。左右relay/PMW/custom-settings/core-settings RPCと左PMW Studio subsystemを有効化。両CDCに5秒間隔上限の再結合済みrelay受信件数を追加（payload/設定値を出力しない）。host96件ASan/UBSan、独立レビュー、fork CI33066224904成功。just.sh pristine左右と生成DTS/config/ELF/CDC/UF2監査の結果・hashは検証報告参照。2026-08-27 20:32 JSTに一致するUF2 pairをflashし、left COM326→H serial7192CB7FFA85E5D1→DebugCOM325、right COM327→I serial07410F37C96F9FEF→DebugCOM327を確認。両CDC bootとright PMW3610 initialized step3/CPI800（previous PID errorなし）は64860ddの実測。flash copyも両方完了。旧72801a6+upstream314c7cbのCDC/PMW失敗は歴史的結果のまま、新候補に転用しない。またこの新revisionのPMW初期化合格からrelayがsensorを修正したとは結論しない。CI33066366370はhead64860ddでsuccess。native local Studioはleft COM326で左local custom subsystem列挙とright source1 GetInfo要求を受理したが、2回目20:39:04 JSTと3回目20:40:36 JSTを含む3回のGetInfoはdeferred応答後8秒間Peripheral応答なし、両Debug CDCにもrelay受信件数なしでrelay RPC往復はfailed。3回目は両DebugにもDTR/RTSをassertしたが同じ結果で、DTR説明は支持されない。ESB接続、物理入力、OLEDはpending。次手は再flash/UI試験でなくESB delivery/receiveの診断。ALL_CONNECTEDはlivenessではなく、stream自動停止を保証しない。通常BLE・stable/maintenanceは未変更。",
+      "notes": "ユーザー指示で実験を終了したためclosed。これは成功完了ではなく、ESB delivery/receiveの追加診断や再flash/UI試験は次アクションではない。候補64860ddはrelay-capable ESB656477cに固定。左右relay/PMW/custom-settings/core-settings RPCと左PMW Studio subsystemを有効化。両CDCに5秒間隔上限の再結合済みrelay受信件数を追加（payload/設定値を出力しない）。host96件ASan/UBSan、独立レビュー、fork CI33066224904成功。just.sh pristine左右と生成DTS/config/ELF/CDC/UF2監査の結果・hashは検証報告参照。2026-08-27 20:32 JSTに一致するUF2 pairをflashし、left COM326→H serial7192CB7FFA85E5D1→DebugCOM325、right COM327→I serial07410F37C96F9FEF→DebugCOM327を確認。両CDC bootとright PMW3610 initialized step3/CPI800（previous PID errorなし）は64860ddの実測。flash copyも両方完了。旧72801a6+upstream314c7cbのCDC/PMW失敗は歴史的結果のまま、新候補に転用しない。またこの新revisionのPMW初期化合格からrelayがsensorを修正したとは結論しない。CI33066366370はhead64860ddでsuccess。native local Studioはleft COM326で左local custom subsystem列挙とright source1 GetInfo要求を受理したが、2回目20:39:04 JSTと3回目20:40:36 JSTを含む3回のGetInfoはdeferred応答後8秒間Peripheral応答なし、両Debug CDCにもrelay受信件数なしでrelay RPC往復はfailed。3回目は両DebugにもDTR/RTSをassertしたが同じ結果で、DTR説明は支持されない。ESB接続、物理入力、OLEDはpending。ALL_CONNECTEDはlivenessではなく、stream自動停止を保証しない。通常BLE・stable/maintenanceは未変更。",
       "validation": {
         "dependency-pins": "passed",
         "source-audit": "passed",

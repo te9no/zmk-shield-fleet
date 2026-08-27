@@ -6,36 +6,24 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
-id = "polaris-esb-usb-only-trial"
-state = "active"
+id = "polaris-pinmux-hardware"
+state = "waiting"
 priority = "high"
 order = 1
 repository = "polaris"
-action = "Polaris候補64860ddで失敗したright source1 GetInfoのESB delivery/receiveを診断する。payloadを出さないESB TX/RX/ACK/error counterでlossを局所化し、blanket debugやkeystroke payload loggingを有効化しない。local Studio列挙/要求受理は再確認不要で、unchanged UF2の再flashだけやUIだけの再試験を依頼しない。"
-completion = "対象revisionでESB経由の単発RPC往復、キー/ポインター入力を実測する。host96件・build合格、local request受理や受信件数だけでは実機完了にしない。"
-blocker = "ESB fork656477cのRPC relay実装とhost96件ASan/UBSan・独立レビュー・fork CIは合格。候補64860ddはjust.sh/生成物監査とCI33066366370 success済みで、2026-08-27 20:32 JSTに左右flash/CDC boot・右PMW初期化を実測。native local Studioは左local custom subsystem列挙とright source1 GetInfo要求を受理したが、2回目20:39:04 JSTと3回目20:40:36 JSTを含む3回のGetInfoはdeferred応答後8秒間Peripheral応答なし、両Debug CDCにもrelay受信件数なしでrelay-rpc-roundtripはfailed。3回目は両DebugのDTR/RTSもassertしたが同じ結果で、DTR説明は支持されない。deferred responseはlocal enqueue/raise-event成功でradio ACK/deliveryの証拠ではない。compiled radio address/role/ACK/CRC/relay limitsには不一致の証跡がなく、INFOにはraw ACK telemetryがないため原因未特定。ESB接続、物理入力、OLEDはpending。旧72801a6の結果は歴史的記録のまま。ALL_CONNECTEDは切断検知ではないため連続streamは別gate。upstream PRなし。"
-repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-esb-validation"
-change_id = "polaris-esb-usb-only-trial"
-validation_keys = ["retry-identity-host", "rx-progress-host", "small-command-host", "init-error-host", "relay-host", "fork-ci", "security-review", "log-privacy-cap", "log-privacy-runtime", "targeted-build", "ci", "ble-target-isolation", "generated-config", "left-flash", "right-flash", "cdc-debug", "local-studio-rpc", "relay-rpc-roundtrip", "relay-disconnect", "relay-streaming", "usb-host-input", "esb-connectivity", "esb-key-input", "esb-pointer-relay", "esb-reconnect", "right-tb-sensor-init", "hardware"]
-variant_ids = ["left-joy-usb-central", "right-tb-esb-peripheral"]
-
-[[next_actions]]
-id = "polaris-pinmux-hardware"
-state = "later"
-priority = "medium"
-order = 2
-repository = "polaris"
-action = "このpinmux比較は歴史的記録として保持する。現行64860ddの実機確認はpolaris-esb-usb-only-trialを優先し、必要時だけ当時のrevisionを明示した再比較を行う。"
-completion = "8421728/ed5cba4の歴史的PMW失敗と64860ddの別revisionでの初期化合格を混同せず、必要なら対象revision付きで再比較を記録する。"
-blocker = "旧比較時の履歴: 左JOY/右TB照合・8421728書込、左COM326→H→COM325起動、右COM327→I→COM327起動/split合格だがPID00/OBSffでPMW初期化失敗。右旧ed5cba4でも同症状で、比較直後は右旧版/左新JOY版だった。その後左右ともESB試験へ移行。64860ddでは2026-08-27に右PMW初期化が合格したが、これは旧失敗の原因やrelayの効果を確定しない。既存失敗結果と未確認JOY入力/OLEDは歴史的に保持、mergeなし。"
+action = "通常BLEのPolaris pinmux検証8421728は左右matched pairへ復旧済み。ユーザーによるphysical左JOY入力/OLEDと右TB入力（方向・速度・連続性）を確認し、revision付きで記録する。BLE split/Studio RPC合格をphysical入力やOLED合格へ転用しない。"
+completion = "8421728の通常BLE pairでleft JOY入力/OLEDとright TB入力を実測し、各結果をrevision付きで記録する。BLE split接続、remote PMW GetInfo RPC、boot、sensor初期化の合格だけではoverall hardwareを完了にしない。"
+blocker = "ESB実験はユーザー指示で終了し、成功完了ではない。64860dd/656477cのrelay RPC往復failedと未完了gateは歴史的証跡として保持する。2026-08-27 21:04:23 JSTまでに左右とも通常BLE8421728へ復旧し、left COM326→H→serial7192CB7FFA85E5D1 copy→COM325 boot、right COM327→I→serial07410F37C96F9FEF copy→COM327 boot、BLE security callbackを確認した。native Studio COM326@12500ではPMW subsystem index2を列挙し、source1 GetInfoがPeripheralResponse（Device ready、Product ID0x3e、revision0x01、runtime CPI800）を返した。設定write、stream、keymap dumpは行っていない。physical JOY/TB入力とOLEDは未確認。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["right-tb-sensor-init", "right-tb-baseline-sensor-init", "right-tb-comparison-rollback", "left-joy-module-input", "left-oled-visual", "hardware"]
+validation_keys = ["right-tb-sensor-init", "right-tb-module-input", "left-joy-module-input", "left-oled-visual", "hardware"]
 variant_ids = ["left-joy", "right-tb"]
 evidence = [
   { label = "Polaris validation@8421728 (9/9, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942" },
   { label = "Polaris CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324" },
-  { label = "New and baseline UF2: PMW init failed; CDC/boot/split passed", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md" },
+  { label = "Right TB BLE restore@8421728: boot and PMW initialized/CPI800", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-ble-restore" },
+  { label = "Matched BLE 8421728 pair: split and remote PMW GetInfo RPC", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc" },
+  { label = "Historical pre-restore 8421728/ed5cba4: PMW init failed", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback" },
 ]
 
 [[next_actions]]

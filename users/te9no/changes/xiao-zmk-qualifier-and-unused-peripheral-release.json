@@ -171,7 +171,7 @@
       "commit": "84217286bbc5d064b1d6a3e3b3f671017e687942",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。以下はESB移行前の比較時履歴。検証source8421728は9/9 pristine・101 assertions・CI合格。未使用UART/SPIと右I2Cを解放し、左OLED I2C1・A0/470k/1.47M/NiMH・JOY oversampling・CDC・cormoran ZMK・Bongo Cat・3-wireを保持。2026-08-27、ユーザーが左JOY/右TBを照合後に8421728 UF2を両手へ書込。左COM326(Studio)→H→Debug COM325復帰とZephyr起動を確認。COM325 trigger無反応は対象port違いで故障としない。右COM327→I→COM327復帰、起動とsplit接続は合格したがPMW Product ID=0x00(expected0x3e)、OBSERVATION=0xff、11 attempts後step2失敗。右のみhash照合済みed5cba4配布UF2へ戻しても同じ初期化失敗を再現。比較rollback操作は完了だが復旧ではなく、新pin-release起因の回帰は未立証。比較直後は右旧版/左新JOY版で、右完全powercycle・物理module配線確認を依頼した。左JOY入力/OLED目視も未確認、hardware完了扱いにしない。過去pointer合格記録は保持。stable/maintenance未merge、firmware PRなし。その後左右ともESB試験へ移行し、現在のfirmware/実結果はpolaris-esb-usb-only-trialと同検証報告を参照。既存の失敗gateは変更しない。",
+      "notes": "P0。検証source8421728は9/9 pristine・101 assertions・CI合格。未使用UART/SPIと右I2Cを解放し、左OLED I2C1・A0/470k/1.47M/NiMH・JOY oversampling・CDC・cormoran ZMK・Bongo Cat・3-wireを保持。右8421728は一度PMW Product ID=0x00(expected0x3e)、OBSERVATION=0xff、11 attempts後step2失敗し、hash照合済みed5cba4配布UF2でも同じ失敗を再現した。これは歴史的failed evidenceとして保持する。2026-08-27 21:02:45 JSTに右8421728通常BLEを再書込しCOM327 boot/PMW3610 initialized/CPI800を確認。21:04:23 JSTまでにleft COM326→H→serial7192CB7FFA85E5D1 copy→COM325 bootで左も8421728へ復旧し、right BLE security callbackを確認した。native Studio COM326@12500ではPMW subsystem index2を列挙、source1 GetInfoはPeripheralResponse（Device ready、Product ID0x3e、revision0x01、runtime CPI800）を返した。設定write、stream、keymap dumpはなし。matched BLE pair、split、remote read RPC、boot、sensor-initは合格だが、physical left JOY/right TB入力とOLEDは未確認でoverall hardwareはpending。stable/maintenance未merge、firmware PRなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
@@ -183,11 +183,12 @@
         "left-joy-flash-boot": "passed",
         "right-tb-flash-boot": "passed",
         "right-tb-split-connectivity": "passed",
-        "right-tb-sensor-init": "failed",
+        "right-tb-sensor-init": "passed",
+        "ble-restore-pair": "passed",
+        "studio-peripheral-read-rpc": "passed",
         "left-joy-module-input": "pending",
         "left-oled-visual": "pending",
-        "right-tb-comparison-rollback": "passed",
-        "right-tb-baseline-sensor-init": "failed",
+        "right-tb-module-input": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
@@ -201,9 +202,9 @@
         "left-joy-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
         "right-tb-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
         "right-tb-split-connectivity": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md",
-        "right-tb-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-sensor-failure",
-        "right-tb-comparison-rollback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
-        "right-tb-baseline-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback",
+        "right-tb-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-ble-restore",
+        "ble-restore-pair": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc",
+        "studio-peripheral-read-rpc": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc",
         "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md"
       },
       "variants": [
@@ -215,6 +216,7 @@
             "1200-baud": "passed",
             "cdc-return": "passed",
             "boot": "passed",
+            "ble-restore": "passed",
             "module-input": "pending",
             "oled-visual": "pending",
             "hardware": "pending"
@@ -235,18 +237,28 @@
             "1200-baud": "passed",
             "cdc-return": "passed",
             "boot": "passed",
+            "ble-restore": "passed",
             "split-connectivity": "passed",
-            "sensor-init": "failed",
+            "sensor-init": "passed",
+            "studio-peripheral-read-rpc": "passed",
             "module-input": "pending",
-            "comparison-rollback": "passed",
-            "baseline-sensor-init": "failed",
-            "hardware": "failed"
+            "hardware": "pending"
           },
           "evidence": [
             {
-              "label": "COM327 flash/boot/split passed; PMW Product ID 0x00, init step 2 failed",
+              "label": "2026-08-27 21:02:45 JST: BLE 8421728 restore booted and PMW initialized/CPI800",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-ble-restore"
+            },
+            {
+              "label": "Historical 8421728 attempt: PMW Product ID 0x00, init step 2 failed",
               "status": "failed",
               "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-sensor-failure"
+            },
+            {
+              "label": "Historical ed5cba4 comparison: same PMW initialization failure after rollback",
+              "status": "failed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback"
             }
           ]
         }
