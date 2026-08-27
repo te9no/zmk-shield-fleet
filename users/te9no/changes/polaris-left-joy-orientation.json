@@ -1,0 +1,80 @@
+{
+  "schema": 1,
+  "id": "polaris-left-joy-orientation",
+  "enabled": true,
+  "title": "Polaris左JOYの90度方向ずれを左だけで補正する",
+  "description": "8421728の実機でphysical LEFTがcursor UPへ動く90度ずれを確認したため、左JOY overlayだけをXY_SWAP | X_INVERTへ変更する。これは(newX, newY) = (-oldY, oldX)の変換であり、ADC、pointer speed、trackball設定、右halfを変更しない。",
+  "source": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "from_revision": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+    "to_revision": "8de074a06c5bdca580fd4f1b26dc03647d41a10d",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/8de074a06c5bdca580fd4f1b26dc03647d41a10d",
+    "notes": "snippets/JOY/JOY.overlayだけをXY_SWAP | X_INVERT（param3）へ変更する左-only候補。right TBをrebuild/flashせず、ESB transportを再導入しない。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "84217286bbc5d064b1d6a3e3b3f671017e687942",
+    "change_url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-failure",
+    "notes": "8421728のphysical left-JOY試験でLEFT→cursor UPを確認。"
+  },
+  "repositories": ["polaris"],
+  "tracking": {
+    "polaris": {
+      "status": "applied",
+      "pr": null,
+      "commit": "1fdc244ce05d593abb71f8c3b04bf7d6f851c5dc",
+      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "base_branch": "zmk-0.4",
+      "notes": "公開branch head@1fdc244は8de074a sourceの公開と、8de9473向け既存CI artifact 615f53aの保全mergeを含む。left-only source@8de074aはlocal incremental build-fast Polaris_L_MODULE_JOY 1/1、4 cardinal-vector/overlay audit、generated-DTS param3、101 preservation assertionsに合格。UF2 999936 bytes SHA-256 6de57ae4ce58c23364ea58670d23d5ecda266e80a5a5cf31510a46924c3579c0を2026-08-27 21:38:59 JSTにleftのみflashしCOM325 bootを確認。ユーザーはJOY direction acceptanceと長時間動作を合格としたが、速度、時間、各方向の個別測定値は未申告。CI 33072906476@1fdc244は9/9 build、publish、build-healthすべてsuccess。前候補8de9473は「上下逆、左右も逆」でJOY failed、OLEDはuser OK。right TBは8421728 UF2 SHA-256 296aad41178784752b89ebb94fd9dbe0f1fc38191f5462eaf4f06eaf02976d52のままunchangedでuser OK、新しいmatched buildではない。",
+      "validation": {
+        "source-audit": "passed",
+        "cardinal-orientation-audit": "passed",
+        "generated-dts": "passed",
+        "preserved-config": "passed",
+        "targeted-build": "passed",
+        "left-joy-flash-boot": "passed",
+        "ci": "passed",
+        "left-joy-module-input": "passed",
+        "left-joy-continuous-operation": "passed",
+        "left-oled-visual": "passed",
+        "hardware": "passed"
+      },
+      "validation_urls": {
+        "source-audit": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/8de074a06c5bdca580fd4f1b26dc03647d41a10d",
+        "cardinal-orientation-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "targeted-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "left-joy-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072906476",
+        "left-joy-module-input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "left-joy-continuous-operation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "left-oled-visual": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate"
+      },
+      "variants": [
+        {
+          "id": "left-joy",
+          "status": "passed",
+          "validation": {
+            "source-audit": "passed",
+            "targeted-build": "passed",
+            "flash-boot": "passed",
+            "module-input": "passed",
+            "continuous-operation": "passed",
+            "oled-visual": "passed",
+            "hardware": "passed"
+          },
+          "evidence": [
+            {
+              "label": "Left-only source@8de074a: build/flash/boot, user direction acceptance and continuous operation",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "steps": []
+}

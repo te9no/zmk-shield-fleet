@@ -6,27 +6,6 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
-id = "polaris-pinmux-hardware"
-state = "waiting"
-priority = "high"
-order = 1
-repository = "polaris"
-action = "通常BLEのPolaris pinmux検証8421728は左右matched pairへ復旧済み。ユーザーによるphysical左JOY入力/OLEDと右TB入力（方向・速度・連続性）を確認し、revision付きで記録する。BLE split/Studio RPC合格をphysical入力やOLED合格へ転用しない。"
-completion = "8421728の通常BLE pairでleft JOY入力/OLEDとright TB入力を実測し、各結果をrevision付きで記録する。BLE split接続、remote PMW GetInfo RPC、boot、sensor初期化の合格だけではoverall hardwareを完了にしない。"
-blocker = "ESB実験はユーザー指示で終了し、成功完了ではない。64860dd/656477cのrelay RPC往復failedと未完了gateは歴史的証跡として保持する。2026-08-27 21:04:23 JSTまでに左右とも通常BLE8421728へ復旧し、left COM326→H→serial7192CB7FFA85E5D1 copy→COM325 boot、right COM327→I→serial07410F37C96F9FEF copy→COM327 boot、BLE security callbackを確認した。native Studio COM326@12500ではPMW subsystem index2を列挙し、source1 GetInfoがPeripheralResponse（Device ready、Product ID0x3e、revision0x01、runtime CPI800）を返した。設定write、stream、keymap dumpは行っていない。physical JOY/TB入力とOLEDは未確認。"
-repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
-change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["right-tb-sensor-init", "right-tb-module-input", "left-joy-module-input", "left-oled-visual", "hardware"]
-variant_ids = ["left-joy", "right-tb"]
-evidence = [
-  { label = "Polaris validation@8421728 (9/9, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/commit/84217286bbc5d064b1d6a3e3b3f671017e687942" },
-  { label = "Polaris CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33037002324" },
-  { label = "Right TB BLE restore@8421728: boot and PMW initialized/CPI800", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#right-tb-ble-restore" },
-  { label = "Matched BLE 8421728 pair: split and remote PMW GetInfo RPC", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc" },
-  { label = "Historical pre-restore 8421728/ed5cba4: PMW init failed", status = "failed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#comparison-rollback" },
-]
-
-[[next_actions]]
 id = "mkb-pinmux-hardware"
 state = "waiting"
 priority = "high"
