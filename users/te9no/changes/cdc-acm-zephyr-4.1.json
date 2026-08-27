@@ -31,21 +31,20 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-      "commit": "07bd951a1e73319cc6fa93004306945c6cdab958",
-      "branch": "codex/zmk-0.4-cdc-debug-right",
+      "status": "merged",
+      "pr": null,
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "pr_head": "db78208e1d007aff6bbe8cce2a3572dd49439be3",
-      "notes": "zmk-0.4起点の専用Draft PR #7で、廃止したIQS専用debug artifact/snippetに代えて右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用。board CDCを無効化し、USB loggingの1 CDCに1200 baud boot triggerを接続した。左のStudio/boot/Bongo構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機のCOM327を1200 baud+DTRでI:XIAO-BOOTへ遷移させ、新UF2を書き込み、COM327復帰、CDC trigger初期化、ZMK boot、Peripheral connectedを確認した。IQSログをerror以上に限定したartifactでRDY timeoutとERRがないことも確認済み。TB/TPDのmodule固有入力は別途実機待ち。Draftを維持し、zmk-0.4へは未merge。",
+      "notes": "右の通常TB/TPD/IQS全targetへzmk-usb-loggingとcdc-debug-bootを適用し、Actions 32742627186で全9 target成功。2026-08-25に右IQSで1200 baud、flash、COM327復帰、CDC log、module入力を実機確認。2026-08-26には右TBをCOM327の1200 baud+DTRでI:XIAO-BOOTへ移行し、flash、COM327復帰、controller/PMW3610起動ログ、全初期転送result=0、ポインタ入力、split relayを実機合格とした。検証済みsourceを生成UF2なし・PRなしでac1a312としてzmk-0.4へ直接統合し、stable mainは変更していない。統合後に右TB、左JOY、settings_resetを再build済み。右TPDのみ未確認。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
         "ci": "passed"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-        "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
+        "build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
+        "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
       },
       "variants": [
@@ -62,9 +61,9 @@
           },
           "evidence": [
             {
-              "label": "Draft PR #7",
-              "status": "info",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+              "label": "Polaris zmk-0.4 integration@ac1a312",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de"
             },
             {
               "label": "9/9 CI",
@@ -75,20 +74,25 @@
         },
         {
           "id": "right-tb",
-          "status": "pending",
+          "status": "passed",
           "validation": {
-            "flash": "pending",
-            "cdc-enumeration": "pending",
-            "1200-baud": "pending",
-            "cdc-log": "pending",
-            "module-input": "pending",
-            "split-connectivity": "pending"
+            "flash": "passed",
+            "cdc-enumeration": "passed",
+            "1200-baud": "passed",
+            "cdc-log": "passed",
+            "module-input": "passed",
+            "split-connectivity": "passed"
           },
           "evidence": [
             {
-              "label": "Draft PR #7 hardware gate",
-              "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+              "label": "Right-TB 1200-baud, flash, and COM327 CDC record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+            },
+            {
+              "label": "Pointer input and split relay",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
             }
           ]
         },
@@ -105,9 +109,9 @@
           },
           "evidence": [
             {
-              "label": "Draft PR #7 hardware gate",
+              "label": "Polaris zmk-0.4 right-TPD hardware gate",
               "status": "pending",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7"
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
             }
           ]
         }
@@ -147,10 +151,10 @@
       "base_branch": "master"
     },
     "cornix": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
-      "notes": "Draft PR #3でMadulaを含む対象構成へCDC Debugと1200 baud bootを統合。12/12 CI、書き込み、2 CDC列挙、DYA Studio接続は実機合格。1200 baudによるbootloader遷移のみ未確認のためDraftを維持する。",
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "Cornix mainへCDC Debugと1200 baud boot設定を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格し、書き込み、2 CDC列挙、DYA Studio接続も実機合格。1200 baudによるbootloader遷移のみ未確認。PR #3はclosed、validation branchは削除し、保守用zmk-0.4は保持した。",
       "validation": {
         "build": "passed",
         "flash": "passed",
@@ -159,15 +163,14 @@
         "1200-baud": "pending"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "base_branch": "zmk-0.4",
-      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d"
+      "branch": "main",
+      "base_branch": "main"
     },
     "solstice": {
       "status": "merged",

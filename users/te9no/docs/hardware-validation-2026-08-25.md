@@ -1,7 +1,7 @@
-# Hardware validation record — 2026-08-22 to 2026-08-25
+# Hardware validation record — 2026-08-22 to 2026-08-27
 
 This is the durable Fleet record of hardware results confirmed by the owner
-during the ZMK 0.4 rollout session. CI results are recorded separately in each
+during the ZMK 0.4 rollout sessions. CI results are recorded separately in each
 change ledger. A passed item below applies only to the named physical variant;
 it must not be generalized to sibling modules.
 
@@ -37,9 +37,12 @@ it must not be generalized to sibling modules.
 ## Cornix / Madula
 
 - Madula firmware flash, two-CDC enumeration, and DYA Studio connection passed.
-- A physical Madula trackball was not available. PMW3610 pointer/source/frame
-  validation remains pending. The 1200-baud transition is a separate controller
-  check and does not require the physical trackball module.
+- Madula Trackball passed PMW3610 initialization (`0x3e`/revision `0x01`,
+  `ready=true`, `init_err=0`), source readiness, and owner-confirmed pointer
+  input after the XIAO pinmux fix. Cornix `main@794987c`, the `just.sh` 12/12
+  manifest, and Actions run 32991787396 are the integration evidence.
+- The Trackball item is complete. The 1200-baud transition and physical IQS
+  input remain separate pending checks and must not be shown as Trackball work.
 
 ## Evidence policy
 

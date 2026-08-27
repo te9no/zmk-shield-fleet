@@ -31,20 +31,33 @@
   "tracking": {
     "polaris": {
       "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6",
-      "commit": "53cbeec1040ce2043d4489e8e5d4e52db99b1ba9",
-      "notes": "cormoran PMW driver@5c34ea0、custom settings@c6a7fef、左右TBのcormoran,pmw3610 compatible、Studio/custom-settings split relay、240-byte relay payload、4096-byte low-priority stackをPolaris/zmk-0.4へ統合済み。元のPMW検証commit 59d4f17はzmk-0.4の祖先で、専用branchとの差は生成UF2 10個だけ、ソース差分は0であることを2026-08-25に再監査した。現行zmk-0.4の10 target CIも成功。stable mainは未変更。残るgateは右TB実機での入力、split、source 1/ALL、frame capture確認のみ。",
+      "pr": null,
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "notes": "PR #6でcormoran PMW driver@5c34ea0、Studio/custom-settings split relay等をzmk-0.4へ統合済みだが、Polaris右TBのP0.05共有SDIOはZephyr 4.1の標準SPIで全readが0x3eとなった。原版cormoran driverを変更せず、公開済みte9no/zmk-driver-spi-three-wire v0.1.0@4362133を使う専用branch@30fe2bdで解消を検証。COM327 CDCでcontroller ready、OBSERVATION low nibble 0xf、Product ID=0x3e、全起動時転送result=0、PMW3610 initializedを確認し、ユーザー操作でポインタ入力とsplit relay、Local mod DYA Studioでsource列挙とStudio診断も合格した。検証済みsourceを生成UF2なし・PRなしでac1a312としてzmk-0.4へ直接統合し、stable mainは変更していない。統合後に右TB、左JOY、settings_resetを再build済み。右TBの方向・感度、frame captureと左TBは未確認。",
       "validation": {
         "ci": "passed",
+        "targeted-build": "passed",
+        "flash": "passed",
+        "cdc-log": "passed",
+        "sensor-init": "passed",
+        "source-enumeration": "passed",
+        "studio-diagnostics": "passed",
+        "frame-capture": "pending",
         "hardware": "pending"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602",
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
+        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "source-enumeration": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "studio-diagnostics": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "frame-capture": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
         "hardware": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
       },
-      "branch": "zmk-0.4_validation_cormoran-zmk",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "pr_head": "da95be27ed47a2661742e0a0c4e61d7da1fee075",
       "variants": [
         {
           "id": "left-tb",
@@ -72,22 +85,38 @@
           "id": "right-tb",
           "status": "pending",
           "validation": {
-            "hardware": "pending",
-            "module-input": "pending",
-            "split-connectivity": "pending",
-            "source-enumeration": "pending",
+            "targeted-build": "passed",
+            "flash": "passed",
+            "cdc-enumeration": "passed",
+            "cdc-log": "passed",
+            "sensor-init": "passed",
+            "hardware": "passed",
+            "module-input": "passed",
+            "split-connectivity": "passed",
+            "source-enumeration": "passed",
+            "studio-diagnostics": "passed",
             "frame-capture": "pending"
           },
           "evidence": [
             {
-              "label": "PR #6 merged into zmk-0.4",
+              "label": "Generic three-wire SPI module v0.1.0@4362133",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/6"
+              "url": "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0"
             },
             {
-              "label": "zmk-0.4 10/10 CI",
+              "label": "Polaris zmk-0.4 integration@ac1a312",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32645090602"
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de"
+            },
+            {
+              "label": "Build, flash, and CDC sensor-init record",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+            },
+            {
+              "label": "Pointer direction, sensitivity, and frame-capture gate",
+              "status": "pending",
+              "url": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4"
             }
           ]
         }
@@ -244,51 +273,64 @@
       ]
     },
     "cornix": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-      "commit": "729909b819016b3f3e41460d27f85a48dcfe130d",
-      "notes": "Fleet最優先。Cornix/zmk-0.4へ向けたDraft PR #3で、cormoran/zmk-driver-pmw3610-with-custom-studio-rpcを5c34ea0eec246a1c986111417cd779b53144629aへ固定し、Madula PMW compatibleをcormoran,pmw3610へ移行、Madula trackballへDYA Studio PMW診断/runtime settingsを追加。Madula専用west workspaceを同期後、just.sh build-fast madula --pristine=alwaysでTrackball/TrackPoint/IQSの3/3 targetが成功。2026-08-23にMadula Trackball firmwareをXIAO-SENSEへ書き込み、Debug/CDC Boot COM445とStudio RPC COM447の2 CDC列挙およびDYA Studio接続を確認。次は物理trackball moduleを装着してPMW3610入力、local source診断、frame captureを確認する。未接続のためDraftを維持し、mainには反映しない。",
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "notes": "Cornix main@794987cへcormoran PMW driver、Madula 3-wire transport、Studio RPC、XIAO pin解放を統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、GitHub Actions 32991787396が合格した。Trackball実機はProduct ID 0x3e、Revision 0x01、ready=true、init_err=0、source ready、ユーザー操作によるpointer/module-inputまで合格。MadulaはCentral一体型のためsplit relayは対象外。frame captureはmain統合の必須gateからwaiveし、DYA Studio UIを再確認する場合は独立診断として扱う。PR #3はclosed、validation branch 2本は削除、zmk-0.4は保持。",
       "validation": {
         "targeted-build": "passed",
         "ci": "passed",
         "flash": "passed",
         "cdc-enumeration": "passed",
         "dya-studio-connection": "passed",
-        "hardware": "pending"
+        "sensor-init": "passed",
+        "source-enumeration": "passed",
+        "module-input": "passed",
+        "hardware": "passed"
       },
       "validation_urls": {
-        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "dya-studio-connection": "https://github.com/te9no/zmk-keyboard-cornix/pull/3",
-        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "dya-studio-connection": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "sensor-init": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
       },
-      "branch": "zmk-0.4_validation_pmw3610-cormoran-rpc",
-      "base_branch": "zmk-0.4",
-      "pr_head": "729909b819016b3f3e41460d27f85a48dcfe130d",
+      "branch": "main",
+      "base_branch": "main",
       "variants": [
         {
           "id": "madula-trackball",
-          "status": "pending",
+          "status": "passed",
           "validation": {
-            "hardware": "pending",
-            "module-input": "pending",
-            "split-connectivity": "pending",
-            "source-enumeration": "pending",
-            "frame-capture": "pending",
-            "1200-baud": "pending"
+            "targeted-build": "passed",
+            "flash": "passed",
+            "cdc-enumeration": "passed",
+            "sensor-init": "passed",
+            "hardware": "passed",
+            "module-input": "passed",
+            "source-enumeration": "passed",
+            "frame-capture": "waived",
+            "1200-baud": "waived"
           },
           "evidence": [
             {
-              "label": "Draft PR #3 hardware gate",
-              "status": "pending",
-              "url": "https://github.com/te9no/zmk-keyboard-cornix/pull/3"
+              "label": "Cornix main integration and PMW hardware result@794987c",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8"
             },
             {
-              "label": "12/12 CI",
+              "label": "Cornix main CI 12/12",
               "status": "passed",
-              "url": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32627774654"
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396"
+            },
+            {
+              "label": "Frame capture and 1200-baud are tracked outside the PMW input completion gate",
+              "status": "waived",
+              "url": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
             }
           ]
         }

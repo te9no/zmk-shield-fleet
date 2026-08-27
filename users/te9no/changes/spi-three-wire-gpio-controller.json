@@ -1,0 +1,262 @@
+{
+  "schema": 1,
+  "id": "spi-three-wire-gpio-controller",
+  "enabled": true,
+  "title": "共有SDIOのPMW3610を汎用3-wire SPI controllerへ揃える",
+  "description": "MOSIとMISOを同じSDIOへ配線したPMW3610 moduleでは、Zephyr 4.1のhardware SPIではなくGPIO bit-bang型3-wire controllerを使用する。cormoran版PMW3610 driver本体には変更を加えず、transportを独立moduleとして固定revisionで横断管理する。",
+  "source": {
+    "repository": "te9no/zmk-driver-spi-three-wire",
+    "from_revision": null,
+    "to_revision": "4362133dbfbf66788b66b0a3e3c410b9232c06cb",
+    "change_url": "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0",
+    "notes": "GPIO-backed SPI controllerの公開版v0.1.0。PMW3610 childはcormoran,pmw3610のまま、共有SDIO、turnaround、recovery、disable-burst-readをkeyboard側Devicetreeで指定する。v0.1.0と同じcontroller実装をRenode nRF52840上で検証するprotocol fixtureをcodex/renode-half-duplex@a601287へ追加し、正常なSDIO turnaroundと0x3e固定読み故障の検出を2/2合格。電圧・信号品質・実時間marginは対象外。"
+  },
+  "trigger": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "revision": "ac1a312bd471f014b90f506e31c7f48da21346de",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
+    "notes": "Polaris右TBでhardware SPIのreadが0x3eへ張り付く症状を切り分け、汎用3-wire controllerでOBSERVATION=0x7f、Product ID=0x3e、PMW3610初期化成功をCDC実機確認した。検証済みsourceを生成UF2なしでzmk-0.4へ統合した。"
+  },
+  "repositories": [
+    "polaris",
+    "mkb2",
+    "cornix",
+    "saa"
+  ],
+  "tracking": {
+    "polaris": {
+      "status": "merged",
+      "pr": null,
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "notes": "右TBを公開module v0.1.0へ移行。just.sh build、Iへのflash、COM327 CDCによるcontroller/PMW3610初期化は合格。2026-08-26の再flashではProduct ID=0x3e、OBSERVATION=0x6f（low nibble 0xf）、全startup transfer result=0を取得し、ユーザー操作で右TBのポインタ入力とPeripheralからCentralへのsplit relayを実機合格とした。Local mod DYA Studioで右TBのsource列挙とStudio診断も合格。検証済みsourceだけをac1a312でzmk-0.4へ直接統合し、生成UF2、PR、stable mainは変更していない。右TBの方向・感度、frame captureと左TBは未確認。",
+      "validation": {
+        "targeted-build": "passed",
+        "renode-protocol": "passed",
+        "flash": "passed",
+        "cdc-log": "passed",
+        "sensor-init": "passed",
+        "module-input": "passed",
+        "split-connectivity": "passed",
+        "source-enumeration": "passed",
+        "frame-capture": "pending",
+        "studio-diagnostics": "passed"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/ac1a312bd471f014b90f506e31c7f48da21346de",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
+        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "module-input": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "split-connectivity": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "source-enumeration": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md",
+        "frame-capture": "https://github.com/te9no/zmk-config-GeaconPolaris/tree/zmk-0.4",
+        "studio-diagnostics": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/polaris-pmw3610-three-wire-validation-2026-08-26.md"
+      }
+    },
+    "mkb2": {
+      "status": "applied",
+      "pr": null,
+      "commit": "8f8313681846ca6db8496a1f239b4acf40c6fa50",
+      "branch": "codex/mkb-three-wire-module",
+      "base_branch": "zmk-0.4",
+      "notes": "共有SDIOの左TB、右TBv3、右TBv4を汎用controllerへ移行。公開module verifierは3/3、just.shはTB 3/3と非TB KEY回帰2/2が成功。cormoran PMW driver、CDC Debug、USB logging、1200-baud boot triggerを維持。実機へのflashは未実施。",
+      "validation": {
+        "targeted-build": "passed",
+        "regression-build": "passed",
+        "renode-protocol": "passed",
+        "revision-pin": "passed",
+        "cdc-config": "passed",
+        "hardware": "pending",
+        "module-input": "pending",
+        "split-connectivity": "pending",
+        "source-enumeration": "pending",
+        "frame-capture": "pending",
+        "studio-diagnostics": "pending"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "regression-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
+        "revision-pin": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "cdc-config": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
+        "module-input": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
+        "split-connectivity": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
+        "source-enumeration": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
+        "frame-capture": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
+        "studio-diagnostics": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module"
+      },
+      "variants": [
+        {
+          "id": "left-tb",
+          "status": "pending",
+          "validation": {
+            "targeted-build": "passed",
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB three-wire preparation@8f83136",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            }
+          ]
+        },
+        {
+          "id": "right-tbv3",
+          "status": "pending",
+          "validation": {
+            "targeted-build": "passed",
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB three-wire preparation@8f83136",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            }
+          ]
+        },
+        {
+          "id": "right-tbv4",
+          "status": "pending",
+          "validation": {
+            "targeted-build": "passed",
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "frame-capture": "pending"
+          },
+          "evidence": [
+            {
+              "label": "MKB three-wire preparation@8f83136",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            }
+          ]
+        }
+      ]
+    },
+    "cornix": {
+      "status": "merged",
+      "pr": null,
+      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
+      "branch": "main",
+      "base_branch": "main",
+      "notes": "Madula Trackballの共有SDIOを汎用controllerへ移行しCornix mainへ統合。just.sh manifest 12/12、madula-pmw-debug opt-in、通常Trackball pristine再build、Actions 32991787396が合格。実機でPMW3610初期化、source ready、ポインター入力を確認した。MadulaはCentral一体型のためsplit relayは対象外。Studio preview/diagnosticsはtransport統合の必須gate外として別途扱う。PR #3はclosed、2本のvalidation branchは削除し、zmk-0.4は保持した。",
+      "validation": {
+        "targeted-build": "passed",
+        "regression-build": "passed",
+        "renode-protocol": "passed",
+        "revision-pin": "passed",
+        "cdc-config": "passed",
+        "hardware": "passed",
+        "module-input": "passed",
+        "split-connectivity": "waived",
+        "source-enumeration": "passed",
+        "studio-peripheral-preview-hardware": "waived",
+        "studio-diagnostics": "waived"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "regression-build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
+        "revision-pin": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "cdc-config": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "hardware": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "module-input": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "split-connectivity": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "source-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "studio-diagnostics": "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
+      }
+    },
+    "saa": {
+      "status": "applied",
+      "pr": null,
+      "commit": "c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+      "branch": "codex/zmk-0.4-three-wire-spi-module",
+      "base_branch": "zmk-0.4_validation_cormoran-zmk",
+      "notes": "専用ZMK 0.4検証branchを基点に左右TBを汎用controllerへ移行。just.sh pristineで全21/21、TB関連4/4が成功。cormoran PMW driver、右CDC Debug、1200-baud boot triggerを維持。stable master、PR、merge、実機は未変更。",
+      "validation": {
+        "targeted-build": "passed",
+        "regression-build": "passed",
+        "renode-protocol": "passed",
+        "revision-pin": "passed",
+        "cdc-config": "passed",
+        "hardware": "pending",
+        "module-input": "pending",
+        "split-connectivity": "pending",
+        "source-enumeration": "pending",
+        "studio-peripheral-preview-hardware": "pending",
+        "studio-diagnostics": "pending"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+        "regression-build": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+        "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
+        "revision-pin": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+        "cdc-config": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",
+        "module-input": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",
+        "split-connectivity": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",
+        "source-enumeration": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",
+        "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module",
+        "studio-diagnostics": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module"
+      },
+      "variants": [
+        {
+          "id": "left-tb",
+          "status": "pending",
+          "validation": {
+            "targeted-build": "passed",
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "studio-peripheral-preview-hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "SAA three-wire preparation@c9f6779",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd"
+            }
+          ]
+        },
+        {
+          "id": "right-tb",
+          "status": "pending",
+          "validation": {
+            "targeted-build": "passed",
+            "hardware": "pending",
+            "module-input": "pending",
+            "split-connectivity": "pending",
+            "source-enumeration": "pending",
+            "studio-peripheral-preview-hardware": "pending"
+          },
+          "evidence": [
+            {
+              "label": "SAA three-wire preparation@c9f6779",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "steps": []
+}

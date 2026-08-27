@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "id": "workspace-hygiene-and-firmware-artifact-layout",
+  "enabled": true,
+  "title": "workspace配置とfirmware artifactを正規化する",
+  "dashboard_label": "Workspace hygiene",
+  "description": "canonical repository、temporary worktree、firmware artifact、build profile、recovery inventoryの置き場所を分離し、容量を抑えながらGit参照を監査可能な状態に保つ。",
+  "scope": {
+    "all": true
+  },
+  "source": {
+    "repository": "te9no/zmk-workspace",
+    "from_revision": "1ebf2c4a",
+    "to_revision": "9e10e81fe97e710554dd4569249066c2952a2635",
+    "change_url": null,
+    "notes": "local main commits 4a979e52、9b461ad5、9e10e81fでprofile/artifact処理、CDC bootloader切断処理、repository配置規約を整備。3 commitは未push。workspace保守はmainへ直接蓄積し、PRを作らない運用とする。"
+  },
+  "repositories": [
+    "polaris",
+    "mkb2",
+    "saa",
+    "cornix",
+    "solstice",
+    "sparagmos",
+    "mopolia"
+  ],
+  "tracking": {
+    "polaris": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "canonical checkoutをconfig/に保持し、active repository/worktree参照を修復。現行Polaris/MKB build profiles 6.9 GiB、共有ccache 3.8 GiB、archived repository snapshots 2.2 GiBは意図的に保持。root main 3 commitのpushと保持容量の次回レビューは独立pending。",
+      "validation": {
+        "canonical-layout": "passed",
+        "active-repository-repair": "passed",
+        "artifact-layout": "passed",
+        "root-main-push": "pending",
+        "retained-storage-review": "pending"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "root-main-push": "https://github.com/te9no/zmk-workspace/tree/main",
+        "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "mkb2": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "canonical checkoutをconfig/に統一。現行MKB/Polaris build profilesは実機検証継続用として保持し、firmware artifactはrepository/branch単位の正規配置へ縮約した。",
+      "validation": {
+        "canonical-layout": "passed",
+        "artifact-layout": "passed",
+        "active-profile-retention": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "artifact-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-profile-retention": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "saa": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "canonical checkoutをconfig/に統一し、active SAA worktree参照を修復。専用validation branchと実機検証待ちの台帳状態は変更していない。",
+      "validation": {
+        "canonical-layout": "passed",
+        "active-repository-repair": "passed",
+        "inventory-preservation": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "active-repository-repair": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "cornix": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "canonical checkoutをconfig/に統一し、一時clone/worktreeをwork/またはarchive inventoryへ分離。firmwareやCornix mainの内容は変更していない。",
+      "validation": {
+        "canonical-layout": "passed",
+        "worktree-audit": "passed",
+        "inventory-preservation": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "solstice": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "canonical checkoutをconfig/に統一し、temporary worktreeとarchive inventoryを分離。既存firmware validationの結果は変更していない。",
+      "validation": {
+        "canonical-layout": "passed",
+        "worktree-audit": "passed",
+        "inventory-preservation": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "sparagmos": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "legacy firmware priorityは変更せず、canonical checkout、temporary worktree、archive inventoryの配置規約だけを適用。",
+      "validation": {
+        "canonical-layout": "passed",
+        "worktree-audit": "passed",
+        "inventory-preservation": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    },
+    "mopolia": {
+      "status": "applied",
+      "pr": null,
+      "commit": null,
+      "notes": "固有6DoF構成は変更せず、canonical checkout、temporary worktree、archive inventoryの配置規約だけを適用。",
+      "validation": {
+        "canonical-layout": "passed",
+        "worktree-audit": "passed",
+        "inventory-preservation": "passed"
+      },
+      "validation_urls": {
+        "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
+        "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/codex/record-polaris-three-wire-hardware/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+      }
+    }
+  },
+  "steps": []
+}
