@@ -6,25 +6,6 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
-id = "polaris-pinmux-hardware"
-state = "waiting"
-priority = "high"
-order = 1
-repository = "polaris"
-action = "8de074aの左JOYはユーザー方向受入れと長時間動作で合格した。OLEDは8de9473、right TBは8421728でユーザー合格。CI 33072906476の完了結果を記録する。8421728 LEFT→UPと8de9473「上下逆、左右も逆」はhistorical failed evidenceとして保持する。"
-completion = "8de074a left-JOY direction/continuous-operation user acceptance、8de9473 OLED、8421728 right-TB inputのrevision別合格を保持し、in-progress CI 33072906476の最終結果を記録する。right TBのBLE/PMW read RPC証跡を左候補のmatched-pair証跡として扱わない。"
-blocker = "left-only 8de074aは2026-08-27 21:38:59 JSTにflash/bootし、ユーザーのJOY方向受入れと長時間動作が合格。測定時間、速度、各方向の個別測定値は未申告である。OLEDは8de9473、right TBは8421728（UF2 SHA-256 296aad41178784752b89ebb94fd9dbe0f1fc38191f5462eaf4f06eaf02976d52）で合格し、rightはrebuild/flashしていない。CI 33072906476はin progress。ESB実験は終了・disabledであり、64860dd/656477cのrelay RPC failedは歴史的証跡として保持する。"
-repository_url = "https://github.com/te9no/zmk-config-GeaconPolaris/tree/codex/zmk-0.4-xiao-pinmux"
-change_id = "polaris-left-joy-orientation"
-validation_keys = ["ci", "left-joy-module-input", "left-oled-visual", "hardware"]
-variant_ids = ["left-joy"]
-evidence = [
-  { label = "Left-only orientation candidate@8de074a: incremental build, flash/boot, direction and continuous operation accepted", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#left-joy-orientation-candidate" },
-  { label = "Right TB remains@8421728: user OK plus BLE/PMW read RPC", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/polaris-pinmux-hardware-validation-2026-08-27.md#matched-ble-restore-and-studio-rpc" },
-  { label = "Latest left candidate CI 33072906476 (in progress)", status = "pending", url = "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072906476" },
-]
-
-[[next_actions]]
 id = "mkb-pinmux-hardware"
 state = "waiting"
 priority = "high"

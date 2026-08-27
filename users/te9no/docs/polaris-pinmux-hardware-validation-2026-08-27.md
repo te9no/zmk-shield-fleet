@@ -135,9 +135,9 @@ ADC, pointer speed, and trackball settings are unchanged.
   the `8de074a` JOY direction and reported **「長時間動作もOKです」**. No
   duration, speed measurement, or per-direction measurement is claimed. CI run
   [33072085319](https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072085319)
-  for the earlier `8de9473` candidate succeeded; the latest source/artifact
+  for the earlier `8de9473` candidate succeeded. The latest source/artifact
   head CI run [33072906476](https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/33072906476)
-  is in progress.
+  at `1fdc244` also succeeded: all 9 builds, publish, and build-health passed.
 
 The right half was not rebuilt or flashed for this candidate. It remains on
 `8421728` with UF2 SHA-256
