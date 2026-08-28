@@ -126,20 +126,22 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-MKB2/pull/14",
       "commit": "1f540398d5af4b49b04bbab045263ee67c5a63ce",
-      "notes": "統合PR #14でMKB/zmk-0.4へfirmwareを反映し、15/15 CI、右TBv4のPMW入力、split relay、Product ID/Revision/CPI、484-pixel frame capture、streamingを実機確認。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。外部cormoran/dya-studio PR #168はfirmware commitではなく、Peripheral UI対応の独立したopen upstream validationとして追跡する。",
+      "notes": "統合PR #14でMKB/zmk-0.4へfirmwareを反映し、15/15 CI、右TBv4のPMW入力、split relay、Product ID/Revision/CPI、484-pixel frame capture、streamingを実機確認。旧PR #7/#9/#10はclosed-unmergedの統合前履歴。cormoran/dya-studio PR #168は2026-08-27T16:27:12Z（JST 2026-08-28 01:27）にMERGED、merge commitはca39a3585258ad623dadefc394d226013ea3f81b。これはPeripheral UI upstreamのマージ記録であり、MKB firmware commitや公式公開版の実機検証を意味しない。",
       "validation": {
         "ci": "passed",
         "hardware-input": "pending",
         "upstream-local-ci": "pending",
         "studio-peripheral-preview-hardware": "passed",
-        "upstream-pr": "pending"
+        "upstream-pr": "passed",
+        "studio-peripheral-official-hardware": "pending"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330",
         "hardware-input": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
         "upstream-local-ci": "https://github.com/cormoran/dya-studio/pull/168",
         "studio-peripheral-preview-hardware": "https://github.com/te9no/zmk-config-MKB2/blob/zmk-0.4/docs/zmk-0.4-validation.md",
-        "upstream-pr": "https://github.com/cormoran/dya-studio/pull/168"
+        "upstream-pr": "https://github.com/cormoran/dya-studio/pull/168",
+        "studio-peripheral-official-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/pr-ledger-audit-2026-08-24.md#dya-studio-pr-168-update-2026-08-28"
       },
       "branch": "zmk-0.4_validation_cormoran-zmk",
       "base_branch": "zmk-0.4",
