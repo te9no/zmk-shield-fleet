@@ -30,13 +30,14 @@ order = 2
 repository = "solstice"
 action = "Solsticeのpin-release検証firmwareでCDC、OLEDとPeripheral電池表示、JOY、右TB、左右入力を実機確認する。"
 completion = "643a256の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。"
-blocker = "just.sh全5/5 pristine・101 assertions・CI run33037950369合格。未flash・実機未確認、PR/maintenance mergeなし。"
+blocker = "2026-08-28再確認：643a256で生成DTS 101 assertions再実行合格、既存just.sh 5/5 buildログとCI successを照合。zmk-0.4は6638e6cのまま。今回版の実機未確認・未統合で、過去のOLED/JOY/TB合格は転用しない。"
 repository_url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-xiao-pinmux"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
 validation_keys = ["hardware"]
 evidence = [
   { label = "Solstice validation@643a256 (5/5, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62" },
   { label = "Solstice CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369" },
+  { label = "2026-08-28 read-only recheck: DTS 101/101", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-recheck-2026-08-28" },
 ]
 
 [[next_actions]]
@@ -226,24 +227,6 @@ evidence = [
   { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
   { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
   { label = "Three-wire preparation@8f83136 (just.sh 5/5)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50" },
-]
-
-[[next_actions]]
-id = "workspace-obsolete-storage-cleanup-approval"
-state = "waiting"
-priority = "low"
-order = 95
-repository = "te9no/zmk-workspace"
-repository_url = "https://github.com/te9no/zmk-workspace/tree/main"
-action = "旧ESB profile約3.69 GiBと旧build/west退避45.22 GiBから削除候補を分離し、正確なパス・保持対象を提示して明示承認を得る。"
-completion = "最新inventoryでsource worktree・dirty files・必要なログを保持対象として分離し、削除対象ごとの承認または継続保持の判断が記録される。承認前は削除しない。"
-blocker = "容量再監査は完了。8 profiles 31.11 GiB、ccache 3.74 GiB、旧build/west45.22 GiB、旧firmware324.21 MiB、Fleet source2.12 GiBを現在は保持。45.22 GiB archiveには修復したSAA worktreeも含まれるため、全体削除は不可。"
-change_id = "workspace-hygiene-and-firmware-artifact-layout"
-validation_keys = ["storage-cleanup-approval"]
-evidence = [
-  { label = "Re-audit and retention inventory", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
-  { label = "Workspace path tests 18/18", status = "passed", url = "https://github.com/te9no/zmk-workspace/actions/runs/33083235604" },
-  { label = "Cleanup requires explicit approval", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md" },
 ]
 
 [[next_actions]]

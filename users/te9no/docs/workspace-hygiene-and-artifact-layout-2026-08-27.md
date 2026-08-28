@@ -1,10 +1,53 @@
 # Workspace hygiene and firmware artifact layout
 
-Date: 2026-08-27
+Date: 2026-08-27; updated 2026-08-28
 
 This is the Fleet record of a local workspace cleanup. It records placement,
 recovery, deletion, and retained-storage decisions without treating filesystem
 maintenance as a firmware rollout or pull-request authorization.
+
+## Owner-approved cleanup 2026-08-28
+
+This update supersedes the historical retention/approval snapshot below. The
+owner separately approved removal of the old SAA checkout, unused worktrees,
+and the approximately 45 GiB legacy archive. Those operations are complete;
+they do not authorize further deletions.
+
+- Removed four unused worktrees and their individual registrations: archived
+  `saa-three-wire-spi-module`, `work/saa-pmw-validation`,
+  `work/fleet-audit-request-ui`, and `work/record-polaris-pmw-applied`.
+  Their allocated size was 275,288,064 bytes (about 262.5 MiB). Branch history
+  and administrative metadata were retained; additional recovery refs protect
+  the three `work/` entries. No meaningful uncommitted source was lost.
+- Removed the exact `.zmk-workspace/archive/20260827-083105` after checking
+  that current profiles and live Git references did not depend on it. After
+  the separate archived-SAA removal, its remaining allocated size was
+  48,420,225,024 bytes (about 45.1 GiB). The original directory no longer exists.
+- Preserved Git history/metadata, dirty and untracked source, broken snapshots,
+  temporary tools, logs, and generated DTS/config/build provenance in
+  `.zmk-workspace/archive/20260828-legacy-recovery/`. Full content verification
+  covered 45,945 files and 19,285 unique contents, including three dirty module
+  repositories and two broken historical snapshots. Local `files.json`,
+  `repositories.json`, and `VERIFIED.json` record the checks; private manifests
+  and raw recovery data are not published to Fleet.
+- The recovery tarball is 3,098,363,190 bytes; its directory occupies
+  3,108,462,592 allocated bytes (about 2.9 GiB). Net archive space recovered is
+  about **42.2 GiB**, separate from the earlier four-worktree cleanup.
+  Source/history/evidence can be recovered from the package; discarded build
+  caches must be regenerated. The Windows-host WSL virtual disk was not compacted.
+- Post-cleanup checks passed: 18 workspace-path regression tests, all eight
+  profile source locations, active Git worktree references with no prunable
+  registrations, and the read-only Madula IQS artifact/CDC resolver. Current
+  firmware was preserved, including `firmware/zmk-keyboard-cornix/main/madula_iqs.uf2`
+  with SHA-256 `6191ba66643c7272768436b94a8df48dee56494a0342a0157823ebb2e9c3d926`.
+  Workspace `main@14838370` remains clean. No build, flash, or hardware test was
+  performed by this cleanup.
+
+All eight profiles, their referenced checkouts (including retired ESB), the
+external Polaris worktree, ccache, old firmware archive, and separate Fleet-source
+archive remain. Their older sizes below are historical, not fresh measurements.
+Additional cleanup requires its own scope/retention decision and approval. The
+completed archive operation is removed from the pending work queue.
 
 ## Initial cleanup (historical snapshot)
 
@@ -56,7 +99,7 @@ Workspace maintenance is performed directly on `main`; it does not use a
 feature branch or PR. This record documents the completed publication and does
 not authorize unrelated workspace changes.
 
-## Re-audit and fixes
+## Re-audit and fixes (2026-08-27 historical snapshot)
 
 The owner authorized implementation after the read-only audit. No keyboard
 firmware source, hardware validation result, or device was changed by this
@@ -115,10 +158,11 @@ existed, and could fall back to another branch's unique matching UF2.
 - `organize --dry-run` reports no legacy root directories. Neither root nor
   canonical Fleet `.fleet-workspace/` exists.
 
-## Current retained storage (re-audit snapshot)
+## Retained storage before approved deletion (historical snapshot)
 
 The previous 6.9 / 3.8 / 2.2 GiB summary was incomplete and is superseded here.
-All entries below are **retained for now**. Sizes are allocated bytes measured
+All entries below were retained at the 2026-08-27 re-audit. The legacy archive
+was subsequently removed as recorded above. Sizes are allocated bytes measured
 with `du -B1 -s`; new builds can change them.
 
 | Location under `.zmk-workspace/` | Bytes | Reason / next decision |
@@ -146,9 +190,9 @@ or 98,242,560 allocated bytes. All files are under repository/branch directories
 growth since the initial 64-file cleanup is recorded, not treated as a failed
 cleanup or silently removed.
 
-The retained-storage review is complete: all current categories have a size and
-retention decision. **Cleanup approval is still pending**, separately from the
-completed path/Git repairs. A future cleanup must freshly enumerate exact
-candidates, separate source worktrees and dirty files from generated caches,
-retain evidence where needed, and obtain explicit owner approval. In particular,
-the 45.22 GiB archive must not be recursively deleted as if it were only cache.
+At that re-audit, the retained-storage review was complete but deletion approval
+was still pending, separately from the completed path/Git repairs. The later
+owner-approved cleanup above supplied that approval, separated and verified
+source/history/evidence, and removed the legacy archive. This historical table
+is not a current deletion queue. Further cleanup still requires fresh inspection
+and explicit approval for its own targets.
