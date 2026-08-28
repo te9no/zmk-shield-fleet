@@ -320,7 +320,7 @@
       "commit": "0540667e1ccd3c2b83714a1bdfb0c6e0480d428f",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4_validation_cormoran-zmk",
-      "notes": "P0。専用zmk-0.4_validation_cormoran-zmk@4e54e1cを基点とする検証branch@0540667へsource修正を適用しpush済み。SAA.dtsi 1fileのみで既定UART/SPI/I2Cを停止し、module overlayで必要controllerを再有効化。vbattは&vbatt overrideへ変更し、AIN0・470k/1.47M・NiMH閾値を保持、board power-gpiosを削除した。just.sh全21/21 pristine build、生成DTS/.config786 assertions、CI run33038522353の最終successに合格。OLED I2C0、LED SPI3、右CDC/Studioを保持し、左はbaselineどおりCDCなし。左右TPD_IQSの既存I2C pin競合は生成DTSで確認済みで別課題module-pin-ownership-conflictsのfailed gateへ分離。今回未修正でhardware-readyとは扱わない。全target実機未検証、PR/stable/maintenance mergeなし。",
+      "notes": "中優先度（2026-08-28ユーザー指定）。専用zmk-0.4_validation_cormoran-zmk@4e54e1cを基点とする検証branch@0540667へsource修正を適用しpush済み。SAA.dtsi 1fileのみで既定UART/SPI/I2Cを停止し、module overlayで必要controllerを再有効化。vbattは&vbatt overrideへ変更し、AIN0・470k/1.47M・NiMH閾値を保持、board power-gpiosを削除した。just.sh全21/21 pristine build、生成DTS/.config786 assertions、CI run33038522353の最終successに合格。OLED I2C0、LED SPI3、右CDC/Studioを保持し、左はbaselineどおりCDCなし。左右TPD_IQSの既存I2C pin競合は生成DTSで確認済みで別課題module-pin-ownership-conflictsのfailed gateへ分離。今回未修正でhardware-readyとは扱わない。全target実機未検証、PR/stable/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
