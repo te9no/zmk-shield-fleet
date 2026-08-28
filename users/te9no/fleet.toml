@@ -11,15 +11,17 @@ state = "waiting"
 priority = "high"
 order = 2
 repository = "mkb2"
-action = "MKBのpin-release検証firmwareでCDC、OLED、JOYなど代表module入力と左右接続を実機確認する。"
-completion = "3361c9eの代表実機入力が合格し、今回のhardware validationへ証跡が記録される。3-wire moduleの別準備branchと混同しない。"
-blocker = "just.sh全16/16 pristine・258 assertions・CI run33037699063最終success。未flash・実機未確認、PR/maintenance mergeなし。3-wire moduleはmaintenance基点に存在せず今回未統合。"
-repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-xiao-pinmux"
+action = "MKBの統合検証版03fa08eでlocal just.shを再検証後、CDC・OLED・JOYなど代表module入力と左右接続を実機確認する。"
+completion = "統合source03fa08eのlocal just.sh buildと代表実機入力が合格し、今回のvalidationへ証跡が記録される。旧版の合格は転用しない。"
+blocker = "CI33151685626全16/16・最終success、CI生成DTS/.config 487 assertions合格、UF2は4234531に公開済み。Docker接続エラーでlocal just.shはcompile前停止。今回版は未flash・実機未確認、maintenance未統合。"
+repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire"
 change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["hardware"]
+validation_keys = ["local-just-build", "hardware"]
 evidence = [
-  { label = "MKB validation@3361c9e (16/16, 258 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3" },
-  { label = "MKB CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063" },
+  { label = "Combined source@03fa08e", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd" },
+  { label = "Combined-source CI 16/16", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626" },
+  { label = "Generated DTS/config: 487 assertions", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#ci" },
+  { label = "Local just.sh: Docker startup blocked", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#local-build" },
 ]
 
 [[next_actions]]
@@ -217,16 +219,18 @@ state = "waiting"
 priority = "medium"
 order = 11
 repository = "mkb2"
-action = "MKB左TBと右TBv3 firmwareを書き込み、PMW3610入力、split relay、Studio診断を確認する。"
-completion = "左TBと右TBv3が、合格済みの右TBv4と同じくsource列挙、frame capture、pointer入力に合格する。"
-blocker = "右TBv4は従来構成で実機合格済み。公開3-wire module固定branchはjust.shでTB 3/3＋KEY回帰2/2 build済みだが未flash。左TB、右TBv3、右TBv4の再確認待ち。"
+action = "新branch codex/zmk-0.4-pinmux-three-wire（03fa08e）でleft-tb、right-tbv3、right-tbv4のPMW3610入力、split relay、Studio診断を確認する。"
+completion = "03fa08eのlocal just.sh buildと左TB・右TBv3・右TBv4のsource列挙、frame capture、pointer入力、左右接続が合格する。旧構成の右TBv4合格は転用しない。"
+blocker = "CI33151685626全16/16・生成DTS/.config 487 assertions合格。Docker接続エラーでlocal just.shはcompile前停止。left-tb/right-tbv3/right-tbv4の今回版は未flash・実機確認待ち。旧実機結果は転用しない。"
 change_id = "spi-three-wire-gpio-controller"
-validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
-variant_ids = ["left-tb", "right-tbv3"]
+repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire"
+validation_keys = ["local-just-build", "hardware", "module-input", "split-connectivity", "source-enumeration", "frame-capture"]
+variant_ids = ["left-tb", "right-tbv3", "right-tbv4"]
 evidence = [
-  { label = "Integrated PR #14", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/pull/14" },
-  { label = "15/15 CI", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/32635837330" },
-  { label = "Three-wire preparation@8f83136 (just.sh 5/5)", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50" },
+  { label = "Combined source@03fa08e", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd" },
+  { label = "Combined-source CI 16/16", status = "passed", url = "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626" },
+  { label = "Generated DTS/config: 487 assertions", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#ci" },
+  { label = "Local just.sh: Docker startup blocked", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#local-build" },
 ]
 
 [[next_actions]]

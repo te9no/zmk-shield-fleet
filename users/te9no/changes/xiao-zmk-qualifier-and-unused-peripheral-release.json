@@ -265,10 +265,10 @@
     "mkb2": {
       "status": "applied",
       "pr": null,
-      "commit": "3361c9e2e40a1d05f88ba47447b4a14050699ad3",
-      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "commit": "03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+      "branch": "codex/zmk-0.4-pinmux-three-wire",
       "base_branch": "zmk-0.4",
-      "notes": "P0。zmk-0.4@7b02e9bを基点とする検証branch@3361c9eへsource修正を適用しpush済み。共通MKB.dtsiの13行追加のみで未使用UART/SPIをdisable。just.sh全16/16 pristine build、生成DTS/.configの258 assertions、CI run33037699063の最終successに合格。通常15 targetのOLED用I2C1 P1.14/P1.15、XIAO既定battery AIN7・power P0.14 active-low/open-drain・510k/1.51M、CDC、Bongo Cat、左右JOY oversampling/ADC2/3、各module pinを保持。maintenance基点には3-wire moduleが元からなく、別準備branchを今回統合したわけではない。transportの追加削除は行っていない。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
+      "notes": "2026-08-28: pin-release@3361c9eへ3-wire準備@8f83136のsource 7 filesのみ統合した03fa08eをpush済み。左TB/右TBv3/右TBv4を公開controller@4362133へ統一し、cormoran PMW driverと既存module設定を保持。CI33151685626は全16 target/最終success。CIログ由来の生成DTS/.config 16組で487 assertions合格。成果物のみの追加commit4234531に全16 UF2公開済み。旧3361c9eのjust.sh 16/16・258 assertions、8f83136のTB 3/3＋KEY 2/2は履歴で新版へ転用しない。新版local-just-buildはDocker接続エラーでcompile前停止、実機はpending。未flash・PR/maintenance mergeなし。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
@@ -276,16 +276,18 @@
         "targeted-build": "passed",
         "preserved-config": "passed",
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "pending",
+        "local-just-build": "pending"
       },
       "validation_urls": {
-        "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3",
-        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#mkb-validation-branch",
-        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/3361c9e2e40a1d05f88ba47447b4a14050699ad3",
-        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#mkb-validation-branch",
-        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33037699063",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-xiao-pinmux"
+        "board-qualifier": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+        "source-audit": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#ci",
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626",
+        "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "local-just-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#local-build"
       }
     },
     "solstice": {

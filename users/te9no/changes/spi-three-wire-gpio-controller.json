@@ -59,10 +59,10 @@
     "mkb2": {
       "status": "applied",
       "pr": null,
-      "commit": "8f8313681846ca6db8496a1f239b4acf40c6fa50",
-      "branch": "codex/mkb-three-wire-module",
+      "commit": "03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+      "branch": "codex/zmk-0.4-pinmux-three-wire",
       "base_branch": "zmk-0.4",
-      "notes": "共有SDIOの左TB、右TBv3、右TBv4を汎用controllerへ移行。公開module verifierは3/3、just.shはTB 3/3と非TB KEY回帰2/2が成功。cormoran PMW driver、CDC Debug、USB logging、1200-baud boot triggerを維持。実機へのflashは未実施。",
+      "notes": "2026-08-28: pin-release@3361c9eへ3-wire準備@8f83136のsource 7 filesのみ統合した03fa08eをpush済み。左TB/右TBv3/右TBv4を公開controller@4362133へ統一し、cormoran PMW driverと既存module設定を保持。CI33151685626は全16 target/最終success。CIログ由来の生成DTS/.config 16組で487 assertions合格。成果物のみの追加commit4234531に全16 UF2公開済み。旧3361c9eのjust.sh 16/16・258 assertions、8f83136のTB 3/3＋KEY 2/2は履歴で新版へ転用しない。renode-protocolは既存moduleの検証結果。新版local-just-buildはDocker接続エラーでcompile前停止、実機はpending。未flash・PR/maintenance mergeなし。",
       "validation": {
         "targeted-build": "passed",
         "regression-build": "passed",
@@ -74,20 +74,28 @@
         "split-connectivity": "pending",
         "source-enumeration": "pending",
         "frame-capture": "pending",
-        "studio-diagnostics": "pending"
+        "studio-diagnostics": "pending",
+        "generated-dts": "passed",
+        "ci": "passed",
+        "local-just-build": "pending",
+        "source-audit": "passed"
       },
       "validation_urls": {
-        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
-        "regression-build": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626",
+        "regression-build": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626",
         "renode-protocol": "https://github.com/te9no/zmk-driver-spi-three-wire/commit/a60128717261b7f12a6ec402b1c44a43c3096352",
-        "revision-pin": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
-        "cdc-config": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50",
-        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
-        "module-input": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
-        "split-connectivity": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
-        "source-enumeration": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
-        "frame-capture": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module",
-        "studio-diagnostics": "https://github.com/te9no/zmk-config-MKB2/tree/codex/mkb-three-wire-module"
+        "revision-pin": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+        "cdc-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md",
+        "hardware": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "module-input": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "split-connectivity": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "source-enumeration": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "frame-capture": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "studio-diagnostics": "https://github.com/te9no/zmk-config-MKB2/tree/codex/zmk-0.4-pinmux-three-wire",
+        "local-just-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#local-build",
+        "source-audit": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#ci"
       },
       "variants": [
         {
@@ -103,9 +111,19 @@
           },
           "evidence": [
             {
-              "label": "MKB three-wire preparation@8f83136",
+              "label": "Historical MKB three-wire preparation@8f83136",
               "status": "passed",
               "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            },
+            {
+              "label": "Combined source@03fa08e",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd"
+            },
+            {
+              "label": "Combined-source CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626"
             }
           ]
         },
@@ -122,9 +140,19 @@
           },
           "evidence": [
             {
-              "label": "MKB three-wire preparation@8f83136",
+              "label": "Historical MKB three-wire preparation@8f83136",
               "status": "passed",
               "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            },
+            {
+              "label": "Combined source@03fa08e",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd"
+            },
+            {
+              "label": "Combined-source CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626"
             }
           ]
         },
@@ -141,9 +169,19 @@
           },
           "evidence": [
             {
-              "label": "MKB three-wire preparation@8f83136",
+              "label": "Historical MKB three-wire preparation@8f83136",
               "status": "passed",
               "url": "https://github.com/te9no/zmk-config-MKB2/commit/8f8313681846ca6db8496a1f239b4acf40c6fa50"
+            },
+            {
+              "label": "Combined source@03fa08e",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/commit/03fa08eb09c0033a229e1fee37da9c0f32b942bd"
+            },
+            {
+              "label": "Combined-source CI",
+              "status": "passed",
+              "url": "https://github.com/te9no/zmk-config-MKB2/actions/runs/33151685626"
             }
           ]
         }

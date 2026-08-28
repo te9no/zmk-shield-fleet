@@ -31,22 +31,23 @@
   ],
   "tracking": {
     "polaris": {
-      "status": "pr-open",
-      "pr": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-      "commit": "07bd951a1e73319cc6fa93004306945c6cdab958",
-      "branch": "codex/zmk-0.4-cdc-debug-right",
+      "status": "applied",
+      "pr": null,
+      "commit": "ac1a312bd471f014b90f506e31c7f48da21346de",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "pr_head": "db78208e1d007aff6bbe8cce2a3572dd49439be3",
-      "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機でCOM327のCDC Debug、1200 baudによるI:XIAO-BOOT遷移、書き戻し後のCOM327復帰とZMK/Peripheral接続を確認し、右側1 CDC構成を実機合格とした。PR #7はDraftのまま。",
+      "notes": "Draft PR #7の右TB/TPD/IQSで未使用board CDCを無効化し、USB loggingの1 CDCだけを有効化。bootloader_trigger.cdc-portが同じlogging UARTを参照する生成DTSを全3targetで確認し、nRF52840のUSB endpoint予算内に収めた。左のStudio RPC構成は変更なし。Actions 32742627186で全9 target成功。2026-08-25に右IQS実機でCOM327のCDC Debug、1200 baudによるI:XIAO-BOOT遷移、書き戻し後のCOM327復帰とZMK/Peripheral接続を確認し、右側1 CDC構成を実機合格とした。PR #7はclosed-unmergedだが、検証済みsourceはPRとは別にac1a312としてzmk-0.4へ直接統合済み。現行ed5cba4で3targetのCDC設定を再確認した。",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
-        "ci": "passed"
+        "ci": "passed",
+        "source-audit": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
         "config-dts": "https://github.com/te9no/zmk-config-GeaconPolaris/pull/7",
-        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186"
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/32742627186",
+        "source-audit": "https://github.com/te9no/zmk-config-GeaconPolaris/blob/ed5cba42763d94f696ce172255fc7ff9f1b8c2c1/snippets/cdc-debug-boot/cdc-debug-boot.overlay"
       },
       "variants": [
         {
