@@ -43,8 +43,8 @@ evidence = [
 [[next_actions]]
 id = "saa-pinmux-hardware"
 state = "waiting"
-priority = "high"
-order = 2
+priority = "medium"
+order = 4
 repository = "saa"
 action = "SAAのpin-release検証branchでOLED、LED、JOYなど代表module入力と左右接続、右CDC/Studioを実機確認する。"
 completion = "0540667の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。左右TPD_IQSは別pin競合解消まで対象を分ける。"
@@ -92,7 +92,7 @@ evidence = [
 [[next_actions]]
 id = "saa-zmk-0-4-hardware-validation"
 state = "active"
-priority = "high"
+priority = "medium"
 order = 4
 repository = "saa"
 action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象moduleを書き込み、左右実機を検証する。"
@@ -109,7 +109,7 @@ evidence = [
 [[next_actions]]
 id = "saa-pmw3610-hardware"
 state = "active"
-priority = "high"
+priority = "medium"
 order = 5
 repository = "saa"
 action = "専用codex/zmk-0.4-three-wire-spi-moduleから左右TB artifactを書き込み、PMW3610入力とStudio診断を確認する。"
