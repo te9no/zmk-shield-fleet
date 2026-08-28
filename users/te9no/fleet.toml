@@ -143,20 +143,20 @@ evidence = [
 ]
 
 [[next_actions]]
-id = "dya-studio-upstream-pr-168"
+id = "mkb-official-dya-studio-peripheral-hardware"
 state = "waiting"
 priority = "medium"
 order = 7
-repository = "cormoran/dya-studio"
-repository_url = "https://github.com/cormoran/dya-studio"
-action = "外部PR #168のPeripheral PMW3610対応を確認し、採否はユーザー判断に委ねる。"
-completion = "upstream側の判断が確定し、Fleetのupstream-pr validationへ結果が記録される。"
-blocker = "外部所有repositoryのopen PR。Fleetから変更・close・mergeせず、ユーザー判断を待つ。"
+repository = "mkb2"
+repository_url = "https://github.com/te9no/zmk-config-MKB2/tree/zmk-0.4"
+action = "既存検証済みMKB右TBv4で、PR #168の修正が配信された公式版DYA Studioを使用し、Peripheral PMW3610のsource列挙と診断を再確認する。"
+completion = "PR #168の修正が配信された版であることを確認し、MKB右TBv4のPeripheral source列挙・診断の実機結果が記録される。"
+blocker = "PR #168はマージ済みだが、修正の公式配信反映と、その版を用いた実機確認は未確認。"
 pr = "https://github.com/cormoran/dya-studio/pull/168"
 change_id = "pmw3610-cormoran-custom-studio-rpc"
-validation_keys = ["upstream-pr"]
+validation_keys = ["studio-peripheral-official-hardware"]
 evidence = [
-  { label = "External PR #168", status = "pending", url = "https://github.com/cormoran/dya-studio/pull/168" },
+  { label = "External PR #168 merged ca39a358 (2026-08-28 JST)", status = "passed", url = "https://github.com/cormoran/dya-studio/pull/168" },
 ]
 
 [[next_actions]]
