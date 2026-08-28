@@ -39,11 +39,22 @@ Cornix `just.sh` manifest builds passed 12/12, the `madula-pmw-debug` opt-in bui
 | Cornix Madula | Complete | Three module targets are qualified; unused connector nodes are disabled; main integration, manifest 12/12, debug opt-in, normal pristine rebuild, CI, PMW init, and real pointer/module-input passed. | None for this pin-release item. |
 | Cornix TPS43 | Complete | Production, host-bond-reset, and Central settings-reset are qualified. The common overlay releases unused connector peripherals; main and CI builds passed. | None for this pin-release item. |
 | Polaris | P0 / BLE pair restored, hardware incomplete | `8421728` passed build/DTS/CI. The historical `8421728` and hash-verified old-UF2 PMW failures are preserved. By 21:04:23 JST both halves were restored to matched `8421728`; boot, split security callback, right PMW initialization/CPI800, and read-only remote PMW GetInfo RPC passed. | Verify physical left JOY/OLED and right TB input. Do not claim hardware completion from boot, split, sensor initialization, or read RPC. |
-| MKB2 | P0 / hardware pending | Validation branch `3361c9e` passes `just.sh` pristine 16/16 and 258 generated-DTS/config assertions. Common shield disables unused UART/SPI and keeps OLED I2C1, battery, CDC, and module pin assignments. | Flash and verify representative hardware before maintenance integration. The separate 3-wire preparation is not included in this branch. |
+| MKB2 | P0 / local build and hardware pending | The former `3361c9e` pinmux result is historical. The [2026-08-28 combined validation](./mkb-pinmux-three-wire-validation-2026-08-28.md) at source `03fa08e` passes CI 16/16 and 487 generated-DTS/config assertions; all three TB variants use the public three-wire module. | Local `just.sh` is blocked by Docker startup; verify it and representative hardware before maintenance integration. |
 | Solstice | P0 / hardware pending | Validation branch `643a256` passes `just.sh` pristine 5/5 and 101 generated-DTS/config assertions. Four added overlay lines disable unused SPI while keeping matrix, left OLED/analog, right TB, battery, and CDC configuration. | Verify representative hardware on the new revision before maintenance integration. |
 | SAA | Medium / hardware pending | Validation branch `0540667` passes `just.sh` pristine 21/21 and 786 generated-DTS/config assertions for unused-bus release and preserved settings. Existing TPD+IQS pin ownership fails separately in generated DTS. | Verify representative hardware; resolve the separate TPD+IQS wiring/controller conflict before claiming that combination ready. |
 | Mopolia | Not applicable | Both targets are qualified, UART is disabled, and SPI2 is deliberately overridden for MLX90393. P0.04/P0.05 are unused by the shield. | No source change. Recheck generated DTS when ZMK or module revisions change. |
 | Sparagmos | P3 | The stable branch still uses ZMK 0.3 and `seeeduino_xiao_ble`. | Treat this audit as a gate for a future non-default ZMK 0.4 migration branch; do not change stable `master`. |
+
+### MKB follow-up — 2026-08-28
+
+The new `codex/zmk-0.4-pinmux-three-wire` source at `03fa08e` combines the
+3361c9e pin-release base with the historical three-wire source from 8f83136.
+The [dedicated validation record](./mkb-pinmux-three-wire-validation-2026-08-28.md)
+records the source, CI, local-build, and hardware gates separately. The new CI
+run passes 16/16 targets and 487 generated-DTS/config assertions. Local
+`just.sh` is blocked before compilation by Docker startup; hardware is pending.
+Earlier local-build and hardware results are historical and are not transferred
+to this revision.
 
 ## Source evidence
 
