@@ -13,7 +13,7 @@
     "from_revision": "1ebf2c4a",
     "to_revision": "148383705c155920be46a48a79d6c6e26127b879",
     "change_url": "https://github.com/te9no/zmk-workspace/commit/148383705c155920be46a48a79d6c6e26127b879",
-    "notes": "workspace main@14838370へ直接push済み。現在checkout優先のartifact保存先、CDCとの共通resolver、profile内ログ、実機に触れない--resolveを追加。18件の回帰テストはlocal/CIとも合格。再監査でMKB消失登録を履歴保全して退避し、退避SAAと現存FleetのGit参照を修復。容量一覧と保持理由も更新した。ファーム変更・build・flash・他者PR・大容量削除は行っていない。"
+    "notes": "workspace main@14838370へ直接push済み。現在checkout優先のartifact保存先、CDCとの共通resolver、profile内ログ、実機に触れない--resolveを追加。18件の回帰テストはlocal/CIとも合格。2026-08-28に明示承認された旧worktree 4件と旧build/west archiveを削除済み。履歴・未保存source・証跡を検証済み復旧データ約2.9 GiBへ保全し、archive整理で差引約42.2 GiBを回収。削除後も18 tests、8 profiles、Git参照、firmware/CDC resolverを確認。ファーム変更・build・flashは行っていない。"
   },
   "repositories": [
     "polaris",
@@ -29,7 +29,7 @@
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "workspace再監査・修正済み。8 profiles 31.11 GiB、ccache 3.74 GiB、旧build/west退避45.22 GiB、旧firmware324.21 MiB、Fleet source退避2.12 GiBを保持理由付きで記録。旧6.9/3.8/2.2 GiBの要約を訂正した。外部Polaris worktreeは実在を確認し、削除せず監査。全active Git参照とartifact/CDC resolverを検証、workspace main@14838370公開・18件CI合格。残るのは旧ESB/旧build等の削除候補を分類して明示承認を得る別作業。",
+      "notes": "2026-08-28更新。旧worktree 4件（約262.5 MiB）を履歴・metadata保全後に承認済み削除。続いて旧build/west archiveの残り約45.1 GiBを削除し、約2.9 GiBの検証済み復旧データを差し引き約42.2 GiB回収。45945 files・19285 unique contents、dirty module 3件・broken snapshot 2件を保全。8 profiles、現行firmware、外部Polaris worktreeは維持し、削除後18 testsとGit参照・CDC resolverを確認。旧ESB profile、ccache、旧firmware/Fleet source archiveは未削除で、追加整理は別途判断。旧45.22 GiB保持・承認待ちの記録は履歴扱い。WSL仮想ディスクの縮小はしていない。",
       "validation": {
         "canonical-layout": "passed",
         "active-repository-repair": "passed",
@@ -39,7 +39,11 @@
         "retained-storage-review": "passed",
         "workspace-path-tests": "passed",
         "cdc-artifact-resolution": "passed",
-        "storage-cleanup-approval": "pending"
+        "storage-cleanup-approval": "passed",
+        "obsolete-worktree-cleanup": "passed",
+        "legacy-archive-cleanup": "passed",
+        "recovery-bundle-verification": "passed",
+        "post-cleanup-validation": "passed"
       },
       "validation_urls": {
         "canonical-layout": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
@@ -50,7 +54,11 @@
         "retained-storage-review": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "workspace-path-tests": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604",
         "cdc-artifact-resolution": "https://github.com/te9no/zmk-workspace/actions/runs/33083235604",
-        "storage-cleanup-approval": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
+        "storage-cleanup-approval": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md#owner-approved-cleanup-2026-08-28",
+        "obsolete-worktree-cleanup": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md#owner-approved-cleanup-2026-08-28",
+        "legacy-archive-cleanup": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md#owner-approved-cleanup-2026-08-28",
+        "recovery-bundle-verification": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md#owner-approved-cleanup-2026-08-28",
+        "post-cleanup-validation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md#owner-approved-cleanup-2026-08-28"
       }
     },
     "mkb2": {
@@ -75,7 +83,7 @@
       "status": "applied",
       "pr": null,
       "commit": null,
-      "notes": "canonical checkoutをconfig/に維持。再監査で旧.tmpのSAA worktreeを45.22 GiB archive内に発見し両方向のGit参照を修復、保全lockを付与。metadataを別途backupし、既存改行差分・専用branch・実機検証待ちは維持。archive全体を単なるcacheとして削除しない。",
+      "notes": "canonical checkoutをconfig/に維持。修復・保全していた旧SAA worktree@c9f6779とwork/saa-pmw-validation@4e54e1cは2026-08-28に明示承認後削除。branch履歴とGit metadataは保全し、現行work/saa-xiao-pinmux@0540667・専用branch・実機検証待ちは維持。旧archiveもsource/証跡の復旧データを検証してから承認済み削除した。SAA firmwareや実機結果は変更していない。",
       "validation": {
         "canonical-layout": "passed",
         "active-repository-repair": "passed",

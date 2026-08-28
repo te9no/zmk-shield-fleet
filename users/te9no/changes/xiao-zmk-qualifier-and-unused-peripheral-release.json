@@ -294,7 +294,7 @@
       "commit": "643a2568e7bb14ed5cca7d513f4d8baa09334a62",
       "branch": "codex/zmk-0.4-xiao-pinmux",
       "base_branch": "zmk-0.4",
-      "notes": "P0。zmk-0.4@6638e6cを基点とする検証branch@643a256へsource修正を適用しpush済み。左右overlayの4行追加のみでxiao_spiを停止。just.sh全5/5 pristine build、生成DTS/.configの101 assertions、CI run33037950369の最終successに合格。通常4 targetのUART/SPI停止、matrix pinを確認。左OLED用I2C1 P0.28/P0.29、analog ADC2/3・oversampling・Peripheral電池表示を保持。右TB SPI0 P0.04/P0.05/P0.28、CS P0.02、IRQ P0.29、CPI800、Y invert、col-offset8を保持。全4 targetのCDCとXIAO battery AIN7・power P0.14・510k/1.51Mも保持。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。",
+      "notes": "P0。zmk-0.4@6638e6cを基点とする検証branch@643a256へsource修正を適用しpush済み。左右overlayの4行追加のみでxiao_spiを停止。just.sh全5/5 pristine build、生成DTS/.configの101 assertions、CI run33037950369の最終successに合格。通常4 targetのUART/SPI停止、matrix pinを確認。左OLED用I2C1 P0.28/P0.29、analog ADC2/3・oversampling・Peripheral電池表示を保持。右TB SPI0 P0.04/P0.05/P0.28、CS P0.02、IRQ P0.29、CPI800、Y invert、col-offset8を保持。全4 targetのCDCとXIAO battery AIN7・power P0.14・510k/1.51Mも保持。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。 2026-08-28読み取り専用再確認：remote検証branchは643a256、maintenanceは6638e6cのまま。生成DTS/.configの101 assertionsを再実行して合格し、保存証跡のSHA256も照合。既存just.sh 5/5 buildログとCI successを再確認した。新規build・flash・mergeは行わず、今回版のhardwareはpendingを維持。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
@@ -307,7 +307,7 @@
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-validation-branch",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-recheck-2026-08-28",
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
         "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-validation-branch",
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369",

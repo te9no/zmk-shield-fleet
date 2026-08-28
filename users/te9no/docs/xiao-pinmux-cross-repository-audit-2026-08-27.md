@@ -93,6 +93,24 @@ The source changes are pushed as [`643a256`](https://github.com/te9no/zmk-config
 - CDC and XIAO battery AIN7, power P0.14, and the 510 kΩ/1.51 MΩ divider remain configured in all 4 keyboard targets.
 - Hardware validation is pending for this firmware revision; earlier successful OLED/TB/analog observations do not complete this new gate.
 
+### Solstice recheck 2026-08-28
+
+Read-only re-audit confirmed that the remote validation branch remains at
+`643a2568e7bb14ed5cca7d513f4d8baa09334a62`, while maintenance `zmk-0.4` remains at
+`6638e6c2f3331b4577b7863b99a84206722768e6`. The source change is still only four
+added lines across the left/right overlays; all five targets use `xiao_ble//zmk`.
+
+- Re-ran the generated-DTS/config checker: **101 assertions passed**, covering
+  the four keyboard variants and settings-reset qualifier.
+- Verified saved Solstice evidence against its SHA-256 manifest.
+- Rechecked all five existing `just.sh` build logs and the successful conclusion
+  of [CI run 33037950369](https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369)
+  at the same source SHA. This is verification of the previous builds, not a new build.
+- No source modification, firmware flash, or maintenance merge was performed.
+  Hardware remains **pending** for this revision. Earlier OLED/TB/JOY confirmations
+  must not be reused to close it. Next verify keys/split, left JOY/OLED and
+  Peripheral battery display, right TB, and CDC on this firmware pair.
+
 ## SAA validation branch
 
 The source changes are pushed as [`0540667`](https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f) on `codex/zmk-0.4-xiao-pinmux`, based on dedicated maintenance `zmk-0.4_validation_cormoran-zmk@4e54e1c`. Only `SAA.dtsi` changes. No firmware PR, stable/maintenance merge, or flash has been performed.
