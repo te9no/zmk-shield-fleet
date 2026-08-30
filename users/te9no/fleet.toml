@@ -59,22 +59,6 @@ evidence = [
   { label = "SAA CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353" },
 ]
 
-[[next_actions]]
-id = "cornix-madula-1200-baud"
-state = "waiting"
-priority = "high"
-order = 1
-repository = "cornix"
-action = "main/TB firmwareで1200 baud bootを実行し、LPPSで確認済みのCOM447 reset/boot復帰を別variantへ転用せず確認する。"
-completion = "main/TB variantのCDC Debug接続中に1200 baudを実行し、bootloaderと通常COMの復帰が実機合格する。"
-blocker = "LPPSと2026-08-28のIQS診断版では1200 baud reset/boot復帰済み。main/TB variantは未確認で、他variantの結果を転用しない。"
-repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/main"
-change_id = "cdc-acm-zephyr-4.1"
-validation_keys = ["1200-baud"]
-evidence = [
-  { label = "Cornix main integration@794987c", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8" },
-  { label = "Cornix main CI 12/12", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396" },
-]
 
 [[next_actions]]
 id = "cornix-madula-iqs-hardware"
@@ -82,13 +66,13 @@ state = "waiting"
 priority = "high"
 order = 3
 repository = "cornix"
-action = "Madula IQSの入力・方向は確認済み。main通常版でgesture、cold-start、長時間動作、split接続を追加確認する。"
-completion = "確認済みの入力・方向を保持し、残るgesture、cold-start、長時間、split接続の証跡が揃う。"
-blocker = "2026-08-28にSDA P1.14とROTATE_270で入力・方向OK。main@578c9f1へ統合済み。通常版再flashと残項目のみ未確認。"
+action = "Madula IQSはmain通常版で動作確認済み。通常版のままgesture、cold-start、長時間動作、split接続を追加確認する。診断版は使用しない。"
+completion = "通常版の動作確認を保持し、gesture、cold-start、長時間、split接続の証跡が揃う。"
+blocker = "2026-08-30 main@578c9f1通常版をflashし1261ブロック一致、ユーザーが上下左右入力の確認依頼に『OK動きます』と回答。初回の製品IDエラーは履歴に保持。残る確認項目のみ保留。"
 change_id = "iqs9151-upstream-zmk-0.4"
 validation_keys = ["gestures", "cold-start", "long-duration", "split-connectivity"]
 evidence = [
-  { label = "IQS input, direction and CDC verified", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md" },
+  { label = "Main production IQS hardware confirmed by owner", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md" },
 ]
 
 [[next_actions]]
