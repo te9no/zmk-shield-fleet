@@ -184,6 +184,16 @@ out-of-scope work. The first currently actionable entry is also shown once as
 Validation checks are rendered individually, so each named evidence URL remains
 reachable on desktop and mobile.
 
+Use the sidebar (horizontal navigation on small screens) to switch between the
+work queue, change ledger, repository matrix, revision findings, and setup guide
+without scrolling through the whole fleet. The queue initially shows **Now**;
+**Waiting**, **Later**, and **All** keep the other work accessible. Work and change
+lists show six records per page, with totals and previous/next controls.
+Completion conditions, branch context, and evidence expand on demand. On mobile,
+expand a repository before opening its individual changes. Existing action and
+repository hash links still reveal their target, including across filters/pages.
+These view controls do not modify ledger data or completion rules.
+
 All committed `users/*/fleet.toml` profiles and their enabled change ledgers are
 included in the public dashboard payload. Never commit credentials, private
 clone URLs, private evidence URLs, local absolute paths, or firmware binaries.

@@ -12,11 +12,12 @@ import {
   targetNeedsAction,
   targetVariants,
 } from "./model.js?v=20260827-evidence";
+import { PAGE_SIZE, paginate, routeForHash } from "./navigation.js?v=20260830-modern";
 
 // Completion lives in model.js; its accepted-check predicate remains:
 // checks.every((status) => status === "passed" || status === "waived")
 
-const state = { data: null, profile: null, actionFilter: "all", filter: "all", matrixFilter: "all", search: "" };
+const state = { data: null, profile: null, actionFilter: "active", actionPage: 0, changePage: 0, filter: "all", matrixFilter: "all", search: "" };
 const actionStates = {
   active: { label: "今進める", detail: "Actionable now" },
   waiting: { label: "実機/外部待ち", detail: "Waiting" },
@@ -152,12 +153,14 @@ function actionCard(profile, action) {
     <h3 id="action-title-${escapeHtml(action.id)}">${repositoryMarkup(profile, action)}</h3>
     <p class="action-task">${escapeHtml(action.action)}</p>
     ${auditRequestButton(action.change_id, action.repository, action.id)}
+    <details class="action-context"><summary>完了条件・ブランチ・保留理由</summary>
     ${renderBranch(actionBranch(profile, action))}
     ${variants.length ? `<p class="variant-list"><strong>Variants</strong> ${variants.map(escapeHtml).join(", ")}</p>` : ""}
     <dl class="action-details">
       <div><dt>Done when / 完了条件</dt><dd>${escapeHtml(action.completion)}</dd></div>
       <div class="blocker"><dt>Blocker / 保留理由</dt><dd>${escapeHtml(blocker)}</dd></div>
     </dl>
+    </details>
     ${evidence.length ? `<details class="action-evidence"><summary>${escapeHtml(evidenceSummary)}</summary><div class="action-evidence-scroll" tabindex="0" role="region" aria-label="${escapeHtml(action.repository)}の証跡一覧">${renderEvidence(evidence)}</div></details>` : ""}
     <div class="action-footer"><span>${escapeHtml(stateMeta.detail)}</span>${action.pr ? externalLink(action.pr, "Related PR ↗") : ""}</div>
   </article>`;
@@ -181,9 +184,12 @@ function renderActions(profile) {
   document.querySelector("#action-summary").textContent = allActions.length
     ? `${totals.active} actionable now · ${totals.waiting} waiting · ${totals.later} later`
     : "No explicit next actions in this profile";
+  const page = paginate(visible, state.actionPage);
+  state.actionPage = page.page;
   document.querySelector("#action-grid").innerHTML = visible.length
-    ? visible.map((action) => actionCard(profile, action)).join("")
-    : '<div class="empty">No next actions match this filter.</div>';
+    ? page.items.map((action) => actionCard(profile, action)).join("")
+    : '<div class="empty">この条件の作業はありません。別の状態のタブで待機中・後回しの項目を確認できます。</div>';
+  renderPagination("action", page);
 }
 
 function shortChangeLabel(change) {
@@ -197,19 +203,22 @@ function renderChanges(profile) {
     if (state.filter === "complete") return progress.incomplete === 0;
     return true;
   });
-  document.querySelector("#change-grid").innerHTML = changes.length ? changes.map((change) => {
+  const page = paginate(changes, state.changePage);
+  state.changePage = page.page;
+  document.querySelector("#change-grid").innerHTML = changes.length ? page.items.map((change) => {
     const progress = changeCounts(change);
     const percent = progress.total ? Math.round(progress.complete / progress.total * 100) : 0;
     const sourceUrl = change.trigger?.change_url || change.source?.change_url;
     return `<article class="change-card">
       <div class="change-meta"><span>${escapeHtml(scopeLabel(change.scope))}</span><span class="badge ${change.automated ? "" : "manual"}">${change.automated ? "PR ready" : "ledger only"}</span></div>
-      <h3>${escapeHtml(change.title)}</h3><p>${escapeHtml(change.description)}</p>
+      <h3>${escapeHtml(change.title)}</h3><details class="change-description"><summary>変更の詳細</summary><p>${escapeHtml(change.description)}</p></details>
       ${Object.keys(change.tracking ?? {}).length ? auditRequestButton(change.id) : ""}
       <div class="progress-line" role="progressbar" aria-label="${escapeHtml(change.title)} completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}"><span style="width:${percent}%"></span></div>
       <div class="progress-copy"><strong>${progress.complete} / ${progress.total} accounted for</strong><span>${progress.incomplete} incomplete</span></div>
       ${sourceUrl ? externalLink(sourceUrl, "View reference implementation ↗", "source-link") : ""}
     </article>`;
   }).join("") : '<div class="empty">No changes match this filter.</div>';
+  renderPagination("change", page);
 }
 
 function statusMarkup(target) {
@@ -287,14 +296,14 @@ function renderMatrix(profile) {
     ${profile.changes.map((change) => { const target = change.tracking[repository.id]; return `<td class="${statusCellClass(target)}">${statusMarkup(target)}${targetDetails(repository, target, change.id)}</td>`; }).join("")}
   </tr>`).join("") || '<tr><td class="empty" colspan="99">No repositories match.</td></tr>';
 
-  document.querySelector("#matrix-cards").innerHTML = repositories.map((repository) => `<article class="matrix-card" id="mobile-repo-${escapeHtml(repository.id)}">
-    <header><div><h3>${escapeHtml(repository.id)}</h3><p>${escapeHtml(repository.architecture)} · ${escapeHtml(repository.modules.join(", "))}</p></div><span class="status ${repository.rollout_order >= 99 ? "na" : "pr-open"}">${repository.rollout_order >= 99 ? "lowest" : `#${repository.rollout_order ?? "—"}`}</span></header>
+  document.querySelector("#matrix-cards").innerHTML = repositories.map((repository) => `<details class="matrix-card" id="mobile-repo-${escapeHtml(repository.id)}">
+    <summary><span><strong>${escapeHtml(repository.id)}</strong><small>${escapeHtml(repository.architecture)} · ${escapeHtml(repository.modules.join(", "))}</small></span><span class="status ${repository.rollout_order >= 99 ? "na" : "pr-open"}">${repository.rollout_order >= 99 ? "lowest" : `#${repository.rollout_order ?? "—"}`}</span></summary>
     <p class="repo-branches">Maintenance: ${escapeHtml(repository.maintenance_branch)} · Stable: ${escapeHtml(repository.default_branch)}</p>
     <div class="mobile-change-list">${profile.changes.filter((change) => change.tracking[repository.id]).map((change) => {
       const target = change.tracking[repository.id];
       return `<details class="mobile-change ${statusCellClass(target)}"><summary><span>${escapeHtml(shortChangeLabel(change))}</span>${statusMarkup(target)}</summary><div class="mobile-target-details">${targetDetailBody(repository, target, change.id)}</div></details>`;
     }).join("")}</div>
-  </article>`).join("") || '<div class="empty">No repositories match.</div>';
+  </details>`).join("") || '<div class="empty">No repositories match.</div>';
 }
 
 function renderRevisions(profile) {
@@ -316,6 +325,68 @@ function render() {
   const generated = state.data.generated_at ? new Date(state.data.generated_at).toLocaleString(profile.locale || undefined) : "unknown";
   const commit = state.data.source_commit ? state.data.source_commit.slice(0, 12) : "unknown";
   document.querySelector("#footer-source").textContent = `Generated ${generated} · source ${commit}`;
+  document.querySelector("#active-profile-label").textContent = profile.id;
+}
+
+function renderPagination(kind, page) {
+  const container = document.querySelector(`#${kind}-pagination`);
+  container.hidden = page.pages <= 1;
+  container.innerHTML = `<span role="status">${page.total}件中 ${page.page * PAGE_SIZE + 1}–${Math.min((page.page + 1) * PAGE_SIZE, page.total)}件</span><div><button type="button" data-page-kind="${kind}" data-page="${page.page - 1}" ${page.page === 0 ? "disabled" : ""} aria-label="前のページ">← 前へ</button><span>${page.page + 1} / ${page.pages}</span><button type="button" data-page-kind="${kind}" data-page="${page.page + 1}" ${page.page + 1 === page.pages ? "disabled" : ""} aria-label="次のページ">次へ →</button></div>`;
+}
+
+function showRoute(focus = false) {
+  const route = routeForHash(location.hash);
+  const profile = currentProfile();
+  // Shared links must reveal their targets, even across filters and pages.
+  if (route.actionId) {
+    const actions = sortedActions(profile.next_actions ?? []);
+    state.actionFilter = "all";
+    state.actionPage = Math.max(0, Math.floor(actions.findIndex((a) => a.id === route.actionId) / PAGE_SIZE));
+    updatePressed(".action-filter", document.querySelector('[data-action-filter="all"]'));
+    renderActions(profile);
+  }
+  if (route.repositoryId) {
+    state.search = ""; state.matrixFilter = "all";
+    document.querySelector("#repo-search").value = "";
+    updatePressed(".matrix-filter", document.querySelector('[data-matrix-filter="all"]'));
+    renderMatrix(profile);
+  }
+  document.querySelectorAll("[data-view]").forEach((section) => { section.hidden = section.dataset.view !== route.view; });
+  document.querySelectorAll("[data-view-link]").forEach((link) => {
+    if (link.dataset.viewLink === route.view) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  });
+  let target = route.targetId ? document.getElementById(route.targetId) : null;
+  if (route.repositoryId && !document.querySelector(".matrix-wrap").getClientRects().length) {
+    target = document.getElementById(`mobile-repo-${route.repositoryId}`);
+    if (target) target.open = true;
+  }
+  if (target) {
+    target.scrollIntoView({ block: "start" });
+    if (focus) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
+  } else if (focus) {
+    window.scrollTo({ top: 0, behavior: "instant" });
+    document.querySelector(`#${route.view} h2`)?.focus({ preventScroll: true });
+  }
+}
+
+function initNavigation() {
+  window.addEventListener("hashchange", () => showRoute(true));
+  document.addEventListener("click", (event) => {
+    const pager = event.target.closest?.("[data-page-kind]");
+    if (pager) {
+      const kind = pager.dataset.pageKind;
+      state[`${kind}Page`] = Number(pager.dataset.page);
+      if (kind === "action") renderActions(currentProfile()); else renderChanges(currentProfile());
+      const heading = document.querySelector(kind === "action" ? "#actions-heading" : "#changes-heading");
+      heading.focus({ preventScroll: true });
+      heading.scrollIntoView({ block: "start" });
+    }
+    const link = event.target.closest?.('a[href^="#"]');
+    // Clicking an already-current deep link still reveals a filtered target.
+    if (link && link.hash === location.hash) { event.preventDefault(); showRoute(true); }
+  });
+  showRoute();
 }
 
 function updatePressed(selector, active) {
@@ -437,17 +508,18 @@ async function init() {
     select.innerHTML = state.data.profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.id)}</option>`).join("");
     document.querySelector("#profile-control").hidden = state.data.profiles.length === 1;
     select.addEventListener("change", (event) => {
-      state.profile = event.target.value; state.actionFilter = "all"; state.search = ""; state.matrixFilter = "all";
+      state.profile = event.target.value; state.actionFilter = "active"; state.actionPage = 0; state.changePage = 0; state.search = ""; state.matrixFilter = "all";
       document.querySelector("#repo-search").value = "";
       updatePressed(".matrix-filter", document.querySelector('[data-matrix-filter="all"]'));
-      updatePressed(".action-filter", document.querySelector('[data-action-filter="all"]'));
+      updatePressed(".action-filter", document.querySelector('[data-action-filter="active"]'));
       render();
+      showRoute();
     });
     document.querySelectorAll(".action-filter").forEach((button) => button.addEventListener("click", () => {
-      state.actionFilter = button.dataset.actionFilter; updatePressed(".action-filter", button); renderActions(currentProfile());
+      state.actionFilter = button.dataset.actionFilter; state.actionPage = 0; updatePressed(".action-filter", button); renderActions(currentProfile());
     }));
     document.querySelectorAll(".filter").forEach((button) => button.addEventListener("click", () => {
-      state.filter = button.dataset.filter; updatePressed(".filter", button); renderChanges(currentProfile());
+      state.filter = button.dataset.filter; state.changePage = 0; updatePressed(".filter", button); renderChanges(currentProfile());
     }));
     document.querySelectorAll(".matrix-filter").forEach((button) => button.addEventListener("click", () => {
       state.matrixFilter = button.dataset.matrixFilter; updatePressed(".matrix-filter", button); renderMatrix(currentProfile());
@@ -455,6 +527,7 @@ async function init() {
     document.querySelector("#repo-search").addEventListener("input", (event) => { state.search = event.target.value; renderMatrix(currentProfile()); });
     initAuditRequest();
     render();
+    initNavigation();
   } catch (error) {
     document.querySelector("main").innerHTML = `<section class="section"><div class="empty" role="alert">Dashboard data could not be loaded: ${escapeHtml(error.message)}</div></section>`;
   }
