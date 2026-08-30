@@ -122,6 +122,81 @@ added lines across the left/right overlays; all five targets use `xiao_ble//zmk`
   must not be reused to close it. Next verify keys/split, left JOY/OLED and
   Peripheral battery display, right TB, and CDC on this firmware pair.
 
+### Solstice recheck 2026-08-30
+
+The owner requested a re-audit of this Solstice item. The remote validation
+branch is still `643a2568e7bb14ed5cca7d513f4d8baa09334a62`, and maintenance
+`zmk-0.4` is still `6638e6c2f3331b4577b7863b99a84206722768e6`. There is no new
+source revision or firmware PR for this change. Its exact diff remains four
+added lines disabling `xiao_spi` in the left/right overlays. The XIAO ZMK
+qualifier was already present in all five targets.
+
+- Re-ran the existing Solstice generated-DTS/config checker: **101/101 passed**.
+  Only its container root path was mapped to the current workspace in memory;
+  the check logic and saved evidence were not modified.
+- Verified all **12 Solstice evidence files** (ten DTS/config files, the checker,
+  and the audit summary) against their manifest SHA-256 and archived ZIP bytes.
+- Rechecked the five existing `just.sh` pristine-build logs and
+  [CI 33037950369](https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369):
+  all five build jobs succeeded at `643a256`. No new build was run.
+- Left OLED/Peripheral battery proxy/analog oversampling, right trackball SPI0
+  and orientation, matrix pins, battery wiring, and CDC settings remain covered
+  by the generated-DTS/config checks above.
+- No firmware flash, source edit, PR creation, or maintenance merge was done.
+  An existing unrelated SVG worktree change was left untouched.
+
+Asked the owner whether `643a256` was flashed and which hardware checks were
+performed. The owner clarified: **「まだ確認してません」** (not yet verified).
+**Hardware remains pending**, explicitly unperformed rather than merely awaiting
+an evidence link. Next verify CDC, OLED/Peripheral battery display, JOY, right
+TB, and left/right key input on the validation firmware. The overall item is not
+complete and maintenance is not integrated.
+
+### Solstice hardware follow-up 2026-08-30
+
+After the read-only audit, the owner explicitly requested CDC flashing and
+hardware verification. Retained the previously selected US layout. Downloaded
+the firmware artifact from CI `33037950369`; both US images exactly match the
+saved `just.sh` build outputs. Verified UF2 magic, nRF52840 family, unique
+application addresses, and SHA-256 before writing. No settings-reset image was
+used.
+
+| Side | Firmware SHA-256 | Result |
+| --- | --- | --- |
+| Left US | `a10c96218a02ed2db9322f657a376d4df5cacb480700604b1a80351829c352c0` | CDC COM73 at 1200 baud entered the identity-checked H: bootloader; image copied, bootloader volume disconnected. Runtime COM73 returned and a 15-second capture contained the Zephyr boot banner. |
+| Right US | `ca38bb9d80aebb3d8fc17f0e7177b1fb8439a5cb1ded5844f3ce804379eef4f2` | The existing firmware did not enter bootloader through CDC COM49 or COM50. After manual bootloader entry was requested, H: appeared and was positively identified as Solstice right. Image copied; bootloader volume disconnected and runtime COM50 opened at 115200 baud. No log text was received during the initial three-second capture. |
+
+The right-side 1200-baud observations concern the previously installed image,
+not the pin-release candidate. They are not a failure of the newly flashed
+candidate. At this initial stage its 1200-baud trigger had not been retested.
+Both US images were flashed and the owner was immediately notified. No right
+sensor-init, split-connectivity or input acceptance was yet claimed. The left boot/log check
+does not verify OLED appearance, battery display, JOY directions, right TB,
+or key input. Overall hardware validation was still pending at that stage.
+
+Artifacts, copy records, and a filtered boot log are stored privately in
+`.zmk-workspace/evidence/solstice-pinmux-hardware-20260830/`. Stable USB device
+identifiers and raw input logs are not included in this public document.
+
+Subsequently the owner reported overlapping `NLCK` text. The left was reflashed
+with `643a256` plus an uncommitted lock-text config change; the right remains
+on the original `643a256` image. See the
+[OLED follow-up](solstice-oled-lock-text-2026-08-30.md) for exact artifact hashes,
+build verification and the owner's subsequent acceptance:
+**「OK消えました 他も動作問題ないです」**. Representative operation of the actual
+US pair and the OLED change are passed based on that report. A subsequent
+[right CDC recheck](solstice-right-cdc-recheck-2026-08-30.md) independently passed
+1200-baud boot, 1133/1133 application-block readback, recovery, PMW3610
+initialization and split connection. JIS hardware, extended-duration testing
+and resolution of the left saved-settings errors are not inferred.
+Maintenance integration was pending at the time of the hardware test. The
+owner subsequently requested completion: [PR #6](https://github.com/te9no/zmk-config-GeaconSolstice/pull/6)
+integrated the exact tested source (including the OLED text fix, now committed
+as `25dbb3f`) into `zmk-0.4@7f64859`. Source CI passed all five targets and the
+merged Git tree matches that source. Stable `main` is unchanged. See the
+[integration record](solstice-pinmux-integration-2026-08-30.md) for distinct
+build, hardware, and integration evidence; no new flashing was performed.
+
 ## SAA validation branch
 
 The source changes are pushed as [`0540667`](https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f) on `codex/zmk-0.4-xiao-pinmux`, based on dedicated maintenance `zmk-0.4_validation_cormoran-zmk@4e54e1c`. Only `SAA.dtsi` changes. No firmware PR, stable/maintenance merge, or flash has been performed.
