@@ -50,6 +50,16 @@ readback確認後の2回目の起動では、採取した12秒間に次のRDY警
 
 続けて **「診断版はもういらないよ」** と指示されたため、今後の使用・検証対象はmain通常版に統一する。診断版の追加ビルド・再flashは行わず、8月28日の診断版記録は過去の証跡としてのみ残す。
 
+## 移行完了と追加検証の分離（2026-08-30）
+
+ユーザーが「未確認4項目を別の追加検証として保留に残し、移行項目をクローズする」方針を承認したため、台帳のみを整理した。
+
+- [本家ドライバ移行](../changes/iqs9151-upstream-zmk-0.4.json)のCornixは、main統合・ビルド/CI・通常版のflash/readback・CDC・入力/方向の既存証拠により完了。`merged`を保持し、未確認4項目を追加検証へ移管した。
+- [Madula IQS通常版の追加実機検証](../changes/madula-iqs-additional-validation.json)へ `gestures`、`cold-start`、`long-duration`、`split-connectivity` をすべて `pending` のまま移した。合格・免除・検証不要とは判定していない。
+- 次の作業は `cornix-madula-iqs-additional-validation`。通常版を対象とし、実施時のrevisionと各結果を別々に記録する。
+- 上記の初回起動失敗と再起動後のRDY警告は引き続き観測履歴。原因や起動安定性は未確定。
+- 今回は新しいビルド・実機検証・書き込み・ソース修正・マージを行っていない。対象はCornixのみで、他repositoryの状態は変更していない。
+
 ## 証跡の扱い
 
 ローカルの `.zmk-workspace/evidence/cornix-madula-iqs-audit-20260830/` にCI log、生成DTS/config、UF2、照合結果、初期化に限定したログ抜粋を保存。機器の固有識別情報と生の入力ログは公開台帳に含めない。full-flash readbackは照合後に削除し、ブロック一致数だけを保持する。
