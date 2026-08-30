@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "madula-iqs-additional-validation",
+  "enabled": true,
+  "title": "Madula IQS通常版の追加実機検証を行う",
+  "description": "Cornixの本家IQS9151ドライバ移行完了とは分けて、通常版のジェスチャー・完全電源OFFからの起動・長時間動作・split接続を確認する。未確認を合格や免除にはしない。",
+  "source": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "from_revision": null,
+    "to_revision": "578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/commit/578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
+    "notes": "2026-08-30 ユーザー承認によりiqs9151-upstream-zmk-0.4のCornixに残っていた4項目を移管。ShiniNet本家driver@08a6fd19c5aa5ae7f11daf371b5a391cd8596783を使うmain通常版が参考基準。新たな実機確認・ソース変更・書き込みは行っていない。"
+  },
+  "repositories": [
+    "cornix"
+  ],
+  "tracking": {
+    "cornix": {
+      "status": "pending",
+      "pr": null,
+      "commit": "578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
+      "branch": "main",
+      "base_branch": "main",
+      "notes": "通常版のbuild/CI・flash/readback・CDC・入力/方向は移行元iqs9151-upstream-zmk-0.4で合格済み。この追加検証の合格へ転用しない。初回起動でRDY timeout/製品ID0xeeee、2回目でRDY警告を観測した履歴を保持し、起動安定性や原因解消を断定しない。完全電源OFF、gestures、長時間、split接続の個別証拠は未取得。診断版は使用しない。次回は実際の検証対象revisionと結果を記録する。",
+      "validation": {
+        "gestures": "pending",
+        "cold-start": "pending",
+        "long-duration": "pending",
+        "split-connectivity": "pending"
+      },
+      "validation_urls": {
+        "gestures": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "cold-start": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "long-duration": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "split-connectivity": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md"
+      }
+    }
+  },
+  "steps": []
+}
