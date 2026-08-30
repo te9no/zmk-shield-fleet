@@ -15,67 +15,76 @@
     <meta name="twitter:image" content="https://te9no.github.io/zmk-shield-fleet/og.png">
     <title>ZMK Shield Fleet</title>
     <link rel="stylesheet" href="styles.css?v=20260827-evidence">
+    <link rel="stylesheet" href="dashboard.css?v=20260830-modern">
   </head>
   <body>
     <a class="skip-link" href="#next-actions">Skip to next actions / 次にやることへ</a>
-    <header class="topbar">
+    <aside class="sidebar" aria-label="Fleet navigation">
       <a class="brand" href="#top" aria-label="ZMK Shield Fleet home">
-        <span class="brand-mark" aria-hidden="true">ZF</span>
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><path d="M14 17.5h7m-3.5-3.5v7"/></svg></span>
         <span id="brand-name">ZMK Shield Fleet</span>
       </a>
+      <p class="nav-label">WORKSPACE</p>
+      <nav class="view-nav" aria-label="Dashboard views">
+        <a href="#next-actions" data-view-link="next-actions" aria-current="page"><span aria-hidden="true">→</span>次にやること</a>
+        <a href="#changes" data-view-link="changes"><span aria-hidden="true">≡</span>変更台帳</a>
+        <a href="#coverage" data-view-link="coverage"><span aria-hidden="true">▦</span>横断表</a>
+        <a href="#revisions" data-view-link="revisions"><span aria-hidden="true">⌘</span>Revision確認</a>
+        <a href="#create-your-fleet" data-view-link="create-your-fleet"><span aria-hidden="true">＋</span>自分のFleetを作る</a>
+      </nav>
+      <p class="sidebar-note">Shared changes.<br>One clear view.<small>Cross-repository rollout tracker</small></p>
+    </aside>
+    <header class="topbar">
+      <div class="workspace-label"><span>Workspace</span><strong id="active-profile-label">Fleet</strong></div>
       <nav class="topbar-actions" aria-label="Dashboard links">
         <label class="profile-control" id="profile-control">
           <span>Profile</span>
           <select id="profile-select" aria-label="Fleet profile"></select>
         </label>
-        <a class="docs-link" href="#create-your-fleet">Create yours</a>
         <a class="github-link" id="project-link" href="https://github.com/te9no/zmk-shield-fleet">GitHub ↗</a>
       </nav>
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
+      <section class="hero" data-view="next-actions" aria-labelledby="hero-title">
         <div class="hero-heading">
           <div>
             <p class="eyebrow">FLEET OVERVIEW</p>
-            <h1 id="hero-title">Know what<br><span>ships next.</span></h1>
+            <h1 id="hero-title">Fleet overview<span class="heading-dot">.</span></h1>
           </div>
-          <p class="hero-copy">Turn shared ZMK changes into a clear queue of reviews, validation, and rollout work.</p>
+          <p class="hero-copy">今進める作業から、ひとつずつ。<br>変更と検証の状況を、リポジトリ横断で。</p>
         </div>
         <div class="stats" id="stats" aria-live="polite"></div>
-        <p class="stats-note">“Incomplete ledger cells” counts repository × change records that are not fully accepted. Use the curated queue below for concrete work.</p>
+        <p class="stats-note">未完了数は「リポジトリ × 変更項目」の件数です。具体的な作業は下のキューから選べます。</p>
       </section>
 
-      <section class="section action-section" id="next-actions" aria-labelledby="actions-heading">
+      <section class="section action-section" id="next-actions" data-view="next-actions" aria-labelledby="actions-heading">
         <div class="section-heading">
           <div>
             <p class="eyebrow">WORK QUEUE</p>
-            <h2 id="actions-heading">Next actions <span>/ 次にやること</span></h2>
+            <h2 id="actions-heading" tabindex="-1">次にやること</h2>
           </div>
           <div class="action-toolbar">
             <p class="section-copy" id="action-summary" aria-live="polite"></p>
             <div class="action-filters" role="group" aria-label="Next action status filter">
-              <button class="action-filter active" data-action-filter="all" aria-pressed="true">All / すべて</button>
-              <button class="action-filter" data-action-filter="active" aria-pressed="false">Now / 今進める</button>
+              <button class="action-filter active" data-action-filter="active" aria-pressed="true">Now / 今進める</button>
               <button class="action-filter" data-action-filter="waiting" aria-pressed="false">Waiting / 待ち</button>
               <button class="action-filter" data-action-filter="later" aria-pressed="false">Later / 後回し</button>
+              <button class="action-filter" data-action-filter="all" aria-pressed="false">All / すべて</button>
             </div>
           </div>
         </div>
         <div class="start-here" id="start-here"></div>
-        <div class="action-legend" aria-label="Next action status legend">
-          <span class="action-state active">今進める</span>
-          <span class="action-state waiting">実機/外部待ち</span>
-          <span class="action-state later">後回し/対象外</span>
-        </div>
         <div class="action-grid" id="action-grid"></div>
+        <nav class="pagination" id="action-pagination" aria-label="作業一覧のページ" hidden></nav>
       </section>
 
-      <section class="section" aria-labelledby="changes-heading">
+      <section class="section" id="changes" data-view="changes" aria-labelledby="changes-heading" hidden>
         <div class="section-heading">
           <div>
             <p class="eyebrow">CHANGE LEDGER</p>
-            <h2 id="changes-heading">Rollout campaigns</h2>
+            <h2 id="changes-heading" tabindex="-1">変更台帳</h2>
+            <p class="section-intro">横展開する変更と、各リポジトリへの反映状況。</p>
           </div>
           <div class="filters" role="group" aria-label="Change filters">
             <button class="filter active" data-filter="all" aria-pressed="true">All changes</button>
@@ -84,14 +93,15 @@
           </div>
         </div>
         <div class="change-grid" id="change-grid"></div>
+        <nav class="pagination" id="change-pagination" aria-label="変更台帳のページ" hidden></nav>
       </section>
 
-      <section class="section matrix-section" aria-labelledby="matrix-heading">
+      <section class="section matrix-section" id="coverage" data-view="coverage" aria-labelledby="matrix-heading" hidden>
         <div class="section-heading matrix-title">
           <div>
             <p class="eyebrow">FLEET MATRIX</p>
-            <h2 id="matrix-heading">Repository coverage</h2>
-            <p class="matrix-intro">Every validation name and evidence URL remains individually reachable. Open “Evidence &amp; notes” for branch and stable-rollout context.</p>
+            <h2 id="matrix-heading" tabindex="-1">リポジトリ横断表</h2>
+            <p class="matrix-intro">色で状況を比較。セルの「Evidence &amp; notes」から検証内容・証跡を確認できます。</p>
           </div>
           <div class="matrix-controls">
             <div class="matrix-filters" role="group" aria-label="Repository view">
@@ -121,19 +131,19 @@
         <div class="matrix-cards" id="matrix-cards"></div>
       </section>
 
-      <section class="section revision-section" aria-labelledby="revision-heading">
+      <section class="section revision-section" id="revisions" data-view="revisions" aria-labelledby="revision-heading" hidden>
         <div>
           <p class="eyebrow">REPRODUCIBLE BUILDS</p>
-          <h2 id="revision-heading">Revision pinning</h2>
+          <h2 id="revision-heading" tabindex="-1">Revision確認</h2>
           <p>Moving branches and abbreviated SHAs remain visible until each repository is pinned to a verified commit.</p>
         </div>
         <div id="revision-list" class="revision-list"></div>
       </section>
 
-      <section class="section create-section" id="create-your-fleet" aria-labelledby="create-heading">
+      <section class="section create-section" id="create-your-fleet" data-view="create-your-fleet" aria-labelledby="create-heading" hidden>
         <div>
           <p class="eyebrow">PUBLIC &amp; REUSABLE</p>
-          <h2 id="create-heading">Create your fleet <span>/ 自分の台帳を作る</span></h2>
+          <h2 id="create-heading" tabindex="-1">自分のFleetを作る</h2>
           <p>Fork the project, copy the example profile, validate it, and let GitHub Pages publish the generated dashboard.</p>
         </div>
         <ol class="create-steps">
@@ -175,6 +185,6 @@
       <p id="audit-status" class="audit-status" role="status" aria-live="polite" aria-atomic="true"></p>
     </dialog>
 
-    <script type="module" src="app.js?v=20260827-evidence"></script>
+    <script type="module" src="app.js?v=20260830-modern"></script>
   </body>
 </html>
