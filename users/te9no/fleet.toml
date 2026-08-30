@@ -24,23 +24,6 @@ evidence = [
   { label = "Local just.sh: Docker startup blocked", status = "pending", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/mkb-pinmux-three-wire-validation-2026-08-28.md#local-build" },
 ]
 
-[[next_actions]]
-id = "solstice-pinmux-hardware"
-state = "waiting"
-priority = "high"
-order = 2
-repository = "solstice"
-action = "Solsticeのpin-release検証firmwareでCDC、OLEDとPeripheral電池表示、JOY、右TB、左右入力を実機確認する。"
-completion = "643a256の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。"
-blocker = "2026-08-28再確認：643a256で生成DTS 101 assertions再実行合格、既存just.sh 5/5 buildログとCI successを照合。zmk-0.4は6638e6cのまま。今回版の実機未確認・未統合で、過去のOLED/JOY/TB合格は転用しない。"
-repository_url = "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-xiao-pinmux"
-change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["hardware"]
-evidence = [
-  { label = "Solstice validation@643a256 (5/5, 101 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62" },
-  { label = "Solstice CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369" },
-  { label = "2026-08-28 read-only recheck: DTS 101/101", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-recheck-2026-08-28" },
-]
 
 [[next_actions]]
 id = "saa-pinmux-hardware"

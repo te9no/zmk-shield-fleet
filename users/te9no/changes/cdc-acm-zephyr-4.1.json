@@ -188,11 +188,21 @@
       "status": "merged",
       "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
       "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "notes": "左右US/JISへzmk-usb-loggingとcdc-bootを追加し、未使用board CDCを無効化。just.sh pristineで4/4成功。左右USへ書き込み、左COM73と右COM50のCDC Debugを確認。2026-08-23に右COM50へ1200 baud touchを送信し、COM50の消失とXIAO-SENSEブートローダーのHドライブ出現を実機確認した。Solstice_R_US.uf2を書き戻した後はCOM50へ復帰し、CDC DebugでPMW3610ログを再取得。左右の1200 baud boot triggerを実機合格とした。統合PR #4をzmk-0.4へmerge済み。stable mainは未変更。",
+      "notes": "左右US/JISへzmk-usb-loggingとcdc-bootを追加し、未使用board CDCを無効化。just.sh pristine 4/4、左右CDC Debug/1200 baudは2026-08-23に実機合格しPR #4をzmk-0.4へ統合。stable mainは未変更。2026-08-30に右の現行検証版643a256 USで再検査：COM50を115200 baudで開きログ取得、1200 baudでDTRを2秒保持後に解放し約797msでH:bootloader/COM235へ移行。readback1133/1133ブロックがCI33037950369のUF2 ca38bb9d…と一致。同一UF2を書き戻してCOM50復帰、boot banner・PMW3610 initialized・Peripheral connectedを取得。旧版でのCDC不応答は履歴で、現行候補のCDCは合格。再検査時には設定消去・source修正・maintenance統合は行っていない。その後、同じ右firmware sourceを含む検証候補をPR #6でzmk-0.4@7f64859へ統合。右CDCの再flash・再計測は行わず、上記readbackとログの実測結果を保持。",
       "validation": {
         "ci": "passed",
         "left-hardware": "passed",
-        "right-hardware": "passed"
+        "right-hardware": "passed",
+        "right-validation-cdc-log": "passed",
+        "right-validation-1200-baud": "passed",
+        "right-validation-readback": "passed",
+        "right-validation-cdc-return": "passed"
+      },
+      "validation_urls": {
+        "right-validation-cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "right-validation-1200-baud": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "right-validation-readback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "right-validation-cdc-return": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md"
       },
       "branch": "zmk-0.4_validation_oled-custom-stack",
       "base_branch": "zmk-0.4",

@@ -291,12 +291,12 @@
       }
     },
     "solstice": {
-      "status": "applied",
-      "pr": null,
-      "commit": "643a2568e7bb14ed5cca7d513f4d8baa09334a62",
-      "branch": "codex/zmk-0.4-xiao-pinmux",
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/6",
+      "commit": "7f64859869022d5d7b65afdd4aee0a0d1b45a9a2",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "notes": "P0。zmk-0.4@6638e6cを基点とする検証branch@643a256へsource修正を適用しpush済み。左右overlayの4行追加のみでxiao_spiを停止。just.sh全5/5 pristine build、生成DTS/.configの101 assertions、CI run33037950369の最終successに合格。通常4 targetのUART/SPI停止、matrix pinを確認。左OLED用I2C1 P0.28/P0.29、analog ADC2/3・oversampling・Peripheral電池表示を保持。右TB SPI0 P0.04/P0.05/P0.28、CS P0.02、IRQ P0.29、CPI800、Y invert、col-offset8を保持。全4 targetのCDCとXIAO battery AIN7・power P0.14・510k/1.51Mも保持。今回のfirmwareは未flash・実機未確認、PR/maintenance mergeなし。 2026-08-28読み取り専用再確認：remote検証branchは643a256、maintenanceは6638e6cのまま。生成DTS/.configの101 assertionsを再実行して合格し、保存証跡のSHA256も照合。既存just.sh 5/5 buildログとCI successを再確認した。新規build・flash・mergeは行わず、今回版のhardwareはpendingを維持。",
+      "notes": "2026-08-30 PR #6で検証済みの左右xiao_spi停止と左OLED lock文字非表示をzmk-0.4@7f64859へ統合。Git treeは検証head25dbb3fと一致し、stable main@9dbc6fbは未変更。pin-release643a256のjust.sh5/5・生成DTS/config101 assertionsに加え、OLED追加のjust.sh US/JIS左2/2・DTS元版一致・最終source CI33306076773全5/5が合格。実機は左US b1c15139…（後に25dbb3fとしてcommitした同一設定）と右US643a256 ca38bb9d…でユーザーが『OK消えました 他も動作問題ないです』と承認。右CDCログ・1200 baud boot・readback1133/1133一致・通常復帰・PMW初期化・split接続も合格。今回は再flashしておらず、JIS実機・長時間・左保存設定エラー解消を新たに合格とはしない。",
       "validation": {
         "board-qualifier": "passed",
         "source-audit": "passed",
@@ -304,17 +304,34 @@
         "targeted-build": "passed",
         "preserved-config": "passed",
         "ci": "passed",
-        "hardware": "pending"
+        "hardware": "passed",
+        "left-flash-boot": "passed",
+        "left-cdc-log": "passed",
+        "right-flash-boot": "passed",
+        "right-cdc-recheck": "passed",
+        "right-sensor-init": "passed",
+        "split-connectivity": "passed",
+        "maintenance-integration": "passed",
+        "post-merge-ci": "passed"
       },
       "validation_urls": {
         "board-qualifier": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md",
-        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-recheck-2026-08-28",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-recheck-2026-08-30",
         "targeted-build": "https://github.com/te9no/zmk-config-GeaconSolstice/commit/643a2568e7bb14ed5cca7d513f4d8baa09334a62",
         "preserved-config": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-validation-branch",
-        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33037950369",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/tree/codex/zmk-0.4-xiao-pinmux"
-      }
+        "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33306076773",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-oled-lock-text-2026-08-30.md#hardware",
+        "left-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-hardware-follow-up-2026-08-30",
+        "left-cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-hardware-follow-up-2026-08-30",
+        "right-flash-boot": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/xiao-pinmux-cross-repository-audit-2026-08-27.md#solstice-hardware-follow-up-2026-08-30",
+        "right-cdc-recheck": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "right-sensor-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "split-connectivity": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-right-cdc-recheck-2026-08-30.md",
+        "maintenance-integration": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-pinmux-integration-2026-08-30.md",
+        "post-merge-ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33306224704"
+      },
+      "pr_head": "25dbb3f3061f3b5f1c8729025fd15e3b281dd34b"
     },
     "saa": {
       "status": "applied",

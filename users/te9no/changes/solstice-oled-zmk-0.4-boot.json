@@ -24,9 +24,9 @@
   "tracking": {
     "solstice": {
       "status": "merged",
-      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-      "commit": "5f57607e24e82e1ec19eccf153d6eb0099079cb9",
-      "notes": "PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。採用しなかった白背景対策3案は実機不合格のためwaived。englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替え、compact表示・背景極性・左右OLED・Peripheral電池表示を2026-08-23に実機合格と確認した。englmaxi PR #37は提案を取り下げたclosed-unmerged履歴。DYA Studio UIとUS/JIS左右4/4 buildも合格し、PR #4をzmk-0.4へmerge済み。",
+      "pr": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/6",
+      "commit": "7f64859869022d5d7b65afdd4aee0a0d1b45a9a2",
+      "notes": "PR #4でPeripheral電池表示、6144-byte表示thread stack、右専用col-offset 8 snippetを統合。採用しなかった白背景対策3案は実機不合格のためwaived。englmaxi/zmk-dongle-display@2bb333f87136d33e94a49d86236ed9ec254a8060へ切替え、compact表示・背景極性・左右OLED・Peripheral電池表示を2026-08-23に実機合格と確認した。englmaxi PR #37は提案を取り下げたclosed-unmerged履歴。DYA Studio UIとUS/JIS左右4/4 buildも合格し、PR #4をzmk-0.4へmerge済み。 2026-08-30のNLCK重なり対策は25dbb3fとしてcommitし、PR #6でzmk-0.4@7f64859へ統合。US/JIS左just.sh2/2、生成DTS維持、検証source CI33306076773全5/5、ユーザーによる非表示と通常操作の実機承認を記録。上記PR #4の判定と旧対策の履歴は保持する。今回の統合で再flash・設定消去は行っていない。",
       "validation": {
         "ci": "passed",
         "standard-oled-hardware": "passed",
@@ -44,16 +44,26 @@
         "oled-polarity": "passed",
         "peripheral-battery": "passed",
         "right-key-offset": "passed",
-        "hardware": "passed"
+        "hardware": "passed",
+        "lock-text-removal-build": "passed",
+        "lock-text-removal-flash": "passed",
+        "lock-text-removal-visual": "passed",
+        "lock-text-removal-ci": "passed",
+        "lock-text-removal-integration": "passed"
       },
       "validation_urls": {
         "ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/32625961895",
         "peripheral-battery": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
-        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4"
+        "hardware": "https://github.com/te9no/zmk-config-GeaconSolstice/pull/4",
+        "lock-text-removal-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-oled-lock-text-2026-08-30.md",
+        "lock-text-removal-flash": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-oled-lock-text-2026-08-30.md",
+        "lock-text-removal-visual": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-oled-lock-text-2026-08-30.md",
+        "lock-text-removal-ci": "https://github.com/te9no/zmk-config-GeaconSolstice/actions/runs/33306076773",
+        "lock-text-removal-integration": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/solstice-pinmux-integration-2026-08-30.md"
       },
-      "branch": "zmk-0.4_validation_oled-custom-stack",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "pr_head": "12d870eeabf61d4d943e62320257eb92fcd8cd0d"
+      "pr_head": "25dbb3f3061f3b5f1c8729025fd15e3b281dd34b"
     },
     "mopolia": {
       "status": "not-applicable",
