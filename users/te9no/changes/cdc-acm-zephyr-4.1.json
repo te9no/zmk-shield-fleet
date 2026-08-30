@@ -153,25 +153,33 @@
     "cornix": {
       "status": "merged",
       "pr": null,
-      "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
-      "notes": "Cornix mainへCDC Debugと1200 baud boot設定を統合。既存12/12 buildとDYA Studio実機合格を維持。2026-08-28にMadula IQS診断版で1200 baud boot、flash、通常CDC復帰、IQS初期化ログを実機確認。IQSのSDA/方向修正はmain@578c9f1へ統合済み。main/TB variantの1200 baudは未確認のまま保持し、IQS/LPPSの結果を転用しない。",
+      "commit": "578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
+      "notes": "CDC初回統合はmain@794987c。2026-08-30、接続MadulaのreadbackがLPPS@81644c2の1248/1248 blockと一致したため、ユーザーの追加承認後に現行main@578c9f1のTB版へ書き換えて確認した。CI33278783894は12/12、Zephyr4.1.0のTB生成DTS/configはCDC19 assertions合格。TBのdebug/bootはCOM454で、COM447はStudio。COM454の1200 baudで約850ms後にH:XIAO-SENSE/COM446へ移行、TB readback1783/1783 blockがCI UF2（SHA256 33d21724…）と一致。同一TB UF2で復帰しCOM454を115200 baudで再openでき、main/TBの1200-baudを合格とした。今回のCDCログ本文は未取得、TB pointer/DYA/長時間の新規合格は主張しない。DYA StudioとIQSの合格は過去証跡を維持。source修正・merge・PR・settings resetなし。",
       "validation": {
         "build": "passed",
         "flash": "passed",
         "cdc-enumeration": "passed",
         "dya-studio": "passed",
-        "1200-baud": "pending",
+        "1200-baud": "passed",
         "iqs-1200-baud": "passed",
-        "iqs-cdc-log": "passed"
+        "iqs-cdc-log": "passed",
+        "source-audit": "passed",
+        "generated-dts": "passed",
+        "tb-firmware-readback": "passed",
+        "tb-cdc-return": "passed"
       },
       "validation_urls": {
-        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/32991787396",
-        "flash": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
-        "cdc-enumeration": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
+        "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33278783894",
+        "flash": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
+        "cdc-enumeration": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
         "dya-studio": "https://github.com/te9no/zmk-keyboard-cornix/commit/794987c0a15c903c107a06db28110f66f75ddda8",
-        "1200-baud": "https://github.com/te9no/zmk-keyboard-cornix/tree/main",
+        "1200-baud": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
         "iqs-1200-baud": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
-        "iqs-cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md"
+        "iqs-cdc-log": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
+        "tb-firmware-readback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
+        "tb-cdc-return": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md"
       },
       "branch": "main",
       "base_branch": "main"

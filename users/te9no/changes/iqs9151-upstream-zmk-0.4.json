@@ -66,28 +66,40 @@
       "status": "merged",
       "pr": null,
       "commit": "578c9f1f94c1a3d2bdd0b7c33ba2fe02c58dac72",
-      "notes": "2026-08-28にMadula IQSのSDAをP1.15からP1.14へ修正し、ROTATE_270で取り付け方向を補正。CDCでProduct ID 0x09bcと初期化完了、ユーザーが入力・方向OKを確認し、明示許可でmainへ統合・push。通常版just.sh buildと生成DTS検証は成功。実機確認は診断版で、統合後通常版の再flash、gesture、cold-start、長時間、split接続は未確認。ShiniNet本家driverとTWIMは変更なし。",
+      "notes": "2026-08-30 main@578c9f1のCI 33278783894（12 target成功）からMadula IQS通常版をCDCでflashし、1261/1261ブロック一致、COM447 logging/1200-baud triggerを確認。上下左右入力の確認依頼にユーザーが『OK動きます』と回答し、通常版の初期化・入力・方向を実動作に基づき合格。正常製品IDのログ取得を意味しない。初回RDY timeoutと製品ID0xeeee、再起動後のRDY警告は履歴として保持。完全電源OFFの実施、gestures、長時間、split接続は未確認。『診断版はもういらない』の指示により今後は通常版のみ使用し、8月28日の診断版は過去証跡扱い。ShiniNet本家driver、TWIM、SDA P1.14・ROTATE_270は変更なし、今回ソース修正・マージなし。",
       "branch": "main",
       "base_branch": "main",
       "validation": {
         "build": "passed",
         "config-dts": "passed",
-        "ci": "pending",
+        "ci": "passed",
         "init": "passed",
         "input": "passed",
         "direction": "passed",
         "gestures": "pending",
         "cold-start": "pending",
         "long-duration": "pending",
-        "split-connectivity": "pending"
+        "split-connectivity": "pending",
+        "production-flash": "passed",
+        "production-readback": "passed",
+        "production-cdc": "passed",
+        "production-init": "passed",
+        "production-input": "passed",
+        "production-direction": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
         "config-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33127943387",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33278783894",
         "init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
         "input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
-        "direction": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md"
+        "direction": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-iqs-validation-2026-08-28.md",
+        "production-flash": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "production-readback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "production-cdc": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "production-init": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "production-input": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md",
+        "production-direction": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-iqs-audit-2026-08-30.md"
       }
     }
   },
