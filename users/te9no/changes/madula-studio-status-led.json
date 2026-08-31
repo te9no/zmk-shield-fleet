@@ -21,7 +21,7 @@
       "pr_head": "c24252b62009ed001c96d2acaa78c4de5a7d3bc0",
       "branch": "main",
       "base_branch": "main",
-      "notes": "PR #6をmain@fd1ac78へ統合済み。just.sh pristineでMadula TB/LPPS/IQSとTPS43 productionの4target成功。生成DTS/configでStudio UART・CDC・GPIO RGB/SPI LED併用とPMW RPCのTB限定を確認。4件のhost/config試験で実コードの0〜31回点滅、途中変更、Base復帰、優先表示を検証。CI33384028618は12/12 target・workflow最終success。CI生成UF2をc24252bで公開し、差分がfirmwareのみであることを確認して統合。新ファームは未書き込み。既存のTB Studio合格・LPPS/IQS入力合格は今回の追加Studio/LED検証へ転用しない。",
+      "notes": "PR #6をmain@fd1ac78へ統合済み。just.sh pristineでMadula TB/LPPS/IQSとTPS43 productionの4target成功。生成DTS/configでStudio UART・CDC・GPIO RGB/SPI LED併用とPMW RPCのTB限定を確認。4件のhost/config試験で実コードの0〜31回点滅、途中変更、Base復帰、優先表示を検証。CI33384028618は12/12 target・workflow最終success。main CI33384668884も成功し、firmwareのみ更新したd899063のLPPS UF2を2026-08-31にCDCで書き込み。機器識別・Git blob/SHA256を照合し、再起動後のCDC3本復帰を確認。所有者の書き込み後『OK』をLPPSのDYA Studio接続合格として記録。LED動作、IQS Studio、TB回帰、新版のCDC再書き込み復帰は未確認。以前のLPPS入力合格は今回版の入力回帰や追加LED検証へ転用しない。",
       "validation": {
         "local-just-build": "passed",
         "generated-config": "passed",
@@ -29,7 +29,7 @@
         "ci": "passed",
         "main-integration": "passed",
         "firmware-published": "passed",
-        "lpps-studio-hardware": "pending",
+        "lpps-studio-hardware": "passed",
         "iqs-studio-hardware": "pending",
         "tb-regression-hardware": "pending",
         "dual-led-hardware": "pending",
@@ -42,7 +42,8 @@
         "host-tests": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/tests/layer_number_host.c",
         "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618",
         "main-integration": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
-        "firmware-published": "https://github.com/te9no/zmk-keyboard-cornix/tree/fd1ac78d72fe39aee173d3fa678084530a2b35b7/firmware/zmk-keyboard-cornix/codex-madula-studio-status"
+        "firmware-published": "https://github.com/te9no/zmk-keyboard-cornix/tree/d899063c78debfc40fd378b17f491e3386c0bb5d/firmware/zmk-keyboard-cornix/main",
+        "lpps-studio-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-studio-validation-2026-08-31.md"
       }
     }
   },
