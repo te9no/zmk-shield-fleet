@@ -81,7 +81,7 @@
       "status": "merged",
       "pr": null,
       "commit": "794987c0a15c903c107a06db28110f66f75ddda8",
-      "notes": "一般的なZMK 0.4・DYA Studio・TPS43基準に加え、Madula Trackball固有のPMW3610/runtime拡張もmain@794987cへ統合済み。just.sh manifest 12/12、Actions 32991787396、DYA Studio接続、Madula TrackballのPMW初期化と実ポインター入力に合格。PR #3はclosed、validation branchは削除した。Madula内で残る確認はTrackballとは独立した1200 baud bootとIQS個別実機入力のみ。",
+      "notes": "一般的なZMK 0.4・DYA Studio・TPS43基準に加え、Madula Trackball固有のPMW3610/runtime拡張もmain@794987cへ統合済み。just.sh manifest 12/12、Actions 32991787396、DYA Studio接続、Madula TrackballのPMW初期化と実ポインター入力に合格。PR #3はclosed、validation branchは削除した。これはTPS43/TB基準の実証であり、LPPS/IQS全種類のStudio実証ではない。2026-08-31追加の全3種類Studio・LED併用の変更と未確認実機項目はmadula-studio-status-ledで別管理する。",
       "branch": "main",
       "base_branch": "main",
       "validation": {
