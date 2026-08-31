@@ -166,7 +166,8 @@
         "source-audit": "passed",
         "generated-dts": "passed",
         "tb-firmware-readback": "passed",
-        "tb-cdc-return": "passed"
+        "tb-cdc-return": "passed",
+        "tb-20260831-cdc-recovery": "passed"
       },
       "validation_urls": {
         "build": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33278783894",
@@ -179,7 +180,8 @@
         "source-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
         "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
         "tb-firmware-readback": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
-        "tb-cdc-return": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md"
+        "tb-cdc-return": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/cornix-madula-cdc-audit-2026-08-30.md",
+        "tb-20260831-cdc-recovery": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-tb-orientation-validation-2026-08-31.md"
       },
       "branch": "main",
       "base_branch": "main"
