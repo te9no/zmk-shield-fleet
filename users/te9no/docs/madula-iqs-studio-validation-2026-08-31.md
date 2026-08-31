@@ -31,6 +31,6 @@ LEDは今回の確認項目に対する所有者申告であり、点滅タイ�
 
 [TB確認記録](madula-tb-orientation-validation-2026-08-31.md)、[LPPS確認記録](madula-lpps-studio-validation-2026-08-31.md)、本IQS記録で、それぞれの入力・Studio・LED表示が確認済み。これによりStudio/LED項目の `dual-led-hardware` と `usb-layer-led-hardware` を合格とする。
 
-`cdc-recovery-hardware` は保留を維持する。TBは同一UF2へのCDC再書き込み・復帰を実測済みだが、LPPS/IQSは各variant自身への再書き込み・復帰が未確認。今回のLPPS→IQS切り替えは、同一variantへ復帰する試験の代わりにはしない。
+この初回確認時点ではLPPS/IQSの同一variantへのCDC復帰が未確認だった。後続の[IQS CDC確認](madula-iqs-cdc-recovery-2026-09-01.md)でIQSも合格し、残りはLPPSのみ。`cdc-recovery-hardware` はLPPS確認まで保留を維持する。初回のLPPS→IQS切り替えを同一variantの復帰試験へ転用していない。
 
 別項目のIQS gesture・cold-start・長時間動作・split接続については、今回の「OKです」から合格を推定しない。
