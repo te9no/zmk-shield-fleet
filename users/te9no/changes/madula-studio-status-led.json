@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "madula-studio-status-led",
+  "enabled": true,
+  "title": "Madula全3種類のDYA Studio・内蔵RGBとSPI LED併用を揃える",
+  "description": "TBに加えてLPPS/IQSにも共通Studioを適用し、内蔵RGBとSPI LEDを併用する。SPI LEDのUSB表示とレイヤー番号点滅を加え、既存の入力合格とは別に新しい実機検証を記録する。",
+  "dashboard_label": "Madula Studio / LEDs",
+  "source": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "from_revision": "667f7fbba4ee955c7fcd56cb2d67c7f5aff0c07c",
+    "to_revision": "06ca68094e9abd1521999779555784a5a0118b30",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
+    "notes": "元のfeature/madula-tp-statusの未コミット編集は確認できず、2026-08-31に現行mainを基準に不足機能を再構成。PMW専用RPCはTBだけに分離し、ポインティングのpinout・方向・LPPS deadzone 1200・ドライバrevisionは維持。第三者リポジトリへのPRなし。"
+  },
+  "repositories": ["cornix"],
+  "tracking": {
+    "cornix": {
+      "status": "merged",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
+      "commit": "fd1ac78d72fe39aee173d3fa678084530a2b35b7",
+      "pr_head": "c24252b62009ed001c96d2acaa78c4de5a7d3bc0",
+      "branch": "main",
+      "base_branch": "main",
+      "notes": "PR #6をmain@fd1ac78へ統合済み。just.sh pristineでMadula TB/LPPS/IQSとTPS43 productionの4target成功。生成DTS/configでStudio UART・CDC・GPIO RGB/SPI LED併用とPMW RPCのTB限定を確認。4件のhost/config試験で実コードの0〜31回点滅、途中変更、Base復帰、優先表示を検証。CI33384028618は12/12 target・workflow最終success。CI生成UF2をc24252bで公開し、差分がfirmwareのみであることを確認して統合。新ファームは未書き込み。既存のTB Studio合格・LPPS/IQS入力合格は今回の追加Studio/LED検証へ転用しない。",
+      "validation": {
+        "local-just-build": "passed",
+        "generated-config": "passed",
+        "host-tests": "passed",
+        "ci": "passed",
+        "main-integration": "passed",
+        "firmware-published": "passed",
+        "lpps-studio-hardware": "pending",
+        "iqs-studio-hardware": "pending",
+        "tb-regression-hardware": "pending",
+        "dual-led-hardware": "pending",
+        "usb-layer-led-hardware": "pending",
+        "cdc-recovery-hardware": "pending"
+      },
+      "validation_urls": {
+        "local-just-build": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md",
+        "generated-config": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md",
+        "host-tests": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/tests/layer_number_host.c",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618",
+        "main-integration": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
+        "firmware-published": "https://github.com/te9no/zmk-keyboard-cornix/tree/fd1ac78d72fe39aee173d3fa678084530a2b35b7/firmware/zmk-keyboard-cornix/codex-madula-studio-status"
+      }
+    }
+  },
+  "steps": []
+}

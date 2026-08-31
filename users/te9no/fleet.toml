@@ -44,6 +44,24 @@ evidence = [
 
 
 [[next_actions]]
+id = "cornix-madula-studio-status-hardware"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "Madula LPPS/IQSのDYA Studio接続、TB入力の回帰、3種類の内蔵RGB＋SPI LED・USB表示・レイヤー番号点滅・CDC復帰を実機確認する。"
+completion = "新しいファームのrevisionと各結果を記録し、Studio・両LED・USB/レイヤー表示・CDC復帰の証拠を揃える。既存入力の合格は今回の結果へ転用しない。"
+blocker = "main@fd1ac78へ統合済み。just.sh4target、host試験、CI12/12とUF2公開は完了。今回版は未書き込みで、LPPS/IQSのStudio接続とLED併用を実機確認する必要がある。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/fd1ac78d72fe39aee173d3fa678084530a2b35b7/firmware/zmk-keyboard-cornix/codex-madula-studio-status"
+change_id = "madula-studio-status-led"
+validation_keys = ["lpps-studio-hardware", "iqs-studio-hardware", "tb-regression-hardware", "dual-led-hardware", "usb-layer-led-hardware", "cdc-recovery-hardware"]
+evidence = [
+  { label = "Local just.sh / generated configuration / host tests", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md" },
+  { label = "CI: all 12 targets passed", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618" },
+  { label = "Integrated into Cornix main", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/6" },
+]
+
+[[next_actions]]
 id = "cornix-madula-iqs-additional-validation"
 state = "waiting"
 priority = "high"
