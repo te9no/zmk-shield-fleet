@@ -39,7 +39,7 @@
 
 ## 保留範囲
 
-IQSのLED併用・USB/レイヤー表示、新版Studioと入力、LPPS/IQS新版CDC復帰は未確認。LPPSの入力・LED表示は後続の[LPPS確認記録](madula-lpps-studio-validation-2026-08-31.md)で合格。TBのセンサー画像キャプチャ／ストリーミングは追加確認として保留。
+LPPS/IQSの同一variantへのCDC再書き込み・復帰は未確認。入力・Studio・LED表示は後続の[LPPS確認記録](madula-lpps-studio-validation-2026-08-31.md)と[IQS確認記録](madula-iqs-studio-validation-2026-08-31.md)で合格。TBのセンサー画像キャプチャ／ストリーミングは追加確認として保留。
 
 ## TBのLED確認
 
