@@ -13,7 +13,7 @@
 - 6件のhost/config試験成功。方向試験は旧補正と報告された動きから推定した入力値によるモデル試験であり、実機測定とは区別する。
 - [修正ブランチCI](https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33399226607): 全12構成・workflow成功。CI生成commit `5246917cf3b90e57b948e83239cfb25899c59c3c` はsourceとの差分がfirmware 12ファイルのみ。
 - PR #7を `main@b54f1de0c93b1bfb8636251d48a45645285b29ee` へ統合済み。統合後のtreeと上記CI生成commitのtreeに差分なし。
-- [CI公開UF2](https://github.com/te9no/zmk-keyboard-cornix/tree/b54f1de0c93b1bfb8636251d48a45645285b29ee/firmware/zmk-keyboard-cornix/codex-madula-tb-orientation)。main標準フォルダの再生成とは区別する。
+- [CI公開UF2](https://github.com/te9no/zmk-keyboard-cornix/tree/b54f1de0c93b1bfb8636251d48a45645285b29ee/firmware/zmk-keyboard-cornix/codex-madula-tb-orientation)。続くmain CI33402191691も成功し、[main標準フォルダ](https://github.com/te9no/zmk-keyboard-cornix/tree/b3191a46da203c557091bb3248209f7280a07633/firmware/zmk-keyboard-cornix/main)を再生成済み。
 
 ## 実機対象と所有者確認
 
@@ -39,4 +39,8 @@
 
 ## 保留範囲
 
-LED併用・USB/レイヤー表示、センサー画像キャプチャ／ストリーミング、LPPS/IQS新版のCDC復帰、IQS新版Studioは未確認。
+LPPS/IQSのLED併用・USB/レイヤー表示、新版CDC復帰、IQS新版Studioは未確認。TBのセンサー画像キャプチャ／ストリーミングは追加確認として保留。
+
+## TBのLED確認
+
+LED確認内容を「内蔵RGBとSPI LEDの併用」「USB接続表示」「レイヤー番号の点滅」と説明した後、所有者から「TBのLEDはOK」と返答を得た。TB版の上記表示を所有者申告の合格として記録する。LPPS/IQSへは転用しない。

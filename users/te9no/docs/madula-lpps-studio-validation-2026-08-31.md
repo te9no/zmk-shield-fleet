@@ -36,3 +36,13 @@ Studioへの読み取り要求後に受信はあったが、収集処理の型�
 - 新版からの1200-baud再書き込み・復帰（今回のブート要求元は旧版）。
 
 他のvalidationは変更せず、項目全体を完了にはしない。
+
+## TB検証後のLPPS再書き込み
+
+所有者の「LPPS版書き込んで」に従い、main CI33402191691成功後の公開artifact `b3191a46da203c557091bb3248209f7280a07633` からLPPS版を取得して書き込んだ。
+
+- [使用UF2](https://github.com/te9no/zmk-keyboard-cornix/blob/b3191a46da203c557091bb3248209f7280a07633/firmware/zmk-keyboard-cornix/main/madula_trackpoint.uf2)、882688 bytes。
+- Git blob `43e7def463d90364fbb128cd6f8d5b6d360aa83e`、SHA256 `4e5798bd773985b600fbd06e73577ef8e7bbbf8a6717392445bc7f5143c68215` を照合。
+- 対象Madulaをシリアルで識別し、TB版のCOM454から1200 baudで起動、H: のシリアル・board ID照合後にLPPS版をコピーした。
+- 再起動後、COM454を115200 baudで開け、COM447のStudio core get-device-info（request ID 62）から同じMadulaの28-byte応答を検証。両ポートは解放済み。
+- これはLPPSへの書き込み・復帰とStudio基本通信の確認。LPPS自身を起点とするCDC再書き込み試験、今回の入力・LEDの所有者確認はまだ行っていない。
