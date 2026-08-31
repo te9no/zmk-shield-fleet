@@ -20,4 +20,4 @@ SHA256: `f0727c4d1a2b1ce2d3a3ad60cc9ba0c46efb6f91374b4264e7393b8448e8c161`。
 
 ## 残件
 
-Studio/LED項目の未確認はLPPS自身へのCDC再書き込み・復帰のみ。集約ゲート `cdc-recovery-hardware` はLPPS確認まで保留を維持する。IQSのgesture・cold-start・長時間動作・split接続の追加検証は本試験の対象外であり、ログ中の接続状態だけで合格にはしない。
+このIQS確認時点の残件はLPPS自身へのCDC再書き込み・復帰のみだった。後続の[LPPS確認](madula-lpps-cdc-recovery-2026-09-01.md)で合格し、集約ゲート `cdc-recovery-hardware` も完了。IQSのgesture・cold-start・長時間動作・split接続の追加検証は本試験の対象外であり、ログ中の接続状態だけで合格にはしない。

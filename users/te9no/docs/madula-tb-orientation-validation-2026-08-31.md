@@ -39,7 +39,7 @@
 
 ## 保留範囲
 
-同一variantへのCDC再書き込み・復帰はLPPSのみ未確認。IQSは後続の[CDC確認記録](madula-iqs-cdc-recovery-2026-09-01.md)で合格。入力・Studio・LED表示は後続の[LPPS確認記録](madula-lpps-studio-validation-2026-08-31.md)と[IQS確認記録](madula-iqs-studio-validation-2026-08-31.md)で合格。TBのセンサー画像キャプチャ／ストリーミングは追加確認として保留。
+同一variantへのCDC再書き込み・復帰は後続の[IQS確認](madula-iqs-cdc-recovery-2026-09-01.md)と[LPPS確認](madula-lpps-cdc-recovery-2026-09-01.md)でも合格。入力・Studio・LED表示は後続の[LPPS確認記録](madula-lpps-studio-validation-2026-08-31.md)と[IQS確認記録](madula-iqs-studio-validation-2026-08-31.md)で合格。TBのセンサー画像キャプチャ／ストリーミングは追加確認として保留。
 
 ## TBのLED確認
 
