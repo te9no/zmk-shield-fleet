@@ -49,17 +49,19 @@ state = "waiting"
 priority = "high"
 order = 1
 repository = "cornix"
-action = "LPPSのDYA Studio接続は確認済み。次はIQSのStudio接続、TB入力の回帰、3種類の内蔵RGB＋SPI LED・USB表示・レイヤー番号点滅・CDC復帰を実機確認する。LPPSの新版入力回帰も記録する。"
+action = "LPPS StudioとTBの方向・Studioセンサー表示・CDC復帰は確認済み。次はIQSのStudio接続、3種類の内蔵RGB＋SPI LED・USB表示・レイヤー番号点滅、LPPS/IQS新版のCDC復帰を実機確認する。LPPSの新版入力回帰も記録する。"
 completion = "新しいファームのrevisionと各結果を記録し、Studio・両LED・USB/レイヤー表示・CDC復帰の証拠を揃える。既存入力の合格は今回の結果へ転用しない。"
-blocker = "main@fd1ac78へ統合済み。just.sh4target、host試験、CI12/12とUF2公開は完了。2026-08-31にmain artifact@d899063のLPPSをCDCで書き込み、CDC3本復帰と所有者のDYA Studio接続OKを確認。IQS/TB・LED・新版CDC復帰は引き続き未確認。"
-repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/d899063c78debfc40fd378b17f491e3386c0bb5d/firmware/zmk-keyboard-cornix/main"
+blocker = "TB方向修正はPR #7・main@b54f1deへ統合。just.sh TB、host6件、CI12/12成功。所有者の方向・PMW表示OKに加え、TB修正版の1200-baud起動・1787/1787ブロック照合・同一UF2復帰・Studio応答を確認済み。IQS Studio、LED、LPPS/IQS新版CDCは未確認。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/b54f1de0c93b1bfb8636251d48a45645285b29ee/firmware/zmk-keyboard-cornix/codex-madula-tb-orientation"
 change_id = "madula-studio-status-led"
-validation_keys = ["lpps-studio-hardware", "iqs-studio-hardware", "tb-regression-hardware", "dual-led-hardware", "usb-layer-led-hardware", "cdc-recovery-hardware"]
+validation_keys = ["lpps-studio-hardware", "iqs-studio-hardware", "tb-regression-hardware", "tb-orientation-main", "tb-orientation-ci", "tb-cdc-recovery-hardware", "dual-led-hardware", "usb-layer-led-hardware", "cdc-recovery-hardware"]
 evidence = [
   { label = "Local just.sh / generated configuration / host tests", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md" },
   { label = "CI: all 12 targets passed", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618" },
   { label = "Integrated into Cornix main", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/6" },
   { label = "LPPS: CDC flash and owner-confirmed DYA Studio connection", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-studio-validation-2026-08-31.md" },
+  { label = "TB: direction / PMW Studio display / measured CDC recovery", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-tb-orientation-validation-2026-08-31.md" },
+  { label = "TB orientation integrated into main (PR #7)", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/pull/7" },
 ]
 
 [[next_actions]]

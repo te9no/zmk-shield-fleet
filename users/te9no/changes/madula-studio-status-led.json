@@ -16,12 +16,12 @@
   "tracking": {
     "cornix": {
       "status": "merged",
-      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
-      "commit": "fd1ac78d72fe39aee173d3fa678084530a2b35b7",
-      "pr_head": "c24252b62009ed001c96d2acaa78c4de5a7d3bc0",
+      "pr": "https://github.com/te9no/zmk-keyboard-cornix/pull/7",
+      "commit": "b54f1de0c93b1bfb8636251d48a45645285b29ee",
+      "pr_head": "5246917cf3b90e57b948e83239cfb25899c59c3c",
       "branch": "main",
       "base_branch": "main",
-      "notes": "PR #6をmain@fd1ac78へ統合済み。just.sh pristineでMadula TB/LPPS/IQSとTPS43 productionの4target成功。生成DTS/configでStudio UART・CDC・GPIO RGB/SPI LED併用とPMW RPCのTB限定を確認。4件のhost/config試験で実コードの0〜31回点滅、途中変更、Base復帰、優先表示を検証。CI33384028618は12/12 target・workflow最終success。main CI33384668884も成功し、firmwareのみ更新したd899063のLPPS UF2を2026-08-31にCDCで書き込み。機器識別・Git blob/SHA256を照合し、再起動後のCDC3本復帰を確認。所有者の書き込み後『OK』をLPPSのDYA Studio接続合格として記録。LED動作、IQS Studio、TB回帰、新版のCDC再書き込み復帰は未確認。以前のLPPS入力合格は今回版の入力回帰や追加LED検証へ転用しない。",
+      "notes": "初回Studio/LED対応はPR #6・main@fd1ac78へ統合し、just.sh4target・host4件・CI12/12成功。LPPSはartifact@d899063を書き込み、所有者のStudio接続OKを確認。2026-08-31、TBの上→左・右→上を受け、両TB overlayの取り付け補正を0x2から0x7へ修正。source@c7e2a06のjust.sh TB pristine・host6件・CI33399226607全12構成成功。所有者は方向・Studio接続・PMW3610情報表示を確認済み。修正版自身のCOM454/1200 baud起動、application readback1787/1787一致、同一UF2再書き込み、CDC再open・Studio応答を実測。PR #7でmain@b54f1deへ統合し、CI生成head@5246917とtree一致を確認。LPPS/IQS・ドライバ・保存設定は変更なし。未確認はIQS Studio、LED動作、LPPS/IQS新版CDC復帰等。TBの合格を他variantへ転用しない。",
       "validation": {
         "local-just-build": "passed",
         "generated-config": "passed",
@@ -31,7 +31,10 @@
         "firmware-published": "passed",
         "lpps-studio-hardware": "passed",
         "iqs-studio-hardware": "pending",
-        "tb-regression-hardware": "pending",
+        "tb-regression-hardware": "passed",
+        "tb-orientation-main": "passed",
+        "tb-orientation-ci": "passed",
+        "tb-cdc-recovery-hardware": "passed",
         "dual-led-hardware": "pending",
         "usb-layer-led-hardware": "pending",
         "cdc-recovery-hardware": "pending"
@@ -40,10 +43,14 @@
         "local-just-build": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md",
         "generated-config": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md",
         "host-tests": "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/tests/layer_number_host.c",
-        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618",
-        "main-integration": "https://github.com/te9no/zmk-keyboard-cornix/pull/6",
-        "firmware-published": "https://github.com/te9no/zmk-keyboard-cornix/tree/d899063c78debfc40fd378b17f491e3386c0bb5d/firmware/zmk-keyboard-cornix/main",
-        "lpps-studio-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-studio-validation-2026-08-31.md"
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33399226607",
+        "main-integration": "https://github.com/te9no/zmk-keyboard-cornix/pull/7",
+        "firmware-published": "https://github.com/te9no/zmk-keyboard-cornix/tree/b54f1de0c93b1bfb8636251d48a45645285b29ee/firmware/zmk-keyboard-cornix/codex-madula-tb-orientation",
+        "lpps-studio-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-lpps-studio-validation-2026-08-31.md",
+        "tb-regression-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-tb-orientation-validation-2026-08-31.md",
+        "tb-orientation-main": "https://github.com/te9no/zmk-keyboard-cornix/pull/7",
+        "tb-orientation-ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33399226607",
+        "tb-cdc-recovery-hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/madula-tb-orientation-validation-2026-08-31.md"
       }
     }
   },
