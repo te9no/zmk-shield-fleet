@@ -49,12 +49,12 @@ state = "waiting"
 priority = "high"
 order = 1
 repository = "cornix"
-action = "LPPS StudioとTBの方向・Studioセンサー表示・CDC復帰は確認済み。次はIQSのStudio接続、3種類の内蔵RGB＋SPI LED・USB表示・レイヤー番号点滅、LPPS/IQS新版のCDC復帰を実機確認する。LPPSの新版入力回帰も記録する。"
+action = "TBは方向・Studioセンサー表示・CDC復帰・LED表示が確認済み。残りはLPPSの新版入力・LED・CDC復帰、IQSの今回版の入力・Studio接続・LED・CDC復帰。LPPSのStudio接続は確認済み。"
 completion = "新しいファームのrevisionと各結果を記録し、Studio・両LED・USB/レイヤー表示・CDC復帰の証拠を揃える。既存入力の合格は今回の結果へ転用しない。"
-blocker = "TB方向修正はPR #7・main@b54f1deへ統合。just.sh TB、host6件、CI12/12成功。所有者の方向・PMW表示OKに加え、TB修正版の1200-baud起動・1787/1787ブロック照合・同一UF2復帰・Studio応答を確認済み。IQS Studio、LED、LPPS/IQS新版CDCは未確認。"
-repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/b54f1de0c93b1bfb8636251d48a45645285b29ee/firmware/zmk-keyboard-cornix/codex-madula-tb-orientation"
+blocker = "TB方向修正はPR #7・main@b54f1deへ統合。just.sh TB、host6件、CI12/12成功。TBの方向・PMW表示・LEDは所有者確認済み。1200-baud起動・1787/1787ブロック照合・同一UF2復帰・Studio応答も実測済み。未確認はLPPS/IQS側。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/b3191a46da203c557091bb3248209f7280a07633/firmware/zmk-keyboard-cornix/main"
 change_id = "madula-studio-status-led"
-validation_keys = ["lpps-studio-hardware", "iqs-studio-hardware", "tb-regression-hardware", "tb-orientation-main", "tb-orientation-ci", "tb-cdc-recovery-hardware", "dual-led-hardware", "usb-layer-led-hardware", "cdc-recovery-hardware"]
+validation_keys = ["lpps-studio-hardware", "iqs-studio-hardware", "tb-regression-hardware", "tb-orientation-main", "tb-orientation-ci", "tb-cdc-recovery-hardware", "tb-led-hardware", "dual-led-hardware", "usb-layer-led-hardware", "cdc-recovery-hardware"]
 evidence = [
   { label = "Local just.sh / generated configuration / host tests", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/blob/06ca68094e9abd1521999779555784a5a0118b30/docs/madula-studio-status-validation.md" },
   { label = "CI: all 12 targets passed", status = "passed", url = "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/33384028618" },
