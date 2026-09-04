@@ -25,24 +25,6 @@ evidence = [
 ]
 
 
-[[next_actions]]
-id = "saa-pinmux-hardware"
-state = "waiting"
-priority = "medium"
-order = 5
-repository = "saa"
-action = "SAAのpin-release検証branchでOLED、LED、JOYなど代表module入力と左右接続、右CDC/Studioを実機確認する。"
-completion = "0540667の代表実機入力が合格し、今回のhardware validationへ証跡が記録される。左右TPD_IQSは別pin競合解消まで対象を分ける。"
-blocker = "just.sh21/21・786 assertions・CI run33038522353最終success。未flash・実機未確認、PR/stable/maintenance mergeなし。左CDCはbaseline同様なし。TPD_IQS2 targetは既存I2C競合がDTSでもfailed。"
-repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-xiao-pinmux"
-change_id = "xiao-zmk-qualifier-and-unused-peripheral-release"
-validation_keys = ["hardware"]
-evidence = [
-  { label = "SAA validation@0540667 (21/21, 786 assertions)", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/0540667e1ccd3c2b83714a1bdfb0c6e0480d428f" },
-  { label = "SAA CI final success", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33038522353" },
-]
-
-
 # Madula Studio/LED action completed; evidence is retained in the change ledger.
 
 [[next_actions]]
@@ -66,33 +48,17 @@ state = "active"
 priority = "medium"
 order = 5
 repository = "saa"
-action = "専用zmk-0.4_validation_cormoran-zmkの21 artifactから対象moduleを書き込み、左右実機を検証する。"
-completion = "1200 baud boot、DYA Studio UI、両手接続、対象module入力が合格し、専用branchの検証証跡が揃う。"
-blocker = "実機moduleと書き込み時間が必要。stable masterは対象外。"
-repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk"
-change_id = "cormoran-zmk-core-zmk-0.4"
-validation_keys = ["hardware", "1200-baud", "dya-studio", "split-connectivity", "module-input"]
+action = "統合済みzmk-0.4の21 artifactから対象moduleを書き込み、代表variantの1200 baud boot、DYA Studio、左右split、OLED/LED、JOY、TB/PMW3610入力を実機確認する。"
+completion = "検証したartifact revisionとvariantごとに結果を記録し、代表入力・表示・通信が合格する。TPD+IQSの既知pin ownership課題は別項目として保留する。"
+blocker = "source@28c3546をzmk-0.4へpushし、local just.sh21/21とCI33862051924全21成功、artifact@1f702fcへ21 UF2格納済み。実機とmoduleの接続・書き込み待ち。stable masterは対象外。"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4"
+change_id = "saa-zmk-0.4-baseline"
+validation_keys = ["hardware"]
 evidence = [
-  { label = "Dedicated validation branch", status = "info", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4_validation_cormoran-zmk" },
-  { label = "21/21 CI", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/32628652475" },
-]
-
-[[next_actions]]
-id = "saa-pmw3610-hardware"
-state = "active"
-priority = "medium"
-order = 5
-repository = "saa"
-action = "専用codex/zmk-0.4-three-wire-spi-moduleから左右TB artifactを書き込み、PMW3610入力とStudio診断を確認する。"
-completion = "左右PMW3610入力、split relay、DYA Studio source列挙が公開3-wire module固定branchで実機合格する。"
-blocker = "公開3-wire module v0.1.0を固定してjust.sh全21/21・TB関連4/4 build済み。実機moduleと書き込み時間が必要。stable masterは対象外。"
-repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/codex/zmk-0.4-three-wire-spi-module"
-change_id = "spi-three-wire-gpio-controller"
-validation_keys = ["hardware", "module-input", "split-connectivity", "source-enumeration", "studio-peripheral-preview-hardware"]
-variant_ids = ["left-tb", "right-tb"]
-evidence = [
-  { label = "Three-wire preparation@c9f6779 (just.sh 21/21)", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/c9f6779104e7fe2baf8696cc353bc1a19e1e80bd" },
-  { label = "Three-wire controller v0.1.0@4362133", status = "passed", url = "https://github.com/te9no/zmk-driver-spi-three-wire/releases/tag/v0.1.0" },
+  { label = "Consolidated source@28c3546", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/28c354634f3d1ea19ebe7077dbeb9456409b00b5" },
+  { label = "Local just.sh pristine 21/21", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/saa-zmk-0.4-baseline-2026-09-04.md" },
+  { label = "CI 21/21, generated DTS/config and firmware publish", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33862051924" },
+  { label = "21 branch firmware files@1f702fc", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4/firmware/zmk-config-SparAkashaAnanta/zmk-0.4" },
 ]
 
 [[next_actions]]
@@ -277,7 +243,7 @@ rollout_order = 5
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
 default_branch = "master"
-maintenance_branch = "zmk-0.4_validation_cormoran-zmk"
+maintenance_branch = "zmk-0.4"
 architecture = "module-shields"
 modules = ["encoder", "iqs9151", "joystick", "keys", "trackball", "touchpad"]
 tags = ["mekabu", "modular-input", "split", "xiao"]
