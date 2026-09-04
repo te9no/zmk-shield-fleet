@@ -12,7 +12,7 @@ action is not permission to edit firmware or mutate GitHub.
 - Before any write, state the exact repository, source branch, base branch,
   commit, artifacts, and hardware gate. CI success is not hardware validation.
 - Do not promote a ZMK 0.4 validation branch to the stable firmware branch by
-  implication. SAA remains on `zmk-0.4_validation_cormoran-zmk`; its `master`
+  implication. SAA remains on the dedicated `zmk-0.4` branch; its `master`
   branch is outside the current rollout.
 - Do not store credentials, local device paths, stable device identifiers, or
   raw private logs in `users/`; profile contents are published by GitHub Pages.

@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "id": "saa-zmk-0.4-baseline",
+  "enabled": true,
+  "title": "SAAのZMK 0.4成果を専用ブランチへ集約する",
+  "description": "分散していたSAAのZMK 0.4、cormoran ZMK、IQS、PMW3610、3-wire SPI、oversampling、CDC、XIAO pin解放をzmk-0.4へ集約し、生成firmwareと検証入口を一本化する。",
+  "dashboard_label": "SAA ZMK 0.4 baseline",
+  "source": {
+    "repository": "te9no/zmk-config-SparAkashaAnanta",
+    "from_revision": "c9f6779104e7fe2baf8696cc353bc1a19e1e80bd",
+    "to_revision": "28c354634f3d1ea19ebe7077dbeb9456409b00b5",
+    "change_url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4",
+    "notes": "3-wire SPI検証source@c9f6779へXIAO pin解放0540667と同一patchを5d67222として適用。日次build-health commitを停止したsource head@28c3546をpushし、CIがfirmware commit@1f702fcを生成した。masterや第三者repositoryは変更していない。"
+  },
+  "repositories": ["saa"],
+  "tracking": {
+    "saa": {
+      "status": "applied",
+      "pr": null,
+      "commit": "1f702fc09fbf3578c9b01d8bce13224a620658a2",
+      "branch": "zmk-0.4",
+      "base_branch": "codex/zmk-0.4-three-wire-spi-module",
+      "notes": "2026-09-04に正式な開発branchとして作成。cormoran ZMK@e5c9b691、PMW3610 custom Studio RPC@5c34ea0、3-wire SPI@4362133、ShiniNet IQS9151@08a6fd1、analog oversampling@59fc126、CDC trigger@1850754を固定。xiao_ble//zmk qualifierとSAA.dtsiの未使用peripheral解放を含む。local just.sh pristine 21/21、CI run33862051924も全21 firmwareとKconfig/Devicetree出力に成功し、21 UF2をbranchへ格納。build-health jobはskipされ、新規badge commitは0件。実機は未検証で、TPD+IQSの既知pin ownership課題は解決済みとしない。",
+      "validation": {
+        "source-consolidation": "passed",
+        "local-just-build": "passed",
+        "ci": "passed",
+        "firmware-published": "passed",
+        "daily-health-commit-disabled": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "source-consolidation": "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/28c354634f3d1ea19ebe7077dbeb9456409b00b5",
+        "local-just-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/saa-zmk-0.4-baseline-2026-09-04.md",
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33862051924",
+        "firmware-published": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4/firmware/zmk-config-SparAkashaAnanta/zmk-0.4",
+        "daily-health-commit-disabled": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33862051924",
+        "hardware": "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4"
+      }
+    }
+  },
+  "steps": []
+}
