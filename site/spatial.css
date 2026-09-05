@@ -66,8 +66,8 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 3px soli
 }
 @media (max-width: 640px) {
   .fleet-space { margin-top: 14px; }
-  .dock-grid { grid-template-columns: repeat(auto-fit,minmax(96px,1fr)); gap: 13px; transform: rotateX(12deg); }
-  .dock-viewport { padding: 0 16px 12px; }
+  .dock-grid { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 112px; gap: 13px; transform: none; width: max-content; }
+  .dock-viewport { padding: 0 16px 12px; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #99ab8d transparent; }
   .dock-top { min-height: 106px; padding: 11px; }.dock-chip { margin-bottom: 8px; }
   .dock-top strong { font-size: 12px; }.dock-indicator { right: 10px; top: 13px; }
   .space-caption, .space-footer { padding: 10px 13px; font-size: 9px; }
