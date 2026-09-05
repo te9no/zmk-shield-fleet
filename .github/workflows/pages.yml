@@ -55,6 +55,17 @@ jobs:
       - name: Build dashboard data
         run: python scripts/build_dashboard.py
 
+      - name: Include spatial UI preview at /test/
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Pin the reviewed preview; production UI remains at the site root.
+          preview_commit=a9f2359c2ff4d4e93e86082c47e5656edae01f6e
+          git fetch --depth=1 origin "$preview_commit"
+          mkdir -p site/test
+          git archive "$preview_commit" site | tar -x --strip-components=1 -C site/test
+          cp site/data.json site/test/data.json
+
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
 
