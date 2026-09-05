@@ -16,6 +16,7 @@
     <title>ZMK Shield Fleet</title>
     <link rel="stylesheet" href="styles.css?v=20260827-evidence">
     <link rel="stylesheet" href="dashboard.css?v=20260830-modern">
+    <link rel="stylesheet" href="spatial.css?v=20260905">
   </head>
   <body>
     <a class="skip-link" href="#next-actions">Skip to next actions / 次にやることへ</a>
@@ -35,7 +36,7 @@
       <p class="sidebar-note">Shared changes.<br>One clear view.<small>Cross-repository rollout tracker</small></p>
     </aside>
     <header class="topbar">
-      <div class="workspace-label"><span>Workspace</span><strong id="active-profile-label">Fleet</strong></div>
+      <div class="workspace-label"><span>Workspace</span><strong id="active-profile-label">Fleet</strong><small>TEST / 立体UI</small></div>
       <nav class="topbar-actions" aria-label="Dashboard links">
         <label class="profile-control" id="profile-control">
           <span>Profile</span>
@@ -49,11 +50,16 @@
       <section class="hero" data-view="next-actions" aria-labelledby="hero-title">
         <div class="hero-heading">
           <div>
-            <p class="eyebrow">FLEET OVERVIEW</p>
-            <h1 id="hero-title">Fleet overview<span class="heading-dot">.</span></h1>
+            <p class="eyebrow">YOUR KEYBOARDS, CONNECTED</p>
+            <h1 id="hero-title">Fleet control<span class="heading-dot">.</span></h1>
           </div>
           <p class="hero-copy">今進める作業から、ひとつずつ。<br>変更と検証の状況を、リポジトリ横断で。</p>
         </div>
+        <section class="fleet-space" aria-label="リポジトリの立体マップ">
+          <div class="space-caption"><span><i aria-hidden="true"></i> REPOSITORY DOCKS</span><button id="space-view" type="button" aria-pressed="true">立体表示 ON</button></div>
+          <div class="dock-viewport"><div class="dock-grid" id="repository-docks"></div></div>
+          <div class="space-footer"><span>ドックを選択して反映状況を見る ↗</span><span><i class="dock-legend done"></i> 完了 <i class="dock-legend todo"></i> 未完了</span></div>
+        </section>
         <div class="stats" id="stats" aria-live="polite"></div>
         <p class="stats-note">未完了数は「リポジトリ × 変更項目」の件数です。具体的な作業は下のキューから選べます。</p>
       </section>
@@ -185,6 +191,6 @@
       <p id="audit-status" class="audit-status" role="status" aria-live="polite" aria-atomic="true"></p>
     </dialog>
 
-    <script type="module" src="app.js?v=20260830-modern"></script>
+    <script type="module" src="app.js?v=20260905-spatial"></script>
   </body>
 </html>

@@ -73,6 +73,7 @@ function renderProjectMetadata() {
 }
 
 function renderStats(profile) {
+  renderDocks(profile);
   const incomplete = profile.changes.reduce((sum, change) => sum + changeCounts(change).incomplete, 0);
   const revision = changeFor(profile, "west-revision-pinning");
   const revisionFindings = revision?.metrics?.finding_total ?? Object.values(revision?.tracking ?? {})
@@ -85,6 +86,30 @@ function renderStats(profile) {
   ];
   document.querySelector("#stats").innerHTML = stats.map(([value, label, description]) =>
     `<div class="stat"><strong>${value}</strong><span>${label}</span><small>${description}</small></div>`).join("");
+}
+
+function renderDocks(profile) {
+  const docks = document.querySelector("#repository-docks");
+  docks.replaceChildren();
+  for (const repo of profile.repositories) {
+    const targets = profile.changes.map(change => change.tracking?.[repo.id])
+      .filter(target => target && target.status !== "not-applicable");
+    const complete = targets.filter(targetComplete).length;
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "repository-dock";
+    button.setAttribute("aria-label", `${repo.id}: ${targets.length}項目中${complete}完了。横断表を開く`);
+    button.innerHTML = `<span class="dock-top"><span class="dock-chip" aria-hidden="true">${Array.from({ length: 12 }, () => '<i></i>').join("")}</span><span class="dock-indicator ${complete === targets.length && targets.length ? "ready" : ""}" aria-hidden="true"></span><strong>${escapeHtml(repo.id)}</strong><span class="dock-meter" aria-hidden="true"><span style="width:${targets.length ? complete / targets.length * 100 : 0}%"></span></span><small>${complete} / ${targets.length} 完了</small></span>`;
+    button.addEventListener("click", () => {
+      state.search = repo.id;
+      state.matrixFilter = "all";
+      document.querySelector("#repo-search").value = repo.id;
+      updatePressed(".matrix-filter", document.querySelector('[data-matrix-filter="all"]'));
+      renderMatrix(currentProfile());
+      location.hash = "coverage";
+    });
+    docks.append(button);
+  }
 }
 
 function actionTarget(profile, action) {
@@ -526,6 +551,11 @@ async function init() {
     }));
     document.querySelector("#repo-search").addEventListener("input", (event) => { state.search = event.target.value; renderMatrix(currentProfile()); });
     initAuditRequest();
+    document.querySelector("#space-view").addEventListener("click", (event) => {
+      const flat = document.querySelector(".fleet-space").classList.toggle("flat");
+      event.currentTarget.setAttribute("aria-pressed", String(!flat));
+      event.currentTarget.textContent = flat ? "立体表示 OFF" : "立体表示 ON";
+    });
     render();
     initNavigation();
   } catch (error) {
