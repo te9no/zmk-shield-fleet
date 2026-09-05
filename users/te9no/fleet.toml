@@ -6,6 +6,19 @@ owner = "te9no"
 workspace = "../../.."
 
 [[next_actions]]
+id = "cornix-madula-layout-shift-scroll-hardware"
+state = "waiting"
+priority = "high"
+order = 1
+repository = "cornix"
+action = "検証ブランチでCornix/MadulaのLayout Shift、Madula右エンコーダ、TB/LPPSのレイヤー1スクロールを実機確認する。"
+completion = "各実機項目を個別に確認し証跡を記録する。main統合は別途承認後。"
+blocker = "コード修正とlocal build確認済み。今回は未flash、実機未確認。"
+repository_url = "https://github.com/te9no/zmk-keyboard-cornix/tree/feature/madula-right-encoder-scroll"
+change_id = "cornix-madula-layout-shift-scroll"
+validation_keys = ["layout-shift-hardware", "encoder-scroll-hardware", "layer1-scroll-hardware"]
+
+[[next_actions]]
 id = "mkb-pinmux-hardware"
 state = "waiting"
 priority = "high"

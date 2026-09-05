@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "id": "cornix-madula-layout-shift-scroll",
+  "enabled": true,
+  "title": "Cornix/MadulaのLayout Shiftとレイヤー1スクロールを検証する",
+  "dashboard_label": "Layout Shift / Scroll",
+  "description": "include順序で上書きされるLayout Shiftを復元。Madula右エンコーダとTB/LPPSレイヤー1スクロールは実機確認を分離して追跡する。",
+  "source": {
+    "repository": "te9no/zmk-keyboard-cornix",
+    "to_revision": "5be6917",
+    "change_url": "https://github.com/te9no/zmk-keyboard-cornix/commit/5be6917",
+    "notes": "feature/madula-right-encoder-scrollのみ。main未統合。"
+  },
+  "repositories": [
+    "cornix"
+  ],
+  "tracking": {
+    "cornix": {
+      "status": "applied",
+      "branch": "feature/madula-right-encoder-scroll",
+      "commit": "5be6917780f36c55441a54972977556023877379",
+      "pr": null,
+      "notes": "2026-09-05: Madula修正e417c5aに続きCornix側もef5e507でkp互換性をinclude後に復元、kpls無効化、mtlsをkpへ接続。just.sh cornix_tps43_production成功。Madula3種の先行ビルド成功と今回のCornixビルドを区別。今回flashなし。ハードウェア動作とmain統合は未確認。",
+      "validation": {
+        "source-audit": "passed",
+        "cornix-local-build": "passed",
+        "layout-shift-hardware": "pending",
+        "encoder-scroll-hardware": "pending",
+        "layer1-scroll-hardware": "pending",
+        "main-integration": "pending"
+      },
+      "validation_urls": {
+        "source-audit": "https://github.com/te9no/zmk-keyboard-cornix/commit/ef5e507",
+        "cornix-local-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-audit-2026-09-05.md"
+      }
+    }
+  },
+  "steps": []
+}
