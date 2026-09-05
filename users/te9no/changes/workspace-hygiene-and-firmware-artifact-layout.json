@@ -11,8 +11,8 @@
   "source": {
     "repository": "te9no/zmk-workspace",
     "from_revision": "1ebf2c4a",
-    "to_revision": "148383705c155920be46a48a79d6c6e26127b879",
-    "change_url": "https://github.com/te9no/zmk-workspace/commit/148383705c155920be46a48a79d6c6e26127b879",
+    "to_revision": "5a5ef7df034e0856a169d0e57bbb1a0fc26fdc72",
+    "change_url": "https://github.com/te9no/zmk-workspace/commit/5a5ef7df034e0856a169d0e57bbb1a0fc26fdc72",
     "notes": "workspace main@14838370へ直接push済み。現在checkout優先のartifact保存先、CDCとの共通resolver、profile内ログ、実機に触れない--resolveを追加。18件の回帰テストはlocal/CIとも合格。2026-08-28に明示承認された旧worktree 4件と旧build/west archiveを削除済み。履歴・未保存source・証跡を検証済み復旧データ約2.9 GiBへ保全し、archive整理で差引約42.2 GiBを回収。削除後も18 tests、8 profiles、Git参照、firmware/CDC resolverを確認。ファーム変更・build・flashは行っていない。"
   },
   "repositories": [
