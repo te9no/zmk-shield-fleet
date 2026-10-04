@@ -25,6 +25,7 @@
     "evidence_status": "public-ci-passed"
   },
   "repositories": [
+    "equinox",
     "polaris",
     "mkb2",
     "saa",
@@ -34,6 +35,17 @@
     "mopolia"
   ],
   "tracking": {
+    "equinox": {
+      "findings": 0,
+      "status": "pending",
+      "branch": "main",
+      "commit": null,
+      "notes": "2026-10-04管理対象に追加。既存実装はあるが、この共通項目の受入条件との照合は未完了。ローカル変更と公開mainを区別して監査する。詳細: users/te9no/docs/equinox-onboarding-2026-10-04.md。",
+      "validation": {
+        "source-audit": "pending",
+        "hardware": "pending"
+      }
+    },
     "polaris": {
       "status": "applied",
       "pr": null,

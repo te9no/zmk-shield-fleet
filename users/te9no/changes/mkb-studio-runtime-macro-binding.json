@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "id": "mkb-studio-runtime-macro-binding",
+  "enabled": true,
+  "title": "MeKaBuで作成済みランタイムマクロをキーへ割り当て可能にする",
+  "description": "マクロ編集モジュールはあるがrmacro定義がなく割り当て候補に出ない。CentralのStudio snippetへruntime_macro.dtsiを追加した。",
+  "source": {
+    "repository": "te9no/zmk-config-MKB2",
+    "to_revision": "local-working-tree:codex/mkb-studio-persistence",
+    "from_revision": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
+    "notes": "2026-10-04ユーザー報告。詳細はusers/te9no/docs/mkb-studio-issues-2026-10-04.md。"
+  },
+  "repositories": [
+    "mkb2"
+  ],
+  "tracking": {
+    "mkb2": {
+      "status": "applied",
+      "branch": "codex/mkb-studio-persistence",
+      "base_branch": "zmk-0.4",
+      "commit": null,
+      "notes": "ローカル未コミット・未pushの修正。just.sh左7構成成功、ホスト回帰テスト3件成功。実機未flash、main/zmk-0.4未統合。共通モジュールの横展開は未着手。",
+      "validation": {
+        "source-audit": "passed",
+        "local-build": "passed",
+        "host-tests": "passed",
+        "macro-assignment": "pending",
+        "hardware": "pending",
+        "publication": "pending"
+      }
+    }
+  },
+  "steps": []
+}

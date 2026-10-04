@@ -1,5 +1,71 @@
 schema = 1
 
+[[next_actions]]
+id = "equinox-studio-hardware"
+state = "waiting"
+priority = "medium"
+order = 23
+repository = "equinox"
+change_id = "dya-studio-v2-zmk-0.4"
+validation_keys = ["right-flash", "studio-hardware", "publication"]
+action = "EquinoxのDYA拡張をレビュー・公開し、承認後に右側を書き込んでStudioの診断・マクロ・コンボ・入力プロセッサーを確認する。"
+completion = "左右の検証revision、Studio実機結果、公開commitを記録する。USとJISの結果は区別する。"
+blocker = "ローカル4構成ビルド済み。左USのみ書き込み済み。右側未書き込み、Studio画面は未確認。"
+
+[[repositories]]
+id = "equinox"
+rollout_enabled = false
+allow_external = false
+github = "te9no/zmk-keyboard-GeaconEquinox"
+checkout = "zmk-keyboard-GeaconEquinox"
+default_branch = "main"
+maintenance_branch = "main"
+architecture = "integrated-shield"
+modules = ["optical-dial", "trackball"]
+tags = ["dya-studio", "split", "xiao", "us-jis"]
+required_globs = [
+  "build.yaml",
+  "config/west.yml",
+  "boards/shields/GeaconEquinox/*.overlay",
+  "boards/shields/GeaconEquinox/*.conf",
+]
+
+[[next_actions]]
+id = "mkb-studio-macro-assignment"
+state = "waiting"
+priority = "high"
+order = 20
+repository = "mkb2"
+change_id = "mkb-studio-runtime-macro-binding"
+validation_keys = ["macro-assignment", "hardware", "publication"]
+action = "MeKaBuのrmacro定義追加をレビュー・公開後、マクロ作成→キー割り当て→実行を確認する。"
+completion = "検証revisionと実機結果を記録する。"
+blocker = "ローカル修正・左7構成ビルド・回帰テスト成功。未コミット・未push・未flash。"
+
+[[next_actions]]
+id = "mkb-studio-combo-cold-start"
+state = "waiting"
+priority = "high"
+order = 21
+repository = "mkb2"
+change_id = "mkb-runtime-combo-cold-start"
+validation_keys = ["cold-start", "hardware", "publication"]
+action = "MeKaBuの修正版でコンボ保存後の完全電源断・起動時キー押下を検証し、再保存なしで動作するか確認する。"
+completion = "起動ログと保存内容・実動作を区別して記録する。"
+blocker = "キャッシュ補正はビルド・ホストテスト済み。報告元実機で原因と解決は未確認。"
+
+[[next_actions]]
+id = "mkb-studio-shifted-key-reproduce"
+state = "waiting"
+priority = "medium"
+order = 22
+repository = "mkb2"
+change_id = "mkb-studio-shifted-key-assignment"
+validation_keys = ["reproduction", "shifted-key-hardware"]
+action = "報告元のファーム版とDYA Studio操作を確認し、Shift付きキーの割り当て・保存・入力を再現する。"
+completion = "OS配列とLayout Shift状態を含め原因を切り分ける。"
+blocker = "コード上は対応済み。実機で未再現、修正なし。"
+
 [fleet]
 owner = "te9no"
 # This repository normally lives beside the managed checkouts under config/.
