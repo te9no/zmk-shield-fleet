@@ -16,6 +16,7 @@
     "notes": "workspace main@14838370へ直接push済み。現在checkout優先のartifact保存先、CDCとの共通resolver、profile内ログ、実機に触れない--resolveを追加。18件の回帰テストはlocal/CIとも合格。2026-08-28に明示承認された旧worktree 4件と旧build/west archiveを削除済み。履歴・未保存source・証跡を検証済み復旧データ約2.9 GiBへ保全し、archive整理で差引約42.2 GiBを回収。削除後も18 tests、8 profiles、Git参照、firmware/CDC resolverを確認。ファーム変更・build・flashは行っていない。"
   },
   "repositories": [
+    "equinox",
     "polaris",
     "mkb2",
     "saa",
@@ -25,6 +26,16 @@
     "mopolia"
   ],
   "tracking": {
+    "equinox": {
+      "status": "pending",
+      "branch": "main",
+      "commit": null,
+      "notes": "2026-10-04管理対象に追加。既存実装はあるが、この共通項目の受入条件との照合は未完了。ローカル変更と公開mainを区別して監査する。詳細: users/te9no/docs/equinox-onboarding-2026-10-04.md。",
+      "validation": {
+        "source-audit": "pending",
+        "hardware": "pending"
+      }
+    },
     "polaris": {
       "status": "applied",
       "pr": null,

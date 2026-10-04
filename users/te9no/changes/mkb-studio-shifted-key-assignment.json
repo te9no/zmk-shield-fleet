@@ -1,0 +1,31 @@
+{
+  "schema": 1,
+  "id": "mkb-studio-shifted-key-assignment",
+  "enabled": true,
+  "title": "MeKaBuでShift付きキーをStudioから割り当てる操作を確認する",
+  "description": "ユーザー報告: Shift+任意キーを設定できない。現行DYA StudioとZMK/Layout Shiftは修飾ビットに対応。使用ファーム版・UI操作・保存時の挙動は未確認。コード変更なし。",
+  "source": {
+    "repository": "te9no/zmk-config-MKB2",
+    "to_revision": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
+    "from_revision": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
+    "notes": "2026-10-04ユーザー報告。詳細はusers/te9no/docs/mkb-studio-issues-2026-10-04.md。"
+  },
+  "repositories": [
+    "mkb2"
+  ],
+  "tracking": {
+    "mkb2": {
+      "status": "pending",
+      "branch": "codex/mkb-studio-persistence",
+      "base_branch": "zmk-0.4",
+      "commit": null,
+      "notes": "調査のみ。既存処理を変更していない。報告元のファーム版と再現操作の確認が必要。",
+      "validation": {
+        "source-audit": "passed",
+        "reproduction": "pending",
+        "shifted-key-hardware": "pending"
+      }
+    }
+  },
+  "steps": []
+}

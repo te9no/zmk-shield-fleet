@@ -21,6 +21,7 @@
     "notes": "MKB firmware commit 1f540398d5af4b49b04bbab045263ee67c5a63ceを統合PR #14でzmk-0.4へ反映し、PMW3610 custom Studio RPCとsplit relayを実機検証した。"
   },
   "repositories": [
+    "equinox",
     "polaris",
     "mkb2",
     "saa",
@@ -29,6 +30,16 @@
     "sparagmos"
   ],
   "tracking": {
+    "equinox": {
+      "status": "pending",
+      "branch": "main",
+      "commit": null,
+      "notes": "2026-10-04管理対象に追加。既存実装はあるが、この共通項目の受入条件との照合は未完了。ローカル変更と公開mainを区別して監査する。詳細: users/te9no/docs/equinox-onboarding-2026-10-04.md。",
+      "validation": {
+        "source-audit": "pending",
+        "hardware": "pending"
+      }
+    },
     "polaris": {
       "status": "merged",
       "pr": null,
