@@ -36,6 +36,7 @@
   ],
   "tracking": {
     "equinox": {
+      "findings": 0,
       "status": "pending",
       "branch": "main",
       "commit": null,
