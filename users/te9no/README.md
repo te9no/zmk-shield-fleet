@@ -8,9 +8,11 @@ none of it is required by other users of the project.
 Madula Trackball is complete on `main@794987c`. Madula IQS input/direction and
 its CDC boot/log path passed on 2026-08-28; the SDA/rotation fix is integrated in
 `main@578c9f1`. IQS extended checks and Trackball's 1200-baud check remain
-independent items. SAA is consolidated on the dedicated `zmk-0.4` branch and is the currently active hardware
-validation; MKB2 and GeaconSolstice follow as already validated references, and
-order 99 is the lowest-priority backlog.
+independent items. SAA is consolidated on the dedicated `zmk-0.4` branch.
+At the owner's request on 2026-10-07, SAA hardware validation is deferred to the
+low-priority backlog (rollout order 90, next-action order 91), rather than active
+work. Existing implementation and validation evidence is unchanged.
+Order 99 remains the lowest-priority backlog.
 CI success only advances a validation branch; default-branch promotion requires
 hardware validation.
 

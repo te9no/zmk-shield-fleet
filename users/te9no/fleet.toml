@@ -123,9 +123,9 @@ evidence = [
 
 [[next_actions]]
 id = "saa-zmk-0-4-hardware-validation"
-state = "active"
-priority = "medium"
-order = 5
+state = "later"
+priority = "low"
+order = 91
 repository = "saa"
 action = "統合済みzmk-0.4の21 artifactから対象moduleを書き込み、代表variantの1200 baud boot、DYA Studio、左右split、OLED/LED、JOY、TB/PMW3610入力を実機確認する。"
 completion = "検証したartifact revisionとvariantごとに結果を記録し、代表入力・表示・通信が合格する。TPD+IQSの既知pin ownership課題は別項目として保留する。"
@@ -318,7 +318,7 @@ required_globs = [
 id = "saa"
 rollout_enabled = false
 allow_external = false
-rollout_order = 5
+rollout_order = 90
 github = "te9no/zmk-config-SparAkashaAnanta"
 checkout = "zmk-config-SparAkashaAnanta"
 default_branch = "master"
