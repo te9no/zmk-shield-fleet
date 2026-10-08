@@ -30,29 +30,43 @@ required_globs = [
   "boards/shields/GeaconEquinox/*.conf",
 ]
 
-[[next_actions]]
-id = "mkb-studio-macro-assignment"
-state = "waiting"
-priority = "high"
-order = 20
-repository = "mkb2"
-change_id = "mkb-studio-runtime-macro-binding"
-validation_keys = ["macro-assignment", "hardware", "publication"]
-action = "MeKaBuのrmacro定義追加をレビュー・公開後、マクロ作成→キー割り当て→実行を確認する。"
-completion = "検証revisionと実機結果を記録する。"
-blocker = "ローカル修正・左7構成ビルド・回帰テスト成功。未コミット・未push・未flash。"
+# MeKaBu macro/combo checks completed; evidence remains in their ledger entries.
 
 [[next_actions]]
-id = "mkb-studio-combo-cold-start"
+id = "polaris-lpps-deadzone-hardware"
 state = "waiting"
 priority = "high"
-order = 21
+order = 4
+repository = "polaris"
+change_id = "lpps-deadzone-drift"
+validation_keys = ["hardware"]
+action = "Polaris左LPPSのデッドゾーン1500版で、静止直後・数分後のドリフトと弱い操作への反応を確認する。"
+completion = "書き込んだrevisionと静止・微操作の結果を記録する。"
+blocker = "zmk-0.4へ反映・ビルド確認済み。書き込みと実機確認は未実施。"
+
+[[next_actions]]
+id = "mkb-lpps-deadzone-hardware"
+state = "waiting"
+priority = "medium"
+order = 12
 repository = "mkb2"
-change_id = "mkb-runtime-combo-cold-start"
-validation_keys = ["cold-start", "hardware", "publication"]
-action = "MeKaBuの修正版でコンボ保存後の完全電源断・起動時キー押下を検証し、再保存なしで動作するか確認する。"
-completion = "起動ログと保存内容・実動作を区別して記録する。"
-blocker = "キャッシュ補正はビルド・ホストテスト済み。報告元実機で原因と解決は未確認。"
+change_id = "lpps-deadzone-drift"
+validation_keys = ["hardware"]
+action = "MKB左右LPPSのデッドゾーン1500版で、静止時ドリフトと弱い操作への反応を左右別に確認する。"
+completion = "左右それぞれのrevisionと静止・微操作の結果を記録する。"
+blocker = "zmk-0.4へ反映・左右ビルド確認済み。TBの確認結果はLPPSへ転用しない。"
+
+[[next_actions]]
+id = "cornix-lpps-deadzone-hardware"
+state = "waiting"
+priority = "medium"
+order = 13
+repository = "cornix"
+change_id = "lpps-deadzone-drift"
+validation_keys = ["hardware"]
+action = "Madula LPPSのデッドゾーン1500版で、静止時ドリフトと弱い操作への反応を確認する。"
+completion = "mainの対象revisionと静止・微操作の結果を記録する。"
+blocker = "現行mainへ反映・ビルド確認済み。旧zmk-0.4は対象外。過去のpinout/free XY合格と今回のデッドゾーン効果は別検証。"
 
 [[next_actions]]
 id = "mkb-studio-shifted-key-reproduce"

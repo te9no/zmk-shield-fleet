@@ -4,6 +4,15 @@ This directory contains te9no's personal ZMK repository inventory, propagation
 ledger, and audit notes. It is data consumed by the generic `shield-fleet` CLI;
 none of it is required by other users of the project.
 
+## Latest reconciliation (2026-10-09)
+
+MeKaBu runtime macro assignment and combo cold-start checks are recorded as
+owner-confirmed on the tested TB setup; their completed queue cards are removed.
+The 20261004 release is public. LPPS deadzone 1500 is integrated in Polaris/MKB
+`zmk-0.4` and Cornix `main`, with builds passing but hardware effects still pending.
+See [the evidence and remaining scope](docs/fleet-refresh-2026-10-09.md).
+SAA remains low priority. Historical validation below does not certify newer revisions.
+
 `rollout_order` is the personal deployment queue shown on GitHub Pages. Cornix
 Madula Trackball is complete on `main@794987c`. Madula IQS input/direction and
 its CDC boot/log path passed on 2026-08-28; the SDA/rotation fix is integrated in
