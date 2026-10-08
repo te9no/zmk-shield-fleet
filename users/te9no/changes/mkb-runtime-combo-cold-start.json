@@ -3,10 +3,10 @@
   "id": "mkb-runtime-combo-cold-start",
   "enabled": true,
   "title": "MeKaBuの電源断後にランタイムコンボが効かなくなる問題を検証・修正する",
-  "description": "ユーザー報告: 電源断後にコンボが効かずStudio再保存で復帰。設定読込前のキーイベントでキャッシュが作られる可能性を調査し、読込完了イベントで再構築するローカル補正を追加。実機での原因・解決は未確定。",
+  "description": "電源断後のコンボ不動対策として設定読込完了時のキャッシュ再構築を追加。zmk-0.4へ統合・公開済み。MeKaBu両側TBでユーザー確認済み。報告元の全個体での根本原因確定とは区別する。",
   "source": {
     "repository": "te9no/zmk-config-MKB2",
-    "to_revision": "local-working-tree:codex/mkb-studio-persistence",
+    "to_revision": "d49fab5b6738935da15ea404f6858a87f887ad30",
     "from_revision": "7b02e9bcf512dd6a494ed94cb1be2f02466213f3",
     "notes": "2026-10-04ユーザー報告。詳細はusers/te9no/docs/mkb-studio-issues-2026-10-04.md。"
   },
@@ -16,17 +16,22 @@
   "tracking": {
     "mkb2": {
       "status": "applied",
-      "branch": "codex/mkb-studio-persistence",
+      "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
-      "commit": null,
-      "notes": "ローカル未コミット・未pushの修正。just.sh左7構成成功、ホスト回帰テスト3件成功。実機未flash、main/zmk-0.4未統合。共通モジュールの横展開は未着手。",
+      "commit": "d49fab5b6738935da15ea404f6858a87f887ad30",
+      "notes": "2026-10-09台帳整理: d49fab5がzmk-0.4に含まれることと公開リリースを確認。会話中のMeKaBu両側TBでのマクロ・電源断後コンボのユーザー確認を記録。全moduleの実機合格や、報告元の全個体での原因確定を意味しない。共通モジュールの他機種への横展開は未確認。",
       "validation": {
         "source-audit": "passed",
         "local-build": "passed",
         "host-tests": "passed",
-        "cold-start": "pending",
-        "hardware": "pending",
-        "publication": "pending"
+        "cold-start": "passed",
+        "hardware": "passed",
+        "publication": "passed"
+      },
+      "validation_urls": {
+        "cold-start": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "publication": "https://github.com/te9no/zmk-config-MKB2/releases/tag/zmk-0.4-20261004"
       }
     }
   },

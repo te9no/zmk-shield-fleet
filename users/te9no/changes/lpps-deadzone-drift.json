@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "id": "lpps-deadzone-drift",
+  "enabled": true,
+  "title": "LPPSの静止時ドリフト対策としてデッドゾーンを1500へ拡大する",
+  "description": "Polarisで静止時の緩やかなカーソル移動が報告されたため、LPPS各構成の両軸を1500へ変更。コード反映と実機効果は独立管理する。方向・速度・校正方式は変更しない。",
+  "source": {
+    "repository": "te9no/zmk-config-GeaconPolaris",
+    "to_revision": "35d64dc8b7c867eaf99dfe006006f393f8b536d0",
+    "change_url": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/35d64dc8b7c867eaf99dfe006006f393f8b536d0",
+    "notes": "デッドゾーン拡大は対策候補であり、中心ずれの原因確定ではない。"
+  },
+  "repositories": [
+    "polaris",
+    "mkb2",
+    "cornix"
+  ],
+  "tracking": {
+    "polaris": {
+      "status": "applied",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "commit": "35d64dc8b7c867eaf99dfe006006f393f8b536d0",
+      "notes": "1000→1500・左LPPS。ユーザー承認で統合先へpush済み。ローカルビルド・生成DTS確認済み。今回の値での書き込み・実機効果は未確認。",
+      "validation": {
+        "local-build": "passed",
+        "generated-dts": "passed",
+        "ci": "passed",
+        "publication": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "local-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "ci": "https://github.com/te9no/zmk-config-GeaconPolaris/actions/runs/37582161009",
+        "publication": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/35d64dc8b7c867eaf99dfe006006f393f8b536d0",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md"
+      }
+    },
+    "mkb2": {
+      "status": "applied",
+      "branch": "zmk-0.4",
+      "base_branch": "zmk-0.4",
+      "commit": "3efccb00eec803db57dc6f79cad577465de526c1",
+      "notes": "600→1500・左右LPPS。ユーザー承認で統合先へpush済み。ローカルビルド・生成DTS確認済み。今回の値での書き込み・実機効果は未確認。",
+      "validation": {
+        "local-build": "passed",
+        "generated-dts": "passed",
+        "ci": "passed",
+        "publication": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "local-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/37582163521",
+        "publication": "https://github.com/te9no/zmk-config-MKB2/commit/3efccb00eec803db57dc6f79cad577465de526c1",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md"
+      }
+    },
+    "cornix": {
+      "status": "applied",
+      "branch": "main",
+      "base_branch": "main",
+      "commit": "9cfab7efe910c3968f43b457104e4a4a073b6210",
+      "notes": "1200→1500・Madula LPPS。ユーザー承認で統合先へpush済み。ローカルビルド・生成DTS確認済み。今回の値での書き込み・実機効果は未確認。",
+      "validation": {
+        "local-build": "passed",
+        "generated-dts": "passed",
+        "ci": "passed",
+        "publication": "passed",
+        "hardware": "pending"
+      },
+      "validation_urls": {
+        "local-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "generated-dts": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
+        "ci": "https://github.com/te9no/zmk-keyboard-cornix/actions/runs/37583837063",
+        "publication": "https://github.com/te9no/zmk-keyboard-cornix/commit/9cfab7efe910c3968f43b457104e4a4a073b6210",
+        "hardware": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md"
+      }
+    }
+  },
+  "steps": []
+}
