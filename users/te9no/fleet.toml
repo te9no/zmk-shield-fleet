@@ -141,13 +141,15 @@ state = "later"
 priority = "low"
 order = 91
 repository = "saa"
-action = "統合済みzmk-0.4の21 artifactから対象moduleを書き込み、代表variantの1200 baud boot、DYA Studio、左右split、OLED/LED、JOY、TB/PMW3610入力を実機確認する。"
+action = "Ananta rc.2の残る構成と長時間動作を実機確認する。右TB・左ENCの無線キー同時操作時の引っかかりは解消確認済み。"
 completion = "検証したartifact revisionとvariantごとに結果を記録し、代表入力・表示・通信が合格する。TPD+IQSの既知pin ownership課題は別項目として保留する。"
-blocker = "source@28c3546をzmk-0.4へpushし、local just.sh21/21とCI33862051924全21成功、artifact@1f702fcへ21 UF2格納済み。実機とmoduleの接続・書き込み待ち。stable masterは対象外。"
-repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/tree/zmk-0.4"
-change_id = "saa-zmk-0.4-baseline"
-validation_keys = ["hardware"]
+blocker = "rc.2 source@65af0ba、CI39115843957全21成功・公開済み。右TB/左ENCの実機確認を全構成の合格へ拡張しない。他構成・長期・画像バーストは未確認。修正は専用branchで、zmk-0.4/masterへの統合は別。"
+repository_url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/releases/tag/zmk-0.4-20261018-tb-rc.2"
+change_id = "ananta-wireless-trackball-burst"
+validation_keys = ["other-variants-hardware", "long-duration", "frame-capture-burst"]
 evidence = [
+  { label = "rc.2 all 21 firmware published", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/releases/tag/zmk-0.4-20261018-tb-rc.2" },
+  { label = "Wireless right TB / left ENC stutter resolved", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/blob/65af0ba1f543a0c0c65d9410820963983cb88697/docs/modifier-trackball-stutter.md" },
   { label = "Consolidated source@28c3546", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/commit/28c354634f3d1ea19ebe7077dbeb9456409b00b5" },
   { label = "Local just.sh pristine 21/21", status = "passed", url = "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/saa-zmk-0.4-baseline-2026-09-04.md" },
   { label = "CI 21/21, generated DTS/config and firmware publish", status = "passed", url = "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/33862051924" },

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "id": "ananta-wireless-trackball-burst",
+  "enabled": true,
+  "title": "Anantaの無線キー同時操作時のトラボもたつきを解消する",
+  "description": "右PMW3610をバースト読み取りへ変更。診断モジュール、INFOログ、LT短押し優先350msを含むrc.2を公開。全種類のビルドと限定構成の実機確認を区別する。",
+  "dashboard_label": "Ananta wireless TB rc.2",
+  "source": {
+    "repository": "te9no/zmk-config-SparAkashaAnanta",
+    "from_revision": "d538c8fb634b98bf68ee5fb9ed700d733ddd7768",
+    "to_revision": "65af0ba1f543a0c0c65d9410820963983cb88697",
+    "change_url": "https://github.com/te9no/zmk-config-SparAkashaAnanta/releases/tag/zmk-0.4-20261018-tb-rc.2",
+    "notes": "2026-10-18公開のプレリリース。zmk-0.4/masterへの統合完了を意味しない。"
+  },
+  "repositories": ["saa"],
+  "tracking": {
+    "saa": {
+      "status": "applied",
+      "pr": null,
+      "commit": "65af0ba1f543a0c0c65d9410820963983cb88697",
+      "branch": "codex/ananta-tb-runtime-fix",
+      "base_branch": "zmk-0.4",
+      "notes": "右TB・左ENC、IQSなし。利用者が無線でShift等を押しながらトラボ操作し『ひっかかりません』と確認。実機比較版UF2 SHA256=0a1539cf615a7bc93c6278648f1bdedabe99a86baf7c19dd7608588124afd7cd。CI再ビルドの公開右TBはc8332785c18171fc657dae7ee1047fb05ffa5921d92b6523043cd3a884237f80であり、実機へ公開バイナリを再書き込みしたとは扱わない。全21 UF2（settings_reset含む）と21証跡JSON、SHA256SUMSの43添付を検証済み。他構成・長期動作・画像バースト取得は保留。",
+      "validation": {
+        "ci": "passed",
+        "release-assets": "passed",
+        "right-tb-left-enc-wireless-stutter": "passed",
+        "other-variants-hardware": "pending",
+        "long-duration": "pending",
+        "frame-capture-burst": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-SparAkashaAnanta/actions/runs/39115843957",
+        "release-assets": "https://github.com/te9no/zmk-config-SparAkashaAnanta/releases/tag/zmk-0.4-20261018-tb-rc.2",
+        "right-tb-left-enc-wireless-stutter": "https://github.com/te9no/zmk-config-SparAkashaAnanta/blob/65af0ba1f543a0c0c65d9410820963983cb88697/docs/modifier-trackball-stutter.md"
+      }
+    }
+  },
+  "steps": []
+}
