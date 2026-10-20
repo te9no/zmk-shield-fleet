@@ -18,7 +18,7 @@ test("each navigation destination has a matching accessible view in the HTML", (
     assert.ok(html.includes(`href="#${view}" data-view-link="${view}"`));
     assert.match(html, new RegExp(`id="${view}" data-view="${view}" aria-labelledby="[^"]+"`));
   }
-  assert.ok(html.includes('data-action-filter="active" aria-pressed="true"'));
+  assert.ok(html.includes('data-action-filter="next" aria-pressed="true"'));
 });
 
 test("existing action and desktop/mobile repository deep links resolve", () => {
