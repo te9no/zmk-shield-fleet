@@ -1,4 +1,26 @@
 /* Application shell and compact views; base styles retain shared components. */
+.overview-details { margin-top: 16px; color: var(--muted); }
+.overview-details > summary { cursor: pointer; padding-block: 8px; }
+#action-grid { grid-template-columns: 1fr; gap: 12px; }
+.repository-queue { min-width: 0; padding: 20px 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+.queue-heading, .queue-controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.queue-heading h3 { margin: 0; font-size: 20px; overflow-wrap: anywhere; }
+.queue-state { font-size: 12px; color: var(--green); background: var(--green-soft); border-radius: 6px; padding: 4px 9px; }
+.queue-next { margin: 10px 0 14px; max-width: 90ch; overflow-wrap: anywhere; line-height: 1.7; }
+.queue-controls .audit-request-button { margin: 0; width: auto; }
+.queue-details { border-top: 1px solid var(--line); margin-top: 12px; }
+.queue-details > summary, .queue-record > summary { cursor: pointer; padding: 12px 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.queue-details .action-card { margin-block: 10px; box-shadow: none; }
+.queue-record { padding: 0 12px; border-bottom: 1px solid var(--line); }
+.queue-record .target-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.queue-record > summary .status { margin-right: 8px; }
+@media (max-width: 640px) {
+  .repository-queue { padding: 16px; }
+  .queue-controls { align-items: stretch; flex-direction: column; }
+  .queue-controls .audit-request-button { width: 100%; }
+  .action-toolbar .action-filters { flex-wrap: wrap; }
+  .action-toolbar .action-filter { flex: 1 1 28%; font-size: 11px; }
+}
 :root {
   --ink: #1d2a3d;
   --muted: #617087;

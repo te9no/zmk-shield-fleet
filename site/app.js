@@ -6,18 +6,18 @@ import {
   copyAuditRequest,
   evidenceCounts,
   scopeLabel,
-  selectStartAction,
   sortedActions,
   targetComplete,
   targetNeedsAction,
   targetVariants,
 } from "./model.js?v=20260827-evidence";
 import { PAGE_SIZE, paginate, routeForHash } from "./navigation.js?v=20260830-modern";
+import { repositoryGroups } from "./focus.js?v=20261020";
 
 // Completion lives in model.js; its accepted-check predicate remains:
 // checks.every((status) => status === "passed" || status === "waived")
 
-const state = { data: null, profile: null, actionFilter: "active", actionPage: 0, changePage: 0, filter: "all", matrixFilter: "all", search: "" };
+const state = { data: null, profile: null, actionFilter: "next", actionPage: 0, changePage: 0, filter: "all", matrixFilter: "all", search: "" };
 const actionStates = {
   active: { label: "今進める", detail: "Actionable now" },
   waiting: { label: "実機/外部待ち", detail: "Waiting" },
@@ -167,10 +167,10 @@ function actionCard(profile, action) {
 }
 
 function renderStartHere(profile) {
-  const action = selectStartAction(profile.next_actions);
+  const action = repositoryGroups(profile)[0]?.actions[0];
   const container = document.querySelector("#start-here");
   if (!action) {
-    container.innerHTML = '<p class="start-empty"><strong>No actionable item right now.</strong> Review the waiting queue and blockers below.</p>';
+    container.innerHTML = '<p class="start-empty"><strong>次の作業はありません。</strong> 保留・完了記録はタブから確認できます。</p>';
     return;
   }
   container.innerHTML = `<div><span class="start-label">Start here / まずこれ</span><strong>${escapeHtml(action.repository)}</strong><p>${escapeHtml(action.action)}</p></div><a href="#action-${escapeHtml(action.id)}">Open action <span aria-hidden="true">↓</span></a>`;
@@ -178,18 +178,37 @@ function renderStartHere(profile) {
 
 function renderActions(profile) {
   const allActions = sortedActions(profile.next_actions ?? []);
-  const visible = allActions.filter((action) => state.actionFilter === "all" || action.state === state.actionFilter);
+  const visible = repositoryGroups(profile, state.actionFilter);
   const totals = Object.fromEntries(Object.keys(actionStates)
     .map((key) => [key, allActions.filter((action) => action.state === key).length]));
   document.querySelector("#action-summary").textContent = allActions.length
-    ? `${totals.active} actionable now · ${totals.waiting} waiting · ${totals.later} later`
+    ? `${visible.length}リポジトリ · 今進める ${totals.active}件 / 待ち ${totals.waiting}件 / 保留 ${totals.later}件`
     : "No explicit next actions in this profile";
   const page = paginate(visible, state.actionPage);
   state.actionPage = page.page;
   document.querySelector("#action-grid").innerHTML = visible.length
-    ? page.items.map((action) => actionCard(profile, action)).join("")
+    ? page.items.map((group) => repositoryQueueCard(profile, group)).join("")
     : '<div class="empty">この条件の作業はありません。別の状態のタブで待機中・後回しの項目を確認できます。</div>';
   renderPagination("action", page);
+  document.querySelector("#start-here").hidden = state.actionFilter !== "next";
+}
+
+function repositoryQueueCard(profile, group) {
+  const first = group.actions[0];
+  const repository = repositoryFor(profile, group.repository) ?? { id: group.repository };
+  const label = first ? actionStates[first.state].label
+    : state.actionFilter === "complete" ? "完了記録" : "台帳";
+  return `<article class="repository-queue">
+    <div class="queue-heading"><h3>${escapeHtml(group.repository)}</h3><span class="queue-state">${escapeHtml(label)}</span></div>
+    ${first ? `<p class="queue-next">${escapeHtml(first.action)}</p>
+      <div class="queue-controls"><span class="priority-badge ${escapeHtml(first.priority)}">優先度 ${escapeHtml(first.priority)} · #${escapeHtml(first.order)}</span>
+      ${auditRequestButton(first.change_id, first.repository, first.id)}</div>`
+      : `<p class="queue-next">${group.records.length}件の${state.actionFilter === "complete" ? "完了" : "台帳"}記録</p>`}
+    ${group.actions.length ? `<details class="queue-details"><summary>作業の詳細${group.actions.length > 1 ? `・続き ${group.actions.length - 1}件` : ""}</summary>
+      ${group.actions.map((action) => actionCard(profile, action)).join("")}</details>` : ""}
+    ${group.records.length ? `<details class="queue-details"><summary>関連する台帳・検証記録 ${group.records.length}件</summary>
+      ${group.records.map(({change, target}) => `<details class="queue-record"><summary>${statusMarkup(target)} ${escapeHtml(change.title)}</summary>${targetDetailBody(repository, target, change.id)}</details>`).join("")}</details>` : ""}
+  </article>`;
 }
 
 function shortChangeLabel(change) {
@@ -339,9 +358,9 @@ function showRoute(focus = false) {
   const profile = currentProfile();
   // Shared links must reveal their targets, even across filters and pages.
   if (route.actionId) {
-    const actions = sortedActions(profile.next_actions ?? []);
+    const groups = repositoryGroups(profile, "all");
     state.actionFilter = "all";
-    state.actionPage = Math.max(0, Math.floor(actions.findIndex((a) => a.id === route.actionId) / PAGE_SIZE));
+    state.actionPage = Math.max(0, Math.floor(groups.findIndex((g) => g.actions.some((a) => a.id === route.actionId)) / PAGE_SIZE));
     updatePressed(".action-filter", document.querySelector('[data-action-filter="all"]'));
     renderActions(profile);
   }
@@ -362,6 +381,9 @@ function showRoute(focus = false) {
     if (target) target.open = true;
   }
   if (target) {
+    for (let parent = target.parentElement; parent; parent = parent.parentElement) {
+      if (parent.tagName === "DETAILS") parent.open = true;
+    }
     target.scrollIntoView({ block: "start" });
     if (focus) { target.tabIndex = -1; target.focus({ preventScroll: true }); }
   } else if (focus) {
@@ -508,10 +530,10 @@ async function init() {
     select.innerHTML = state.data.profiles.map((profile) => `<option value="${escapeHtml(profile.id)}">${escapeHtml(profile.id)}</option>`).join("");
     document.querySelector("#profile-control").hidden = state.data.profiles.length === 1;
     select.addEventListener("change", (event) => {
-      state.profile = event.target.value; state.actionFilter = "active"; state.actionPage = 0; state.changePage = 0; state.search = ""; state.matrixFilter = "all";
+      state.profile = event.target.value; state.actionFilter = "next"; state.actionPage = 0; state.changePage = 0; state.search = ""; state.matrixFilter = "all";
       document.querySelector("#repo-search").value = "";
       updatePressed(".matrix-filter", document.querySelector('[data-matrix-filter="all"]'));
-      updatePressed(".action-filter", document.querySelector('[data-action-filter="active"]'));
+      updatePressed(".action-filter", document.querySelector('[data-action-filter="next"]'));
       render();
       showRoute();
     });

@@ -15,7 +15,7 @@
     <meta name="twitter:image" content="https://te9no.github.io/zmk-shield-fleet/og.png">
     <title>ZMK Shield Fleet</title>
     <link rel="stylesheet" href="styles.css?v=20260827-evidence">
-    <link rel="stylesheet" href="dashboard.css?v=20260830-modern">
+    <link rel="stylesheet" href="dashboard.css?v=20261020-focus">
   </head>
   <body>
     <a class="skip-link" href="#next-actions">Skip to next actions / 次にやることへ</a>
@@ -50,12 +50,14 @@
         <div class="hero-heading">
           <div>
             <p class="eyebrow">FLEET OVERVIEW</p>
-            <h1 id="hero-title">Fleet overview<span class="heading-dot">.</span></h1>
+            <h1 id="hero-title">次の一歩を、ここから<span class="heading-dot">.</span></h1>
           </div>
-          <p class="hero-copy">今進める作業から、ひとつずつ。<br>変更と検証の状況を、リポジトリ横断で。</p>
+          <p class="hero-copy">各キーボードの次の作業をひとつずつ。<br>証拠や履歴は、必要なときだけ開けます。</p>
         </div>
-        <div class="stats" id="stats" aria-live="polite"></div>
-        <p class="stats-note">未完了数は「リポジトリ × 変更項目」の件数です。具体的な作業は下のキューから選べます。</p>
+        <details class="overview-details"><summary>Fleet全体の集計を見る</summary>
+          <div class="stats" id="stats" aria-live="polite"></div>
+          <p class="stats-note">未完了数は「リポジトリ × 変更項目」の件数です。作業の完了とは別に検証状況を記録しています。</p>
+        </details>
       </section>
 
       <section class="section action-section" id="next-actions" data-view="next-actions" aria-labelledby="actions-heading">
@@ -67,9 +69,10 @@
           <div class="action-toolbar">
             <p class="section-copy" id="action-summary" aria-live="polite"></p>
             <div class="action-filters" role="group" aria-label="Next action status filter">
-              <button class="action-filter active" data-action-filter="active" aria-pressed="true">Now / 今進める</button>
+              <button class="action-filter active" data-action-filter="next" aria-pressed="true">次の作業</button>
               <button class="action-filter" data-action-filter="waiting" aria-pressed="false">Waiting / 待ち</button>
-              <button class="action-filter" data-action-filter="later" aria-pressed="false">Later / 後回し</button>
+              <button class="action-filter" data-action-filter="later" aria-pressed="false">保留 / 対象外</button>
+              <button class="action-filter" data-action-filter="complete" aria-pressed="false">完了記録</button>
               <button class="action-filter" data-action-filter="all" aria-pressed="false">All / すべて</button>
             </div>
           </div>
@@ -185,6 +188,6 @@
       <p id="audit-status" class="audit-status" role="status" aria-live="polite" aria-atomic="true"></p>
     </dialog>
 
-    <script type="module" src="app.js?v=20260830-modern"></script>
+    <script type="module" src="app.js?v=20261020-focus"></script>
   </body>
 </html>
