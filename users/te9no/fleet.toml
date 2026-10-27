@@ -33,18 +33,6 @@ required_globs = [
 # MeKaBu macro/combo checks completed; evidence remains in their ledger entries.
 
 [[next_actions]]
-id = "polaris-lpps-deadzone-hardware"
-state = "waiting"
-priority = "high"
-order = 4
-repository = "polaris"
-change_id = "lpps-deadzone-drift"
-validation_keys = ["hardware"]
-action = "Polaris左LPPSのデッドゾーン1500版で、静止直後・数分後のドリフトと弱い操作への反応を確認する。"
-completion = "書き込んだrevisionと静止・微操作の結果を記録する。"
-blocker = "zmk-0.4へ反映・ビルド確認済み。書き込みと実機確認は未実施。"
-
-[[next_actions]]
 id = "mkb-lpps-deadzone-hardware"
 state = "waiting"
 priority = "medium"

@@ -21,13 +21,13 @@
       "branch": "zmk-0.4",
       "base_branch": "zmk-0.4",
       "commit": "35d64dc8b7c867eaf99dfe006006f393f8b536d0",
-      "notes": "1000→1500・左LPPS。ユーザー承認で統合先へpush済み。ローカルビルド・生成DTS確認済み。今回の値での書き込み・実機効果は未確認。",
+      "notes": "1000→1500・左LPPS。ユーザー承認で統合先へpush済み。ローカルビルド・生成DTS確認済み。2026-10-27、ユーザーが実機確認済み（hardware passed）。",
       "validation": {
         "local-build": "passed",
         "generated-dts": "passed",
         "ci": "passed",
         "publication": "passed",
-        "hardware": "pending"
+        "hardware": "passed"
       },
       "validation_urls": {
         "local-build": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/fleet-refresh-2026-10-09.md",
