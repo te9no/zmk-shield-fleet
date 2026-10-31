@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "id": "mkb-wireless-recovery",
+  "enabled": true,
+  "title": "MeKaBuの放置後の無線復帰を改善する",
+  "description": "接続開始失敗時の制限付き再試行を左親機・右子機へ適用。全16構成をビルドし、検証用プレリリースを公開。実機での放置後復帰は未確認。",
+  "dashboard_label": "MeKaBu 無線復旧 rc.1",
+  "source": {
+    "repository": "te9no/zmk-module-bt-recovery",
+    "from_revision": null,
+    "to_revision": "7e76381d90856a42e739cebf66752afebbe78748",
+    "change_url": "https://github.com/te9no/zmk-module-bt-recovery/commit/7e76381d90856a42e739cebf66752afebbe78748",
+    "notes": "固定ZMK e5c9b6915b56801193e359dd9bad4a167ce0d1b8向けブリッジと併用。通常の省電力設定は維持。"
+  },
+  "repositories": [
+    "mkb2"
+  ],
+  "tracking": {
+    "mkb2": {
+      "status": "applied",
+      "pr": null,
+      "commit": "b6b6a942ed0f2059b02a604aa749b057fbd18502",
+      "branch": "feat/bt-recovery",
+      "base_branch": "zmk-0.4",
+      "notes": "2026-10-31に無線復旧rc.1をプレリリース公開。左右15構成とsettings_resetの全16 UF2・16証跡JSON・SHA256SUMSを再取得して照合済み。settings_resetでは復旧機構無効。7件の設定・既存テストと復旧モジュールの状態機械／ZMK所有関数モック試験に成功。正式ブランチへ未統合、MeKaBuへの書き込み・実機試験は未実施。Anantaの改善報告をMeKaBuの実機合格へ転用しない。",
+      "validation": {
+        "ci": "passed",
+        "release-assets": "passed",
+        "unit-tests": "passed",
+        "idle-reconnect-hardware": "pending",
+        "deep-sleep-wake-hardware": "pending",
+        "long-duration": "pending"
+      },
+      "validation_urls": {
+        "ci": "https://github.com/te9no/zmk-config-MKB2/actions/runs/41198065632",
+        "release-assets": "https://github.com/te9no/zmk-config-MKB2/releases/tag/zmk-0.4-20261031-bt-recovery-rc.1",
+        "unit-tests": "https://github.com/te9no/zmk-config-MKB2/actions/runs/41198065632"
+      }
+    }
+  },
+  "steps": []
+}

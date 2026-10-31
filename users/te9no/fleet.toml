@@ -1,6 +1,18 @@
 schema = 1
 
 [[next_actions]]
+id = "mkb-wireless-recovery-hardware"
+state = "waiting"
+priority = "medium"
+order = 30
+repository = "mkb2"
+change_id = "mkb-wireless-recovery"
+validation_keys = ["idle-reconnect-hardware", "deep-sleep-wake-hardware", "long-duration"]
+action = "MeKaBuの無線復旧rc.1を左右に揃え、USB／電池駆動と放置時間を分けて再接続・DeepSleep復帰を確認する。"
+completion = "対象モジュール、左右のファーム、電源条件、放置時間、復帰結果を記録する。"
+blocker = "全16構成のビルドとプレリリース添付の照合は合格。MeKaBu実機への書き込み・長時間試験は未実施。"
+
+[[next_actions]]
 id = "equinox-studio-hardware"
 state = "waiting"
 priority = "medium"
