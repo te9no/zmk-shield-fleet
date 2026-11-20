@@ -27,7 +27,8 @@
     "saa",
     "cornix",
     "solstice",
-    "sparagmos"
+    "sparagmos",
+    "cagime"
   ],
   "tracking": {
     "equinox": {
@@ -371,6 +372,12 @@
       "pr": null,
       "commit": null,
       "notes": "最低優先群。現行efogdev moving mainとpixart,pmw3610。左右variantの適用範囲を確認"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CaGiMe登録に伴う監査対象。今回の左右識別試験では、この項目の適用・検証状況は判定していない。"
     }
   },
   "steps": []

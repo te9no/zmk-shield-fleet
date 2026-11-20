@@ -25,7 +25,8 @@
     "mkb2",
     "saa",
     "solstice",
-    "sparagmos"
+    "sparagmos",
+    "cagime"
   ],
   "tracking": {
     "mkb2": {
@@ -154,6 +155,12 @@
       "pr": null,
       "commit": null,
       "notes": "交換式analog stick構成。最低優先度で監査する。"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CaGiMe登録に伴う監査対象。今回の左右識別試験では、この項目の適用・検証状況は判定していない。"
     }
   },
   "steps": []

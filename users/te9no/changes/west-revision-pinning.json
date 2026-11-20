@@ -32,7 +32,8 @@
     "cornix",
     "solstice",
     "sparagmos",
-    "mopolia"
+    "mopolia",
+    "cagime"
   ],
   "tracking": {
     "equinox": {
@@ -165,6 +166,17 @@
         "revision-audit": "https://github.com/te9no/GeaconMopolia-zmk-config/tree/479ce3897fd2df351a9c5d24ae71dd106cd9ad4e/config"
       },
       "findings": 6
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "2026-11-20のFleet CIでCaGiMeのwest revision指摘は0件。",
+      "findings": 0,
+      "branch": "main",
+      "validation": {
+        "source-audit": "passed"
+      }
     }
   },
   "steps": []
