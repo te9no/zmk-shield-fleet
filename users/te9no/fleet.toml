@@ -403,3 +403,16 @@ required_globs = [
   "boards/shields/GeaconSparagmos/*.overlay",
   "boards/shields/GeaconSparagmos/*.conf",
 ]
+
+[[repositories]]
+id = "cagime"
+rollout_enabled = false
+allow_external = false
+github = "te9no/zmk-config-CaGiMe"
+checkout = "zmk-config-CaGiMe"
+default_branch = "main"
+maintenance_branch = "main"
+architecture = "integrated-shield"
+modules = ["encoder", "optical-dial", "trackball", "lpps", "joystick", "key"]
+tags = ["zeroshift", "split", "xiao"]
+required_globs = ["build.yaml", "config/west.yml", "boards/shields/CGM/CGM_left.overlay", "boards/shields/CGM/CGM_right.overlay"]

@@ -25,7 +25,8 @@
     "mkb2",
     "saa",
     "solstice",
-    "sparagmos"
+    "sparagmos",
+    "cagime"
   ],
   "tracking": {
     "polaris": {
@@ -140,6 +141,12 @@
       "pr": null,
       "commit": null,
       "notes": "交換式analog stick対応。module導入と実機確認が必要"
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CaGiMe登録に伴う監査対象。今回の左右識別試験では、この項目の適用・検証状況は判定していない。"
     }
   },
   "steps": []

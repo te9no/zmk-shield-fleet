@@ -28,7 +28,8 @@
     "cornix",
     "solstice",
     "sparagmos",
-    "mopolia"
+    "mopolia",
+    "cagime"
   ],
   "tracking": {
     "equinox": {
@@ -213,6 +214,12 @@
       "validation_urls": {
         "endpoint-budget": "https://github.com/te9no/GeaconMopolia-zmk-config/tree/main"
       }
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CaGiMe登録に伴う監査対象。今回の左右識別試験では、この項目の適用・検証状況は判定していない。"
     }
   },
   "steps": []

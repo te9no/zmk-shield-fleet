@@ -23,7 +23,8 @@
     "cornix",
     "solstice",
     "sparagmos",
-    "mopolia"
+    "mopolia",
+    "cagime"
   ],
   "tracking": {
     "equinox": {
@@ -171,6 +172,12 @@
         "worktree-audit": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md",
         "inventory-preservation": "https://github.com/te9no/zmk-shield-fleet/blob/main/users/te9no/docs/workspace-hygiene-and-artifact-layout-2026-08-27.md"
       }
+    },
+    "cagime": {
+      "status": "pending",
+      "pr": null,
+      "commit": null,
+      "notes": "CaGiMe登録に伴う監査対象。今回の左右識別試験では、この項目の適用・検証状況は判定していない。"
     }
   },
   "steps": []

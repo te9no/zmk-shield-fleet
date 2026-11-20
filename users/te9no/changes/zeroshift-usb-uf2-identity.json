@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "id": "zeroshift-usb-uf2-identity",
+  "enabled": true,
+  "title": "ZeroShiftの左右をUSB製品名・UF2ドライブ名で識別",
+  "dashboard_label": "ZeroShift 左右識別",
+  "description": "通常起動時と書き込み時に機種・左右を識別できる。UF2ドライブ名には識別情報対応のXIAOブートローダーが必要。通常版とSense版で生成されるFATラベルをARMエミュレーターで検証。",
+  "source": {
+    "repository": "te9no/zmk-config-CaGiMe",
+    "from_revision": "439f1ecf1a6d8cb5945e4f9dcc4b0947b8e219f8",
+    "to_revision": "afb88e36e33175e7388a38013e7db14f29d39ed0",
+    "change_url": "https://github.com/te9no/zmk-config-CaGiMe/compare/439f1ec..afb88e3",
+    "notes": "CaGiMe AAA R01は左J5配線修正版を左シールドに統合。左右の正式なシールド名はCGM_leftとCGM_right。ZeroShiftで各側の下側・中央モジュールを選択し、保存後の再起動で適用する。"
+  },
+  "repositories": [
+    "cagime",
+    "mkb2",
+    "polaris"
+  ],
+  "tracking": {
+    "cagime": {
+      "status": "applied",
+      "branch": "main",
+      "commit": "afb88e36e33175e7388a38013e7db14f29d39ed0",
+      "pr": null,
+      "notes": "左 CAGIME-ZS-L、右 CAGIME-ZS-R。左右のUSB・ラベル試験は識別版718b8f8で実施。J5統合・CGM改名後のmainで左右を再ビルド。",
+      "validation": {
+        "targeted-build": "passed",
+        "uf2-usb-product-name": "passed",
+        "emulated-fat-label": "passed",
+        "hardware-usb-and-drive-name": "pending",
+        "hardware-bootloader-update": "pending",
+        "ci": "passed"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-CaGiMe/commit/afb88e36e33175e7388a38013e7db14f29d39ed0",
+        "ci": "https://github.com/te9no/zmk-config-CaGiMe/actions/runs/44675495979"
+      }
+    },
+    "mkb2": {
+      "status": "applied",
+      "branch": "feat/uf2-volume-id",
+      "commit": "8da317f759021946c577a24f62744c082a68cf14",
+      "pr": null,
+      "notes": "左 MEKABU-ZS-L、右 MEKABU-ZS-R。開発ブランチで左右をビルド。CaGiMeとMeKaBuの4本は通常版・Sense版とvolume1・volume2の全16組でラベル生成を検証。",
+      "validation": {
+        "targeted-build": "passed",
+        "uf2-usb-product-name": "passed",
+        "emulated-fat-label": "passed",
+        "hardware-usb-and-drive-name": "pending",
+        "hardware-bootloader-update": "pending"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-MKB2/commit/8da317f759021946c577a24f62744c082a68cf14"
+      }
+    },
+    "polaris": {
+      "status": "applied",
+      "branch": "feat/polaris-zeroshift",
+      "commit": "b934da730b74fce3da8844fa1424e7a64e956248",
+      "pr": null,
+      "notes": "左 POLARISZS-L、右 POLARISZS-R。統合ファーム左右をビルド。Polarisのラベルには0.11.0-volume2が必要。",
+      "validation": {
+        "targeted-build": "passed",
+        "uf2-usb-product-name": "passed",
+        "emulated-fat-label": "passed",
+        "hardware-usb-and-drive-name": "pending",
+        "hardware-bootloader-update": "pending"
+      },
+      "validation_urls": {
+        "targeted-build": "https://github.com/te9no/zmk-config-GeaconPolaris/commit/b934da730b74fce3da8844fa1424e7a64e956248"
+      }
+    }
+  },
+  "steps": []
+}
